@@ -25,8 +25,16 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 			EnhanceCustomCommand: true, // only required if you want to use the custom command
 			RpcCommandOptions: []*autocliv1.RpcCommandOptions{
 				{
-					RpcMethod: "UpdateParams",
-					Skip:      true, // skipped because authority gated
+					RpcMethod: "NewBlockHashes",
+					Skip:      true,
+				},
+				{
+					RpcMethod: "NewDeposits",
+					Skip:      true,
+				},
+				{
+					RpcMethod: "NewPubkey",
+					Skip:      true,
 				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
