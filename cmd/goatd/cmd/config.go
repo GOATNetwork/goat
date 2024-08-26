@@ -40,7 +40,7 @@ func initAppConfig() (string, interface{}) {
 	//   own app.toml to override, or use this default value.
 	//
 	// In tests, we set the min gas prices to 0.
-	// srvCfg.MinGasPrices = "0goat"
+	// srvCfg.MinGasPrices = "0stake"
 	// srvCfg.BaseConfig.IAVLDisableFastNode = true // disable fastnode by default
 
 	customAppConfig := CustomAppConfig{

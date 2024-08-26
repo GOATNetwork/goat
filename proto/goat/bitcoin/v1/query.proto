@@ -1,0 +1,47 @@
+syntax = "proto3";
+package goat.bitcoin.v1;
+
+import "amino/amino.proto";
+// import "cosmos/base/query/v1beta1/pagination.proto";
+import "goat/bitcoin/v1/params.proto";
+import "goat/relayer/v1/relayer.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+
+option go_package = "github.com/goatnetwork/goat/x/bitcoin/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Parameters queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/goatnetwork/goat/bitcoin/v1/params";
+  }
+
+  // Pubkeys queries current public key for deposit
+  rpc Pubkey(QueryPubkeyRequest) returns (QueryPubkeyResponse) {
+    option (google.api.http).get = "/goatnetwork/goat/bitcoin/v1/pubkey";
+  }
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+// QueryPubkeyRequest is request type for the Query/Pubkey RPC method
+message QueryPubkeyRequest {}
+
+// QueryPubkeyResponse is response type for the Query/Pubkey RPC method
+message QueryPubkeyResponse {
+  goat.relayer.v1.PublicKey public_key = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}

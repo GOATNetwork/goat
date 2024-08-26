@@ -35,7 +35,8 @@ import (
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 
 	"github.com/goatnetwork/goat/docs"
-	goatmodulekeeper "github.com/goatnetwork/goat/x/goat/keeper"
+	bitcoinmodulekeeper "github.com/goatnetwork/goat/x/bitcoin/keeper"
+	relayermodulekeeper "github.com/goatnetwork/goat/x/relayer/keeper"
 )
 
 const (
@@ -70,7 +71,8 @@ type App struct {
 	DistrKeeper           distrkeeper.Keeper
 	ConsensusParamsKeeper consensuskeeper.Keeper
 
-	GoatKeeper goatmodulekeeper.Keeper
+	RelayerKeeper relayermodulekeeper.Keeper
+	BitcoinKeeper bitcoinmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -142,7 +144,8 @@ func New(
 		&app.StakingKeeper,
 		&app.DistrKeeper,
 		&app.ConsensusParamsKeeper,
-		&app.GoatKeeper,
+		&app.RelayerKeeper,
+		&app.BitcoinKeeper,
 	); err != nil {
 		panic(err)
 	}

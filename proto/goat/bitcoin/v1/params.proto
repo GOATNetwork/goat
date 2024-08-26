@@ -1,0 +1,13 @@
+syntax = "proto3";
+package goat.bitcoin.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/goatnetwork/goat/x/bitcoin/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (amino.name) = "goat/x/bitcoin/Params";
+  option (gogoproto.equal) = true;
+}

@@ -1,0 +1,20 @@
+syntax = "proto3";
+package goat.relayer.v1;
+
+// import "amino/amino.proto";
+import "cosmos/msg/v1/msg.proto";
+// import "cosmos_proto/cosmos.proto";
+// import "goat/relayer/v1/params.proto";
+// import "goat/relayer/v1/relayer.proto";
+// import "gogoproto/gogo.proto";
+
+option go_package = "github.com/goatnetwork/goat/x/relayer/types";
+
+// Msg defines the Msg service.
+service Msg {
+  option (cosmos.msg.v1.service) = true;
+
+  // UpdateParams defines a (governance) operation for updating the module
+  // parameters. The authority defaults to the x/gov module account.
+  // rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+}

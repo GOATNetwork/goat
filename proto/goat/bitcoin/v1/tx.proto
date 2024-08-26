@@ -1,0 +1,63 @@
+syntax = "proto3";
+package goat.bitcoin.v1;
+
+import "amino/amino.proto";
+import "cosmos/msg/v1/msg.proto";
+import "cosmos_proto/cosmos.proto";
+import "goat/bitcoin/v1/bitcoin.proto";
+import "goat/relayer/v1/relayer.proto";
+
+option go_package = "github.com/goatnetwork/goat/x/bitcoin/types";
+
+// Msg defines the Msg service.
+service Msg {
+  option (cosmos.msg.v1.service) = true;
+
+  // NewBlockHashs adds new bitcoin hashs
+  rpc NewBlocks(MsgNewBlocks) returns (MsgNewBlocksResponse);
+
+  // NewDeposit adds new deposits
+  rpc NewDeposits(MsgNewDeposits) returns (MsgNewDepositsResponse);
+
+  // NewPubkey adds new deposit public key
+  rpc NewPubkey(MsgNewPubkey) returns (MsgNewPubkeyResponse);
+}
+
+// MsgNewBlocks represents a solid block header is confirmed by relayer group
+message MsgNewBlocks {
+  option (cosmos.msg.v1.signer) = "proposer";
+  option (amino.name) = "goat/x/bitcoin/MsgNewHeaders";
+
+  string proposer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  goat.relayer.v1.Votes vote = 2;
+  uint64 start_block_number = 3;
+  repeated bytes block_hash = 4;
+}
+
+// MsgNewBlocksResponse defines the Msg/NewHeaders response type.
+message MsgNewBlocksResponse {}
+
+// MsgNewDeposits represents new deposits
+message MsgNewDeposits {
+  option (cosmos.msg.v1.signer) = "proposer";
+  option (amino.name) = "goat/x/bitcoin/MsgNewDeposits";
+
+  string proposer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  repeated Deposit deposits = 2;
+}
+
+// MsgNewDepositsResponse defines the Msg/NewDeposits response type.
+message MsgNewDepositsResponse {}
+
+// MsgNewPubkey is the Msg/NewPubkey request type.
+message MsgNewPubkey {
+  option (cosmos.msg.v1.signer) = "proposer";
+  option (amino.name) = "goat/x/bitcoin/MsgNewPubkey";
+
+  string proposer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  goat.relayer.v1.Votes vote = 2;
+  goat.relayer.v1.PublicKey pubkey = 3;
+}
+
+// MsgNewPubkeyResponse is the Msg/NewPubkey response type.
+message MsgNewPubkeyResponse {}

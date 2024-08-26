@@ -20,7 +20,7 @@ import (
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	goatmodulev1 "github.com/goatnetwork/goat/api/goat/goat/module/v1"
+	relayermodulev1 "github.com/goatnetwork/goat/api/goat/relayer/module/v1"
 
 	// NOTE: The genutils module must occur after staking so that pools are
 	// properly initialized with tokens from genesis accounts.
@@ -28,20 +28,26 @@ import (
 	// NOTE: Capability module must occur first so that it can initialize any capabilities
 	// so that other modules that want to create or claim capabilities afterwards in InitChain
 	// can do so safely.
-	_ "github.com/goatnetwork/goat/x/goat/module"
-	goatmoduletypes "github.com/goatnetwork/goat/x/goat/types"
+	bitcoinmodulev1 "github.com/goatnetwork/goat/api/goat/bitcoin/module/v1"
+	_ "github.com/goatnetwork/goat/x/relayer/module"
+	relayermoduletypes "github.com/goatnetwork/goat/x/relayer/types"
+
+	// cosmos-sdk modules
+	_ "github.com/goatnetwork/goat/x/bitcoin/module"
+	bitcoinmoduletypes "github.com/goatnetwork/goat/x/bitcoin/types"
 )
 
 var (
 	genesisModuleOrder = []string{
-		// cosmos-sdk modules
+
 		authtypes.ModuleName,
 		banktypes.ModuleName,
 		distrtypes.ModuleName,
 		stakingtypes.ModuleName,
 		genutiltypes.ModuleName,
 		// chain modules
-		goatmoduletypes.ModuleName,
+		relayermoduletypes.ModuleName,
+		bitcoinmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
@@ -54,7 +60,7 @@ var (
 		distrtypes.ModuleName,
 		stakingtypes.ModuleName,
 		// chain modules
-		goatmoduletypes.ModuleName,
+		// relayermoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
@@ -62,7 +68,7 @@ var (
 		// cosmos sdk modules
 		stakingtypes.ModuleName,
 		// chain modules
-		goatmoduletypes.ModuleName,
+		relayermoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
 
@@ -155,8 +161,12 @@ var (
 				Config: appconfig.WrapAny(&genutilmodulev1.Module{}),
 			},
 			{
-				Name:   goatmoduletypes.ModuleName,
-				Config: appconfig.WrapAny(&goatmodulev1.Module{}),
+				Name:   relayermoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&relayermodulev1.Module{}),
+			},
+			{
+				Name:   bitcoinmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&bitcoinmodulev1.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},

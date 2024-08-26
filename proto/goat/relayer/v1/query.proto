@@ -1,0 +1,76 @@
+syntax = "proto3";
+package goat.relayer.v1;
+
+import "amino/amino.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "goat/relayer/v1/params.proto";
+import "goat/relayer/v1/relayer.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+
+option go_package = "github.com/goatnetwork/goat/x/relayer/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Parameters queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/goatnetwork/goat/relayer/v1/params";
+  }
+
+  // Relayer queries relayer state
+  rpc Relayer(QueryRelayerRequest) returns (QueryRelayerResponse) {
+    option (google.api.http).get = "/goatnetwork/goat/relayer/v1/relayer";
+  }
+
+  // Voters queries all current voter list
+  rpc Voters(QueryVotersRequest) returns (QueryVotersResponse) {
+    option (google.api.http).get = "/goatnetwork/goat/relayer/v1/voters";
+  }
+
+  // Pubkeys queries all current public keys
+  rpc Pubkeys(QueryPubkeysRequest) returns (QueryPubkeysResponse) {
+    option (google.api.http).get = "/goatnetwork/goat/relayer/v1/pubkeys";
+  }
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+// QueryVotersRequest is request type for the Query/Voters RPC method
+message QueryVotersRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryVotersRequest is response type for the Query/Voters RPC method
+message QueryVotersResponse {
+  repeated Voter voters = 1;
+}
+
+// QueryRelayerRequest is request type for the Query/Relayer RPC method
+message QueryRelayerRequest {}
+
+// QueryRelayerResponse is response type for the Query/Voters RPC method
+message QueryRelayerResponse {
+  uint64 epoch = 1;
+  Relayer relayer = 2 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+// QueryPubkeysRequest is request type for the Query/Pubkeys RPC method
+message QueryPubkeysRequest {}
+
+// QueryPubkeysResponse is response type for the Query/Pubkeys RPC method
+message QueryPubkeysResponse {
+  repeated PublicKey public_keys = 1;
+}

@@ -1,0 +1,68 @@
+syntax = "proto3";
+package goat.relayer.v1;
+
+import "cosmos/base/v1beta1/coin.proto";
+// import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/goatnetwork/goat/x/relayer/types";
+
+// Relayer represents the current relayer group state
+message Relayer {
+  uint64 version = 1;
+  uint64 threshold = 2;
+  string proposer = 3;
+  repeated string voters = 4;
+  google.protobuf.Timestamp last_elected = 5 [
+    (gogoproto.nullable) = false,
+    (gogoproto.stdtime) = true
+  ];
+}
+
+// VoterStatus is the status of a voter.
+enum VoterStatus {
+  option (gogoproto.goproto_enum_prefix) = false;
+
+  // UNSPECIFIED defines an invalid voter status.
+  VOTER_STATUS_UNSPECIFIED = 0 [(gogoproto.enumvalue_customname) = "Unspecified"];
+  // UNACTIVATED defines a voter that is not able to vote and sign a new relayer tx
+  VOTER_STATUS_UNACTIVATED = 1 [(gogoproto.enumvalue_customname) = "Unactivated"];
+  // PENDING defines a voter that is pending to Activated status
+  VOTER_STATUS_PENDING = 2 [(gogoproto.enumvalue_customname) = "Pending"];
+  // ACTIVATED defines a voter that is actived.
+  VOTER_STATUS_ACTIVATED = 3 [(gogoproto.enumvalue_customname) = "Activated"];
+}
+
+// Voter the relayer voter
+message Voter {
+  // tx_key is the uncompressed secp256k1 pubkey, it's for submitting new relayer proposals
+  bytes tx_key = 1;
+  // vote key is the bls12-381 G2 compressed pubkey(96 bytes)
+  bytes vote_key = 2;
+  // status represents the current voter status
+  VoterStatus status = 3;
+  cosmos.base.v1beta1.Coin locking = 4 [(gogoproto.nullable) = false];
+}
+
+// PublicKey defines the keys available for use with relayer
+message PublicKey {
+  option (gogoproto.compare) = true;
+  option (gogoproto.equal) = true;
+
+  // the key
+  oneof key {
+    bytes secp256k1 = 1;
+    bytes schnorr = 2;
+  }
+}
+
+// message Votes the proposal vote result
+message Votes {
+  // the proposal sequence
+  uint64 sequence = 1;
+  // voters represents the voter bitmap
+  bytes voters = 2;
+  // signature is the aggregate signature by voters
+  bytes signature = 3;
+}

@@ -1,0 +1,24 @@
+syntax = "proto3";
+package goat.bitcoin.v1;
+
+import "goat/relayer/v1/relayer.proto";
+
+option go_package = "github.com/goatnetwork/goat/x/bitcoin/types";
+
+// Deposit defines the deposit transaction and its proof
+message Deposit {
+  uint32 verison = 1;
+  uint64 block_number = 2;
+  bytes block_header = 3;
+  // tx_index is the index of transaction in the block
+  uint32 tx_index = 4;
+  // tx is the raw transaction withtout witness
+  bytes no_witness_tx = 5;
+  uint32 output_index = 6;
+  // intermediate proof is the proof without the txid and merkel root
+  bytes intermediate_proof = 7;
+  // evm_address is the user wallet address in goat evm
+  bytes evm_address = 8;
+  // relayer_pubkey is the compressed secp256k1 public key which managed by the relayer group
+  goat.relayer.v1.PublicKey relayer_pubkey = 9;
+}
