@@ -56,7 +56,7 @@ message ExecuableWithdrawalReceipt {
 
 // ExecuableQueue
 message ExecuableQueue {
-  repeated bytes block_hash = 1;
+  uint64 block_number = 1;
   repeated ExecuableDeposit deposits = 2;
   repeated ExecuableWithdrawalReceipt paid_withdrawals = 3;
   repeated uint64 rejected_withdrawals = 4;

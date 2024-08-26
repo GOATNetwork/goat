@@ -15,6 +15,10 @@ const (
 )
 
 func (p *PublicKey) Validate() error {
+	if p == nil {
+		return errors.New("empty public key")
+	}
+
 	switch t := p.Key.(type) {
 	case *PublicKey_Secp256K1:
 		if len(t.Secp256K1) != btcec.PubKeyBytesLenCompressed {

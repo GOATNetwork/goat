@@ -3,6 +3,7 @@ package goat.bitcoin.v1;
 
 import "amino/amino.proto";
 import "goat/bitcoin/v1/params.proto";
+import "goat/relayer/v1/relayer.proto";
 import "gogoproto/gogo.proto";
 
 option go_package = "github.com/goatnetwork/goat/x/bitcoin/types";
@@ -16,4 +17,5 @@ message GenesisState {
   ];
   uint64 start_block_number = 2;
   repeated bytes block_hash = 3;
+  goat.relayer.v1.PublicKey pubkey = 4;
 }

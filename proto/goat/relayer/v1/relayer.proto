@@ -1,7 +1,7 @@
 syntax = "proto3";
 package goat.relayer.v1;
 
-import "cosmos/base/v1beta1/coin.proto";
+// import "cosmos/base/v1beta1/coin.proto";
 // import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
@@ -42,7 +42,8 @@ message Voter {
   bytes vote_key = 2;
   // status represents the current voter status
   VoterStatus status = 3;
-  cosmos.base.v1beta1.Coin locking = 4 [(gogoproto.nullable) = false];
+
+  // cosmos.base.v1beta1.Coin locking = 4 [(gogoproto.nullable) = false];
 }
 
 // PublicKey defines the keys available for use with relayer

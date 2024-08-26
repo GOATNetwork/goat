@@ -24,7 +24,7 @@ import (
 type (
 	Keeper struct {
 		cdc          codec.BinaryCodec
-		addressCodec address.Codec
+		AddrCodec    address.Codec
 		storeService store.KVStoreService
 		logger       log.Logger
 
@@ -61,7 +61,7 @@ func NewKeeper(
 
 	k := Keeper{
 		cdc:          cdc,
-		addressCodec: addressCodec,
+		AddrCodec:    addressCodec,
 		storeService: storeService,
 		authority:    authority,
 		logger:       logger,
@@ -189,8 +189,7 @@ func (k Keeper) ElecteProposer(ctx context.Context) error {
 
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
 
-	header := sdkctx.HeaderInfo()
-	if vlen := int64(len(relayer.Voters)); header.Time.Sub(relayer.LastElected) > 10*time.Minute && vlen > 0 {
+	if vlen := int64(len(relayer.Voters)); sdkctx.BlockTime().Sub(relayer.LastElected) > 10*time.Minute && vlen > 0 {
 		epoch, err := k.Epoch.Peek(ctx)
 		if err != nil {
 			return err
@@ -212,9 +211,9 @@ func (k Keeper) ElecteProposer(ctx context.Context) error {
 		relayer.Proposer, relayer.Voters[proposerIndex] = relayer.Voters[proposerIndex], relayer.Proposer
 
 		relayer.Version++
-		relayer.LastElected = header.Time
+		relayer.LastElected = sdkctx.BlockTime()
 
-		k.Logger().Debug("New proposer", "height", header.Height, "proposer", relayer.Proposer)
+		k.Logger().Debug("New proposer", "height", sdkctx.BlockHeight(), "proposer", relayer.Proposer)
 		if err := k.Relayer.Set(ctx, relayer); err != nil {
 			return err
 		}

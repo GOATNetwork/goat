@@ -28,15 +28,25 @@ func (k msgServer) NewDeposits(ctx context.Context, req *types.MsgNewDeposits) (
 
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
 
+	queue, err := k.ExecuableQueue.Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	exec := make([]*types.ExecuableDeposit, 0, len(req.Deposits))
 	for _, v := range req.Deposits {
 		depoist, err := k.NewDeposit(ctx, v)
 		if err != nil {
 			return nil, err
 		}
 		sdkctx.EventManager().EmitEvent(types.NewDepositEvent(depoist))
+		exec = append(exec, depoist)
 	}
 
-	// todo: add the deposit to the executable queue
+	queue.Deposits = append(queue.Deposits, exec...)
+	if err := k.ExecuableQueue.Set(ctx, queue); err != nil {
+		return nil, err
+	}
 
 	return &types.MsgNewDepositsResponse{}, nil
 }

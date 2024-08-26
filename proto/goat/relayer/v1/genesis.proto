@@ -15,10 +15,6 @@ message GenesisState {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
-  Relayer relayer = 2 [
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
-  ];
+  uint64 threshold = 2;
   repeated Voter voters = 3;
-  repeated PublicKey pubkeys = 4;
 }

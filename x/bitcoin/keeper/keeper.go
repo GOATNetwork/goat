@@ -26,11 +26,12 @@ type (
 		logger       log.Logger
 		schema       collections.Schema
 
-		Params      collections.Item[types.Params]
-		Pubkey      collections.Item[relayertypes.PublicKey]
-		BlockHeight collections.Sequence
-		BlockHashes collections.Map[uint64, []byte]
-		Deposited   collections.Map[collections.Pair[[]byte, uint32], int64]
+		Params         collections.Item[types.Params]
+		Pubkey         collections.Item[relayertypes.PublicKey]
+		BlockHeight    collections.Sequence
+		BlockHashes    collections.Map[uint64, []byte]
+		Deposited      collections.Map[collections.Pair[[]byte, uint32], int64]
+		ExecuableQueue collections.Item[types.ExecuableQueue]
 		// this line is used by starport scaffolding # collection/type
 
 		relayerKeeper types.RelayerKeeper
@@ -54,12 +55,13 @@ func NewKeeper(
 		storeService: storeService,
 		logger:       logger,
 
-		relayerKeeper: relayerKeeper,
-		Params:        collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
-		Pubkey:        collections.NewItem(sb, types.LatestPubkeyKey, "latest_pubkey", codec.CollValue[relayertypes.PublicKey](cdc)),
-		BlockHeight:   collections.NewSequence(sb, types.LatestHeightKey, "latest_height"),
-		BlockHashes:   collections.NewMap(sb, types.BlockHashsKey, "block_hashs", collections.Uint64Key, collections.BytesValue),
-		Deposited:     collections.NewMap(sb, types.Depositedkey, "deposited", collections.PairKeyCodec(collections.BytesKey, collections.Uint32Key), collections.Int64Value),
+		relayerKeeper:  relayerKeeper,
+		Params:         collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		Pubkey:         collections.NewItem(sb, types.LatestPubkeyKey, "latest_pubkey", codec.CollValue[relayertypes.PublicKey](cdc)),
+		BlockHeight:    collections.NewSequence(sb, types.LatestHeightKey, "latest_height"),
+		BlockHashes:    collections.NewMap(sb, types.BlockHashsKey, "block_hashs", collections.Uint64Key, collections.BytesValue),
+		Deposited:      collections.NewMap(sb, types.DepositedKey, "deposited", collections.PairKeyCodec(collections.BytesKey, collections.Uint32Key), collections.Int64Value),
+		ExecuableQueue: collections.NewItem(sb, types.ExecuableQueueKey, "queue", codec.CollValue[types.ExecuableQueue](cdc)),
 		// this line is used by starport scaffolding # collection/instantiate
 	}
 
@@ -139,4 +141,11 @@ func (k Keeper) NewDeposit(ctx context.Context, deposit *types.Deposit) (*types.
 		Txout:   deposit.OutputIndex,
 		Amount:  math.NewInt(txout.Value).Mul(types.Satoshi),
 	}, nil
+}
+
+func (k Keeper) NewPubkey(ctx context.Context, pubkey *relayertypes.PublicKey) error {
+	if err := k.relayerKeeper.AddNewKey(ctx, relayertypes.EncodePublicKey(pubkey)); err != nil {
+		return err
+	}
+	return k.Pubkey.Set(ctx, *pubkey)
 }
