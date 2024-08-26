@@ -19,17 +19,17 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Msg_NewBlocks_FullMethodName   = "/goat.bitcoin.v1.Msg/NewBlocks"
-	Msg_NewDeposits_FullMethodName = "/goat.bitcoin.v1.Msg/NewDeposits"
-	Msg_NewPubkey_FullMethodName   = "/goat.bitcoin.v1.Msg/NewPubkey"
+	Msg_NewBlockHashes_FullMethodName = "/goat.bitcoin.v1.Msg/NewBlockHashes"
+	Msg_NewDeposits_FullMethodName    = "/goat.bitcoin.v1.Msg/NewDeposits"
+	Msg_NewPubkey_FullMethodName      = "/goat.bitcoin.v1.Msg/NewPubkey"
 )
 
 // MsgClient is the client API for Msg service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MsgClient interface {
-	// NewBlockHashs adds new bitcoin hashs
-	NewBlocks(ctx context.Context, in *MsgNewBlocks, opts ...grpc.CallOption) (*MsgNewBlocksResponse, error)
+	// NewBlockHashs adds new bitcoin block hashes
+	NewBlockHashes(ctx context.Context, in *MsgNewBlockHashes, opts ...grpc.CallOption) (*MsgNewBlockHashesResponse, error)
 	// NewDeposit adds new deposits
 	NewDeposits(ctx context.Context, in *MsgNewDeposits, opts ...grpc.CallOption) (*MsgNewDepositsResponse, error)
 	// NewPubkey adds new deposit public key
@@ -44,9 +44,9 @@ func NewMsgClient(cc grpc.ClientConnInterface) MsgClient {
 	return &msgClient{cc}
 }
 
-func (c *msgClient) NewBlocks(ctx context.Context, in *MsgNewBlocks, opts ...grpc.CallOption) (*MsgNewBlocksResponse, error) {
-	out := new(MsgNewBlocksResponse)
-	err := c.cc.Invoke(ctx, Msg_NewBlocks_FullMethodName, in, out, opts...)
+func (c *msgClient) NewBlockHashes(ctx context.Context, in *MsgNewBlockHashes, opts ...grpc.CallOption) (*MsgNewBlockHashesResponse, error) {
+	out := new(MsgNewBlockHashesResponse)
+	err := c.cc.Invoke(ctx, Msg_NewBlockHashes_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -75,8 +75,8 @@ func (c *msgClient) NewPubkey(ctx context.Context, in *MsgNewPubkey, opts ...grp
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
 type MsgServer interface {
-	// NewBlockHashs adds new bitcoin hashs
-	NewBlocks(context.Context, *MsgNewBlocks) (*MsgNewBlocksResponse, error)
+	// NewBlockHashs adds new bitcoin block hashes
+	NewBlockHashes(context.Context, *MsgNewBlockHashes) (*MsgNewBlockHashesResponse, error)
 	// NewDeposit adds new deposits
 	NewDeposits(context.Context, *MsgNewDeposits) (*MsgNewDepositsResponse, error)
 	// NewPubkey adds new deposit public key
@@ -88,8 +88,8 @@ type MsgServer interface {
 type UnimplementedMsgServer struct {
 }
 
-func (UnimplementedMsgServer) NewBlocks(context.Context, *MsgNewBlocks) (*MsgNewBlocksResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method NewBlocks not implemented")
+func (UnimplementedMsgServer) NewBlockHashes(context.Context, *MsgNewBlockHashes) (*MsgNewBlockHashesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method NewBlockHashes not implemented")
 }
 func (UnimplementedMsgServer) NewDeposits(context.Context, *MsgNewDeposits) (*MsgNewDepositsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method NewDeposits not implemented")
@@ -110,20 +110,20 @@ func RegisterMsgServer(s grpc.ServiceRegistrar, srv MsgServer) {
 	s.RegisterService(&Msg_ServiceDesc, srv)
 }
 
-func _Msg_NewBlocks_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgNewBlocks)
+func _Msg_NewBlockHashes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgNewBlockHashes)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).NewBlocks(ctx, in)
+		return srv.(MsgServer).NewBlockHashes(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_NewBlocks_FullMethodName,
+		FullMethod: Msg_NewBlockHashes_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).NewBlocks(ctx, req.(*MsgNewBlocks))
+		return srv.(MsgServer).NewBlockHashes(ctx, req.(*MsgNewBlockHashes))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -172,8 +172,8 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*MsgServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "NewBlocks",
-			Handler:    _Msg_NewBlocks_Handler,
+			MethodName: "NewBlockHashes",
+			Handler:    _Msg_NewBlockHashes_Handler,
 		},
 		{
 			MethodName: "NewDeposits",

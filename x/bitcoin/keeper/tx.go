@@ -26,15 +26,27 @@ func (k msgServer) NewDeposits(ctx context.Context, req *types.MsgNewDeposits) (
 		return nil, types.ErrInvalidRequest.Wrap(err.Error())
 	}
 
-	panic("todo")
+	sdkctx := sdktypes.UnwrapSDKContext(ctx)
+
+	for _, v := range req.Deposits {
+		depoist, err := k.NewDeposit(ctx, v)
+		if err != nil {
+			return nil, err
+		}
+		sdkctx.EventManager().EmitEvent(types.NewDepositEvent(depoist))
+	}
+
+	// todo: add the deposit to the executable queue
+
+	return &types.MsgNewDepositsResponse{}, nil
 }
 
-func (k msgServer) NewBlocks(ctx context.Context, req *types.MsgNewBlocks) (*types.MsgNewBlocksResponse, error) {
+func (k msgServer) NewBlockHashes(ctx context.Context, req *types.MsgNewBlockHashes) (*types.MsgNewBlockHashesResponse, error) {
 	if err := req.Validate(); err != nil {
 		return nil, types.ErrInvalidRequest.Wrap(err.Error())
 	}
 
-	parentHeight, err := k.LastestHeight.Peek(ctx)
+	parentHeight, err := k.BlockHeight.Peek(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -49,12 +61,12 @@ func (k msgServer) NewBlocks(ctx context.Context, req *types.MsgNewBlocks) (*typ
 
 	for _, v := range req.BlockHash {
 		parentHeight++
-		if err := k.BlockHashs.Set(ctx, parentHeight, v); err != nil {
+		if err := k.BlockHashes.Set(ctx, parentHeight, v); err != nil {
 			return nil, err
 		}
 	}
 
-	if err := k.LastestHeight.Set(ctx, parentHeight); err != nil {
+	if err := k.BlockHeight.Set(ctx, parentHeight); err != nil {
 		return nil, err
 	}
 
@@ -66,7 +78,7 @@ func (k msgServer) NewBlocks(ctx context.Context, req *types.MsgNewBlocks) (*typ
 		return nil, err
 	}
 
-	return &types.MsgNewBlocksResponse{}, nil
+	return &types.MsgNewBlockHashesResponse{}, nil
 }
 
 func (k msgServer) NewPubkey(ctx context.Context, req *types.MsgNewPubkey) (*types.MsgNewPubkeyResponse, error) {
@@ -95,7 +107,7 @@ func (k msgServer) NewPubkey(ctx context.Context, req *types.MsgNewPubkey) (*typ
 	if err := k.relayerKeeper.SetProposalSeq(ctx, sequence+1); err != nil {
 		return nil, err
 	}
-	if err := k.LatestPubkey.Set(ctx, *req.Pubkey); err != nil {
+	if err := k.Pubkey.Set(ctx, *req.Pubkey); err != nil {
 		return nil, err
 	}
 	if err := k.relayerKeeper.UpdateRandao(ctx, req); err != nil {

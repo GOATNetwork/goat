@@ -16,78 +16,78 @@ import (
 	sync "sync"
 )
 
-var _ protoreflect.List = (*_MsgNewBlocks_4_list)(nil)
+var _ protoreflect.List = (*_MsgNewBlockHashes_4_list)(nil)
 
-type _MsgNewBlocks_4_list struct {
+type _MsgNewBlockHashes_4_list struct {
 	list *[][]byte
 }
 
-func (x *_MsgNewBlocks_4_list) Len() int {
+func (x *_MsgNewBlockHashes_4_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_MsgNewBlocks_4_list) Get(i int) protoreflect.Value {
+func (x *_MsgNewBlockHashes_4_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfBytes((*x.list)[i])
 }
 
-func (x *_MsgNewBlocks_4_list) Set(i int, value protoreflect.Value) {
+func (x *_MsgNewBlockHashes_4_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Bytes()
 	concreteValue := valueUnwrapped
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_MsgNewBlocks_4_list) Append(value protoreflect.Value) {
+func (x *_MsgNewBlockHashes_4_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Bytes()
 	concreteValue := valueUnwrapped
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_MsgNewBlocks_4_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message MsgNewBlocks at list field BlockHash as it is not of Message kind"))
+func (x *_MsgNewBlockHashes_4_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message MsgNewBlockHashes at list field BlockHash as it is not of Message kind"))
 }
 
-func (x *_MsgNewBlocks_4_list) Truncate(n int) {
+func (x *_MsgNewBlockHashes_4_list) Truncate(n int) {
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_MsgNewBlocks_4_list) NewElement() protoreflect.Value {
+func (x *_MsgNewBlockHashes_4_list) NewElement() protoreflect.Value {
 	var v []byte
 	return protoreflect.ValueOfBytes(v)
 }
 
-func (x *_MsgNewBlocks_4_list) IsValid() bool {
+func (x *_MsgNewBlockHashes_4_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
-	md_MsgNewBlocks                    protoreflect.MessageDescriptor
-	fd_MsgNewBlocks_proposer           protoreflect.FieldDescriptor
-	fd_MsgNewBlocks_vote               protoreflect.FieldDescriptor
-	fd_MsgNewBlocks_start_block_number protoreflect.FieldDescriptor
-	fd_MsgNewBlocks_block_hash         protoreflect.FieldDescriptor
+	md_MsgNewBlockHashes                    protoreflect.MessageDescriptor
+	fd_MsgNewBlockHashes_proposer           protoreflect.FieldDescriptor
+	fd_MsgNewBlockHashes_vote               protoreflect.FieldDescriptor
+	fd_MsgNewBlockHashes_start_block_number protoreflect.FieldDescriptor
+	fd_MsgNewBlockHashes_block_hash         protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_goat_bitcoin_v1_tx_proto_init()
-	md_MsgNewBlocks = File_goat_bitcoin_v1_tx_proto.Messages().ByName("MsgNewBlocks")
-	fd_MsgNewBlocks_proposer = md_MsgNewBlocks.Fields().ByName("proposer")
-	fd_MsgNewBlocks_vote = md_MsgNewBlocks.Fields().ByName("vote")
-	fd_MsgNewBlocks_start_block_number = md_MsgNewBlocks.Fields().ByName("start_block_number")
-	fd_MsgNewBlocks_block_hash = md_MsgNewBlocks.Fields().ByName("block_hash")
+	md_MsgNewBlockHashes = File_goat_bitcoin_v1_tx_proto.Messages().ByName("MsgNewBlockHashes")
+	fd_MsgNewBlockHashes_proposer = md_MsgNewBlockHashes.Fields().ByName("proposer")
+	fd_MsgNewBlockHashes_vote = md_MsgNewBlockHashes.Fields().ByName("vote")
+	fd_MsgNewBlockHashes_start_block_number = md_MsgNewBlockHashes.Fields().ByName("start_block_number")
+	fd_MsgNewBlockHashes_block_hash = md_MsgNewBlockHashes.Fields().ByName("block_hash")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgNewBlocks)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgNewBlockHashes)(nil)
 
-type fastReflection_MsgNewBlocks MsgNewBlocks
+type fastReflection_MsgNewBlockHashes MsgNewBlockHashes
 
-func (x *MsgNewBlocks) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgNewBlocks)(x)
+func (x *MsgNewBlockHashes) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgNewBlockHashes)(x)
 }
 
-func (x *MsgNewBlocks) slowProtoReflect() protoreflect.Message {
+func (x *MsgNewBlockHashes) slowProtoReflect() protoreflect.Message {
 	mi := &file_goat_bitcoin_v1_tx_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -99,43 +99,43 @@ func (x *MsgNewBlocks) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgNewBlocks_messageType fastReflection_MsgNewBlocks_messageType
-var _ protoreflect.MessageType = fastReflection_MsgNewBlocks_messageType{}
+var _fastReflection_MsgNewBlockHashes_messageType fastReflection_MsgNewBlockHashes_messageType
+var _ protoreflect.MessageType = fastReflection_MsgNewBlockHashes_messageType{}
 
-type fastReflection_MsgNewBlocks_messageType struct{}
+type fastReflection_MsgNewBlockHashes_messageType struct{}
 
-func (x fastReflection_MsgNewBlocks_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgNewBlocks)(nil)
+func (x fastReflection_MsgNewBlockHashes_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgNewBlockHashes)(nil)
 }
-func (x fastReflection_MsgNewBlocks_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgNewBlocks)
+func (x fastReflection_MsgNewBlockHashes_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgNewBlockHashes)
 }
-func (x fastReflection_MsgNewBlocks_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgNewBlocks
+func (x fastReflection_MsgNewBlockHashes_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgNewBlockHashes
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgNewBlocks) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgNewBlocks
+func (x *fastReflection_MsgNewBlockHashes) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgNewBlockHashes
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgNewBlocks) Type() protoreflect.MessageType {
-	return _fastReflection_MsgNewBlocks_messageType
+func (x *fastReflection_MsgNewBlockHashes) Type() protoreflect.MessageType {
+	return _fastReflection_MsgNewBlockHashes_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgNewBlocks) New() protoreflect.Message {
-	return new(fastReflection_MsgNewBlocks)
+func (x *fastReflection_MsgNewBlockHashes) New() protoreflect.Message {
+	return new(fastReflection_MsgNewBlockHashes)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgNewBlocks) Interface() protoreflect.ProtoMessage {
-	return (*MsgNewBlocks)(x)
+func (x *fastReflection_MsgNewBlockHashes) Interface() protoreflect.ProtoMessage {
+	return (*MsgNewBlockHashes)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -143,28 +143,28 @@ func (x *fastReflection_MsgNewBlocks) Interface() protoreflect.ProtoMessage {
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgNewBlocks) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgNewBlockHashes) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Proposer != "" {
 		value := protoreflect.ValueOfString(x.Proposer)
-		if !f(fd_MsgNewBlocks_proposer, value) {
+		if !f(fd_MsgNewBlockHashes_proposer, value) {
 			return
 		}
 	}
 	if x.Vote != nil {
 		value := protoreflect.ValueOfMessage(x.Vote.ProtoReflect())
-		if !f(fd_MsgNewBlocks_vote, value) {
+		if !f(fd_MsgNewBlockHashes_vote, value) {
 			return
 		}
 	}
 	if x.StartBlockNumber != uint64(0) {
 		value := protoreflect.ValueOfUint64(x.StartBlockNumber)
-		if !f(fd_MsgNewBlocks_start_block_number, value) {
+		if !f(fd_MsgNewBlockHashes_start_block_number, value) {
 			return
 		}
 	}
 	if len(x.BlockHash) != 0 {
-		value := protoreflect.ValueOfList(&_MsgNewBlocks_4_list{list: &x.BlockHash})
-		if !f(fd_MsgNewBlocks_block_hash, value) {
+		value := protoreflect.ValueOfList(&_MsgNewBlockHashes_4_list{list: &x.BlockHash})
+		if !f(fd_MsgNewBlockHashes_block_hash, value) {
 			return
 		}
 	}
@@ -181,21 +181,21 @@ func (x *fastReflection_MsgNewBlocks) Range(f func(protoreflect.FieldDescriptor,
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgNewBlocks) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgNewBlockHashes) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "goat.bitcoin.v1.MsgNewBlocks.proposer":
+	case "goat.bitcoin.v1.MsgNewBlockHashes.proposer":
 		return x.Proposer != ""
-	case "goat.bitcoin.v1.MsgNewBlocks.vote":
+	case "goat.bitcoin.v1.MsgNewBlockHashes.vote":
 		return x.Vote != nil
-	case "goat.bitcoin.v1.MsgNewBlocks.start_block_number":
+	case "goat.bitcoin.v1.MsgNewBlockHashes.start_block_number":
 		return x.StartBlockNumber != uint64(0)
-	case "goat.bitcoin.v1.MsgNewBlocks.block_hash":
+	case "goat.bitcoin.v1.MsgNewBlockHashes.block_hash":
 		return len(x.BlockHash) != 0
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewBlocks"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewBlockHashes"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewBlocks does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewBlockHashes does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -205,21 +205,21 @@ func (x *fastReflection_MsgNewBlocks) Has(fd protoreflect.FieldDescriptor) bool 
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgNewBlocks) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgNewBlockHashes) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "goat.bitcoin.v1.MsgNewBlocks.proposer":
+	case "goat.bitcoin.v1.MsgNewBlockHashes.proposer":
 		x.Proposer = ""
-	case "goat.bitcoin.v1.MsgNewBlocks.vote":
+	case "goat.bitcoin.v1.MsgNewBlockHashes.vote":
 		x.Vote = nil
-	case "goat.bitcoin.v1.MsgNewBlocks.start_block_number":
+	case "goat.bitcoin.v1.MsgNewBlockHashes.start_block_number":
 		x.StartBlockNumber = uint64(0)
-	case "goat.bitcoin.v1.MsgNewBlocks.block_hash":
+	case "goat.bitcoin.v1.MsgNewBlockHashes.block_hash":
 		x.BlockHash = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewBlocks"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewBlockHashes"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewBlocks does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewBlockHashes does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -229,28 +229,28 @@ func (x *fastReflection_MsgNewBlocks) Clear(fd protoreflect.FieldDescriptor) {
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgNewBlocks) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgNewBlockHashes) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "goat.bitcoin.v1.MsgNewBlocks.proposer":
+	case "goat.bitcoin.v1.MsgNewBlockHashes.proposer":
 		value := x.Proposer
 		return protoreflect.ValueOfString(value)
-	case "goat.bitcoin.v1.MsgNewBlocks.vote":
+	case "goat.bitcoin.v1.MsgNewBlockHashes.vote":
 		value := x.Vote
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "goat.bitcoin.v1.MsgNewBlocks.start_block_number":
+	case "goat.bitcoin.v1.MsgNewBlockHashes.start_block_number":
 		value := x.StartBlockNumber
 		return protoreflect.ValueOfUint64(value)
-	case "goat.bitcoin.v1.MsgNewBlocks.block_hash":
+	case "goat.bitcoin.v1.MsgNewBlockHashes.block_hash":
 		if len(x.BlockHash) == 0 {
-			return protoreflect.ValueOfList(&_MsgNewBlocks_4_list{})
+			return protoreflect.ValueOfList(&_MsgNewBlockHashes_4_list{})
 		}
-		listValue := &_MsgNewBlocks_4_list{list: &x.BlockHash}
+		listValue := &_MsgNewBlockHashes_4_list{list: &x.BlockHash}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewBlocks"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewBlockHashes"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewBlocks does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewBlockHashes does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -264,23 +264,23 @@ func (x *fastReflection_MsgNewBlocks) Get(descriptor protoreflect.FieldDescripto
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgNewBlocks) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgNewBlockHashes) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "goat.bitcoin.v1.MsgNewBlocks.proposer":
+	case "goat.bitcoin.v1.MsgNewBlockHashes.proposer":
 		x.Proposer = value.Interface().(string)
-	case "goat.bitcoin.v1.MsgNewBlocks.vote":
+	case "goat.bitcoin.v1.MsgNewBlockHashes.vote":
 		x.Vote = value.Message().Interface().(*v1.Votes)
-	case "goat.bitcoin.v1.MsgNewBlocks.start_block_number":
+	case "goat.bitcoin.v1.MsgNewBlockHashes.start_block_number":
 		x.StartBlockNumber = value.Uint()
-	case "goat.bitcoin.v1.MsgNewBlocks.block_hash":
+	case "goat.bitcoin.v1.MsgNewBlockHashes.block_hash":
 		lv := value.List()
-		clv := lv.(*_MsgNewBlocks_4_list)
+		clv := lv.(*_MsgNewBlockHashes_4_list)
 		x.BlockHash = *clv.list
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewBlocks"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewBlockHashes"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewBlocks does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewBlockHashes does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -294,61 +294,61 @@ func (x *fastReflection_MsgNewBlocks) Set(fd protoreflect.FieldDescriptor, value
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgNewBlocks) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgNewBlockHashes) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "goat.bitcoin.v1.MsgNewBlocks.vote":
+	case "goat.bitcoin.v1.MsgNewBlockHashes.vote":
 		if x.Vote == nil {
 			x.Vote = new(v1.Votes)
 		}
 		return protoreflect.ValueOfMessage(x.Vote.ProtoReflect())
-	case "goat.bitcoin.v1.MsgNewBlocks.block_hash":
+	case "goat.bitcoin.v1.MsgNewBlockHashes.block_hash":
 		if x.BlockHash == nil {
 			x.BlockHash = [][]byte{}
 		}
-		value := &_MsgNewBlocks_4_list{list: &x.BlockHash}
+		value := &_MsgNewBlockHashes_4_list{list: &x.BlockHash}
 		return protoreflect.ValueOfList(value)
-	case "goat.bitcoin.v1.MsgNewBlocks.proposer":
-		panic(fmt.Errorf("field proposer of message goat.bitcoin.v1.MsgNewBlocks is not mutable"))
-	case "goat.bitcoin.v1.MsgNewBlocks.start_block_number":
-		panic(fmt.Errorf("field start_block_number of message goat.bitcoin.v1.MsgNewBlocks is not mutable"))
+	case "goat.bitcoin.v1.MsgNewBlockHashes.proposer":
+		panic(fmt.Errorf("field proposer of message goat.bitcoin.v1.MsgNewBlockHashes is not mutable"))
+	case "goat.bitcoin.v1.MsgNewBlockHashes.start_block_number":
+		panic(fmt.Errorf("field start_block_number of message goat.bitcoin.v1.MsgNewBlockHashes is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewBlocks"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewBlockHashes"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewBlocks does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewBlockHashes does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgNewBlocks) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgNewBlockHashes) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "goat.bitcoin.v1.MsgNewBlocks.proposer":
+	case "goat.bitcoin.v1.MsgNewBlockHashes.proposer":
 		return protoreflect.ValueOfString("")
-	case "goat.bitcoin.v1.MsgNewBlocks.vote":
+	case "goat.bitcoin.v1.MsgNewBlockHashes.vote":
 		m := new(v1.Votes)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "goat.bitcoin.v1.MsgNewBlocks.start_block_number":
+	case "goat.bitcoin.v1.MsgNewBlockHashes.start_block_number":
 		return protoreflect.ValueOfUint64(uint64(0))
-	case "goat.bitcoin.v1.MsgNewBlocks.block_hash":
+	case "goat.bitcoin.v1.MsgNewBlockHashes.block_hash":
 		list := [][]byte{}
-		return protoreflect.ValueOfList(&_MsgNewBlocks_4_list{list: &list})
+		return protoreflect.ValueOfList(&_MsgNewBlockHashes_4_list{list: &list})
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewBlocks"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewBlockHashes"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewBlocks does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewBlockHashes does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgNewBlocks) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgNewBlockHashes) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in goat.bitcoin.v1.MsgNewBlocks", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in goat.bitcoin.v1.MsgNewBlockHashes", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -356,7 +356,7 @@ func (x *fastReflection_MsgNewBlocks) WhichOneof(d protoreflect.OneofDescriptor)
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgNewBlocks) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgNewBlockHashes) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -367,7 +367,7 @@ func (x *fastReflection_MsgNewBlocks) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgNewBlocks) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgNewBlockHashes) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -379,7 +379,7 @@ func (x *fastReflection_MsgNewBlocks) SetUnknown(fields protoreflect.RawFields) 
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgNewBlocks) IsValid() bool {
+func (x *fastReflection_MsgNewBlockHashes) IsValid() bool {
 	return x != nil
 }
 
@@ -389,9 +389,9 @@ func (x *fastReflection_MsgNewBlocks) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgNewBlocks) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgNewBlockHashes) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgNewBlocks)
+		x := input.Message.Interface().(*MsgNewBlockHashes)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -430,7 +430,7 @@ func (x *fastReflection_MsgNewBlocks) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgNewBlocks)
+		x := input.Message.Interface().(*MsgNewBlockHashes)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -495,7 +495,7 @@ func (x *fastReflection_MsgNewBlocks) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgNewBlocks)
+		x := input.Message.Interface().(*MsgNewBlockHashes)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -527,10 +527,10 @@ func (x *fastReflection_MsgNewBlocks) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgNewBlocks: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgNewBlockHashes: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgNewBlocks: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgNewBlockHashes: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -688,23 +688,23 @@ func (x *fastReflection_MsgNewBlocks) ProtoMethods() *protoiface.Methods {
 }
 
 var (
-	md_MsgNewBlocksResponse protoreflect.MessageDescriptor
+	md_MsgNewBlockHashesResponse protoreflect.MessageDescriptor
 )
 
 func init() {
 	file_goat_bitcoin_v1_tx_proto_init()
-	md_MsgNewBlocksResponse = File_goat_bitcoin_v1_tx_proto.Messages().ByName("MsgNewBlocksResponse")
+	md_MsgNewBlockHashesResponse = File_goat_bitcoin_v1_tx_proto.Messages().ByName("MsgNewBlockHashesResponse")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgNewBlocksResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgNewBlockHashesResponse)(nil)
 
-type fastReflection_MsgNewBlocksResponse MsgNewBlocksResponse
+type fastReflection_MsgNewBlockHashesResponse MsgNewBlockHashesResponse
 
-func (x *MsgNewBlocksResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgNewBlocksResponse)(x)
+func (x *MsgNewBlockHashesResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgNewBlockHashesResponse)(x)
 }
 
-func (x *MsgNewBlocksResponse) slowProtoReflect() protoreflect.Message {
+func (x *MsgNewBlockHashesResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_goat_bitcoin_v1_tx_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -716,43 +716,43 @@ func (x *MsgNewBlocksResponse) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgNewBlocksResponse_messageType fastReflection_MsgNewBlocksResponse_messageType
-var _ protoreflect.MessageType = fastReflection_MsgNewBlocksResponse_messageType{}
+var _fastReflection_MsgNewBlockHashesResponse_messageType fastReflection_MsgNewBlockHashesResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgNewBlockHashesResponse_messageType{}
 
-type fastReflection_MsgNewBlocksResponse_messageType struct{}
+type fastReflection_MsgNewBlockHashesResponse_messageType struct{}
 
-func (x fastReflection_MsgNewBlocksResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgNewBlocksResponse)(nil)
+func (x fastReflection_MsgNewBlockHashesResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgNewBlockHashesResponse)(nil)
 }
-func (x fastReflection_MsgNewBlocksResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgNewBlocksResponse)
+func (x fastReflection_MsgNewBlockHashesResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgNewBlockHashesResponse)
 }
-func (x fastReflection_MsgNewBlocksResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgNewBlocksResponse
+func (x fastReflection_MsgNewBlockHashesResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgNewBlockHashesResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgNewBlocksResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgNewBlocksResponse
+func (x *fastReflection_MsgNewBlockHashesResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgNewBlockHashesResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgNewBlocksResponse) Type() protoreflect.MessageType {
-	return _fastReflection_MsgNewBlocksResponse_messageType
+func (x *fastReflection_MsgNewBlockHashesResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgNewBlockHashesResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgNewBlocksResponse) New() protoreflect.Message {
-	return new(fastReflection_MsgNewBlocksResponse)
+func (x *fastReflection_MsgNewBlockHashesResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgNewBlockHashesResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgNewBlocksResponse) Interface() protoreflect.ProtoMessage {
-	return (*MsgNewBlocksResponse)(x)
+func (x *fastReflection_MsgNewBlockHashesResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgNewBlockHashesResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -760,7 +760,7 @@ func (x *fastReflection_MsgNewBlocksResponse) Interface() protoreflect.ProtoMess
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgNewBlocksResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgNewBlockHashesResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 }
 
 // Has reports whether a field is populated.
@@ -774,13 +774,13 @@ func (x *fastReflection_MsgNewBlocksResponse) Range(f func(protoreflect.FieldDes
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgNewBlocksResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgNewBlockHashesResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewBlocksResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewBlockHashesResponse"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewBlocksResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewBlockHashesResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -790,13 +790,13 @@ func (x *fastReflection_MsgNewBlocksResponse) Has(fd protoreflect.FieldDescripto
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgNewBlocksResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgNewBlockHashesResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewBlocksResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewBlockHashesResponse"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewBlocksResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewBlockHashesResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -806,13 +806,13 @@ func (x *fastReflection_MsgNewBlocksResponse) Clear(fd protoreflect.FieldDescrip
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgNewBlocksResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgNewBlockHashesResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewBlocksResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewBlockHashesResponse"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewBlocksResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewBlockHashesResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -826,13 +826,13 @@ func (x *fastReflection_MsgNewBlocksResponse) Get(descriptor protoreflect.FieldD
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgNewBlocksResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgNewBlockHashesResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewBlocksResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewBlockHashesResponse"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewBlocksResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewBlockHashesResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -846,36 +846,36 @@ func (x *fastReflection_MsgNewBlocksResponse) Set(fd protoreflect.FieldDescripto
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgNewBlocksResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgNewBlockHashesResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewBlocksResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewBlockHashesResponse"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewBlocksResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewBlockHashesResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgNewBlocksResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgNewBlockHashesResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewBlocksResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewBlockHashesResponse"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewBlocksResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewBlockHashesResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgNewBlocksResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgNewBlockHashesResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in goat.bitcoin.v1.MsgNewBlocksResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in goat.bitcoin.v1.MsgNewBlockHashesResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -883,7 +883,7 @@ func (x *fastReflection_MsgNewBlocksResponse) WhichOneof(d protoreflect.OneofDes
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgNewBlocksResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgNewBlockHashesResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -894,7 +894,7 @@ func (x *fastReflection_MsgNewBlocksResponse) GetUnknown() protoreflect.RawField
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgNewBlocksResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgNewBlockHashesResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -906,7 +906,7 @@ func (x *fastReflection_MsgNewBlocksResponse) SetUnknown(fields protoreflect.Raw
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgNewBlocksResponse) IsValid() bool {
+func (x *fastReflection_MsgNewBlockHashesResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -916,9 +916,9 @@ func (x *fastReflection_MsgNewBlocksResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgNewBlocksResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgNewBlockHashesResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgNewBlocksResponse)
+		x := input.Message.Interface().(*MsgNewBlockHashesResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -940,7 +940,7 @@ func (x *fastReflection_MsgNewBlocksResponse) ProtoMethods() *protoiface.Methods
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgNewBlocksResponse)
+		x := input.Message.Interface().(*MsgNewBlockHashesResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -970,7 +970,7 @@ func (x *fastReflection_MsgNewBlocksResponse) ProtoMethods() *protoiface.Methods
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgNewBlocksResponse)
+		x := input.Message.Interface().(*MsgNewBlockHashesResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1002,10 +1002,10 @@ func (x *fastReflection_MsgNewBlocksResponse) ProtoMethods() *protoiface.Methods
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgNewBlocksResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgNewBlockHashesResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgNewBlocksResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgNewBlockHashesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			default:
@@ -2904,8 +2904,8 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// MsgNewBlocks represents a solid block header is confirmed by relayer group
-type MsgNewBlocks struct {
+// MsgNewBlockHashes represents a solid block header is confirmed by relayer group
+type MsgNewBlockHashes struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -2916,8 +2916,8 @@ type MsgNewBlocks struct {
 	BlockHash        [][]byte  `protobuf:"bytes,4,rep,name=block_hash,json=blockHash,proto3" json:"block_hash,omitempty"`
 }
 
-func (x *MsgNewBlocks) Reset() {
-	*x = MsgNewBlocks{}
+func (x *MsgNewBlockHashes) Reset() {
+	*x = MsgNewBlockHashes{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_goat_bitcoin_v1_tx_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2925,54 +2925,54 @@ func (x *MsgNewBlocks) Reset() {
 	}
 }
 
-func (x *MsgNewBlocks) String() string {
+func (x *MsgNewBlockHashes) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgNewBlocks) ProtoMessage() {}
+func (*MsgNewBlockHashes) ProtoMessage() {}
 
-// Deprecated: Use MsgNewBlocks.ProtoReflect.Descriptor instead.
-func (*MsgNewBlocks) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgNewBlockHashes.ProtoReflect.Descriptor instead.
+func (*MsgNewBlockHashes) Descriptor() ([]byte, []int) {
 	return file_goat_bitcoin_v1_tx_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *MsgNewBlocks) GetProposer() string {
+func (x *MsgNewBlockHashes) GetProposer() string {
 	if x != nil {
 		return x.Proposer
 	}
 	return ""
 }
 
-func (x *MsgNewBlocks) GetVote() *v1.Votes {
+func (x *MsgNewBlockHashes) GetVote() *v1.Votes {
 	if x != nil {
 		return x.Vote
 	}
 	return nil
 }
 
-func (x *MsgNewBlocks) GetStartBlockNumber() uint64 {
+func (x *MsgNewBlockHashes) GetStartBlockNumber() uint64 {
 	if x != nil {
 		return x.StartBlockNumber
 	}
 	return 0
 }
 
-func (x *MsgNewBlocks) GetBlockHash() [][]byte {
+func (x *MsgNewBlockHashes) GetBlockHash() [][]byte {
 	if x != nil {
 		return x.BlockHash
 	}
 	return nil
 }
 
-// MsgNewBlocksResponse defines the Msg/NewHeaders response type.
-type MsgNewBlocksResponse struct {
+// MsgNewBlockHashesResponse defines the Msg/NewHeaders response type.
+type MsgNewBlockHashesResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *MsgNewBlocksResponse) Reset() {
-	*x = MsgNewBlocksResponse{}
+func (x *MsgNewBlockHashesResponse) Reset() {
+	*x = MsgNewBlockHashesResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_goat_bitcoin_v1_tx_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2980,14 +2980,14 @@ func (x *MsgNewBlocksResponse) Reset() {
 	}
 }
 
-func (x *MsgNewBlocksResponse) String() string {
+func (x *MsgNewBlockHashesResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgNewBlocksResponse) ProtoMessage() {}
+func (*MsgNewBlockHashesResponse) ProtoMessage() {}
 
-// Deprecated: Use MsgNewBlocksResponse.ProtoReflect.Descriptor instead.
-func (*MsgNewBlocksResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgNewBlockHashesResponse.ProtoReflect.Descriptor instead.
+func (*MsgNewBlockHashesResponse) Descriptor() ([]byte, []int) {
 	return file_goat_bitcoin_v1_tx_proto_rawDescGZIP(), []int{1}
 }
 
@@ -3155,79 +3155,81 @@ var file_goat_bitcoin_v1_tx_proto_rawDesc = []byte{
 	0x2f, 0x76, 0x31, 0x2f, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74,
 	0x6f, 0x1a, 0x1d, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x2f,
 	0x76, 0x31, 0x2f, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x22, 0xed, 0x01, 0x0a, 0x0c, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x42, 0x6c, 0x6f, 0x63, 0x6b,
-	0x73, 0x12, 0x34, 0x0a, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x18, 0x01, 0x20,
+	0x22, 0xf6, 0x01, 0x0a, 0x11, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x42, 0x6c, 0x6f, 0x63, 0x6b,
+	0x48, 0x61, 0x73, 0x68, 0x65, 0x73, 0x12, 0x34, 0x0a, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73,
+	0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f,
+	0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69,
+	0x6e, 0x67, 0x52, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x12, 0x2a, 0x0a, 0x04,
+	0x76, 0x6f, 0x74, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x16, 0x2e, 0x67, 0x6f, 0x61,
+	0x74, 0x2e, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x2e, 0x76, 0x31, 0x2e, 0x56, 0x6f, 0x74,
+	0x65, 0x73, 0x52, 0x04, 0x76, 0x6f, 0x74, 0x65, 0x12, 0x2c, 0x0a, 0x12, 0x73, 0x74, 0x61, 0x72,
+	0x74, 0x5f, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x6e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x18, 0x03,
+	0x20, 0x01, 0x28, 0x04, 0x52, 0x10, 0x73, 0x74, 0x61, 0x72, 0x74, 0x42, 0x6c, 0x6f, 0x63, 0x6b,
+	0x4e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x12, 0x1d, 0x0a, 0x0a, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f,
+	0x68, 0x61, 0x73, 0x68, 0x18, 0x04, 0x20, 0x03, 0x28, 0x0c, 0x52, 0x09, 0x62, 0x6c, 0x6f, 0x63,
+	0x6b, 0x48, 0x61, 0x73, 0x68, 0x3a, 0x32, 0x82, 0xe7, 0xb0, 0x2a, 0x08, 0x70, 0x72, 0x6f, 0x70,
+	0x6f, 0x73, 0x65, 0x72, 0x8a, 0xe7, 0xb0, 0x2a, 0x20, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x78, 0x2f,
+	0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2f, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x42, 0x6c,
+	0x6f, 0x63, 0x6b, 0x48, 0x61, 0x73, 0x68, 0x65, 0x73, 0x22, 0x1b, 0x0a, 0x19, 0x4d, 0x73, 0x67,
+	0x4e, 0x65, 0x77, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x61, 0x73, 0x68, 0x65, 0x73, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xad, 0x01, 0x0a, 0x0e, 0x4d, 0x73, 0x67, 0x4e, 0x65,
+	0x77, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x12, 0x34, 0x0a, 0x08, 0x70, 0x72, 0x6f,
+	0x70, 0x6f, 0x73, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d,
+	0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53,
+	0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x12,
+	0x34, 0x0a, 0x08, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28,
+	0x0b, 0x32, 0x18, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e,
+	0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x52, 0x08, 0x64, 0x65, 0x70,
+	0x6f, 0x73, 0x69, 0x74, 0x73, 0x3a, 0x2f, 0x82, 0xe7, 0xb0, 0x2a, 0x08, 0x70, 0x72, 0x6f, 0x70,
+	0x6f, 0x73, 0x65, 0x72, 0x8a, 0xe7, 0xb0, 0x2a, 0x1d, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x78, 0x2f,
+	0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2f, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x44, 0x65,
+	0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x22, 0x18, 0x0a, 0x16, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77,
+	0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x22, 0xd3, 0x01, 0x0a, 0x0c, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x50, 0x75, 0x62, 0x6b, 0x65,
+	0x79, 0x12, 0x34, 0x0a, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x18, 0x01, 0x20,
 	0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e,
 	0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x08, 0x70,
 	0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x12, 0x2a, 0x0a, 0x04, 0x76, 0x6f, 0x74, 0x65, 0x18,
 	0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x16, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x72, 0x65, 0x6c,
 	0x61, 0x79, 0x65, 0x72, 0x2e, 0x76, 0x31, 0x2e, 0x56, 0x6f, 0x74, 0x65, 0x73, 0x52, 0x04, 0x76,
-	0x6f, 0x74, 0x65, 0x12, 0x2c, 0x0a, 0x12, 0x73, 0x74, 0x61, 0x72, 0x74, 0x5f, 0x62, 0x6c, 0x6f,
-	0x63, 0x6b, 0x5f, 0x6e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52,
-	0x10, 0x73, 0x74, 0x61, 0x72, 0x74, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x4e, 0x75, 0x6d, 0x62, 0x65,
-	0x72, 0x12, 0x1d, 0x0a, 0x0a, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x68, 0x61, 0x73, 0x68, 0x18,
-	0x04, 0x20, 0x03, 0x28, 0x0c, 0x52, 0x09, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x61, 0x73, 0x68,
-	0x3a, 0x2e, 0x82, 0xe7, 0xb0, 0x2a, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x8a,
-	0xe7, 0xb0, 0x2a, 0x1c, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x78, 0x2f, 0x62, 0x69, 0x74, 0x63, 0x6f,
-	0x69, 0x6e, 0x2f, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x48, 0x65, 0x61, 0x64, 0x65, 0x72, 0x73,
-	0x22, 0x16, 0x0a, 0x14, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x73,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xad, 0x01, 0x0a, 0x0e, 0x4d, 0x73, 0x67,
-	0x4e, 0x65, 0x77, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x12, 0x34, 0x0a, 0x08, 0x70,
-	0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2,
-	0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73,
-	0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65,
-	0x72, 0x12, 0x34, 0x0a, 0x08, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x18, 0x02, 0x20,
-	0x03, 0x28, 0x0b, 0x32, 0x18, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f,
-	0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x52, 0x08, 0x64,
-	0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x3a, 0x2f, 0x82, 0xe7, 0xb0, 0x2a, 0x08, 0x70, 0x72,
-	0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x8a, 0xe7, 0xb0, 0x2a, 0x1d, 0x67, 0x6f, 0x61, 0x74, 0x2f,
+	0x6f, 0x74, 0x65, 0x12, 0x32, 0x0a, 0x06, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x18, 0x03, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x72, 0x65, 0x6c, 0x61, 0x79,
+	0x65, 0x72, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x63, 0x4b, 0x65, 0x79, 0x52,
+	0x06, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x3a, 0x2d, 0x82, 0xe7, 0xb0, 0x2a, 0x08, 0x70, 0x72,
+	0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x8a, 0xe7, 0xb0, 0x2a, 0x1b, 0x67, 0x6f, 0x61, 0x74, 0x2f,
 	0x78, 0x2f, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2f, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77,
-	0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x22, 0x18, 0x0a, 0x16, 0x4d, 0x73, 0x67, 0x4e,
-	0x65, 0x77, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x22, 0xd3, 0x01, 0x0a, 0x0c, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x50, 0x75, 0x62,
-	0x6b, 0x65, 0x79, 0x12, 0x34, 0x0a, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
-	0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52,
-	0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x12, 0x2a, 0x0a, 0x04, 0x76, 0x6f, 0x74,
-	0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x16, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x72,
-	0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x2e, 0x76, 0x31, 0x2e, 0x56, 0x6f, 0x74, 0x65, 0x73, 0x52,
-	0x04, 0x76, 0x6f, 0x74, 0x65, 0x12, 0x32, 0x0a, 0x06, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x18,
-	0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x72, 0x65, 0x6c,
-	0x61, 0x79, 0x65, 0x72, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x63, 0x4b, 0x65,
-	0x79, 0x52, 0x06, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x3a, 0x2d, 0x82, 0xe7, 0xb0, 0x2a, 0x08,
-	0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x8a, 0xe7, 0xb0, 0x2a, 0x1b, 0x67, 0x6f, 0x61,
-	0x74, 0x2f, 0x78, 0x2f, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2f, 0x4d, 0x73, 0x67, 0x4e,
-	0x65, 0x77, 0x50, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x22, 0x16, 0x0a, 0x14, 0x4d, 0x73, 0x67, 0x4e,
-	0x65, 0x77, 0x50, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x32, 0x8b, 0x02, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12, 0x51, 0x0a, 0x09, 0x4e, 0x65, 0x77, 0x42,
-	0x6c, 0x6f, 0x63, 0x6b, 0x73, 0x12, 0x1d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74,
-	0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x42, 0x6c,
-	0x6f, 0x63, 0x6b, 0x73, 0x1a, 0x25, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63,
-	0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x42, 0x6c, 0x6f,
-	0x63, 0x6b, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x57, 0x0a, 0x0b, 0x4e,
-	0x65, 0x77, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x12, 0x1f, 0x2e, 0x67, 0x6f, 0x61,
-	0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67,
-	0x4e, 0x65, 0x77, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x1a, 0x27, 0x2e, 0x67, 0x6f,
-	0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73,
-	0x67, 0x4e, 0x65, 0x77, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x51, 0x0a, 0x09, 0x4e, 0x65, 0x77, 0x50, 0x75, 0x62, 0x6b, 0x65,
-	0x79, 0x12, 0x1d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e,
-	0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x50, 0x75, 0x62, 0x6b, 0x65, 0x79,
-	0x1a, 0x25, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e,
-	0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x50, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0, 0x2a, 0x01, 0x42, 0xb7,
-	0x01, 0x0a, 0x13, 0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63,
-	0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x42, 0x07, 0x54, 0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50,
-	0x01, 0x5a, 0x39, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f,
-	0x61, 0x74, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x61,
-	0x70, 0x69, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2f,
-	0x76, 0x31, 0x3b, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x47,
-	0x42, 0x58, 0xaa, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x2e, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69,
-	0x6e, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x42, 0x69, 0x74, 0x63,
-	0x6f, 0x69, 0x6e, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x1b, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x42, 0x69,
-	0x74, 0x63, 0x6f, 0x69, 0x6e, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61,
-	0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x11, 0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x42, 0x69, 0x74,
-	0x63, 0x6f, 0x69, 0x6e, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x50, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x22, 0x16, 0x0a, 0x14, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77,
+	0x50, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0x9a,
+	0x02, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12, 0x60, 0x0a, 0x0e, 0x4e, 0x65, 0x77, 0x42, 0x6c, 0x6f,
+	0x63, 0x6b, 0x48, 0x61, 0x73, 0x68, 0x65, 0x73, 0x12, 0x22, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e,
+	0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65,
+	0x77, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x61, 0x73, 0x68, 0x65, 0x73, 0x1a, 0x2a, 0x2e, 0x67,
+	0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d,
+	0x73, 0x67, 0x4e, 0x65, 0x77, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x61, 0x73, 0x68, 0x65, 0x73,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x57, 0x0a, 0x0b, 0x4e, 0x65, 0x77, 0x44,
+	0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x12, 0x1f, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62,
+	0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77,
+	0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x1a, 0x27, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e,
+	0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65,
+	0x77, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x12, 0x51, 0x0a, 0x09, 0x4e, 0x65, 0x77, 0x50, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x12, 0x1d,
+	0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31,
+	0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x50, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x1a, 0x25, 0x2e,
+	0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e,
+	0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x50, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0, 0x2a, 0x01, 0x42, 0xb7, 0x01, 0x0a, 0x13,
+	0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e,
+	0x2e, 0x76, 0x31, 0x42, 0x07, 0x54, 0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x39,
+	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x6e,
+	0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x61, 0x70, 0x69, 0x2f,
+	0x67, 0x6f, 0x61, 0x74, 0x2f, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2f, 0x76, 0x31, 0x3b,
+	0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x47, 0x42, 0x58, 0xaa,
+	0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x2e, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x56,
+	0x31, 0xca, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e,
+	0x5c, 0x56, 0x31, 0xe2, 0x02, 0x1b, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x42, 0x69, 0x74, 0x63, 0x6f,
+	0x69, 0x6e, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74,
+	0x61, 0xea, 0x02, 0x11, 0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69,
+	0x6e, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -3244,25 +3246,25 @@ func file_goat_bitcoin_v1_tx_proto_rawDescGZIP() []byte {
 
 var file_goat_bitcoin_v1_tx_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_goat_bitcoin_v1_tx_proto_goTypes = []interface{}{
-	(*MsgNewBlocks)(nil),           // 0: goat.bitcoin.v1.MsgNewBlocks
-	(*MsgNewBlocksResponse)(nil),   // 1: goat.bitcoin.v1.MsgNewBlocksResponse
-	(*MsgNewDeposits)(nil),         // 2: goat.bitcoin.v1.MsgNewDeposits
-	(*MsgNewDepositsResponse)(nil), // 3: goat.bitcoin.v1.MsgNewDepositsResponse
-	(*MsgNewPubkey)(nil),           // 4: goat.bitcoin.v1.MsgNewPubkey
-	(*MsgNewPubkeyResponse)(nil),   // 5: goat.bitcoin.v1.MsgNewPubkeyResponse
-	(*v1.Votes)(nil),               // 6: goat.relayer.v1.Votes
-	(*Deposit)(nil),                // 7: goat.bitcoin.v1.Deposit
-	(*v1.PublicKey)(nil),           // 8: goat.relayer.v1.PublicKey
+	(*MsgNewBlockHashes)(nil),         // 0: goat.bitcoin.v1.MsgNewBlockHashes
+	(*MsgNewBlockHashesResponse)(nil), // 1: goat.bitcoin.v1.MsgNewBlockHashesResponse
+	(*MsgNewDeposits)(nil),            // 2: goat.bitcoin.v1.MsgNewDeposits
+	(*MsgNewDepositsResponse)(nil),    // 3: goat.bitcoin.v1.MsgNewDepositsResponse
+	(*MsgNewPubkey)(nil),              // 4: goat.bitcoin.v1.MsgNewPubkey
+	(*MsgNewPubkeyResponse)(nil),      // 5: goat.bitcoin.v1.MsgNewPubkeyResponse
+	(*v1.Votes)(nil),                  // 6: goat.relayer.v1.Votes
+	(*Deposit)(nil),                   // 7: goat.bitcoin.v1.Deposit
+	(*v1.PublicKey)(nil),              // 8: goat.relayer.v1.PublicKey
 }
 var file_goat_bitcoin_v1_tx_proto_depIdxs = []int32{
-	6, // 0: goat.bitcoin.v1.MsgNewBlocks.vote:type_name -> goat.relayer.v1.Votes
+	6, // 0: goat.bitcoin.v1.MsgNewBlockHashes.vote:type_name -> goat.relayer.v1.Votes
 	7, // 1: goat.bitcoin.v1.MsgNewDeposits.deposits:type_name -> goat.bitcoin.v1.Deposit
 	6, // 2: goat.bitcoin.v1.MsgNewPubkey.vote:type_name -> goat.relayer.v1.Votes
 	8, // 3: goat.bitcoin.v1.MsgNewPubkey.pubkey:type_name -> goat.relayer.v1.PublicKey
-	0, // 4: goat.bitcoin.v1.Msg.NewBlocks:input_type -> goat.bitcoin.v1.MsgNewBlocks
+	0, // 4: goat.bitcoin.v1.Msg.NewBlockHashes:input_type -> goat.bitcoin.v1.MsgNewBlockHashes
 	2, // 5: goat.bitcoin.v1.Msg.NewDeposits:input_type -> goat.bitcoin.v1.MsgNewDeposits
 	4, // 6: goat.bitcoin.v1.Msg.NewPubkey:input_type -> goat.bitcoin.v1.MsgNewPubkey
-	1, // 7: goat.bitcoin.v1.Msg.NewBlocks:output_type -> goat.bitcoin.v1.MsgNewBlocksResponse
+	1, // 7: goat.bitcoin.v1.Msg.NewBlockHashes:output_type -> goat.bitcoin.v1.MsgNewBlockHashesResponse
 	3, // 8: goat.bitcoin.v1.Msg.NewDeposits:output_type -> goat.bitcoin.v1.MsgNewDepositsResponse
 	5, // 9: goat.bitcoin.v1.Msg.NewPubkey:output_type -> goat.bitcoin.v1.MsgNewPubkeyResponse
 	7, // [7:10] is the sub-list for method output_type
@@ -3280,7 +3282,7 @@ func file_goat_bitcoin_v1_tx_proto_init() {
 	file_goat_bitcoin_v1_bitcoin_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_goat_bitcoin_v1_tx_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgNewBlocks); i {
+			switch v := v.(*MsgNewBlockHashes); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3292,7 +3294,7 @@ func file_goat_bitcoin_v1_tx_proto_init() {
 			}
 		}
 		file_goat_bitcoin_v1_tx_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgNewBlocksResponse); i {
+			switch v := v.(*MsgNewBlockHashesResponse); i {
 			case 0:
 				return &v.state
 			case 1:

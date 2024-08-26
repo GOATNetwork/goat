@@ -4,7 +4,11 @@
 package types
 
 import (
+	cosmossdk_io_math "cosmossdk.io/math"
 	fmt "fmt"
+	_ "github.com/cosmos/cosmos-proto"
+	_ "github.com/cosmos/cosmos-sdk/types/tx/amino"
+	_ "github.com/cosmos/gogoproto/gogoproto"
 	proto "github.com/cosmos/gogoproto/proto"
 	types "github.com/goatnetwork/goat/x/relayer/types"
 	io "io"
@@ -25,20 +29,22 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Deposit defines the deposit transaction and its proof
 type Deposit struct {
-	Verison     uint32 `protobuf:"varint,1,opt,name=verison,proto3" json:"verison,omitempty"`
-	BlockNumber uint64 `protobuf:"varint,2,opt,name=block_number,json=blockNumber,proto3" json:"block_number,omitempty"`
-	BlockHeader []byte `protobuf:"bytes,3,opt,name=block_header,json=blockHeader,proto3" json:"block_header,omitempty"`
+	// block_number the block number that transaction located at
+	BlockNumber uint64 `protobuf:"varint,1,opt,name=block_number,json=blockNumber,proto3" json:"block_number,omitempty"`
+	// block_header is a encoded bytes for a block header, it's always 80 bytes
+	// refer to https://github.com/btcsuite/btcd/blob/master/wire/blockheader.go#L65 for the details
+	BlockHeader []byte `protobuf:"bytes,2,opt,name=block_header,json=blockHeader,proto3" json:"block_header,omitempty"`
 	// tx_index is the index of transaction in the block
-	TxIndex uint32 `protobuf:"varint,4,opt,name=tx_index,json=txIndex,proto3" json:"tx_index,omitempty"`
+	TxIndex uint32 `protobuf:"varint,3,opt,name=tx_index,json=txIndex,proto3" json:"tx_index,omitempty"`
 	// tx is the raw transaction withtout witness
-	NoWitnessTx []byte `protobuf:"bytes,5,opt,name=no_witness_tx,json=noWitnessTx,proto3" json:"no_witness_tx,omitempty"`
-	OutputIndex uint32 `protobuf:"varint,6,opt,name=output_index,json=outputIndex,proto3" json:"output_index,omitempty"`
+	NoWitnessTx []byte `protobuf:"bytes,4,opt,name=no_witness_tx,json=noWitnessTx,proto3" json:"no_witness_tx,omitempty"`
+	OutputIndex uint32 `protobuf:"varint,5,opt,name=output_index,json=outputIndex,proto3" json:"output_index,omitempty"`
 	// intermediate proof is the proof without the txid and merkel root
-	IntermediateProof []byte `protobuf:"bytes,7,opt,name=intermediate_proof,json=intermediateProof,proto3" json:"intermediate_proof,omitempty"`
+	IntermediateProof []byte `protobuf:"bytes,6,opt,name=intermediate_proof,json=intermediateProof,proto3" json:"intermediate_proof,omitempty"`
 	// evm_address is the user wallet address in goat evm
-	EvmAddress []byte `protobuf:"bytes,8,opt,name=evm_address,json=evmAddress,proto3" json:"evm_address,omitempty"`
+	EvmAddress []byte `protobuf:"bytes,7,opt,name=evm_address,json=evmAddress,proto3" json:"evm_address,omitempty"`
 	// relayer_pubkey is the compressed secp256k1 public key which managed by the relayer group
-	RelayerPubkey *types.PublicKey `protobuf:"bytes,9,opt,name=relayer_pubkey,json=relayerPubkey,proto3" json:"relayer_pubkey,omitempty"`
+	RelayerPubkey *types.PublicKey `protobuf:"bytes,8,opt,name=relayer_pubkey,json=relayerPubkey,proto3" json:"relayer_pubkey,omitempty"`
 }
 
 func (m *Deposit) Reset()         { *m = Deposit{} }
@@ -73,13 +79,6 @@ func (m *Deposit) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_Deposit proto.InternalMessageInfo
-
-func (m *Deposit) GetVerison() uint32 {
-	if m != nil {
-		return m.Verison
-	}
-	return 0
-}
 
 func (m *Deposit) GetBlockNumber() uint64 {
 	if m != nil {
@@ -137,38 +136,250 @@ func (m *Deposit) GetRelayerPubkey() *types.PublicKey {
 	return nil
 }
 
+// ExecuableDeposit
+type ExecuableDeposit struct {
+	Txid    []byte                `protobuf:"bytes,1,opt,name=txid,proto3" json:"txid,omitempty"`
+	Txout   uint32                `protobuf:"varint,2,opt,name=txout,proto3" json:"txout,omitempty"`
+	Address []byte                `protobuf:"bytes,3,opt,name=address,proto3" json:"address,omitempty"`
+	Amount  cosmossdk_io_math.Int `protobuf:"bytes,4,opt,name=amount,proto3,customtype=cosmossdk.io/math.Int" json:"amount"`
+}
+
+func (m *ExecuableDeposit) Reset()         { *m = ExecuableDeposit{} }
+func (m *ExecuableDeposit) String() string { return proto.CompactTextString(m) }
+func (*ExecuableDeposit) ProtoMessage()    {}
+func (*ExecuableDeposit) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c8a1a8d7fb9d8c11, []int{1}
+}
+func (m *ExecuableDeposit) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ExecuableDeposit) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ExecuableDeposit.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ExecuableDeposit) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ExecuableDeposit.Merge(m, src)
+}
+func (m *ExecuableDeposit) XXX_Size() int {
+	return m.Size()
+}
+func (m *ExecuableDeposit) XXX_DiscardUnknown() {
+	xxx_messageInfo_ExecuableDeposit.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ExecuableDeposit proto.InternalMessageInfo
+
+func (m *ExecuableDeposit) GetTxid() []byte {
+	if m != nil {
+		return m.Txid
+	}
+	return nil
+}
+
+func (m *ExecuableDeposit) GetTxout() uint32 {
+	if m != nil {
+		return m.Txout
+	}
+	return 0
+}
+
+func (m *ExecuableDeposit) GetAddress() []byte {
+	if m != nil {
+		return m.Address
+	}
+	return nil
+}
+
+// ExecuableWithdrawal
+type ExecuableWithdrawalReceipt struct {
+	Id     uint64                `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Txid   []byte                `protobuf:"bytes,2,opt,name=txid,proto3" json:"txid,omitempty"`
+	Txout  uint32                `protobuf:"varint,3,opt,name=txout,proto3" json:"txout,omitempty"`
+	Amount cosmossdk_io_math.Int `protobuf:"bytes,4,opt,name=amount,proto3,customtype=cosmossdk.io/math.Int" json:"amount"`
+}
+
+func (m *ExecuableWithdrawalReceipt) Reset()         { *m = ExecuableWithdrawalReceipt{} }
+func (m *ExecuableWithdrawalReceipt) String() string { return proto.CompactTextString(m) }
+func (*ExecuableWithdrawalReceipt) ProtoMessage()    {}
+func (*ExecuableWithdrawalReceipt) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c8a1a8d7fb9d8c11, []int{2}
+}
+func (m *ExecuableWithdrawalReceipt) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ExecuableWithdrawalReceipt) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ExecuableWithdrawalReceipt.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ExecuableWithdrawalReceipt) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ExecuableWithdrawalReceipt.Merge(m, src)
+}
+func (m *ExecuableWithdrawalReceipt) XXX_Size() int {
+	return m.Size()
+}
+func (m *ExecuableWithdrawalReceipt) XXX_DiscardUnknown() {
+	xxx_messageInfo_ExecuableWithdrawalReceipt.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ExecuableWithdrawalReceipt proto.InternalMessageInfo
+
+func (m *ExecuableWithdrawalReceipt) GetId() uint64 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+func (m *ExecuableWithdrawalReceipt) GetTxid() []byte {
+	if m != nil {
+		return m.Txid
+	}
+	return nil
+}
+
+func (m *ExecuableWithdrawalReceipt) GetTxout() uint32 {
+	if m != nil {
+		return m.Txout
+	}
+	return 0
+}
+
+// ExecuableQueue
+type ExecuableQueue struct {
+	BlockHash           [][]byte                      `protobuf:"bytes,1,rep,name=block_hash,json=blockHash,proto3" json:"block_hash,omitempty"`
+	Deposits            []*ExecuableDeposit           `protobuf:"bytes,2,rep,name=deposits,proto3" json:"deposits,omitempty"`
+	PaidWithdrawals     []*ExecuableWithdrawalReceipt `protobuf:"bytes,3,rep,name=paid_withdrawals,json=paidWithdrawals,proto3" json:"paid_withdrawals,omitempty"`
+	RejectedWithdrawals []uint64                      `protobuf:"varint,4,rep,packed,name=rejected_withdrawals,json=rejectedWithdrawals,proto3" json:"rejected_withdrawals,omitempty"`
+}
+
+func (m *ExecuableQueue) Reset()         { *m = ExecuableQueue{} }
+func (m *ExecuableQueue) String() string { return proto.CompactTextString(m) }
+func (*ExecuableQueue) ProtoMessage()    {}
+func (*ExecuableQueue) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c8a1a8d7fb9d8c11, []int{3}
+}
+func (m *ExecuableQueue) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ExecuableQueue) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ExecuableQueue.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ExecuableQueue) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ExecuableQueue.Merge(m, src)
+}
+func (m *ExecuableQueue) XXX_Size() int {
+	return m.Size()
+}
+func (m *ExecuableQueue) XXX_DiscardUnknown() {
+	xxx_messageInfo_ExecuableQueue.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ExecuableQueue proto.InternalMessageInfo
+
+func (m *ExecuableQueue) GetBlockHash() [][]byte {
+	if m != nil {
+		return m.BlockHash
+	}
+	return nil
+}
+
+func (m *ExecuableQueue) GetDeposits() []*ExecuableDeposit {
+	if m != nil {
+		return m.Deposits
+	}
+	return nil
+}
+
+func (m *ExecuableQueue) GetPaidWithdrawals() []*ExecuableWithdrawalReceipt {
+	if m != nil {
+		return m.PaidWithdrawals
+	}
+	return nil
+}
+
+func (m *ExecuableQueue) GetRejectedWithdrawals() []uint64 {
+	if m != nil {
+		return m.RejectedWithdrawals
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*Deposit)(nil), "goat.bitcoin.v1.Deposit")
+	proto.RegisterType((*ExecuableDeposit)(nil), "goat.bitcoin.v1.ExecuableDeposit")
+	proto.RegisterType((*ExecuableWithdrawalReceipt)(nil), "goat.bitcoin.v1.ExecuableWithdrawalReceipt")
+	proto.RegisterType((*ExecuableQueue)(nil), "goat.bitcoin.v1.ExecuableQueue")
 }
 
 func init() { proto.RegisterFile("goat/bitcoin/v1/bitcoin.proto", fileDescriptor_c8a1a8d7fb9d8c11) }
 
 var fileDescriptor_c8a1a8d7fb9d8c11 = []byte{
-	// 369 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x4c, 0x91, 0xcf, 0x6a, 0xdb, 0x40,
-	0x10, 0xc6, 0xbd, 0xae, 0x6b, 0xbb, 0x2b, 0xbb, 0xa5, 0x7b, 0xda, 0x1a, 0xaa, 0xaa, 0x3e, 0x09,
-	0x4a, 0x25, 0xdc, 0x3e, 0x81, 0x4b, 0x0b, 0x2d, 0x85, 0x60, 0x4c, 0x20, 0x90, 0x8b, 0xd0, 0x9f,
-	0x89, 0xbd, 0xd8, 0xda, 0x15, 0xab, 0x95, 0x2c, 0xbd, 0x45, 0x1e, 0x2b, 0x47, 0x1f, 0x73, 0x0a,
-	0xc1, 0x7e, 0x91, 0xa0, 0x5d, 0x29, 0xc9, 0x6d, 0xe6, 0x37, 0xdf, 0x7c, 0x03, 0xdf, 0xe0, 0xcf,
-	0x1b, 0x11, 0x2a, 0x3f, 0x62, 0x2a, 0x16, 0x8c, 0xfb, 0xe5, 0xa2, 0x2b, 0xbd, 0x4c, 0x0a, 0x25,
-	0xc8, 0x87, 0x66, 0xec, 0x75, 0xac, 0x5c, 0xcc, 0x8c, 0x5e, 0xc2, 0x3e, 0xac, 0x41, 0x36, 0xfa,
-	0xb6, 0x34, 0xfa, 0xf9, 0x43, 0x1f, 0x8f, 0x7e, 0x43, 0x26, 0x72, 0xa6, 0x08, 0xc5, 0xa3, 0x12,
-	0x24, 0xcb, 0x05, 0xa7, 0xc8, 0x41, 0xee, 0x74, 0xdd, 0xb5, 0xe4, 0x2b, 0x9e, 0x44, 0x7b, 0x11,
-	0xef, 0x02, 0x5e, 0xa4, 0x11, 0x48, 0xda, 0x77, 0x90, 0x3b, 0x58, 0x5b, 0x9a, 0x5d, 0x68, 0xf4,
-	0x22, 0xd9, 0x42, 0x98, 0x80, 0xa4, 0x6f, 0x1c, 0xe4, 0x4e, 0x5a, 0xc9, 0x5f, 0x8d, 0xc8, 0x27,
-	0x3c, 0x56, 0x55, 0xc0, 0x78, 0x02, 0x15, 0x1d, 0x98, 0x03, 0xaa, 0xfa, 0xd7, 0xb4, 0x64, 0x8e,
-	0xa7, 0x5c, 0x04, 0x07, 0xa6, 0x38, 0xe4, 0x79, 0xa0, 0x2a, 0xfa, 0xd6, 0xac, 0x73, 0x71, 0x65,
-	0xd8, 0x65, 0xd5, 0x5c, 0x10, 0x85, 0xca, 0x0a, 0xd5, 0x5a, 0x0c, 0xb5, 0x85, 0x65, 0x98, 0xb1,
-	0xf9, 0x8e, 0x09, 0xe3, 0x0a, 0x64, 0x0a, 0x09, 0x0b, 0x15, 0x04, 0x99, 0x14, 0xe2, 0x86, 0x8e,
-	0xb4, 0xd7, 0xc7, 0xd7, 0x93, 0x55, 0x33, 0x20, 0x5f, 0xb0, 0x05, 0x65, 0x1a, 0x84, 0x49, 0x22,
-	0x21, 0xcf, 0xe9, 0x58, 0xeb, 0x30, 0x94, 0xe9, 0xd2, 0x10, 0xb2, 0xc4, 0xef, 0xdb, 0xb8, 0x82,
-	0xac, 0x88, 0x76, 0x50, 0xd3, 0x77, 0x0e, 0x72, 0xad, 0x1f, 0x33, 0x4f, 0xc7, 0xdc, 0x45, 0x59,
-	0x2e, 0xbc, 0x55, 0x11, 0xed, 0x59, 0xfc, 0x1f, 0xea, 0xf5, 0xb4, 0xa5, 0x2b, 0xbd, 0xf0, 0xeb,
-	0xcf, 0xdd, 0xc9, 0x46, 0xc7, 0x93, 0x8d, 0x1e, 0x4f, 0x36, 0xba, 0x3d, 0xdb, 0xbd, 0xe3, 0xd9,
-	0xee, 0xdd, 0x9f, 0xed, 0xde, 0xf5, 0xb7, 0x0d, 0x53, 0xdb, 0x22, 0xf2, 0x62, 0x91, 0xfa, 0x8d,
-	0x1d, 0x07, 0x75, 0x10, 0x72, 0xa7, 0x6b, 0xbf, 0x7a, 0x7e, 0xb1, 0xaa, 0x33, 0xc8, 0xa3, 0xa1,
-	0x7e, 0xd7, 0xcf, 0xa7, 0x00, 0x00, 0x00, 0xff, 0xff, 0xe7, 0xed, 0x97, 0x8a, 0xff, 0x01, 0x00,
-	0x00,
+	// 638 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x54, 0xcd, 0x4e, 0xdb, 0x4a,
+	0x14, 0x8e, 0x93, 0x40, 0x60, 0x92, 0xf0, 0x33, 0x97, 0x2b, 0x99, 0x48, 0x04, 0xc3, 0xca, 0xba,
+	0x08, 0xfb, 0x86, 0xbb, 0xbe, 0x0b, 0x50, 0x91, 0x40, 0x95, 0x2a, 0x6a, 0x55, 0x45, 0xea, 0xc6,
+	0x1a, 0xdb, 0xa7, 0xc9, 0x34, 0xb1, 0xc7, 0xf2, 0x8c, 0x83, 0xf3, 0x16, 0x7d, 0x84, 0x2e, 0xbb,
+	0xec, 0xa2, 0x8f, 0xd0, 0x05, 0x4b, 0xd4, 0x55, 0xd5, 0x05, 0xaa, 0x60, 0xd1, 0x67, 0xe8, 0xae,
+	0x9a, 0x19, 0x3b, 0x50, 0xda, 0xee, 0xba, 0x89, 0xce, 0xf9, 0xce, 0x39, 0x5f, 0x3e, 0x7d, 0xe7,
+	0x8c, 0xd1, 0xd6, 0x90, 0x11, 0xe1, 0x06, 0x54, 0x84, 0x8c, 0x26, 0xee, 0x74, 0x50, 0x85, 0x4e,
+	0x9a, 0x31, 0xc1, 0xf0, 0xaa, 0x2c, 0x3b, 0x15, 0x36, 0x1d, 0xf4, 0xd6, 0x49, 0x4c, 0x13, 0xe6,
+	0xaa, 0x5f, 0xdd, 0xd3, 0xdb, 0x0c, 0x19, 0x8f, 0x19, 0xf7, 0x55, 0xe6, 0xea, 0xa4, 0x2c, 0x69,
+	0xf6, 0x0c, 0x26, 0x64, 0x06, 0x99, 0x64, 0x2f, 0xc3, 0xb2, 0xbc, 0x31, 0x64, 0x43, 0xa6, 0xc7,
+	0x64, 0xa4, 0xd1, 0xdd, 0x0f, 0x75, 0xd4, 0x7a, 0x04, 0x29, 0xe3, 0x54, 0xe0, 0x1d, 0xd4, 0x09,
+	0x26, 0x2c, 0x1c, 0xfb, 0x49, 0x1e, 0x07, 0x90, 0x99, 0x86, 0x65, 0xd8, 0x4d, 0xaf, 0xad, 0xb0,
+	0x27, 0x0a, 0xba, 0x6b, 0x19, 0x01, 0x89, 0x20, 0x33, 0xeb, 0x96, 0x61, 0x77, 0xca, 0x96, 0x13,
+	0x05, 0xe1, 0x4d, 0xb4, 0x24, 0x0a, 0x9f, 0x26, 0x11, 0x14, 0x66, 0xc3, 0x32, 0xec, 0xae, 0xd7,
+	0x12, 0xc5, 0xa9, 0x4c, 0xf1, 0x2e, 0xea, 0x26, 0xcc, 0xbf, 0xa0, 0x22, 0x01, 0xce, 0x7d, 0x51,
+	0x98, 0x4d, 0x3d, 0x9e, 0xb0, 0x73, 0x8d, 0x3d, 0x2b, 0xe4, 0x3f, 0xb0, 0x5c, 0xa4, 0xb9, 0x28,
+	0x29, 0x16, 0x14, 0x45, 0x5b, 0x63, 0x9a, 0x66, 0x1f, 0x61, 0x9a, 0x08, 0xc8, 0x62, 0x88, 0x28,
+	0x11, 0x20, 0xbd, 0x60, 0x2f, 0xcd, 0x45, 0xc5, 0xb5, 0x7e, 0xbf, 0x72, 0x26, 0x0b, 0x78, 0x1b,
+	0xb5, 0x61, 0x1a, 0xfb, 0x24, 0x8a, 0x32, 0xe0, 0xdc, 0x6c, 0xa9, 0x3e, 0x04, 0xd3, 0xf8, 0x50,
+	0x23, 0xf8, 0x10, 0xad, 0x94, 0x56, 0xf9, 0x69, 0x1e, 0x8c, 0x61, 0x66, 0x2e, 0x59, 0x86, 0xdd,
+	0x3e, 0xe8, 0x39, 0x6a, 0x21, 0x95, 0x8d, 0xd3, 0x81, 0x73, 0x96, 0x07, 0x13, 0x1a, 0x3e, 0x86,
+	0x99, 0xd7, 0x2d, 0xd1, 0x33, 0x35, 0xb0, 0xfb, 0xc6, 0x40, 0x6b, 0xc7, 0x05, 0x84, 0x39, 0x09,
+	0x26, 0x50, 0xf9, 0x89, 0x51, 0x53, 0x14, 0x34, 0x52, 0x3e, 0x76, 0x3c, 0x15, 0xe3, 0x0d, 0xb4,
+	0x20, 0x0a, 0x96, 0x0b, 0xe5, 0x5c, 0xd7, 0xd3, 0x09, 0x36, 0x51, 0xab, 0x92, 0xd7, 0x50, 0xcd,
+	0x55, 0x8a, 0x4f, 0xd0, 0x22, 0x89, 0x59, 0x9e, 0x08, 0xe5, 0xd5, 0xf2, 0xd1, 0xbf, 0x97, 0xd7,
+	0xdb, 0xb5, 0xcf, 0xd7, 0xdb, 0x7f, 0xeb, 0xd5, 0xf3, 0x68, 0xec, 0x50, 0xe6, 0xc6, 0x44, 0x8c,
+	0x9c, 0xd3, 0x44, 0x7c, 0x7c, 0xbf, 0x8f, 0xca, 0x9b, 0x38, 0x4d, 0xc4, 0xdb, 0xaf, 0xef, 0xfe,
+	0x31, 0xbc, 0x72, 0x5e, 0x4a, 0xec, 0xcd, 0x25, 0x9e, 0x53, 0x31, 0x8a, 0x32, 0x72, 0x41, 0x26,
+	0x1e, 0x84, 0x40, 0x53, 0x81, 0x57, 0x50, 0xbd, 0x94, 0xda, 0xf4, 0xea, 0x34, 0x9a, 0x8b, 0xaf,
+	0xff, 0x4a, 0x7c, 0xe3, 0xbe, 0xf8, 0x3f, 0x27, 0xf1, 0x9b, 0x81, 0x56, 0xe6, 0x12, 0x9f, 0xe6,
+	0x90, 0x03, 0xde, 0x42, 0xa8, 0x3c, 0x38, 0xc2, 0x47, 0xa6, 0x61, 0x35, 0xec, 0x8e, 0xb7, 0xac,
+	0xcf, 0x8d, 0xf0, 0x11, 0xfe, 0x1f, 0x2d, 0x45, 0xda, 0x6d, 0x6e, 0xd6, 0xad, 0x86, 0xdd, 0x3e,
+	0xd8, 0x71, 0x1e, 0xbc, 0x22, 0xe7, 0xe1, 0x5e, 0xbc, 0xf9, 0x08, 0x7e, 0x8e, 0xd6, 0x52, 0x42,
+	0x23, 0x79, 0x92, 0xa5, 0x1d, 0x72, 0x01, 0x92, 0x66, 0xef, 0xf7, 0x34, 0x3f, 0x79, 0xe7, 0xad,
+	0x4a, 0x92, 0x3b, 0x98, 0xe3, 0x01, 0xda, 0xc8, 0xe0, 0x15, 0x84, 0x02, 0x7e, 0xe4, 0x6e, 0x5a,
+	0x0d, 0xbb, 0xe9, 0xfd, 0x55, 0xd5, 0xee, 0x8d, 0x1c, 0x1d, 0x5f, 0xde, 0xf4, 0x8d, 0xab, 0x9b,
+	0xbe, 0xf1, 0xe5, 0xa6, 0x6f, 0xbc, 0xbe, 0xed, 0xd7, 0xae, 0x6e, 0xfb, 0xb5, 0x4f, 0xb7, 0xfd,
+	0xda, 0x8b, 0xbd, 0x21, 0x15, 0xa3, 0x3c, 0x70, 0x42, 0x16, 0xbb, 0x52, 0x54, 0x02, 0xe2, 0x82,
+	0x65, 0x63, 0x15, 0xbb, 0xc5, 0xfc, 0x73, 0x22, 0x66, 0x29, 0xf0, 0x60, 0x51, 0x3d, 0xeb, 0xff,
+	0xbe, 0x07, 0x00, 0x00, 0xff, 0xff, 0x05, 0xaa, 0x4a, 0xeb, 0x6b, 0x04, 0x00, 0x00,
 }
 
 func (m *Deposit) Marshal() (dAtA []byte, err error) {
@@ -201,55 +412,230 @@ func (m *Deposit) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			i = encodeVarintBitcoin(dAtA, i, uint64(size))
 		}
 		i--
-		dAtA[i] = 0x4a
+		dAtA[i] = 0x42
 	}
 	if len(m.EvmAddress) > 0 {
 		i -= len(m.EvmAddress)
 		copy(dAtA[i:], m.EvmAddress)
 		i = encodeVarintBitcoin(dAtA, i, uint64(len(m.EvmAddress)))
 		i--
-		dAtA[i] = 0x42
+		dAtA[i] = 0x3a
 	}
 	if len(m.IntermediateProof) > 0 {
 		i -= len(m.IntermediateProof)
 		copy(dAtA[i:], m.IntermediateProof)
 		i = encodeVarintBitcoin(dAtA, i, uint64(len(m.IntermediateProof)))
 		i--
-		dAtA[i] = 0x3a
+		dAtA[i] = 0x32
 	}
 	if m.OutputIndex != 0 {
 		i = encodeVarintBitcoin(dAtA, i, uint64(m.OutputIndex))
 		i--
-		dAtA[i] = 0x30
+		dAtA[i] = 0x28
 	}
 	if len(m.NoWitnessTx) > 0 {
 		i -= len(m.NoWitnessTx)
 		copy(dAtA[i:], m.NoWitnessTx)
 		i = encodeVarintBitcoin(dAtA, i, uint64(len(m.NoWitnessTx)))
 		i--
-		dAtA[i] = 0x2a
+		dAtA[i] = 0x22
 	}
 	if m.TxIndex != 0 {
 		i = encodeVarintBitcoin(dAtA, i, uint64(m.TxIndex))
 		i--
-		dAtA[i] = 0x20
+		dAtA[i] = 0x18
 	}
 	if len(m.BlockHeader) > 0 {
 		i -= len(m.BlockHeader)
 		copy(dAtA[i:], m.BlockHeader)
 		i = encodeVarintBitcoin(dAtA, i, uint64(len(m.BlockHeader)))
 		i--
-		dAtA[i] = 0x1a
+		dAtA[i] = 0x12
 	}
 	if m.BlockNumber != 0 {
 		i = encodeVarintBitcoin(dAtA, i, uint64(m.BlockNumber))
 		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ExecuableDeposit) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ExecuableDeposit) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ExecuableDeposit) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size := m.Amount.Size()
+		i -= size
+		if _, err := m.Amount.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintBitcoin(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x22
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = encodeVarintBitcoin(dAtA, i, uint64(len(m.Address)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Txout != 0 {
+		i = encodeVarintBitcoin(dAtA, i, uint64(m.Txout))
+		i--
 		dAtA[i] = 0x10
 	}
-	if m.Verison != 0 {
-		i = encodeVarintBitcoin(dAtA, i, uint64(m.Verison))
+	if len(m.Txid) > 0 {
+		i -= len(m.Txid)
+		copy(dAtA[i:], m.Txid)
+		i = encodeVarintBitcoin(dAtA, i, uint64(len(m.Txid)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ExecuableWithdrawalReceipt) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ExecuableWithdrawalReceipt) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ExecuableWithdrawalReceipt) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size := m.Amount.Size()
+		i -= size
+		if _, err := m.Amount.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintBitcoin(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x22
+	if m.Txout != 0 {
+		i = encodeVarintBitcoin(dAtA, i, uint64(m.Txout))
+		i--
+		dAtA[i] = 0x18
+	}
+	if len(m.Txid) > 0 {
+		i -= len(m.Txid)
+		copy(dAtA[i:], m.Txid)
+		i = encodeVarintBitcoin(dAtA, i, uint64(len(m.Txid)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Id != 0 {
+		i = encodeVarintBitcoin(dAtA, i, uint64(m.Id))
 		i--
 		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ExecuableQueue) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ExecuableQueue) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ExecuableQueue) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.RejectedWithdrawals) > 0 {
+		dAtA3 := make([]byte, len(m.RejectedWithdrawals)*10)
+		var j2 int
+		for _, num := range m.RejectedWithdrawals {
+			for num >= 1<<7 {
+				dAtA3[j2] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j2++
+			}
+			dAtA3[j2] = uint8(num)
+			j2++
+		}
+		i -= j2
+		copy(dAtA[i:], dAtA3[:j2])
+		i = encodeVarintBitcoin(dAtA, i, uint64(j2))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.PaidWithdrawals) > 0 {
+		for iNdEx := len(m.PaidWithdrawals) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.PaidWithdrawals[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintBitcoin(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if len(m.Deposits) > 0 {
+		for iNdEx := len(m.Deposits) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Deposits[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintBitcoin(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.BlockHash) > 0 {
+		for iNdEx := len(m.BlockHash) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.BlockHash[iNdEx])
+			copy(dAtA[i:], m.BlockHash[iNdEx])
+			i = encodeVarintBitcoin(dAtA, i, uint64(len(m.BlockHash[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+		}
 	}
 	return len(dAtA) - i, nil
 }
@@ -271,9 +657,6 @@ func (m *Deposit) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Verison != 0 {
-		n += 1 + sovBitcoin(uint64(m.Verison))
-	}
 	if m.BlockNumber != 0 {
 		n += 1 + sovBitcoin(uint64(m.BlockNumber))
 	}
@@ -302,6 +685,83 @@ func (m *Deposit) Size() (n int) {
 	if m.RelayerPubkey != nil {
 		l = m.RelayerPubkey.Size()
 		n += 1 + l + sovBitcoin(uint64(l))
+	}
+	return n
+}
+
+func (m *ExecuableDeposit) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Txid)
+	if l > 0 {
+		n += 1 + l + sovBitcoin(uint64(l))
+	}
+	if m.Txout != 0 {
+		n += 1 + sovBitcoin(uint64(m.Txout))
+	}
+	l = len(m.Address)
+	if l > 0 {
+		n += 1 + l + sovBitcoin(uint64(l))
+	}
+	l = m.Amount.Size()
+	n += 1 + l + sovBitcoin(uint64(l))
+	return n
+}
+
+func (m *ExecuableWithdrawalReceipt) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Id != 0 {
+		n += 1 + sovBitcoin(uint64(m.Id))
+	}
+	l = len(m.Txid)
+	if l > 0 {
+		n += 1 + l + sovBitcoin(uint64(l))
+	}
+	if m.Txout != 0 {
+		n += 1 + sovBitcoin(uint64(m.Txout))
+	}
+	l = m.Amount.Size()
+	n += 1 + l + sovBitcoin(uint64(l))
+	return n
+}
+
+func (m *ExecuableQueue) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.BlockHash) > 0 {
+		for _, b := range m.BlockHash {
+			l = len(b)
+			n += 1 + l + sovBitcoin(uint64(l))
+		}
+	}
+	if len(m.Deposits) > 0 {
+		for _, e := range m.Deposits {
+			l = e.Size()
+			n += 1 + l + sovBitcoin(uint64(l))
+		}
+	}
+	if len(m.PaidWithdrawals) > 0 {
+		for _, e := range m.PaidWithdrawals {
+			l = e.Size()
+			n += 1 + l + sovBitcoin(uint64(l))
+		}
+	}
+	if len(m.RejectedWithdrawals) > 0 {
+		l = 0
+		for _, e := range m.RejectedWithdrawals {
+			l += sovBitcoin(uint64(e))
+		}
+		n += 1 + sovBitcoin(uint64(l)) + l
 	}
 	return n
 }
@@ -343,25 +803,6 @@ func (m *Deposit) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Verison", wireType)
-			}
-			m.Verison = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowBitcoin
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Verison |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field BlockNumber", wireType)
 			}
 			m.BlockNumber = 0
@@ -379,7 +820,7 @@ func (m *Deposit) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 3:
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field BlockHeader", wireType)
 			}
@@ -413,7 +854,7 @@ func (m *Deposit) Unmarshal(dAtA []byte) error {
 				m.BlockHeader = []byte{}
 			}
 			iNdEx = postIndex
-		case 4:
+		case 3:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field TxIndex", wireType)
 			}
@@ -432,7 +873,7 @@ func (m *Deposit) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 5:
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field NoWitnessTx", wireType)
 			}
@@ -466,7 +907,7 @@ func (m *Deposit) Unmarshal(dAtA []byte) error {
 				m.NoWitnessTx = []byte{}
 			}
 			iNdEx = postIndex
-		case 6:
+		case 5:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field OutputIndex", wireType)
 			}
@@ -485,7 +926,7 @@ func (m *Deposit) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 7:
+		case 6:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field IntermediateProof", wireType)
 			}
@@ -519,7 +960,7 @@ func (m *Deposit) Unmarshal(dAtA []byte) error {
 				m.IntermediateProof = []byte{}
 			}
 			iNdEx = postIndex
-		case 8:
+		case 7:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field EvmAddress", wireType)
 			}
@@ -553,7 +994,7 @@ func (m *Deposit) Unmarshal(dAtA []byte) error {
 				m.EvmAddress = []byte{}
 			}
 			iNdEx = postIndex
-		case 9:
+		case 8:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field RelayerPubkey", wireType)
 			}
@@ -589,6 +1030,559 @@ func (m *Deposit) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipBitcoin(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ExecuableDeposit) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowBitcoin
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ExecuableDeposit: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ExecuableDeposit: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Txid", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBitcoin
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Txid = append(m.Txid[:0], dAtA[iNdEx:postIndex]...)
+			if m.Txid == nil {
+				m.Txid = []byte{}
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Txout", wireType)
+			}
+			m.Txout = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBitcoin
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Txout |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBitcoin
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Address = append(m.Address[:0], dAtA[iNdEx:postIndex]...)
+			if m.Address == nil {
+				m.Address = []byte{}
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBitcoin
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Amount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipBitcoin(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ExecuableWithdrawalReceipt) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowBitcoin
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ExecuableWithdrawalReceipt: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ExecuableWithdrawalReceipt: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBitcoin
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Txid", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBitcoin
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Txid = append(m.Txid[:0], dAtA[iNdEx:postIndex]...)
+			if m.Txid == nil {
+				m.Txid = []byte{}
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Txout", wireType)
+			}
+			m.Txout = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBitcoin
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Txout |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBitcoin
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Amount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipBitcoin(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ExecuableQueue) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowBitcoin
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ExecuableQueue: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ExecuableQueue: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BlockHash", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBitcoin
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.BlockHash = append(m.BlockHash, make([]byte, postIndex-iNdEx))
+			copy(m.BlockHash[len(m.BlockHash)-1], dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Deposits", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBitcoin
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Deposits = append(m.Deposits, &ExecuableDeposit{})
+			if err := m.Deposits[len(m.Deposits)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PaidWithdrawals", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBitcoin
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PaidWithdrawals = append(m.PaidWithdrawals, &ExecuableWithdrawalReceipt{})
+			if err := m.PaidWithdrawals[len(m.PaidWithdrawals)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType == 0 {
+				var v uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowBitcoin
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.RejectedWithdrawals = append(m.RejectedWithdrawals, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowBitcoin
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthBitcoin
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthBitcoin
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				var count int
+				for _, integer := range dAtA[iNdEx:postIndex] {
+					if integer < 128 {
+						count++
+					}
+				}
+				elementCount = count
+				if elementCount != 0 && len(m.RejectedWithdrawals) == 0 {
+					m.RejectedWithdrawals = make([]uint64, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowBitcoin
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.RejectedWithdrawals = append(m.RejectedWithdrawals, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field RejectedWithdrawals", wireType)
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipBitcoin(dAtA[iNdEx:])

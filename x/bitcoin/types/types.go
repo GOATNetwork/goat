@@ -6,9 +6,12 @@ import (
 	"errors"
 	"slices"
 
+	"cosmossdk.io/math"
 	"github.com/goatnetwork/goat/pkg/utils"
 	relayertypes "github.com/goatnetwork/goat/x/relayer/types"
 )
+
+var Satoshi = math.NewInt(1e10)
 
 const (
 	NewPubkeyMethodSigName = "Bitcoin/NewPubkey"
@@ -36,9 +39,9 @@ func (req *MsgNewPubkey) VoteSigDoc() []byte {
 	return relayertypes.EncodePublicKey(req.Pubkey)
 }
 
-func (req *MsgNewBlocks) Validate() error {
+func (req *MsgNewBlockHashes) Validate() error {
 	if req == nil {
-		return errors.New("empty MsgNewBlocks")
+		return errors.New("empty MsgNewBlockHashes")
 	}
 
 	if req.StartBlockNumber == 0 {
@@ -61,11 +64,11 @@ func (req *MsgNewBlocks) Validate() error {
 	return nil
 }
 
-func (req *MsgNewBlocks) MethodName() string {
+func (req *MsgNewBlockHashes) MethodName() string {
 	return NewBlocksMethodSigName
 }
 
-func (req *MsgNewBlocks) VoteSigDoc() []byte {
+func (req *MsgNewBlockHashes) VoteSigDoc() []byte {
 	data := make([]byte, 8, 8+len(req.BlockHash)*32)
 	binary.LittleEndian.AppendUint64(data[:8], req.StartBlockNumber)
 	for _, v := range req.BlockHash {

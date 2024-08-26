@@ -44,7 +44,7 @@ func (q queryServer) Pubkey(ctx context.Context, req *types.QueryPubkeyRequest) 
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	key, err := q.k.LatestPubkey.Get(ctx)
+	key, err := q.k.Pubkey.Get(ctx)
 	if err != nil {
 		if errors.Is(err, collections.ErrNotFound) {
 			return nil, status.Error(codes.NotFound, "not found")
