@@ -27,6 +27,8 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 		panic(err)
 	}
 
+	sdkctx := sdk.UnwrapSDKContext(ctx)
+
 	relayer := types.Relayer{
 		Threshold:   genState.Threshold,
 		LastElected: ctx.BlockTime(),
@@ -50,6 +52,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 		}
 
 		v.Status = types.Activated
+		v.Height = sdkctx.BlockHeight()
 		if err := k.Voters.Set(ctx, addr, *v); err != nil {
 			panic(err)
 		}

@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"context"
+
 	"github.com/goatnetwork/goat/x/relayer/types"
 )
 
@@ -14,4 +16,8 @@ type msgServer struct {
 // for the provided Keeper.
 func NewMsgServerImpl(keeper Keeper) types.MsgServer {
 	return &msgServer{Keeper: keeper}
+}
+
+func (k msgServer) OnBoarding(ctx context.Context, req *types.MsgOnBoardingRequest) (*types.MsgOnBoardingResponse, error) {
+	panic("todo")
 }

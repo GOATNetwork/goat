@@ -7,7 +7,10 @@
 package relayerv1
 
 import (
+	context "context"
 	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -15,12 +18,17 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-const ()
+const (
+	Msg_OnBoarding_FullMethodName = "/goat.relayer.v1.Msg/OnBoarding"
+)
 
 // MsgClient is the client API for Msg service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MsgClient interface {
+	// OnBoarding add a new pending voter
+	// the voter should provide online proof(signature of their voteKey and txKey)
+	OnBoarding(ctx context.Context, in *MsgOnBoardingRequest, opts ...grpc.CallOption) (*MsgOnBoardingResponse, error)
 }
 
 type msgClient struct {
@@ -31,10 +39,22 @@ func NewMsgClient(cc grpc.ClientConnInterface) MsgClient {
 	return &msgClient{cc}
 }
 
+func (c *msgClient) OnBoarding(ctx context.Context, in *MsgOnBoardingRequest, opts ...grpc.CallOption) (*MsgOnBoardingResponse, error) {
+	out := new(MsgOnBoardingResponse)
+	err := c.cc.Invoke(ctx, Msg_OnBoarding_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
 type MsgServer interface {
+	// OnBoarding add a new pending voter
+	// the voter should provide online proof(signature of their voteKey and txKey)
+	OnBoarding(context.Context, *MsgOnBoardingRequest) (*MsgOnBoardingResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -42,6 +62,9 @@ type MsgServer interface {
 type UnimplementedMsgServer struct {
 }
 
+func (UnimplementedMsgServer) OnBoarding(context.Context, *MsgOnBoardingRequest) (*MsgOnBoardingResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OnBoarding not implemented")
+}
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
 // UnsafeMsgServer may be embedded to opt out of forward compatibility for this service.
@@ -55,13 +78,36 @@ func RegisterMsgServer(s grpc.ServiceRegistrar, srv MsgServer) {
 	s.RegisterService(&Msg_ServiceDesc, srv)
 }
 
+func _Msg_OnBoarding_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgOnBoardingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).OnBoarding(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_OnBoarding_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).OnBoarding(ctx, req.(*MsgOnBoardingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Msg_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "goat.relayer.v1.Msg",
 	HandlerType: (*MsgServer)(nil),
-	Methods:     []grpc.MethodDesc{},
-	Streams:     []grpc.StreamDesc{},
-	Metadata:    "goat/relayer/v1/tx.proto",
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "OnBoarding",
+			Handler:    _Msg_OnBoarding_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "goat/relayer/v1/tx.proto",
 }

@@ -26,7 +26,7 @@ func (p *PublicKey) Validate() error {
 		}
 	case *PublicKey_Schnorr:
 		if len(t.Schnorr) != schnorr.PubKeyBytesLen {
-			return errors.New("invalid secp256k1 key")
+			return errors.New("invalid schnoor key")
 		}
 	default:
 		return errors.New("unknown pubkey type")
