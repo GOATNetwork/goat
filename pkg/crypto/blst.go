@@ -2,7 +2,7 @@ package crypto
 
 import blst "github.com/supranational/blst/bindings/go"
 
-var blsdst = []byte("BLS_SIG_BLS12381G2_XMD:SHA-256_SSWU_RO_POP_")
+var BLSMode = []byte("BLS_SIG_BLS12381G2_XMD:SHA-256_SSWU_RO_POP_")
 
 type PrivateKey = blst.SecretKey
 type PublicKey = blst.P2Affine
@@ -27,7 +27,7 @@ func AggregateVerify(pks [][]byte, msg, sig []byte) bool {
 			return false
 		}
 	}
-	return dsig.Verify(true, dpks.ToAffine(), true, msg, blsdst)
+	return dsig.Verify(true, dpks.ToAffine(), true, msg, BLSMode)
 }
 
 func Verify(pk, msg, sig []byte) bool {
@@ -39,7 +39,7 @@ func Verify(pk, msg, sig []byte) bool {
 	if pubkey == nil {
 		return false
 	}
-	return signature.Verify(true, pubkey, false, msg, blsdst)
+	return signature.Verify(true, pubkey, false, msg, BLSMode)
 }
 
 func Sign(sk, msg []byte) []byte {
@@ -47,6 +47,6 @@ func Sign(sk, msg []byte) []byte {
 	if prvkey == nil {
 		return nil
 	}
-	sig2 := new(Signature).Sign(prvkey, msg, blsdst)
+	sig2 := new(Signature).Sign(prvkey, msg, BLSMode)
 	return sig2.Compress()
 }

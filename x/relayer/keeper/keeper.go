@@ -17,7 +17,6 @@ import (
 	"github.com/kelindar/bitmap"
 
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
-	"github.com/goatnetwork/goat/pkg/utils"
 	"github.com/goatnetwork/goat/x/relayer/types"
 )
 
@@ -161,7 +160,7 @@ func (k Keeper) UpdateRandao(ctx context.Context, req types.IVoteMsg) error {
 		return err
 	}
 
-	newRandao := utils.SHA256Sum(randao, req.GetVote().Signature)
+	newRandao := goatcrypto.SHA256Sum(randao, req.GetVote().Signature)
 	if err := k.Randao.Set(ctx, newRandao); err != nil {
 		return err
 	}
@@ -205,7 +204,7 @@ func (k Keeper) ElecteProposer(ctx context.Context) error {
 		binary.LittleEndian.PutUint64(epochRaw, epoch)
 
 		// hash with the current epoch to ensure always have a new randao value
-		curRand := new(big.Int).SetBytes(utils.SHA256Sum(randao, epochRaw))
+		curRand := new(big.Int).SetBytes(goatcrypto.SHA256Sum(randao, epochRaw))
 		proposerIndex := curRand.Mod(curRand, big.NewInt(vlen)).Int64()
 
 		relayer.Proposer, relayer.Voters[proposerIndex] = relayer.Voters[proposerIndex], relayer.Proposer

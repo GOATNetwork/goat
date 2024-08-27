@@ -13,7 +13,7 @@ import (
 	"github.com/btcsuite/btcd/wire"
 	"github.com/cosmos/cosmos-sdk/codec"
 
-	"github.com/goatnetwork/goat/pkg/utils"
+	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 	"github.com/goatnetwork/goat/x/bitcoin/types"
 	relayertypes "github.com/goatnetwork/goat/x/relayer/types"
 )
@@ -95,7 +95,7 @@ func (k Keeper) NewDeposit(ctx context.Context, deposit *types.Deposit) (*types.
 	if err != nil {
 		return nil, err
 	}
-	if !bytes.Equal(blockHash, utils.DoubleSHA256Sum(deposit.BlockHeader)) {
+	if !bytes.Equal(blockHash, goatcrypto.DoubleSHA256Sum(deposit.BlockHeader)) {
 		return nil, types.ErrInvalidRequest.Wrapf("incorrect block hash, expected %x", blockHash)
 	}
 
@@ -110,7 +110,7 @@ func (k Keeper) NewDeposit(ctx context.Context, deposit *types.Deposit) (*types.
 	}
 
 	// check if the deposit is done
-	txid := utils.DoubleSHA256Sum(deposit.NoWitnessTx)
+	txid := goatcrypto.DoubleSHA256Sum(deposit.NoWitnessTx)
 	deposited, err := k.Deposited.Has(ctx, collections.Join(txid, deposit.OutputIndex))
 	if err != nil {
 		return nil, err

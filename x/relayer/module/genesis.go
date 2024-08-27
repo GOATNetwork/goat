@@ -1,6 +1,8 @@
 package relayer
 
 import (
+	"bytes"
+
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -59,6 +61,10 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	}
 
 	if err := k.Relayer.Set(ctx, relayer); err != nil {
+		panic(err)
+	}
+
+	if err := k.Randao.Set(ctx, bytes.Repeat([]byte{0}, 32)); err != nil {
 		panic(err)
 	}
 }

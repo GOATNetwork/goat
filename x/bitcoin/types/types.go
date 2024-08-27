@@ -7,7 +7,7 @@ import (
 	"slices"
 
 	"cosmossdk.io/math"
-	"github.com/goatnetwork/goat/pkg/utils"
+	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 	relayertypes "github.com/goatnetwork/goat/x/relayer/types"
 )
 
@@ -128,9 +128,9 @@ func VerifyMerkelProof(txid, root, proof []byte, index uint32) bool {
 		end := start + 32
 		next := proof[start:end]
 		if index&1 == 0 {
-			current = utils.DoubleSHA256Sum(slices.Concat(current, next))
+			current = goatcrypto.DoubleSHA256Sum(slices.Concat(current, next))
 		} else {
-			current = utils.DoubleSHA256Sum(slices.Concat(next, current))
+			current = goatcrypto.DoubleSHA256Sum(slices.Concat(next, current))
 		}
 		index >>= 1
 	}

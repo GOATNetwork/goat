@@ -8,7 +8,7 @@ import (
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/txscript"
-	"github.com/goatnetwork/goat/pkg/utils"
+	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 	relayer "github.com/goatnetwork/goat/x/relayer/types"
 )
 
@@ -23,7 +23,7 @@ func Version0Address(pubkey *relayer.PublicKey, evmAddress []byte, netwk *chainc
 		if err != nil {
 			return nil, err
 		}
-		witnessProg := utils.SHA256Sum(script)
+		witnessProg := goatcrypto.SHA256Sum(script)
 		return btcutil.NewAddressWitnessScriptHash(witnessProg, netwk)
 	case *relayer.PublicKey_Schnorr:
 		pubkey, err := schnorr.ParsePubKey(v.Schnorr)
@@ -61,7 +61,7 @@ func ValidateDespositTxOut(pubkey *relayer.PublicKey, evmAddress, txout []byte) 
 		if err != nil {
 			return false, err
 		}
-		witnessProg := utils.SHA256Sum(script)
+		witnessProg := goatcrypto.SHA256Sum(script)
 		return bytes.Equal(witnessProg, txout[2:]), nil
 	case *relayer.PublicKey_Schnorr:
 		if txout[0] != txscript.OP_1 || txout[1] != txscript.OP_DATA_32 {

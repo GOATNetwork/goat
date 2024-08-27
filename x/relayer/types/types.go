@@ -4,7 +4,7 @@ import (
 	"encoding/binary"
 	"errors"
 
-	"github.com/goatnetwork/goat/pkg/utils"
+	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 	blst "github.com/supranational/blst/bindings/go"
 )
 
@@ -26,7 +26,7 @@ func VoteSignDoc(method, chainId, proposer string, sequence uint64, data []byte)
 	var seqRaw [8]byte
 	binary.LittleEndian.PutUint64(seqRaw[:], sequence)
 
-	sigdoc := utils.SHA256Sum(
+	sigdoc := goatcrypto.SHA256Sum(
 		[]byte(chainId),
 		seqRaw[:],
 		[]byte(method),
