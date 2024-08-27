@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package goat.goat.v1;
+
+option go_package = "github.com/goatnetwork/goat/x/goat/types";
+
+// The withdrawal receipt with the recipient address and amount withdrawn
+message Withdrawal {
+  // Withdrawal index for accounting purposes
+  uint64 index = 1;
+
+  // Validator index for the withdrawal
+  uint64 validator_index = 2;
+
+  // The execution address receiving the funds
+  bytes address = 3;
+
+  // The withdrawn amount in Gwei
+  uint64 amount = 4;
+}
+
+// BlobsBundle is retrieved through engine-api from the execution layer client.
+message BlobsBundle {
+  // The KZG commitments of the blobs.
+  repeated bytes kzg_commitments = 1;
+
+  // The proofs of the blobs.
+  repeated bytes proofs = 2;
+
+  // The blobs itself.
+  repeated bytes blobs = 3;
+}
+
+// ExecutionPayload
+message ExecutionPayload {
+  bytes parent_hash = 1;
+  bytes fee_recipient = 2;
+  bytes state_root = 3;
+  bytes receipts_root = 4;
+  bytes logs_bloom = 5;
+  bytes prev_randao = 6;
+  uint64 block_number = 7;
+  uint64 gas_limit = 8;
+  uint64 gas_used = 9;
+  uint64 timestamp = 10;
+  bytes extra_data = 11;
+  bytes base_fee_per_gas = 12;
+  bytes block_hash = 13;
+  repeated bytes transactions = 14;
+  repeated Withdrawal withdrawals = 15;
+  uint64 blob_gas_used = 16;
+  uint64 excess_blob_gas = 17;
+}

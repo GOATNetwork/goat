@@ -36,6 +36,7 @@ import (
 
 	"github.com/goatnetwork/goat/docs"
 	bitcoinmodulekeeper "github.com/goatnetwork/goat/x/bitcoin/keeper"
+	goatmodulekeeper "github.com/goatnetwork/goat/x/goat/keeper"
 	lockingmodulekeeper "github.com/goatnetwork/goat/x/locking/keeper"
 	relayermodulekeeper "github.com/goatnetwork/goat/x/relayer/keeper"
 )
@@ -75,6 +76,7 @@ type App struct {
 	RelayerKeeper relayermodulekeeper.Keeper
 	BitcoinKeeper bitcoinmodulekeeper.Keeper
 	LockingKeeper lockingmodulekeeper.Keeper
+	GoatKeeper    goatmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -149,6 +151,7 @@ func New(
 		&app.RelayerKeeper,
 		&app.BitcoinKeeper,
 		&app.LockingKeeper,
+		&app.GoatKeeper,
 	); err != nil {
 		panic(err)
 	}

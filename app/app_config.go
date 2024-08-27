@@ -33,9 +33,12 @@ import (
 	relayermoduletypes "github.com/goatnetwork/goat/x/relayer/types"
 
 	// cosmos-sdk modules
+	goatmodulev1 "github.com/goatnetwork/goat/api/goat/goat/module/v1"
 	lockingmodulev1 "github.com/goatnetwork/goat/api/goat/locking/module/v1"
 	_ "github.com/goatnetwork/goat/x/bitcoin/module"
 	bitcoinmoduletypes "github.com/goatnetwork/goat/x/bitcoin/types"
+	_ "github.com/goatnetwork/goat/x/goat/module"
+	goatmoduletypes "github.com/goatnetwork/goat/x/goat/types"
 	_ "github.com/goatnetwork/goat/x/locking/module"
 	lockingmoduletypes "github.com/goatnetwork/goat/x/locking/types"
 )
@@ -52,6 +55,7 @@ var (
 		relayermoduletypes.ModuleName,
 		bitcoinmoduletypes.ModuleName,
 		lockingmoduletypes.ModuleName,
+		goatmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
@@ -66,6 +70,7 @@ var (
 		// chain modules
 		// relayermoduletypes.ModuleName,
 		lockingmoduletypes.ModuleName,
+		goatmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
@@ -75,6 +80,7 @@ var (
 		// chain modules
 		relayermoduletypes.ModuleName,
 		lockingmoduletypes.ModuleName,
+		goatmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
 
@@ -177,6 +183,10 @@ var (
 			{
 				Name:   lockingmoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&lockingmodulev1.Module{}),
+			},
+			{
+				Name:   goatmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&goatmodulev1.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},
