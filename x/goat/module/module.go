@@ -22,6 +22,7 @@ import (
 	// this line is used by starport scaffolding # 1
 
 	modulev1 "github.com/goatnetwork/goat/api/goat/goat/module/v1"
+	"github.com/goatnetwork/goat/pkg/ethrpc"
 	"github.com/goatnetwork/goat/x/goat/keeper"
 	"github.com/goatnetwork/goat/x/goat/types"
 )
@@ -186,7 +187,7 @@ type ModuleInputs struct {
 	BankKeeper    types.BankKeeper
 	BitcoinKeeper types.BitcoinKeeper
 	LockingKeeper types.LockingKeeper
-	RelayerKeeper types.RelayerKeeper
+	EngineClient  *ethrpc.Client `optional:"true"` // optinal for client context
 }
 
 type ModuleOutputs struct {
@@ -210,7 +211,7 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		authority.String(),
 		in.BitcoinKeeper,
 		in.LockingKeeper,
-		in.RelayerKeeper,
+		in.EngineClient,
 	)
 	m := NewAppModule(
 		in.Cdc,

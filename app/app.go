@@ -42,8 +42,8 @@ import (
 )
 
 const (
-	AccountAddressPrefix = "goat"
 	Name                 = "goat"
+	AccountAddressPrefix = Name
 )
 
 var (
@@ -124,6 +124,8 @@ func New(
 		// merge the AppConfig and other configuration in one config
 		appConfig = depinject.Configs(
 			AppConfig(),
+			depinject.Provide(ProvideEngineClient),
+			depinject.Provide(ProvideBitcoinNetworkConfig),
 			depinject.Supply(
 				appOpts, // supply app options
 				logger,  // supply logger

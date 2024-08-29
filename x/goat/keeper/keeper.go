@@ -9,6 +9,7 @@ import (
 	"cosmossdk.io/log"
 	"github.com/cosmos/cosmos-sdk/codec"
 
+	"github.com/goatnetwork/goat/pkg/ethrpc"
 	"github.com/goatnetwork/goat/x/goat/types"
 )
 
@@ -23,13 +24,13 @@ type (
 		// Typically, this should be the x/gov module account.
 		authority string
 
-		Schema collections.Schema
-		Params collections.Item[types.Params]
+		Schema    collections.Schema
+		Params    collections.Item[types.Params]
+		ethclient *ethrpc.Client
 		// this line is used by starport scaffolding # collection/type
 
 		bitcoinKeeper types.BitcoinKeeper
 		lockingKeeper types.LockingKeeper
-		relayerKeeper types.RelayerKeeper
 	}
 )
 
@@ -42,7 +43,7 @@ func NewKeeper(
 
 	bitcoinKeeper types.BitcoinKeeper,
 	lockingKeeper types.LockingKeeper,
-	relayerKeeper types.RelayerKeeper,
+	ethclient *ethrpc.Client,
 ) Keeper {
 	if _, err := addressCodec.StringToBytes(authority); err != nil {
 		panic(fmt.Sprintf("invalid authority address %s: %s", authority, err))
@@ -59,8 +60,8 @@ func NewKeeper(
 
 		bitcoinKeeper: bitcoinKeeper,
 		lockingKeeper: lockingKeeper,
-		relayerKeeper: relayerKeeper,
 		Params:        collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		ethclient:     ethclient,
 		// this line is used by starport scaffolding # collection/instantiate
 	}
 

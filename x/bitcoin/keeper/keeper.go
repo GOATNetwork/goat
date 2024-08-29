@@ -10,9 +10,11 @@ import (
 	"cosmossdk.io/core/store"
 	"cosmossdk.io/log"
 	"cosmossdk.io/math"
+	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/wire"
 	"github.com/cosmos/cosmos-sdk/codec"
 
+	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 	"github.com/goatnetwork/goat/x/bitcoin/types"
 	relayertypes "github.com/goatnetwork/goat/x/relayer/types"
@@ -32,6 +34,7 @@ type (
 		BlockHashes    collections.Map[uint64, []byte]
 		Deposited      collections.Map[collections.Pair[[]byte, uint32], int64]
 		ExecuableQueue collections.Item[types.ExecuableQueue]
+		BtcChainConfig *chaincfg.Params
 		// this line is used by starport scaffolding # collection/type
 
 		relayerKeeper types.RelayerKeeper
@@ -43,6 +46,7 @@ func NewKeeper(
 	addressCodec address.Codec,
 	storeService store.KVStoreService,
 	logger log.Logger,
+	btcConfig *chaincfg.Params,
 
 	relayerKeeper types.RelayerKeeper,
 ) Keeper {
@@ -57,6 +61,7 @@ func NewKeeper(
 
 		relayerKeeper:  relayerKeeper,
 		Params:         collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		BtcChainConfig: btcConfig,
 		Pubkey:         collections.NewItem(sb, types.LatestPubkeyKey, "latest_pubkey", codec.CollValue[relayertypes.PublicKey](cdc)),
 		BlockHeight:    collections.NewSequence(sb, types.LatestHeightKey, "latest_height"),
 		BlockHashes:    collections.NewMap(sb, types.BlockHashsKey, "block_hashs", collections.Uint64Key, collections.BytesValue),
@@ -125,9 +130,8 @@ func (k Keeper) NewDeposit(ctx context.Context, deposit *types.Deposit) (*types.
 		return nil, types.ErrInvalidRequest.Wrap("invalid txout amount")
 	}
 
-	isValidDepositScript, _ := types.ValidateDespositTxOut(deposit.RelayerPubkey, deposit.EvmAddress, txout.PkScript)
-	if !isValidDepositScript {
-		return nil, types.ErrInvalidRequest.Wrap("invalid txout script")
+	if err := types.VerifyDespositScript(deposit.RelayerPubkey, deposit.EvmAddress, txout.PkScript); err != nil {
+		return nil, types.ErrInvalidRequest.Wrapf("invalid txout script: %s", err.Error())
 	}
 
 	// check if the spv is valid
@@ -148,4 +152,8 @@ func (k Keeper) NewPubkey(ctx context.Context, pubkey *relayertypes.PublicKey) e
 		return err
 	}
 	return k.Pubkey.Set(ctx, *pubkey)
+}
+
+func (k Keeper) DequeueBitcoinModuleTx() []*ethtypes.Transaction {
+	return nil
 }

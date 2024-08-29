@@ -5,6 +5,18 @@ import (
 	serverconfig "github.com/cosmos/cosmos-sdk/server/config"
 )
 
+const (
+	FlagGoatGeth       = "goat.geth"
+	FlagGoatJwtSecret  = "goat.jwt-secret"
+	FlagGoatBtcNetwork = "goat.btc-network"
+)
+
+type GoatConfig struct {
+	Geth       string `mapstructure:"geth"`
+	JwtSecret  string `mapstructure:"jwt-secret"`
+	BtcNetwork string `mapstructure:"btc-network"`
+}
+
 // initCometBFTConfig helps to override default CometBFT Config values.
 // return cmtcfg.DefaultConfig if no custom configuration is required for the application.
 func initCometBFTConfig() *cmtcfg.Config {
@@ -21,42 +33,27 @@ func initCometBFTConfig() *cmtcfg.Config {
 // return "", nil if no custom configuration is required for the application.
 func initAppConfig() (string, interface{}) {
 	// The following code snippet is just for reference.
-	type CustomAppConfig struct {
+	type GoatAppConfig struct {
 		serverconfig.Config `mapstructure:",squash"`
+		Goat                GoatConfig `mapstructure:"goat"`
 	}
 
-	// Optionally allow the chain developer to overwrite the SDK's default
-	// server config.
 	srvCfg := serverconfig.DefaultConfig()
-	// The SDK's default minimum gas price is set to "" (empty value) inside
-	// app.toml. If left empty by validators, the node will halt on startup.
-	// However, the chain developer can set a default app.toml value for their
-	// validators here.
-	//
-	// In summary:
-	// - if you leave srvCfg.MinGasPrices = "", all validators MUST tweak their
-	//   own app.toml config,
-	// - if you set srvCfg.MinGasPrices non-empty, validators CAN tweak their
-	//   own app.toml to override, or use this default value.
-	//
-	// In tests, we set the min gas prices to 0.
-	// srvCfg.MinGasPrices = "0stake"
-	// srvCfg.BaseConfig.IAVLDisableFastNode = true // disable fastnode by default
+	srvCfg.MinGasPrices = "0goat"
 
-	customAppConfig := CustomAppConfig{
+	customAppConfig := GoatAppConfig{
 		Config: *srvCfg,
 	}
 
-	customAppTemplate := serverconfig.DefaultConfigTemplate
-	// Edit the default template file
-	//
-	// customAppTemplate := serverconfig.DefaultConfigTemplate + `
-	// [wasm]
-	// # This is the maximum sdk gas (wasm and storage) that we allow for any x/wasm "smart" queries
-	// query_gas_limit = 300000
-	// # This is the number of wasm vm instances we keep cached in memory for speed-up
-	// # Warning: this is currently unstable and may lead to crashes, best to keep for 0 unless testing locally
-	// lru_size = 0`
+	customAppTemplate := serverconfig.DefaultConfigTemplate + `
+[goat]
+# the goat-geth node endpoint, using ipc is recommended
+geth = {{ .Goat.Geth }}
+# the jwt secret file for engine api, it's only required if connecting to an execution node via HTTP.
+jwt-secret = {{ .Goat.JwtSecret }}
+# the bitcoin network name
+btc-network = {{ .Goat.BtcNetwork }}
+`
 
 	return customAppTemplate, customAppConfig
 }

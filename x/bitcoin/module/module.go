@@ -10,6 +10,7 @@ import (
 	"cosmossdk.io/core/store"
 	"cosmossdk.io/depinject"
 	"cosmossdk.io/log"
+	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -178,9 +179,10 @@ type ModuleInputs struct {
 	Config       *modulev1.Module
 	Logger       log.Logger
 
-	AccountKeeper types.AccountKeeper
-	BankKeeper    types.BankKeeper
-	RelayerKeeper types.RelayerKeeper
+	AccountKeeper  types.AccountKeeper
+	BankKeeper     types.BankKeeper
+	RelayerKeeper  types.RelayerKeeper
+	BtcChainConfig *chaincfg.Params `optional:"true"` // optinal for client context
 }
 
 type ModuleOutputs struct {
@@ -196,6 +198,7 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.AddressCodec,
 		in.StoreService,
 		in.Logger,
+		in.BtcChainConfig,
 		in.RelayerKeeper,
 	)
 	m := NewAppModule(

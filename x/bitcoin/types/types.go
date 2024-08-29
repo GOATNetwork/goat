@@ -1,13 +1,10 @@
 package types
 
 import (
-	"bytes"
 	"encoding/binary"
 	"errors"
-	"slices"
 
 	"cosmossdk.io/math"
-	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 	relayertypes "github.com/goatnetwork/goat/x/relayer/types"
 )
 
@@ -98,10 +95,6 @@ func (req *MsgNewDeposits) Validate() error {
 }
 
 func (req *Deposit) Validate() error {
-	if req.BlockHeader == nil {
-		return errors.New("empty block header")
-	}
-
 	if len(req.EvmAddress) != 20 {
 		return errors.New("invalid evm address")
 	}
@@ -115,25 +108,4 @@ func (req *Deposit) Validate() error {
 	}
 
 	return nil
-}
-
-func VerifyMerkelProof(txid, root, proof []byte, index uint32) bool {
-	if len(txid) != 32 || len(root) != 32 || len(proof)%32 != 0 {
-		return false
-	}
-
-	current := txid
-	for i := 0; i < len(proof)/32; i++ {
-		start := i * 32
-		end := start + 32
-		next := proof[start:end]
-		if index&1 == 0 {
-			current = goatcrypto.DoubleSHA256Sum(slices.Concat(current, next))
-		} else {
-			current = goatcrypto.DoubleSHA256Sum(slices.Concat(next, current))
-		}
-		index >>= 1
-	}
-
-	return bytes.Equal(current, root)
 }

@@ -36,7 +36,7 @@ func (p *PublicKey) Validate() error {
 
 func (p *PublicKey) VerifySign(msg, sig []byte) bool {
 	// note: msg is 32 bytes, sig is 64 bytes
-	if len(msg) != schnorr.PubKeyBytesLen || len(sig) != schnorr.SignatureSize {
+	if len(msg) != 32 || len(sig) != schnorr.SignatureSize {
 		return false
 	}
 

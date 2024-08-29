@@ -21,6 +21,16 @@ service Query {
   rpc Pubkey(QueryPubkeyRequest) returns (QueryPubkeyResponse) {
     option (google.api.http).get = "/goatnetwork/goat/bitcoin/v1/pubkey";
   }
+
+  // DepositAddress
+  rpc DepositAddress(QueryDepositAddress) returns (QueryDepositAddressResponse) {
+    option (google.api.http).get = "/goatnetwork/goat/bitcoin/v1/depositAddress";
+  }
+
+  // WithdrawalAddress
+  rpc WithdrawalAddress(QueryWithdrawalAddress) returns (QueryWithdrawalAddressResponse) {
+    option (google.api.http).get = "/goatnetwork/goat/bitcoin/v1/withdrawalAddress";
+  }
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -44,4 +54,25 @@ message QueryPubkeyResponse {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
+}
+
+// QueryDepositAddress is request type for the Query/DepositAddress RPC method
+message QueryDepositAddress {
+  goat.relayer.v1.PublicKey public_key = 1;
+  bytes evm_address = 2;
+}
+
+// QueryDepositAddressResponse is response type for the Query/DepositAddress RPC method
+message QueryDepositAddressResponse {
+  string address = 1;
+}
+
+// QueryWithdrawalAddress is request type for the Query/WithdrawalAddress RPC method
+message QueryWithdrawalAddress {
+  string address = 1;
+}
+
+// QueryWithdrawalAddressReponse is response type for the Query/WithdrawalAddress RPC method
+message QueryWithdrawalAddressResponse {
+  bytes address = 1;
 }

@@ -18,7 +18,6 @@ import (
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	authcmd "github.com/cosmos/cosmos-sdk/x/auth/client/cli"
-	"github.com/cosmos/cosmos-sdk/x/crisis"
 	genutilcli "github.com/cosmos/cosmos-sdk/x/genutil/client/cli"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -39,7 +38,13 @@ func initRootCmd(
 		snapshot.Cmd(newApp),
 	)
 
-	server.AddCommands(rootCmd, app.DefaultNodeHome, newApp, appExport, addModuleInitFlags)
+	server.AddCommandsWithStartCmdOptions(rootCmd, app.DefaultNodeHome, newApp, appExport, server.StartCmdOptions{
+		AddFlags: func(cmd *cobra.Command) {
+			cmd.Flags().String(FlagGoatGeth, "http://127.0.0.1:8545", "the goat-geth endpoint, ipc is recommended")
+			cmd.Flags().String(FlagGoatJwtSecret, "", "the jwt secret file for engine api, it's only required if connecting to an goat-geth via http")
+			cmd.Flags().String(FlagGoatBtcNetwork, "regtest", "the bitcoin network name(mainnet|testnet3|regtest|signet)")
+		},
+	})
 
 	// add keybase, auxiliary RPC, query, genesis, and tx child commands
 	rootCmd.AddCommand(
@@ -49,10 +54,6 @@ func initRootCmd(
 		txCommand(),
 		keys.Commands(),
 	)
-}
-
-func addModuleInitFlags(startCmd *cobra.Command) {
-	crisis.AddModuleInitFlags(startCmd)
 }
 
 // genesisCommand builds genesis-related `goatd genesis` command. Users may provide application specific commands as a parameter

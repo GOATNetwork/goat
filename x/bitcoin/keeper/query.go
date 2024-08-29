@@ -55,3 +55,29 @@ func (q queryServer) Pubkey(ctx context.Context, req *types.QueryPubkeyRequest) 
 
 	return &types.QueryPubkeyResponse{PublicKey: key}, nil
 }
+
+func (q queryServer) DepositAddress(ctx context.Context, req *types.QueryDepositAddress) (*types.QueryDepositAddressResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	address, err := types.DepositAddress(req.PublicKey, req.EvmAddress, q.k.BtcChainConfig)
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "invalid request: %s", err.Error())
+	}
+
+	return &types.QueryDepositAddressResponse{Address: address.EncodeAddress()}, nil
+}
+
+func (q queryServer) WithdrawalAddress(ctx context.Context, req *types.QueryWithdrawalAddress) (*types.QueryWithdrawalAddressResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	address, err := types.WithdrawalAddress(req.Address, q.k.BtcChainConfig)
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "invalid request: %s", err.Error())
+	}
+
+	return &types.QueryWithdrawalAddressResponse{Address: address}, nil
+}

@@ -8,6 +8,7 @@ import (
 	"cosmossdk.io/core/store"
 	"cosmossdk.io/log"
 	"github.com/cosmos/cosmos-sdk/codec"
+	ethtypes "github.com/ethereum/go-ethereum/core/types"
 
 	"github.com/goatnetwork/goat/x/locking/types"
 )
@@ -75,4 +76,8 @@ func (k Keeper) GetAuthority() string {
 // Logger returns a module-specific logger.
 func (k Keeper) Logger() log.Logger {
 	return k.logger.With("module", fmt.Sprintf("x/%s", types.ModuleName))
+}
+
+func (k Keeper) DequeueLockingModuleTx() []*ethtypes.Transaction {
+	return nil
 }

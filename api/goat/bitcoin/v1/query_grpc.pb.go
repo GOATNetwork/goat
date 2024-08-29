@@ -19,8 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Query_Params_FullMethodName = "/goat.bitcoin.v1.Query/Params"
-	Query_Pubkey_FullMethodName = "/goat.bitcoin.v1.Query/Pubkey"
+	Query_Params_FullMethodName            = "/goat.bitcoin.v1.Query/Params"
+	Query_Pubkey_FullMethodName            = "/goat.bitcoin.v1.Query/Pubkey"
+	Query_DepositAddress_FullMethodName    = "/goat.bitcoin.v1.Query/DepositAddress"
+	Query_WithdrawalAddress_FullMethodName = "/goat.bitcoin.v1.Query/WithdrawalAddress"
 )
 
 // QueryClient is the client API for Query service.
@@ -31,6 +33,10 @@ type QueryClient interface {
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
 	// Pubkeys queries current public key for deposit
 	Pubkey(ctx context.Context, in *QueryPubkeyRequest, opts ...grpc.CallOption) (*QueryPubkeyResponse, error)
+	// DepositAddress
+	DepositAddress(ctx context.Context, in *QueryDepositAddress, opts ...grpc.CallOption) (*QueryDepositAddressResponse, error)
+	// WithdrawalAddress
+	WithdrawalAddress(ctx context.Context, in *QueryWithdrawalAddress, opts ...grpc.CallOption) (*QueryWithdrawalAddressResponse, error)
 }
 
 type queryClient struct {
@@ -59,6 +65,24 @@ func (c *queryClient) Pubkey(ctx context.Context, in *QueryPubkeyRequest, opts .
 	return out, nil
 }
 
+func (c *queryClient) DepositAddress(ctx context.Context, in *QueryDepositAddress, opts ...grpc.CallOption) (*QueryDepositAddressResponse, error) {
+	out := new(QueryDepositAddressResponse)
+	err := c.cc.Invoke(ctx, Query_DepositAddress_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) WithdrawalAddress(ctx context.Context, in *QueryWithdrawalAddress, opts ...grpc.CallOption) (*QueryWithdrawalAddressResponse, error) {
+	out := new(QueryWithdrawalAddressResponse)
+	err := c.cc.Invoke(ctx, Query_WithdrawalAddress_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -67,6 +91,10 @@ type QueryServer interface {
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
 	// Pubkeys queries current public key for deposit
 	Pubkey(context.Context, *QueryPubkeyRequest) (*QueryPubkeyResponse, error)
+	// DepositAddress
+	DepositAddress(context.Context, *QueryDepositAddress) (*QueryDepositAddressResponse, error)
+	// WithdrawalAddress
+	WithdrawalAddress(context.Context, *QueryWithdrawalAddress) (*QueryWithdrawalAddressResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -79,6 +107,12 @@ func (UnimplementedQueryServer) Params(context.Context, *QueryParamsRequest) (*Q
 }
 func (UnimplementedQueryServer) Pubkey(context.Context, *QueryPubkeyRequest) (*QueryPubkeyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Pubkey not implemented")
+}
+func (UnimplementedQueryServer) DepositAddress(context.Context, *QueryDepositAddress) (*QueryDepositAddressResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DepositAddress not implemented")
+}
+func (UnimplementedQueryServer) WithdrawalAddress(context.Context, *QueryWithdrawalAddress) (*QueryWithdrawalAddressResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WithdrawalAddress not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -129,6 +163,42 @@ func _Query_Pubkey_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_DepositAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryDepositAddress)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).DepositAddress(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_DepositAddress_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).DepositAddress(ctx, req.(*QueryDepositAddress))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_WithdrawalAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryWithdrawalAddress)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).WithdrawalAddress(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_WithdrawalAddress_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).WithdrawalAddress(ctx, req.(*QueryWithdrawalAddress))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -143,6 +213,14 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Pubkey",
 			Handler:    _Query_Pubkey_Handler,
+		},
+		{
+			MethodName: "DepositAddress",
+			Handler:    _Query_DepositAddress_Handler,
+		},
+		{
+			MethodName: "WithdrawalAddress",
+			Handler:    _Query_WithdrawalAddress_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
