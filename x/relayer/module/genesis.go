@@ -2,8 +2,8 @@ package relayer
 
 import (
 	"bytes"
+	"slices"
 
-	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/goatnetwork/goat/x/relayer/keeper"
@@ -36,9 +36,8 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 		LastElected: ctx.BlockTime(),
 	}
 
-	for idx, v := range genState.Voters {
-		key := &secp256k1.PubKey{Key: v.TxKey}
-		addr, err := k.AddrCodec.BytesToString(key.Address())
+	for addr, v := range genState.Voters {
+		addrByte, err := k.AddrCodec.StringToBytes(addr)
 		if err != nil {
 			panic(err)
 		}
@@ -47,19 +46,17 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 			panic("invalid vote key")
 		}
 
-		if idx == 0 {
-			relayer.Proposer = addr
-		} else {
-			relayer.Voters = append(relayer.Voters, addr)
-		}
-
+		relayer.Voters = append(relayer.Voters, addr)
 		v.Status = types.Activated
 		v.Height = sdkctx.BlockHeight()
-		if err := k.Voters.Set(ctx, addr, *v); err != nil {
+		if err := k.Voters.Set(ctx, addrByte, *v); err != nil {
 			panic(err)
 		}
 	}
 
+	slices.Sort(relayer.Voters)
+	relayer.Proposer = relayer.Voters[0]
+	relayer.Voters = relayer.Voters[1:]
 	if err := k.Relayer.Set(ctx, relayer); err != nil {
 		panic(err)
 	}
@@ -93,12 +90,13 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	defer iter.Close()
 
 	for ; iter.Valid(); iter.Next() {
-		kv, err := iter.Value()
+		kv, err := iter.KeyValue()
 		if err != nil {
 			panic(err)
 		}
-		if kv.Status == types.Activated {
-			genesis.Voters = append(genesis.Voters, &kv)
+
+		if kv.Value.Status == types.Activated {
+			genesis.Voters[kv.Key.String()] = &kv.Value
 		}
 	}
 

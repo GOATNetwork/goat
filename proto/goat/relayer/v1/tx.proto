@@ -1,11 +1,11 @@
 syntax = "proto3";
 package goat.relayer.v1;
 
-import "amino/amino.proto";
+// import "amino/amino.proto";
 import "cosmos/msg/v1/msg.proto";
-import "cosmos_proto/cosmos.proto";
+// import "cosmos_proto/cosmos.proto";
 // import "goat/relayer/v1/params.proto";
-import "goat/relayer/v1/relayer.proto";
+// import "goat/relayer/v1/relayer.proto";
 // import "gogoproto/gogo.proto";
 
 option go_package = "github.com/goatnetwork/goat/x/relayer/types";
@@ -16,19 +16,19 @@ service Msg {
 
   // OnBoarding add a new pending voter
   // the voter should provide online proof(signature of their voteKey and txKey)
-  rpc OnBoarding(MsgOnBoardingRequest) returns (MsgOnBoardingResponse);
+  // rpc OnBoarding(MsgOnBoardingRequest) returns (MsgOnBoardingResponse);
 }
 
 // MsgOnBoardingRequest
-message MsgOnBoardingRequest {
-  option (cosmos.msg.v1.signer) = "proposer";
-  option (amino.name) = "goat/x/relayer/MsgOnBoardingRequest";
+// message MsgOnBoardingRequest {
+//   option (cosmos.msg.v1.signer) = "proposer";
+//   option (amino.name) = "goat/x/relayer/MsgOnBoardingRequest";
 
-  string proposer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  Votes vote = 2;
-  string new_voter = 3;
-  uint64 threshold = 4;
-}
+//   string proposer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+//   Votes vote = 2;
+//   string new_voter = 3;
+//   uint64 threshold = 4;
+// }
 
-// MsgOnBoardingResponse
-message MsgOnBoardingResponse {}
+// // MsgOnBoardingResponse
+// message MsgOnBoardingResponse {}

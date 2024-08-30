@@ -9,11 +9,15 @@ import (
 )
 
 type BitcoinKeeper interface {
-	DequeueBitcoinModuleTx() []*ethtypes.Transaction
+	DequeueBitcoinModuleTx(ctx context.Context) ([]*ethtypes.Transaction, error)
 }
 
 type LockingKeeper interface {
-	DequeueLockingModuleTx() []*ethtypes.Transaction
+	DequeueLockingModuleTx(ctx context.Context) ([]*ethtypes.Transaction, error)
+}
+
+type RelayerKeeper interface {
+	GetCurrentProposer(ctx context.Context) (sdk.AccAddress, error)
 }
 
 // AccountKeeper defines the expected interface for the Account module.

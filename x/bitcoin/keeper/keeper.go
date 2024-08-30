@@ -154,6 +154,6 @@ func (k Keeper) NewPubkey(ctx context.Context, pubkey *relayertypes.PublicKey) e
 	return k.Pubkey.Set(ctx, *pubkey)
 }
 
-func (k Keeper) DequeueBitcoinModuleTx() []*ethtypes.Transaction {
-	return nil
+func (k Keeper) DequeueBitcoinModuleTx(ctx context.Context) ([]*ethtypes.Transaction, error) {
+	return nil, nil
 }

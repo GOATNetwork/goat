@@ -126,6 +126,7 @@ func New(
 			AppConfig(),
 			depinject.Provide(ProvideEngineClient),
 			depinject.Provide(ProvideBitcoinNetworkConfig),
+			depinject.Provide(ProvideValidatorPrvKey),
 			depinject.Supply(
 				appOpts, // supply app options
 				logger,  // supply logger

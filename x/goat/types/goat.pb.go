@@ -22,79 +22,6 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// The withdrawal receipt with the recipient address and amount withdrawn
-type Withdrawal struct {
-	// Withdrawal index for accounting purposes
-	Index uint64 `protobuf:"varint,1,opt,name=index,proto3" json:"index,omitempty"`
-	// Validator index for the withdrawal
-	ValidatorIndex uint64 `protobuf:"varint,2,opt,name=validator_index,json=validatorIndex,proto3" json:"validator_index,omitempty"`
-	// The execution address receiving the funds
-	Address []byte `protobuf:"bytes,3,opt,name=address,proto3" json:"address,omitempty"`
-	// The withdrawn amount in Gwei
-	Amount uint64 `protobuf:"varint,4,opt,name=amount,proto3" json:"amount,omitempty"`
-}
-
-func (m *Withdrawal) Reset()         { *m = Withdrawal{} }
-func (m *Withdrawal) String() string { return proto.CompactTextString(m) }
-func (*Withdrawal) ProtoMessage()    {}
-func (*Withdrawal) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e240fa210386b3d7, []int{0}
-}
-func (m *Withdrawal) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *Withdrawal) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_Withdrawal.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *Withdrawal) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Withdrawal.Merge(m, src)
-}
-func (m *Withdrawal) XXX_Size() int {
-	return m.Size()
-}
-func (m *Withdrawal) XXX_DiscardUnknown() {
-	xxx_messageInfo_Withdrawal.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Withdrawal proto.InternalMessageInfo
-
-func (m *Withdrawal) GetIndex() uint64 {
-	if m != nil {
-		return m.Index
-	}
-	return 0
-}
-
-func (m *Withdrawal) GetValidatorIndex() uint64 {
-	if m != nil {
-		return m.ValidatorIndex
-	}
-	return 0
-}
-
-func (m *Withdrawal) GetAddress() []byte {
-	if m != nil {
-		return m.Address
-	}
-	return nil
-}
-
-func (m *Withdrawal) GetAmount() uint64 {
-	if m != nil {
-		return m.Amount
-	}
-	return 0
-}
-
 // BlobsBundle is retrieved through engine-api from the execution layer client.
 type BlobsBundle struct {
 	// The KZG commitments of the blobs.
@@ -109,7 +36,7 @@ func (m *BlobsBundle) Reset()         { *m = BlobsBundle{} }
 func (m *BlobsBundle) String() string { return proto.CompactTextString(m) }
 func (*BlobsBundle) ProtoMessage()    {}
 func (*BlobsBundle) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e240fa210386b3d7, []int{1}
+	return fileDescriptor_e240fa210386b3d7, []int{0}
 }
 func (m *BlobsBundle) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -161,30 +88,29 @@ func (m *BlobsBundle) GetBlobs() [][]byte {
 
 // ExecutionPayload
 type ExecutionPayload struct {
-	ParentHash    []byte        `protobuf:"bytes,1,opt,name=parent_hash,json=parentHash,proto3" json:"parent_hash,omitempty"`
-	FeeRecipient  []byte        `protobuf:"bytes,2,opt,name=fee_recipient,json=feeRecipient,proto3" json:"fee_recipient,omitempty"`
-	StateRoot     []byte        `protobuf:"bytes,3,opt,name=state_root,json=stateRoot,proto3" json:"state_root,omitempty"`
-	ReceiptsRoot  []byte        `protobuf:"bytes,4,opt,name=receipts_root,json=receiptsRoot,proto3" json:"receipts_root,omitempty"`
-	LogsBloom     []byte        `protobuf:"bytes,5,opt,name=logs_bloom,json=logsBloom,proto3" json:"logs_bloom,omitempty"`
-	PrevRandao    []byte        `protobuf:"bytes,6,opt,name=prev_randao,json=prevRandao,proto3" json:"prev_randao,omitempty"`
-	BlockNumber   uint64        `protobuf:"varint,7,opt,name=block_number,json=blockNumber,proto3" json:"block_number,omitempty"`
-	GasLimit      uint64        `protobuf:"varint,8,opt,name=gas_limit,json=gasLimit,proto3" json:"gas_limit,omitempty"`
-	GasUsed       uint64        `protobuf:"varint,9,opt,name=gas_used,json=gasUsed,proto3" json:"gas_used,omitempty"`
-	Timestamp     uint64        `protobuf:"varint,10,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
-	ExtraData     []byte        `protobuf:"bytes,11,opt,name=extra_data,json=extraData,proto3" json:"extra_data,omitempty"`
-	BaseFeePerGas []byte        `protobuf:"bytes,12,opt,name=base_fee_per_gas,json=baseFeePerGas,proto3" json:"base_fee_per_gas,omitempty"`
-	BlockHash     []byte        `protobuf:"bytes,13,opt,name=block_hash,json=blockHash,proto3" json:"block_hash,omitempty"`
-	Transactions  [][]byte      `protobuf:"bytes,14,rep,name=transactions,proto3" json:"transactions,omitempty"`
-	Withdrawals   []*Withdrawal `protobuf:"bytes,15,rep,name=withdrawals,proto3" json:"withdrawals,omitempty"`
-	BlobGasUsed   uint64        `protobuf:"varint,16,opt,name=blob_gas_used,json=blobGasUsed,proto3" json:"blob_gas_used,omitempty"`
-	ExcessBlobGas uint64        `protobuf:"varint,17,opt,name=excess_blob_gas,json=excessBlobGas,proto3" json:"excess_blob_gas,omitempty"`
+	ParentHash    []byte   `protobuf:"bytes,1,opt,name=parent_hash,json=parentHash,proto3" json:"parent_hash,omitempty"`
+	StateRoot     []byte   `protobuf:"bytes,2,opt,name=state_root,json=stateRoot,proto3" json:"state_root,omitempty"`
+	ReceiptsRoot  []byte   `protobuf:"bytes,3,opt,name=receipts_root,json=receiptsRoot,proto3" json:"receipts_root,omitempty"`
+	LogsBloom     []byte   `protobuf:"bytes,4,opt,name=logs_bloom,json=logsBloom,proto3" json:"logs_bloom,omitempty"`
+	PrevRandao    []byte   `protobuf:"bytes,5,opt,name=prev_randao,json=prevRandao,proto3" json:"prev_randao,omitempty"`
+	BlockNumber   uint64   `protobuf:"varint,6,opt,name=block_number,json=blockNumber,proto3" json:"block_number,omitempty"`
+	GasLimit      uint64   `protobuf:"varint,7,opt,name=gas_limit,json=gasLimit,proto3" json:"gas_limit,omitempty"`
+	GasUsed       uint64   `protobuf:"varint,8,opt,name=gas_used,json=gasUsed,proto3" json:"gas_used,omitempty"`
+	Timestamp     uint64   `protobuf:"varint,9,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	ExtraData     []byte   `protobuf:"bytes,10,opt,name=extra_data,json=extraData,proto3" json:"extra_data,omitempty"`
+	BaseFeePerGas []byte   `protobuf:"bytes,11,opt,name=base_fee_per_gas,json=baseFeePerGas,proto3" json:"base_fee_per_gas,omitempty"`
+	BlockHash     []byte   `protobuf:"bytes,12,opt,name=block_hash,json=blockHash,proto3" json:"block_hash,omitempty"`
+	Transactions  [][]byte `protobuf:"bytes,13,rep,name=transactions,proto3" json:"transactions,omitempty"`
+	BeaconRoot    []byte   `protobuf:"bytes,14,opt,name=beacon_root,json=beaconRoot,proto3" json:"beacon_root,omitempty"`
+	BlobGasUsed   uint64   `protobuf:"varint,15,opt,name=blob_gas_used,json=blobGasUsed,proto3" json:"blob_gas_used,omitempty"`
+	ExcessBlobGas uint64   `protobuf:"varint,16,opt,name=excess_blob_gas,json=excessBlobGas,proto3" json:"excess_blob_gas,omitempty"`
 }
 
 func (m *ExecutionPayload) Reset()         { *m = ExecutionPayload{} }
 func (m *ExecutionPayload) String() string { return proto.CompactTextString(m) }
 func (*ExecutionPayload) ProtoMessage()    {}
 func (*ExecutionPayload) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e240fa210386b3d7, []int{2}
+	return fileDescriptor_e240fa210386b3d7, []int{1}
 }
 func (m *ExecutionPayload) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -216,13 +142,6 @@ var xxx_messageInfo_ExecutionPayload proto.InternalMessageInfo
 func (m *ExecutionPayload) GetParentHash() []byte {
 	if m != nil {
 		return m.ParentHash
-	}
-	return nil
-}
-
-func (m *ExecutionPayload) GetFeeRecipient() []byte {
-	if m != nil {
-		return m.FeeRecipient
 	}
 	return nil
 }
@@ -311,9 +230,9 @@ func (m *ExecutionPayload) GetTransactions() [][]byte {
 	return nil
 }
 
-func (m *ExecutionPayload) GetWithdrawals() []*Withdrawal {
+func (m *ExecutionPayload) GetBeaconRoot() []byte {
 	if m != nil {
-		return m.Withdrawals
+		return m.BeaconRoot
 	}
 	return nil
 }
@@ -333,7 +252,6 @@ func (m *ExecutionPayload) GetExcessBlobGas() uint64 {
 }
 
 func init() {
-	proto.RegisterType((*Withdrawal)(nil), "goat.goat.v1.Withdrawal")
 	proto.RegisterType((*BlobsBundle)(nil), "goat.goat.v1.BlobsBundle")
 	proto.RegisterType((*ExecutionPayload)(nil), "goat.goat.v1.ExecutionPayload")
 }
@@ -341,90 +259,39 @@ func init() {
 func init() { proto.RegisterFile("goat/goat/v1/goat.proto", fileDescriptor_e240fa210386b3d7) }
 
 var fileDescriptor_e240fa210386b3d7 = []byte{
-	// 598 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x54, 0x93, 0xcd, 0x6e, 0xd3, 0x40,
-	0x10, 0xc7, 0xeb, 0x26, 0xfd, 0xc8, 0xc6, 0x69, 0xcb, 0x0a, 0xc1, 0x22, 0x68, 0x08, 0x41, 0xa2,
-	0x39, 0x05, 0x15, 0x6e, 0x1c, 0xc3, 0x47, 0x41, 0x42, 0xa8, 0xb2, 0x84, 0x90, 0xb8, 0xac, 0xc6,
-	0xf6, 0xd4, 0xb1, 0x62, 0x7b, 0xad, 0xdd, 0x75, 0x9a, 0x56, 0xe2, 0x1d, 0x78, 0x2c, 0x8e, 0x3d,
-	0x72, 0x44, 0xed, 0x85, 0xc7, 0x40, 0x3b, 0x9b, 0x26, 0xe5, 0xe2, 0xdd, 0xf9, 0xcd, 0x3f, 0x93,
-	0xf9, 0x5a, 0xf6, 0x30, 0x53, 0x60, 0x5f, 0xd2, 0x67, 0x7e, 0x4c, 0xe7, 0xb8, 0xd6, 0xca, 0x2a,
-	0x1e, 0xd2, 0x9d, 0x3e, 0xf3, 0xe3, 0xe1, 0x0f, 0xc6, 0xbe, 0xe5, 0x76, 0x9a, 0x6a, 0x38, 0x87,
-	0x82, 0xdf, 0x67, 0x5b, 0x79, 0x95, 0xe2, 0x42, 0x04, 0x83, 0x60, 0xd4, 0x8e, 0xbc, 0xc1, 0x8f,
-	0xd8, 0xfe, 0x1c, 0x8a, 0x3c, 0x05, 0xab, 0xb4, 0xf4, 0xfe, 0x4d, 0xf2, 0xef, 0xad, 0xf0, 0x27,
-	0x12, 0x0a, 0xb6, 0x03, 0x69, 0xaa, 0xd1, 0x18, 0xd1, 0x1a, 0x04, 0xa3, 0x30, 0xba, 0x35, 0xf9,
-	0x03, 0xb6, 0x0d, 0xa5, 0x6a, 0x2a, 0x2b, 0xda, 0xf4, 0xcb, 0xa5, 0x35, 0x4c, 0x59, 0x77, 0x52,
-	0xa8, 0xd8, 0x4c, 0x9a, 0x2a, 0x2d, 0xd0, 0xfd, 0xd3, 0xec, 0x32, 0x93, 0x89, 0x2a, 0xcb, 0xdc,
-	0x96, 0x58, 0x59, 0x23, 0x82, 0x41, 0x6b, 0x14, 0x46, 0x7b, 0xb3, 0xcb, 0xec, 0xed, 0x9a, 0xba,
-	0x78, 0xb5, 0x56, 0xea, 0xcc, 0x88, 0x4d, 0xf2, 0x2f, 0x2d, 0x57, 0x40, 0xec, 0xe2, 0x89, 0x16,
-	0x61, 0x6f, 0x0c, 0xff, 0xb6, 0xd9, 0xc1, 0xfb, 0x05, 0x26, 0x8d, 0xcd, 0x55, 0x75, 0x0a, 0x17,
-	0x85, 0x82, 0x94, 0x3f, 0x65, 0xdd, 0x1a, 0x34, 0x56, 0x56, 0x4e, 0xc1, 0x4c, 0xa9, 0xe2, 0x30,
-	0x62, 0x1e, 0x7d, 0x04, 0x33, 0xe5, 0xcf, 0x59, 0xef, 0x0c, 0x51, 0x6a, 0x4c, 0xf2, 0x3a, 0xc7,
-	0xca, 0x52, 0xd1, 0x61, 0x14, 0x9e, 0x21, 0x46, 0xb7, 0x8c, 0x1f, 0x32, 0x66, 0x2c, 0x58, 0x94,
-	0x5a, 0x29, 0xbb, 0xac, 0xba, 0x43, 0x24, 0x52, 0xca, 0xba, 0x18, 0x1a, 0x13, 0xcc, 0x6b, 0x6b,
-	0xbc, 0xa2, 0xed, 0x63, 0xdc, 0x42, 0x12, 0x1d, 0x32, 0x56, 0xa8, 0xcc, 0xc8, 0xb8, 0x50, 0xaa,
-	0x14, 0x5b, 0x3e, 0x86, 0x23, 0x13, 0x07, 0x28, 0x51, 0x8d, 0x73, 0xa9, 0xa1, 0x4a, 0x41, 0x89,
-	0xed, 0x65, 0xa2, 0x1a, 0xe7, 0x11, 0x11, 0xfe, 0x8c, 0x85, 0x71, 0xa1, 0x92, 0x99, 0xac, 0x9a,
-	0x32, 0x46, 0x2d, 0x76, 0xa8, 0xc5, 0x5d, 0x62, 0x5f, 0x08, 0xf1, 0xc7, 0xac, 0x93, 0x81, 0x91,
-	0x45, 0x5e, 0xe6, 0x56, 0xec, 0x92, 0x7f, 0x37, 0x03, 0xf3, 0xd9, 0xd9, 0xfc, 0x11, 0x73, 0x77,
-	0xd9, 0x18, 0x4c, 0x45, 0x87, 0x7c, 0x3b, 0x19, 0x98, 0xaf, 0x06, 0x53, 0xfe, 0x84, 0x75, 0x6c,
-	0x5e, 0xa2, 0xb1, 0x50, 0xd6, 0x82, 0x91, 0x6f, 0x0d, 0x5c, 0xe2, 0xb8, 0xb0, 0x1a, 0x64, 0x0a,
-	0x16, 0x44, 0xd7, 0x27, 0x4e, 0xe4, 0x1d, 0x58, 0xe0, 0x47, 0xec, 0x20, 0x06, 0x83, 0xd2, 0x75,
-	0xb1, 0x46, 0x2d, 0x33, 0x30, 0x22, 0x24, 0x51, 0xcf, 0xf1, 0x0f, 0x88, 0xa7, 0xa8, 0x4f, 0xc0,
-	0xb8, 0x38, 0xbe, 0x00, 0x9a, 0x44, 0xcf, 0xc7, 0x21, 0x42, 0x83, 0x18, 0xb2, 0xd0, 0x6a, 0xa8,
-	0x0c, 0x24, 0x6e, 0x7e, 0x46, 0xec, 0xd1, 0x6c, 0xff, 0x63, 0xfc, 0x0d, 0xeb, 0x9e, 0xaf, 0xf6,
-	0xd8, 0x88, 0xfd, 0x41, 0x6b, 0xd4, 0x7d, 0x25, 0xc6, 0x77, 0x77, 0x7d, 0xbc, 0x5e, 0xf4, 0xe8,
-	0xae, 0x98, 0x0f, 0x59, 0xcf, 0xed, 0x89, 0x5c, 0x35, 0xe1, 0x60, 0xd5, 0xc0, 0xf8, 0x64, 0xd9,
-	0x88, 0x17, 0x6c, 0x1f, 0x17, 0x09, 0x1a, 0x9a, 0x12, 0x49, 0xc5, 0x3d, 0x52, 0xf5, 0x3c, 0x9e,
-	0x78, 0xed, 0x64, 0xf2, 0xeb, 0xba, 0x1f, 0x5c, 0x5d, 0xf7, 0x83, 0x3f, 0xd7, 0xfd, 0xe0, 0xe7,
-	0x4d, 0x7f, 0xe3, 0xea, 0xa6, 0xbf, 0xf1, 0xfb, 0xa6, 0xbf, 0xf1, 0x7d, 0x94, 0xe5, 0x76, 0xda,
-	0xc4, 0xe3, 0x44, 0x95, 0xf4, 0x1c, 0x2b, 0xb4, 0xe7, 0x4a, 0xcf, 0xfc, 0x13, 0x5d, 0xf8, 0xc3,
-	0x5e, 0xd4, 0x68, 0xe2, 0x6d, 0x7a, 0xa8, 0xaf, 0xff, 0x05, 0x00, 0x00, 0xff, 0xff, 0x53, 0x14,
-	0x24, 0xc1, 0xc3, 0x03, 0x00, 0x00,
-}
-
-func (m *Withdrawal) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *Withdrawal) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Withdrawal) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Amount != 0 {
-		i = encodeVarintGoat(dAtA, i, uint64(m.Amount))
-		i--
-		dAtA[i] = 0x20
-	}
-	if len(m.Address) > 0 {
-		i -= len(m.Address)
-		copy(dAtA[i:], m.Address)
-		i = encodeVarintGoat(dAtA, i, uint64(len(m.Address)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if m.ValidatorIndex != 0 {
-		i = encodeVarintGoat(dAtA, i, uint64(m.ValidatorIndex))
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.Index != 0 {
-		i = encodeVarintGoat(dAtA, i, uint64(m.Index))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	// 505 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x54, 0x92, 0xcd, 0x6e, 0xd3, 0x40,
+	0x10, 0xc7, 0xeb, 0x36, 0x4d, 0x9b, 0x89, 0xd3, 0x44, 0x2b, 0x04, 0x8b, 0xa0, 0x26, 0x04, 0x89,
+	0xe6, 0x54, 0x54, 0xf1, 0x06, 0xe6, 0xa3, 0x1c, 0x10, 0xaa, 0x22, 0x71, 0xe1, 0xb2, 0x1a, 0xdb,
+	0x53, 0xc7, 0x8a, 0xed, 0xb5, 0x76, 0x37, 0x21, 0xed, 0x53, 0xf0, 0x18, 0x3c, 0x0a, 0xc7, 0x1e,
+	0x39, 0xa2, 0xe4, 0x45, 0x90, 0x67, 0x43, 0x2b, 0x2e, 0xfb, 0xf1, 0x9b, 0xbf, 0x46, 0x33, 0xff,
+	0x19, 0x78, 0x92, 0x6b, 0x74, 0x6f, 0xf8, 0x58, 0x5d, 0xf0, 0x7d, 0xde, 0x18, 0xed, 0xb4, 0x08,
+	0xf9, 0xcd, 0xc7, 0xea, 0x62, 0x92, 0x41, 0x3f, 0x2e, 0x75, 0x62, 0xe3, 0x65, 0x9d, 0x95, 0x24,
+	0xce, 0x60, 0xb8, 0xb8, 0xcd, 0x55, 0xaa, 0xab, 0xaa, 0x70, 0x15, 0xd5, 0xce, 0xca, 0x60, 0x7c,
+	0x30, 0x0d, 0x67, 0x27, 0x8b, 0xdb, 0xfc, 0xdd, 0x03, 0x15, 0x8f, 0xa1, 0xdb, 0x18, 0xad, 0xaf,
+	0xad, 0xdc, 0xe7, 0xf8, 0xee, 0x27, 0x1e, 0xc1, 0x61, 0xd2, 0xe6, 0x93, 0x07, 0x8c, 0xfd, 0x67,
+	0xf2, 0xb3, 0x03, 0xa3, 0x0f, 0x6b, 0x4a, 0x97, 0xae, 0xd0, 0xf5, 0x15, 0xde, 0x94, 0x1a, 0x33,
+	0xf1, 0x02, 0xfa, 0x0d, 0x1a, 0xaa, 0x9d, 0x9a, 0xa3, 0x9d, 0xcb, 0x60, 0x1c, 0x4c, 0xc3, 0x19,
+	0x78, 0xf4, 0x09, 0xed, 0x5c, 0x9c, 0x02, 0x58, 0x87, 0x8e, 0x94, 0xd1, 0xda, 0xc9, 0x7d, 0x8e,
+	0xf7, 0x98, 0xcc, 0xb4, 0x76, 0xe2, 0x15, 0x0c, 0x0c, 0xa5, 0x54, 0x34, 0xce, 0x7a, 0xc5, 0x01,
+	0x2b, 0xc2, 0x7f, 0x90, 0x45, 0xa7, 0x00, 0xa5, 0xce, 0xad, 0x4a, 0x4a, 0xad, 0x2b, 0xd9, 0xf1,
+	0x39, 0x5a, 0x12, 0xb7, 0x80, 0x6b, 0x30, 0xb4, 0x52, 0x06, 0xeb, 0x0c, 0xb5, 0x3c, 0xdc, 0xd5,
+	0x60, 0x68, 0x35, 0x63, 0x22, 0x5e, 0x42, 0x98, 0x94, 0x3a, 0x5d, 0xa8, 0x7a, 0x59, 0x25, 0x64,
+	0x64, 0x77, 0x1c, 0x4c, 0x3b, 0xb3, 0x3e, 0xb3, 0x2f, 0x8c, 0xc4, 0x33, 0xe8, 0xe5, 0x68, 0x55,
+	0x59, 0x54, 0x85, 0x93, 0x47, 0x1c, 0x3f, 0xce, 0xd1, 0x7e, 0x6e, 0xff, 0xe2, 0x29, 0xb4, 0x6f,
+	0xb5, 0xb4, 0x94, 0xc9, 0x63, 0x8e, 0x1d, 0xe5, 0x68, 0xbf, 0x5a, 0xca, 0xc4, 0x73, 0xe8, 0xb9,
+	0xa2, 0x22, 0xeb, 0xb0, 0x6a, 0x64, 0x8f, 0x63, 0x0f, 0xa0, 0x2d, 0x9c, 0xd6, 0xce, 0xa0, 0xca,
+	0xd0, 0xa1, 0x04, 0x5f, 0x38, 0x93, 0xf7, 0xe8, 0x50, 0x9c, 0xc1, 0x28, 0x41, 0x4b, 0xea, 0x9a,
+	0x48, 0x35, 0x64, 0x54, 0x8e, 0x56, 0xf6, 0x59, 0x34, 0x68, 0xf9, 0x47, 0xa2, 0x2b, 0x32, 0x97,
+	0x68, 0xdb, 0x3c, 0xbe, 0x01, 0x36, 0x39, 0xf4, 0x79, 0x98, 0xb0, 0xc7, 0x13, 0x08, 0x9d, 0xc1,
+	0xda, 0x62, 0xda, 0x8e, 0xc6, 0xca, 0x01, 0x8f, 0xed, 0x3f, 0xd6, 0x9a, 0x94, 0x10, 0xa6, 0xba,
+	0xf6, 0x36, 0x9f, 0x78, 0x93, 0x3c, 0x62, 0x93, 0x27, 0x30, 0x68, 0xe7, 0xac, 0xee, 0x3b, 0x1d,
+	0xde, 0xbb, 0x94, 0x5c, 0xee, 0xba, 0x7d, 0x0d, 0x43, 0x5a, 0xa7, 0x64, 0x79, 0x14, 0x2c, 0x95,
+	0x23, 0x56, 0x0d, 0x3c, 0x8e, 0xbd, 0x36, 0x8e, 0x7f, 0x6d, 0xa2, 0xe0, 0x6e, 0x13, 0x05, 0x7f,
+	0x36, 0x51, 0xf0, 0x63, 0x1b, 0xed, 0xdd, 0x6d, 0xa3, 0xbd, 0xdf, 0xdb, 0x68, 0xef, 0xdb, 0x34,
+	0x2f, 0xdc, 0x7c, 0x99, 0x9c, 0xa7, 0xba, 0xe2, 0x7d, 0xae, 0xc9, 0x7d, 0xd7, 0x66, 0xe1, 0x77,
+	0x7c, 0xed, 0x2f, 0x77, 0xd3, 0x90, 0x4d, 0xba, 0xbc, 0xe9, 0x6f, 0xff, 0x06, 0x00, 0x00, 0xff,
+	0xff, 0xf9, 0x17, 0x4f, 0x3a, 0x04, 0x03, 0x00, 0x00,
 }
 
 func (m *BlobsBundle) Marshal() (dAtA []byte, err error) {
@@ -502,28 +369,19 @@ func (m *ExecutionPayload) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x1
 		i--
-		dAtA[i] = 0x88
+		dAtA[i] = 0x80
 	}
 	if m.BlobGasUsed != 0 {
 		i = encodeVarintGoat(dAtA, i, uint64(m.BlobGasUsed))
 		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x80
+		dAtA[i] = 0x78
 	}
-	if len(m.Withdrawals) > 0 {
-		for iNdEx := len(m.Withdrawals) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Withdrawals[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintGoat(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x7a
-		}
+	if len(m.BeaconRoot) > 0 {
+		i -= len(m.BeaconRoot)
+		copy(dAtA[i:], m.BeaconRoot)
+		i = encodeVarintGoat(dAtA, i, uint64(len(m.BeaconRoot)))
+		i--
+		dAtA[i] = 0x72
 	}
 	if len(m.Transactions) > 0 {
 		for iNdEx := len(m.Transactions) - 1; iNdEx >= 0; iNdEx-- {
@@ -531,7 +389,7 @@ func (m *ExecutionPayload) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			copy(dAtA[i:], m.Transactions[iNdEx])
 			i = encodeVarintGoat(dAtA, i, uint64(len(m.Transactions[iNdEx])))
 			i--
-			dAtA[i] = 0x72
+			dAtA[i] = 0x6a
 		}
 	}
 	if len(m.BlockHash) > 0 {
@@ -539,74 +397,67 @@ func (m *ExecutionPayload) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		copy(dAtA[i:], m.BlockHash)
 		i = encodeVarintGoat(dAtA, i, uint64(len(m.BlockHash)))
 		i--
-		dAtA[i] = 0x6a
+		dAtA[i] = 0x62
 	}
 	if len(m.BaseFeePerGas) > 0 {
 		i -= len(m.BaseFeePerGas)
 		copy(dAtA[i:], m.BaseFeePerGas)
 		i = encodeVarintGoat(dAtA, i, uint64(len(m.BaseFeePerGas)))
 		i--
-		dAtA[i] = 0x62
+		dAtA[i] = 0x5a
 	}
 	if len(m.ExtraData) > 0 {
 		i -= len(m.ExtraData)
 		copy(dAtA[i:], m.ExtraData)
 		i = encodeVarintGoat(dAtA, i, uint64(len(m.ExtraData)))
 		i--
-		dAtA[i] = 0x5a
+		dAtA[i] = 0x52
 	}
 	if m.Timestamp != 0 {
 		i = encodeVarintGoat(dAtA, i, uint64(m.Timestamp))
 		i--
-		dAtA[i] = 0x50
+		dAtA[i] = 0x48
 	}
 	if m.GasUsed != 0 {
 		i = encodeVarintGoat(dAtA, i, uint64(m.GasUsed))
 		i--
-		dAtA[i] = 0x48
+		dAtA[i] = 0x40
 	}
 	if m.GasLimit != 0 {
 		i = encodeVarintGoat(dAtA, i, uint64(m.GasLimit))
 		i--
-		dAtA[i] = 0x40
+		dAtA[i] = 0x38
 	}
 	if m.BlockNumber != 0 {
 		i = encodeVarintGoat(dAtA, i, uint64(m.BlockNumber))
 		i--
-		dAtA[i] = 0x38
+		dAtA[i] = 0x30
 	}
 	if len(m.PrevRandao) > 0 {
 		i -= len(m.PrevRandao)
 		copy(dAtA[i:], m.PrevRandao)
 		i = encodeVarintGoat(dAtA, i, uint64(len(m.PrevRandao)))
 		i--
-		dAtA[i] = 0x32
+		dAtA[i] = 0x2a
 	}
 	if len(m.LogsBloom) > 0 {
 		i -= len(m.LogsBloom)
 		copy(dAtA[i:], m.LogsBloom)
 		i = encodeVarintGoat(dAtA, i, uint64(len(m.LogsBloom)))
 		i--
-		dAtA[i] = 0x2a
+		dAtA[i] = 0x22
 	}
 	if len(m.ReceiptsRoot) > 0 {
 		i -= len(m.ReceiptsRoot)
 		copy(dAtA[i:], m.ReceiptsRoot)
 		i = encodeVarintGoat(dAtA, i, uint64(len(m.ReceiptsRoot)))
 		i--
-		dAtA[i] = 0x22
+		dAtA[i] = 0x1a
 	}
 	if len(m.StateRoot) > 0 {
 		i -= len(m.StateRoot)
 		copy(dAtA[i:], m.StateRoot)
 		i = encodeVarintGoat(dAtA, i, uint64(len(m.StateRoot)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.FeeRecipient) > 0 {
-		i -= len(m.FeeRecipient)
-		copy(dAtA[i:], m.FeeRecipient)
-		i = encodeVarintGoat(dAtA, i, uint64(len(m.FeeRecipient)))
 		i--
 		dAtA[i] = 0x12
 	}
@@ -631,28 +482,6 @@ func encodeVarintGoat(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *Withdrawal) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Index != 0 {
-		n += 1 + sovGoat(uint64(m.Index))
-	}
-	if m.ValidatorIndex != 0 {
-		n += 1 + sovGoat(uint64(m.ValidatorIndex))
-	}
-	l = len(m.Address)
-	if l > 0 {
-		n += 1 + l + sovGoat(uint64(l))
-	}
-	if m.Amount != 0 {
-		n += 1 + sovGoat(uint64(m.Amount))
-	}
-	return n
-}
-
 func (m *BlobsBundle) Size() (n int) {
 	if m == nil {
 		return 0
@@ -687,10 +516,6 @@ func (m *ExecutionPayload) Size() (n int) {
 	var l int
 	_ = l
 	l = len(m.ParentHash)
-	if l > 0 {
-		n += 1 + l + sovGoat(uint64(l))
-	}
-	l = len(m.FeeRecipient)
 	if l > 0 {
 		n += 1 + l + sovGoat(uint64(l))
 	}
@@ -740,14 +565,12 @@ func (m *ExecutionPayload) Size() (n int) {
 			n += 1 + l + sovGoat(uint64(l))
 		}
 	}
-	if len(m.Withdrawals) > 0 {
-		for _, e := range m.Withdrawals {
-			l = e.Size()
-			n += 1 + l + sovGoat(uint64(l))
-		}
+	l = len(m.BeaconRoot)
+	if l > 0 {
+		n += 1 + l + sovGoat(uint64(l))
 	}
 	if m.BlobGasUsed != 0 {
-		n += 2 + sovGoat(uint64(m.BlobGasUsed))
+		n += 1 + sovGoat(uint64(m.BlobGasUsed))
 	}
 	if m.ExcessBlobGas != 0 {
 		n += 2 + sovGoat(uint64(m.ExcessBlobGas))
@@ -760,147 +583,6 @@ func sovGoat(x uint64) (n int) {
 }
 func sozGoat(x uint64) (n int) {
 	return sovGoat(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (m *Withdrawal) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowGoat
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Withdrawal: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Withdrawal: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Index", wireType)
-			}
-			m.Index = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGoat
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Index |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ValidatorIndex", wireType)
-			}
-			m.ValidatorIndex = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGoat
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ValidatorIndex |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGoat
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthGoat
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthGoat
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Address = append(m.Address[:0], dAtA[iNdEx:postIndex]...)
-			if m.Address == nil {
-				m.Address = []byte{}
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
-			}
-			m.Amount = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGoat
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Amount |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipGoat(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthGoat
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
 }
 func (m *BlobsBundle) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
@@ -1113,40 +795,6 @@ func (m *ExecutionPayload) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FeeRecipient", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGoat
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthGoat
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthGoat
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.FeeRecipient = append(m.FeeRecipient[:0], dAtA[iNdEx:postIndex]...)
-			if m.FeeRecipient == nil {
-				m.FeeRecipient = []byte{}
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field StateRoot", wireType)
 			}
 			var byteLen int
@@ -1179,7 +827,7 @@ func (m *ExecutionPayload) Unmarshal(dAtA []byte) error {
 				m.StateRoot = []byte{}
 			}
 			iNdEx = postIndex
-		case 4:
+		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ReceiptsRoot", wireType)
 			}
@@ -1213,7 +861,7 @@ func (m *ExecutionPayload) Unmarshal(dAtA []byte) error {
 				m.ReceiptsRoot = []byte{}
 			}
 			iNdEx = postIndex
-		case 5:
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field LogsBloom", wireType)
 			}
@@ -1247,7 +895,7 @@ func (m *ExecutionPayload) Unmarshal(dAtA []byte) error {
 				m.LogsBloom = []byte{}
 			}
 			iNdEx = postIndex
-		case 6:
+		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field PrevRandao", wireType)
 			}
@@ -1281,7 +929,7 @@ func (m *ExecutionPayload) Unmarshal(dAtA []byte) error {
 				m.PrevRandao = []byte{}
 			}
 			iNdEx = postIndex
-		case 7:
+		case 6:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field BlockNumber", wireType)
 			}
@@ -1300,7 +948,7 @@ func (m *ExecutionPayload) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 8:
+		case 7:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field GasLimit", wireType)
 			}
@@ -1319,7 +967,7 @@ func (m *ExecutionPayload) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 9:
+		case 8:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field GasUsed", wireType)
 			}
@@ -1338,7 +986,7 @@ func (m *ExecutionPayload) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 10:
+		case 9:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Timestamp", wireType)
 			}
@@ -1357,7 +1005,7 @@ func (m *ExecutionPayload) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 11:
+		case 10:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ExtraData", wireType)
 			}
@@ -1391,7 +1039,7 @@ func (m *ExecutionPayload) Unmarshal(dAtA []byte) error {
 				m.ExtraData = []byte{}
 			}
 			iNdEx = postIndex
-		case 12:
+		case 11:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field BaseFeePerGas", wireType)
 			}
@@ -1425,7 +1073,7 @@ func (m *ExecutionPayload) Unmarshal(dAtA []byte) error {
 				m.BaseFeePerGas = []byte{}
 			}
 			iNdEx = postIndex
-		case 13:
+		case 12:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field BlockHash", wireType)
 			}
@@ -1459,7 +1107,7 @@ func (m *ExecutionPayload) Unmarshal(dAtA []byte) error {
 				m.BlockHash = []byte{}
 			}
 			iNdEx = postIndex
-		case 14:
+		case 13:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Transactions", wireType)
 			}
@@ -1491,11 +1139,11 @@ func (m *ExecutionPayload) Unmarshal(dAtA []byte) error {
 			m.Transactions = append(m.Transactions, make([]byte, postIndex-iNdEx))
 			copy(m.Transactions[len(m.Transactions)-1], dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 15:
+		case 14:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Withdrawals", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field BeaconRoot", wireType)
 			}
-			var msglen int
+			var byteLen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowGoat
@@ -1505,27 +1153,27 @@ func (m *ExecutionPayload) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= int(b&0x7F) << shift
+				byteLen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			if msglen < 0 {
+			if byteLen < 0 {
 				return ErrInvalidLengthGoat
 			}
-			postIndex := iNdEx + msglen
+			postIndex := iNdEx + byteLen
 			if postIndex < 0 {
 				return ErrInvalidLengthGoat
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Withdrawals = append(m.Withdrawals, &Withdrawal{})
-			if err := m.Withdrawals[len(m.Withdrawals)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
+			m.BeaconRoot = append(m.BeaconRoot[:0], dAtA[iNdEx:postIndex]...)
+			if m.BeaconRoot == nil {
+				m.BeaconRoot = []byte{}
 			}
 			iNdEx = postIndex
-		case 16:
+		case 15:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field BlobGasUsed", wireType)
 			}
@@ -1544,7 +1192,7 @@ func (m *ExecutionPayload) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 17:
+		case 16:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ExcessBlobGas", wireType)
 			}

@@ -7,7 +7,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 )
 
-func (ec *Client) ForkchoiceUpdatedV3(ctx context.Context, update engine.ForkchoiceStateV1, params *engine.PayloadAttributes) (engine.ForkChoiceResponse, error) {
+func (ec *Client) ForkchoiceUpdatedV3(ctx context.Context, update *engine.ForkchoiceStateV1, params *engine.PayloadAttributes) (engine.ForkChoiceResponse, error) {
 	var result engine.ForkChoiceResponse
 	err := ec.Client.Client().CallContext(ctx, &result, ForkchoiceUpdatedMethodV3, update, params)
 	if err != nil {
@@ -25,7 +25,7 @@ func (ec *Client) GetPayloadV3(ctx context.Context, payloadID engine.PayloadID) 
 	return &result, nil
 }
 
-func (ec *Client) NewPayloadV3(ctx context.Context, params engine.ExecutableData, versionedHashes []common.Hash, beaconRoot *common.Hash) (*engine.PayloadStatusV1, error) {
+func (ec *Client) NewPayloadV3(ctx context.Context, params *engine.ExecutableData, versionedHashes []common.Hash, beaconRoot common.Hash) (*engine.PayloadStatusV1, error) {
 	var result engine.PayloadStatusV1
 	err := ec.Client.Client().CallContext(ctx, &result, NewPayloadMethodV3, params, versionedHashes, beaconRoot)
 	if err != nil {

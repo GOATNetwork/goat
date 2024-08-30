@@ -12,572 +12,6 @@ import (
 	sync "sync"
 )
 
-var (
-	md_Withdrawal                 protoreflect.MessageDescriptor
-	fd_Withdrawal_index           protoreflect.FieldDescriptor
-	fd_Withdrawal_validator_index protoreflect.FieldDescriptor
-	fd_Withdrawal_address         protoreflect.FieldDescriptor
-	fd_Withdrawal_amount          protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_goat_goat_v1_goat_proto_init()
-	md_Withdrawal = File_goat_goat_v1_goat_proto.Messages().ByName("Withdrawal")
-	fd_Withdrawal_index = md_Withdrawal.Fields().ByName("index")
-	fd_Withdrawal_validator_index = md_Withdrawal.Fields().ByName("validator_index")
-	fd_Withdrawal_address = md_Withdrawal.Fields().ByName("address")
-	fd_Withdrawal_amount = md_Withdrawal.Fields().ByName("amount")
-}
-
-var _ protoreflect.Message = (*fastReflection_Withdrawal)(nil)
-
-type fastReflection_Withdrawal Withdrawal
-
-func (x *Withdrawal) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_Withdrawal)(x)
-}
-
-func (x *Withdrawal) slowProtoReflect() protoreflect.Message {
-	mi := &file_goat_goat_v1_goat_proto_msgTypes[0]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_Withdrawal_messageType fastReflection_Withdrawal_messageType
-var _ protoreflect.MessageType = fastReflection_Withdrawal_messageType{}
-
-type fastReflection_Withdrawal_messageType struct{}
-
-func (x fastReflection_Withdrawal_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_Withdrawal)(nil)
-}
-func (x fastReflection_Withdrawal_messageType) New() protoreflect.Message {
-	return new(fastReflection_Withdrawal)
-}
-func (x fastReflection_Withdrawal_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_Withdrawal
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_Withdrawal) Descriptor() protoreflect.MessageDescriptor {
-	return md_Withdrawal
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_Withdrawal) Type() protoreflect.MessageType {
-	return _fastReflection_Withdrawal_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_Withdrawal) New() protoreflect.Message {
-	return new(fastReflection_Withdrawal)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_Withdrawal) Interface() protoreflect.ProtoMessage {
-	return (*Withdrawal)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_Withdrawal) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Index != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.Index)
-		if !f(fd_Withdrawal_index, value) {
-			return
-		}
-	}
-	if x.ValidatorIndex != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.ValidatorIndex)
-		if !f(fd_Withdrawal_validator_index, value) {
-			return
-		}
-	}
-	if len(x.Address) != 0 {
-		value := protoreflect.ValueOfBytes(x.Address)
-		if !f(fd_Withdrawal_address, value) {
-			return
-		}
-	}
-	if x.Amount != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.Amount)
-		if !f(fd_Withdrawal_amount, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_Withdrawal) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "goat.goat.v1.Withdrawal.index":
-		return x.Index != uint64(0)
-	case "goat.goat.v1.Withdrawal.validator_index":
-		return x.ValidatorIndex != uint64(0)
-	case "goat.goat.v1.Withdrawal.address":
-		return len(x.Address) != 0
-	case "goat.goat.v1.Withdrawal.amount":
-		return x.Amount != uint64(0)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.Withdrawal"))
-		}
-		panic(fmt.Errorf("message goat.goat.v1.Withdrawal does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_Withdrawal) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "goat.goat.v1.Withdrawal.index":
-		x.Index = uint64(0)
-	case "goat.goat.v1.Withdrawal.validator_index":
-		x.ValidatorIndex = uint64(0)
-	case "goat.goat.v1.Withdrawal.address":
-		x.Address = nil
-	case "goat.goat.v1.Withdrawal.amount":
-		x.Amount = uint64(0)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.Withdrawal"))
-		}
-		panic(fmt.Errorf("message goat.goat.v1.Withdrawal does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_Withdrawal) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "goat.goat.v1.Withdrawal.index":
-		value := x.Index
-		return protoreflect.ValueOfUint64(value)
-	case "goat.goat.v1.Withdrawal.validator_index":
-		value := x.ValidatorIndex
-		return protoreflect.ValueOfUint64(value)
-	case "goat.goat.v1.Withdrawal.address":
-		value := x.Address
-		return protoreflect.ValueOfBytes(value)
-	case "goat.goat.v1.Withdrawal.amount":
-		value := x.Amount
-		return protoreflect.ValueOfUint64(value)
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.Withdrawal"))
-		}
-		panic(fmt.Errorf("message goat.goat.v1.Withdrawal does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_Withdrawal) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "goat.goat.v1.Withdrawal.index":
-		x.Index = value.Uint()
-	case "goat.goat.v1.Withdrawal.validator_index":
-		x.ValidatorIndex = value.Uint()
-	case "goat.goat.v1.Withdrawal.address":
-		x.Address = value.Bytes()
-	case "goat.goat.v1.Withdrawal.amount":
-		x.Amount = value.Uint()
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.Withdrawal"))
-		}
-		panic(fmt.Errorf("message goat.goat.v1.Withdrawal does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_Withdrawal) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "goat.goat.v1.Withdrawal.index":
-		panic(fmt.Errorf("field index of message goat.goat.v1.Withdrawal is not mutable"))
-	case "goat.goat.v1.Withdrawal.validator_index":
-		panic(fmt.Errorf("field validator_index of message goat.goat.v1.Withdrawal is not mutable"))
-	case "goat.goat.v1.Withdrawal.address":
-		panic(fmt.Errorf("field address of message goat.goat.v1.Withdrawal is not mutable"))
-	case "goat.goat.v1.Withdrawal.amount":
-		panic(fmt.Errorf("field amount of message goat.goat.v1.Withdrawal is not mutable"))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.Withdrawal"))
-		}
-		panic(fmt.Errorf("message goat.goat.v1.Withdrawal does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_Withdrawal) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "goat.goat.v1.Withdrawal.index":
-		return protoreflect.ValueOfUint64(uint64(0))
-	case "goat.goat.v1.Withdrawal.validator_index":
-		return protoreflect.ValueOfUint64(uint64(0))
-	case "goat.goat.v1.Withdrawal.address":
-		return protoreflect.ValueOfBytes(nil)
-	case "goat.goat.v1.Withdrawal.amount":
-		return protoreflect.ValueOfUint64(uint64(0))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.Withdrawal"))
-		}
-		panic(fmt.Errorf("message goat.goat.v1.Withdrawal does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_Withdrawal) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in goat.goat.v1.Withdrawal", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_Withdrawal) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_Withdrawal) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_Withdrawal) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_Withdrawal) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*Withdrawal)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		if x.Index != 0 {
-			n += 1 + runtime.Sov(uint64(x.Index))
-		}
-		if x.ValidatorIndex != 0 {
-			n += 1 + runtime.Sov(uint64(x.ValidatorIndex))
-		}
-		l = len(x.Address)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.Amount != 0 {
-			n += 1 + runtime.Sov(uint64(x.Amount))
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*Withdrawal)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if x.Amount != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.Amount))
-			i--
-			dAtA[i] = 0x20
-		}
-		if len(x.Address) > 0 {
-			i -= len(x.Address)
-			copy(dAtA[i:], x.Address)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Address)))
-			i--
-			dAtA[i] = 0x1a
-		}
-		if x.ValidatorIndex != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.ValidatorIndex))
-			i--
-			dAtA[i] = 0x10
-		}
-		if x.Index != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.Index))
-			i--
-			dAtA[i] = 0x8
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*Withdrawal)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: Withdrawal: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: Withdrawal: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Index", wireType)
-				}
-				x.Index = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.Index |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 2:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ValidatorIndex", wireType)
-				}
-				x.ValidatorIndex = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.ValidatorIndex |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 3:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
-				}
-				var byteLen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					byteLen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if byteLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + byteLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Address = append(x.Address[:0], dAtA[iNdEx:postIndex]...)
-				if x.Address == nil {
-					x.Address = []byte{}
-				}
-				iNdEx = postIndex
-			case 4:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
-				}
-				x.Amount = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.Amount |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
 var _ protoreflect.List = (*_BlobsBundle_1_list)(nil)
 
 type _BlobsBundle_1_list struct {
@@ -740,7 +174,7 @@ func (x *BlobsBundle) ProtoReflect() protoreflect.Message {
 }
 
 func (x *BlobsBundle) slowProtoReflect() protoreflect.Message {
-	mi := &file_goat_goat_v1_goat_proto_msgTypes[1]
+	mi := &file_goat_goat_v1_goat_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1306,107 +740,55 @@ func (x *fastReflection_BlobsBundle) ProtoMethods() *protoiface.Methods {
 	}
 }
 
-var _ protoreflect.List = (*_ExecutionPayload_14_list)(nil)
+var _ protoreflect.List = (*_ExecutionPayload_13_list)(nil)
 
-type _ExecutionPayload_14_list struct {
+type _ExecutionPayload_13_list struct {
 	list *[][]byte
 }
 
-func (x *_ExecutionPayload_14_list) Len() int {
+func (x *_ExecutionPayload_13_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_ExecutionPayload_14_list) Get(i int) protoreflect.Value {
+func (x *_ExecutionPayload_13_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfBytes((*x.list)[i])
 }
 
-func (x *_ExecutionPayload_14_list) Set(i int, value protoreflect.Value) {
+func (x *_ExecutionPayload_13_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Bytes()
 	concreteValue := valueUnwrapped
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_ExecutionPayload_14_list) Append(value protoreflect.Value) {
+func (x *_ExecutionPayload_13_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Bytes()
 	concreteValue := valueUnwrapped
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_ExecutionPayload_14_list) AppendMutable() protoreflect.Value {
+func (x *_ExecutionPayload_13_list) AppendMutable() protoreflect.Value {
 	panic(fmt.Errorf("AppendMutable can not be called on message ExecutionPayload at list field Transactions as it is not of Message kind"))
 }
 
-func (x *_ExecutionPayload_14_list) Truncate(n int) {
+func (x *_ExecutionPayload_13_list) Truncate(n int) {
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_ExecutionPayload_14_list) NewElement() protoreflect.Value {
+func (x *_ExecutionPayload_13_list) NewElement() protoreflect.Value {
 	var v []byte
 	return protoreflect.ValueOfBytes(v)
 }
 
-func (x *_ExecutionPayload_14_list) IsValid() bool {
-	return x.list != nil
-}
-
-var _ protoreflect.List = (*_ExecutionPayload_15_list)(nil)
-
-type _ExecutionPayload_15_list struct {
-	list *[]*Withdrawal
-}
-
-func (x *_ExecutionPayload_15_list) Len() int {
-	if x.list == nil {
-		return 0
-	}
-	return len(*x.list)
-}
-
-func (x *_ExecutionPayload_15_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
-}
-
-func (x *_ExecutionPayload_15_list) Set(i int, value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*Withdrawal)
-	(*x.list)[i] = concreteValue
-}
-
-func (x *_ExecutionPayload_15_list) Append(value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*Withdrawal)
-	*x.list = append(*x.list, concreteValue)
-}
-
-func (x *_ExecutionPayload_15_list) AppendMutable() protoreflect.Value {
-	v := new(Withdrawal)
-	*x.list = append(*x.list, v)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_ExecutionPayload_15_list) Truncate(n int) {
-	for i := n; i < len(*x.list); i++ {
-		(*x.list)[i] = nil
-	}
-	*x.list = (*x.list)[:n]
-}
-
-func (x *_ExecutionPayload_15_list) NewElement() protoreflect.Value {
-	v := new(Withdrawal)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_ExecutionPayload_15_list) IsValid() bool {
+func (x *_ExecutionPayload_13_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
 	md_ExecutionPayload                  protoreflect.MessageDescriptor
 	fd_ExecutionPayload_parent_hash      protoreflect.FieldDescriptor
-	fd_ExecutionPayload_fee_recipient    protoreflect.FieldDescriptor
 	fd_ExecutionPayload_state_root       protoreflect.FieldDescriptor
 	fd_ExecutionPayload_receipts_root    protoreflect.FieldDescriptor
 	fd_ExecutionPayload_logs_bloom       protoreflect.FieldDescriptor
@@ -1419,7 +801,7 @@ var (
 	fd_ExecutionPayload_base_fee_per_gas protoreflect.FieldDescriptor
 	fd_ExecutionPayload_block_hash       protoreflect.FieldDescriptor
 	fd_ExecutionPayload_transactions     protoreflect.FieldDescriptor
-	fd_ExecutionPayload_withdrawals      protoreflect.FieldDescriptor
+	fd_ExecutionPayload_beacon_root      protoreflect.FieldDescriptor
 	fd_ExecutionPayload_blob_gas_used    protoreflect.FieldDescriptor
 	fd_ExecutionPayload_excess_blob_gas  protoreflect.FieldDescriptor
 )
@@ -1428,7 +810,6 @@ func init() {
 	file_goat_goat_v1_goat_proto_init()
 	md_ExecutionPayload = File_goat_goat_v1_goat_proto.Messages().ByName("ExecutionPayload")
 	fd_ExecutionPayload_parent_hash = md_ExecutionPayload.Fields().ByName("parent_hash")
-	fd_ExecutionPayload_fee_recipient = md_ExecutionPayload.Fields().ByName("fee_recipient")
 	fd_ExecutionPayload_state_root = md_ExecutionPayload.Fields().ByName("state_root")
 	fd_ExecutionPayload_receipts_root = md_ExecutionPayload.Fields().ByName("receipts_root")
 	fd_ExecutionPayload_logs_bloom = md_ExecutionPayload.Fields().ByName("logs_bloom")
@@ -1441,7 +822,7 @@ func init() {
 	fd_ExecutionPayload_base_fee_per_gas = md_ExecutionPayload.Fields().ByName("base_fee_per_gas")
 	fd_ExecutionPayload_block_hash = md_ExecutionPayload.Fields().ByName("block_hash")
 	fd_ExecutionPayload_transactions = md_ExecutionPayload.Fields().ByName("transactions")
-	fd_ExecutionPayload_withdrawals = md_ExecutionPayload.Fields().ByName("withdrawals")
+	fd_ExecutionPayload_beacon_root = md_ExecutionPayload.Fields().ByName("beacon_root")
 	fd_ExecutionPayload_blob_gas_used = md_ExecutionPayload.Fields().ByName("blob_gas_used")
 	fd_ExecutionPayload_excess_blob_gas = md_ExecutionPayload.Fields().ByName("excess_blob_gas")
 }
@@ -1455,7 +836,7 @@ func (x *ExecutionPayload) ProtoReflect() protoreflect.Message {
 }
 
 func (x *ExecutionPayload) slowProtoReflect() protoreflect.Message {
-	mi := &file_goat_goat_v1_goat_proto_msgTypes[2]
+	mi := &file_goat_goat_v1_goat_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1514,12 +895,6 @@ func (x *fastReflection_ExecutionPayload) Range(f func(protoreflect.FieldDescrip
 	if len(x.ParentHash) != 0 {
 		value := protoreflect.ValueOfBytes(x.ParentHash)
 		if !f(fd_ExecutionPayload_parent_hash, value) {
-			return
-		}
-	}
-	if len(x.FeeRecipient) != 0 {
-		value := protoreflect.ValueOfBytes(x.FeeRecipient)
-		if !f(fd_ExecutionPayload_fee_recipient, value) {
 			return
 		}
 	}
@@ -1590,14 +965,14 @@ func (x *fastReflection_ExecutionPayload) Range(f func(protoreflect.FieldDescrip
 		}
 	}
 	if len(x.Transactions) != 0 {
-		value := protoreflect.ValueOfList(&_ExecutionPayload_14_list{list: &x.Transactions})
+		value := protoreflect.ValueOfList(&_ExecutionPayload_13_list{list: &x.Transactions})
 		if !f(fd_ExecutionPayload_transactions, value) {
 			return
 		}
 	}
-	if len(x.Withdrawals) != 0 {
-		value := protoreflect.ValueOfList(&_ExecutionPayload_15_list{list: &x.Withdrawals})
-		if !f(fd_ExecutionPayload_withdrawals, value) {
+	if len(x.BeaconRoot) != 0 {
+		value := protoreflect.ValueOfBytes(x.BeaconRoot)
+		if !f(fd_ExecutionPayload_beacon_root, value) {
 			return
 		}
 	}
@@ -1630,8 +1005,6 @@ func (x *fastReflection_ExecutionPayload) Has(fd protoreflect.FieldDescriptor) b
 	switch fd.FullName() {
 	case "goat.goat.v1.ExecutionPayload.parent_hash":
 		return len(x.ParentHash) != 0
-	case "goat.goat.v1.ExecutionPayload.fee_recipient":
-		return len(x.FeeRecipient) != 0
 	case "goat.goat.v1.ExecutionPayload.state_root":
 		return len(x.StateRoot) != 0
 	case "goat.goat.v1.ExecutionPayload.receipts_root":
@@ -1656,8 +1029,8 @@ func (x *fastReflection_ExecutionPayload) Has(fd protoreflect.FieldDescriptor) b
 		return len(x.BlockHash) != 0
 	case "goat.goat.v1.ExecutionPayload.transactions":
 		return len(x.Transactions) != 0
-	case "goat.goat.v1.ExecutionPayload.withdrawals":
-		return len(x.Withdrawals) != 0
+	case "goat.goat.v1.ExecutionPayload.beacon_root":
+		return len(x.BeaconRoot) != 0
 	case "goat.goat.v1.ExecutionPayload.blob_gas_used":
 		return x.BlobGasUsed != uint64(0)
 	case "goat.goat.v1.ExecutionPayload.excess_blob_gas":
@@ -1680,8 +1053,6 @@ func (x *fastReflection_ExecutionPayload) Clear(fd protoreflect.FieldDescriptor)
 	switch fd.FullName() {
 	case "goat.goat.v1.ExecutionPayload.parent_hash":
 		x.ParentHash = nil
-	case "goat.goat.v1.ExecutionPayload.fee_recipient":
-		x.FeeRecipient = nil
 	case "goat.goat.v1.ExecutionPayload.state_root":
 		x.StateRoot = nil
 	case "goat.goat.v1.ExecutionPayload.receipts_root":
@@ -1706,8 +1077,8 @@ func (x *fastReflection_ExecutionPayload) Clear(fd protoreflect.FieldDescriptor)
 		x.BlockHash = nil
 	case "goat.goat.v1.ExecutionPayload.transactions":
 		x.Transactions = nil
-	case "goat.goat.v1.ExecutionPayload.withdrawals":
-		x.Withdrawals = nil
+	case "goat.goat.v1.ExecutionPayload.beacon_root":
+		x.BeaconRoot = nil
 	case "goat.goat.v1.ExecutionPayload.blob_gas_used":
 		x.BlobGasUsed = uint64(0)
 	case "goat.goat.v1.ExecutionPayload.excess_blob_gas":
@@ -1730,9 +1101,6 @@ func (x *fastReflection_ExecutionPayload) Get(descriptor protoreflect.FieldDescr
 	switch descriptor.FullName() {
 	case "goat.goat.v1.ExecutionPayload.parent_hash":
 		value := x.ParentHash
-		return protoreflect.ValueOfBytes(value)
-	case "goat.goat.v1.ExecutionPayload.fee_recipient":
-		value := x.FeeRecipient
 		return protoreflect.ValueOfBytes(value)
 	case "goat.goat.v1.ExecutionPayload.state_root":
 		value := x.StateRoot
@@ -1769,16 +1137,13 @@ func (x *fastReflection_ExecutionPayload) Get(descriptor protoreflect.FieldDescr
 		return protoreflect.ValueOfBytes(value)
 	case "goat.goat.v1.ExecutionPayload.transactions":
 		if len(x.Transactions) == 0 {
-			return protoreflect.ValueOfList(&_ExecutionPayload_14_list{})
+			return protoreflect.ValueOfList(&_ExecutionPayload_13_list{})
 		}
-		listValue := &_ExecutionPayload_14_list{list: &x.Transactions}
+		listValue := &_ExecutionPayload_13_list{list: &x.Transactions}
 		return protoreflect.ValueOfList(listValue)
-	case "goat.goat.v1.ExecutionPayload.withdrawals":
-		if len(x.Withdrawals) == 0 {
-			return protoreflect.ValueOfList(&_ExecutionPayload_15_list{})
-		}
-		listValue := &_ExecutionPayload_15_list{list: &x.Withdrawals}
-		return protoreflect.ValueOfList(listValue)
+	case "goat.goat.v1.ExecutionPayload.beacon_root":
+		value := x.BeaconRoot
+		return protoreflect.ValueOfBytes(value)
 	case "goat.goat.v1.ExecutionPayload.blob_gas_used":
 		value := x.BlobGasUsed
 		return protoreflect.ValueOfUint64(value)
@@ -1807,8 +1172,6 @@ func (x *fastReflection_ExecutionPayload) Set(fd protoreflect.FieldDescriptor, v
 	switch fd.FullName() {
 	case "goat.goat.v1.ExecutionPayload.parent_hash":
 		x.ParentHash = value.Bytes()
-	case "goat.goat.v1.ExecutionPayload.fee_recipient":
-		x.FeeRecipient = value.Bytes()
 	case "goat.goat.v1.ExecutionPayload.state_root":
 		x.StateRoot = value.Bytes()
 	case "goat.goat.v1.ExecutionPayload.receipts_root":
@@ -1833,12 +1196,10 @@ func (x *fastReflection_ExecutionPayload) Set(fd protoreflect.FieldDescriptor, v
 		x.BlockHash = value.Bytes()
 	case "goat.goat.v1.ExecutionPayload.transactions":
 		lv := value.List()
-		clv := lv.(*_ExecutionPayload_14_list)
+		clv := lv.(*_ExecutionPayload_13_list)
 		x.Transactions = *clv.list
-	case "goat.goat.v1.ExecutionPayload.withdrawals":
-		lv := value.List()
-		clv := lv.(*_ExecutionPayload_15_list)
-		x.Withdrawals = *clv.list
+	case "goat.goat.v1.ExecutionPayload.beacon_root":
+		x.BeaconRoot = value.Bytes()
 	case "goat.goat.v1.ExecutionPayload.blob_gas_used":
 		x.BlobGasUsed = value.Uint()
 	case "goat.goat.v1.ExecutionPayload.excess_blob_gas":
@@ -1867,18 +1228,10 @@ func (x *fastReflection_ExecutionPayload) Mutable(fd protoreflect.FieldDescripto
 		if x.Transactions == nil {
 			x.Transactions = [][]byte{}
 		}
-		value := &_ExecutionPayload_14_list{list: &x.Transactions}
-		return protoreflect.ValueOfList(value)
-	case "goat.goat.v1.ExecutionPayload.withdrawals":
-		if x.Withdrawals == nil {
-			x.Withdrawals = []*Withdrawal{}
-		}
-		value := &_ExecutionPayload_15_list{list: &x.Withdrawals}
+		value := &_ExecutionPayload_13_list{list: &x.Transactions}
 		return protoreflect.ValueOfList(value)
 	case "goat.goat.v1.ExecutionPayload.parent_hash":
 		panic(fmt.Errorf("field parent_hash of message goat.goat.v1.ExecutionPayload is not mutable"))
-	case "goat.goat.v1.ExecutionPayload.fee_recipient":
-		panic(fmt.Errorf("field fee_recipient of message goat.goat.v1.ExecutionPayload is not mutable"))
 	case "goat.goat.v1.ExecutionPayload.state_root":
 		panic(fmt.Errorf("field state_root of message goat.goat.v1.ExecutionPayload is not mutable"))
 	case "goat.goat.v1.ExecutionPayload.receipts_root":
@@ -1901,6 +1254,8 @@ func (x *fastReflection_ExecutionPayload) Mutable(fd protoreflect.FieldDescripto
 		panic(fmt.Errorf("field base_fee_per_gas of message goat.goat.v1.ExecutionPayload is not mutable"))
 	case "goat.goat.v1.ExecutionPayload.block_hash":
 		panic(fmt.Errorf("field block_hash of message goat.goat.v1.ExecutionPayload is not mutable"))
+	case "goat.goat.v1.ExecutionPayload.beacon_root":
+		panic(fmt.Errorf("field beacon_root of message goat.goat.v1.ExecutionPayload is not mutable"))
 	case "goat.goat.v1.ExecutionPayload.blob_gas_used":
 		panic(fmt.Errorf("field blob_gas_used of message goat.goat.v1.ExecutionPayload is not mutable"))
 	case "goat.goat.v1.ExecutionPayload.excess_blob_gas":
@@ -1919,8 +1274,6 @@ func (x *fastReflection_ExecutionPayload) Mutable(fd protoreflect.FieldDescripto
 func (x *fastReflection_ExecutionPayload) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "goat.goat.v1.ExecutionPayload.parent_hash":
-		return protoreflect.ValueOfBytes(nil)
-	case "goat.goat.v1.ExecutionPayload.fee_recipient":
 		return protoreflect.ValueOfBytes(nil)
 	case "goat.goat.v1.ExecutionPayload.state_root":
 		return protoreflect.ValueOfBytes(nil)
@@ -1946,10 +1299,9 @@ func (x *fastReflection_ExecutionPayload) NewField(fd protoreflect.FieldDescript
 		return protoreflect.ValueOfBytes(nil)
 	case "goat.goat.v1.ExecutionPayload.transactions":
 		list := [][]byte{}
-		return protoreflect.ValueOfList(&_ExecutionPayload_14_list{list: &list})
-	case "goat.goat.v1.ExecutionPayload.withdrawals":
-		list := []*Withdrawal{}
-		return protoreflect.ValueOfList(&_ExecutionPayload_15_list{list: &list})
+		return protoreflect.ValueOfList(&_ExecutionPayload_13_list{list: &list})
+	case "goat.goat.v1.ExecutionPayload.beacon_root":
+		return protoreflect.ValueOfBytes(nil)
 	case "goat.goat.v1.ExecutionPayload.blob_gas_used":
 		return protoreflect.ValueOfUint64(uint64(0))
 	case "goat.goat.v1.ExecutionPayload.excess_blob_gas":
@@ -2027,10 +1379,6 @@ func (x *fastReflection_ExecutionPayload) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.FeeRecipient)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
 		l = len(x.StateRoot)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
@@ -2077,14 +1425,12 @@ func (x *fastReflection_ExecutionPayload) ProtoMethods() *protoiface.Methods {
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
 		}
-		if len(x.Withdrawals) > 0 {
-			for _, e := range x.Withdrawals {
-				l = options.Size(e)
-				n += 1 + l + runtime.Sov(uint64(l))
-			}
+		l = len(x.BeaconRoot)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if x.BlobGasUsed != 0 {
-			n += 2 + runtime.Sov(uint64(x.BlobGasUsed))
+			n += 1 + runtime.Sov(uint64(x.BlobGasUsed))
 		}
 		if x.ExcessBlobGas != 0 {
 			n += 2 + runtime.Sov(uint64(x.ExcessBlobGas))
@@ -2123,30 +1469,19 @@ func (x *fastReflection_ExecutionPayload) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x1
 			i--
-			dAtA[i] = 0x88
+			dAtA[i] = 0x80
 		}
 		if x.BlobGasUsed != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.BlobGasUsed))
 			i--
-			dAtA[i] = 0x1
-			i--
-			dAtA[i] = 0x80
+			dAtA[i] = 0x78
 		}
-		if len(x.Withdrawals) > 0 {
-			for iNdEx := len(x.Withdrawals) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := options.Marshal(x.Withdrawals[iNdEx])
-				if err != nil {
-					return protoiface.MarshalOutput{
-						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-						Buf:               input.Buf,
-					}, err
-				}
-				i -= len(encoded)
-				copy(dAtA[i:], encoded)
-				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-				i--
-				dAtA[i] = 0x7a
-			}
+		if len(x.BeaconRoot) > 0 {
+			i -= len(x.BeaconRoot)
+			copy(dAtA[i:], x.BeaconRoot)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.BeaconRoot)))
+			i--
+			dAtA[i] = 0x72
 		}
 		if len(x.Transactions) > 0 {
 			for iNdEx := len(x.Transactions) - 1; iNdEx >= 0; iNdEx-- {
@@ -2154,7 +1489,7 @@ func (x *fastReflection_ExecutionPayload) ProtoMethods() *protoiface.Methods {
 				copy(dAtA[i:], x.Transactions[iNdEx])
 				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Transactions[iNdEx])))
 				i--
-				dAtA[i] = 0x72
+				dAtA[i] = 0x6a
 			}
 		}
 		if len(x.BlockHash) > 0 {
@@ -2162,74 +1497,67 @@ func (x *fastReflection_ExecutionPayload) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], x.BlockHash)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.BlockHash)))
 			i--
-			dAtA[i] = 0x6a
+			dAtA[i] = 0x62
 		}
 		if len(x.BaseFeePerGas) > 0 {
 			i -= len(x.BaseFeePerGas)
 			copy(dAtA[i:], x.BaseFeePerGas)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.BaseFeePerGas)))
 			i--
-			dAtA[i] = 0x62
+			dAtA[i] = 0x5a
 		}
 		if len(x.ExtraData) > 0 {
 			i -= len(x.ExtraData)
 			copy(dAtA[i:], x.ExtraData)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ExtraData)))
 			i--
-			dAtA[i] = 0x5a
+			dAtA[i] = 0x52
 		}
 		if x.Timestamp != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.Timestamp))
 			i--
-			dAtA[i] = 0x50
+			dAtA[i] = 0x48
 		}
 		if x.GasUsed != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.GasUsed))
 			i--
-			dAtA[i] = 0x48
+			dAtA[i] = 0x40
 		}
 		if x.GasLimit != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.GasLimit))
 			i--
-			dAtA[i] = 0x40
+			dAtA[i] = 0x38
 		}
 		if x.BlockNumber != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.BlockNumber))
 			i--
-			dAtA[i] = 0x38
+			dAtA[i] = 0x30
 		}
 		if len(x.PrevRandao) > 0 {
 			i -= len(x.PrevRandao)
 			copy(dAtA[i:], x.PrevRandao)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.PrevRandao)))
 			i--
-			dAtA[i] = 0x32
+			dAtA[i] = 0x2a
 		}
 		if len(x.LogsBloom) > 0 {
 			i -= len(x.LogsBloom)
 			copy(dAtA[i:], x.LogsBloom)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.LogsBloom)))
 			i--
-			dAtA[i] = 0x2a
+			dAtA[i] = 0x22
 		}
 		if len(x.ReceiptsRoot) > 0 {
 			i -= len(x.ReceiptsRoot)
 			copy(dAtA[i:], x.ReceiptsRoot)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ReceiptsRoot)))
 			i--
-			dAtA[i] = 0x22
+			dAtA[i] = 0x1a
 		}
 		if len(x.StateRoot) > 0 {
 			i -= len(x.StateRoot)
 			copy(dAtA[i:], x.StateRoot)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.StateRoot)))
-			i--
-			dAtA[i] = 0x1a
-		}
-		if len(x.FeeRecipient) > 0 {
-			i -= len(x.FeeRecipient)
-			copy(dAtA[i:], x.FeeRecipient)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.FeeRecipient)))
 			i--
 			dAtA[i] = 0x12
 		}
@@ -2325,40 +1653,6 @@ func (x *fastReflection_ExecutionPayload) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 2:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field FeeRecipient", wireType)
-				}
-				var byteLen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					byteLen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if byteLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + byteLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.FeeRecipient = append(x.FeeRecipient[:0], dAtA[iNdEx:postIndex]...)
-				if x.FeeRecipient == nil {
-					x.FeeRecipient = []byte{}
-				}
-				iNdEx = postIndex
-			case 3:
-				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field StateRoot", wireType)
 				}
 				var byteLen int
@@ -2391,7 +1685,7 @@ func (x *fastReflection_ExecutionPayload) ProtoMethods() *protoiface.Methods {
 					x.StateRoot = []byte{}
 				}
 				iNdEx = postIndex
-			case 4:
+			case 3:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ReceiptsRoot", wireType)
 				}
@@ -2425,7 +1719,7 @@ func (x *fastReflection_ExecutionPayload) ProtoMethods() *protoiface.Methods {
 					x.ReceiptsRoot = []byte{}
 				}
 				iNdEx = postIndex
-			case 5:
+			case 4:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LogsBloom", wireType)
 				}
@@ -2459,7 +1753,7 @@ func (x *fastReflection_ExecutionPayload) ProtoMethods() *protoiface.Methods {
 					x.LogsBloom = []byte{}
 				}
 				iNdEx = postIndex
-			case 6:
+			case 5:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PrevRandao", wireType)
 				}
@@ -2493,7 +1787,7 @@ func (x *fastReflection_ExecutionPayload) ProtoMethods() *protoiface.Methods {
 					x.PrevRandao = []byte{}
 				}
 				iNdEx = postIndex
-			case 7:
+			case 6:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field BlockNumber", wireType)
 				}
@@ -2512,7 +1806,7 @@ func (x *fastReflection_ExecutionPayload) ProtoMethods() *protoiface.Methods {
 						break
 					}
 				}
-			case 8:
+			case 7:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field GasLimit", wireType)
 				}
@@ -2531,7 +1825,7 @@ func (x *fastReflection_ExecutionPayload) ProtoMethods() *protoiface.Methods {
 						break
 					}
 				}
-			case 9:
+			case 8:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field GasUsed", wireType)
 				}
@@ -2550,7 +1844,7 @@ func (x *fastReflection_ExecutionPayload) ProtoMethods() *protoiface.Methods {
 						break
 					}
 				}
-			case 10:
+			case 9:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Timestamp", wireType)
 				}
@@ -2569,7 +1863,7 @@ func (x *fastReflection_ExecutionPayload) ProtoMethods() *protoiface.Methods {
 						break
 					}
 				}
-			case 11:
+			case 10:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ExtraData", wireType)
 				}
@@ -2603,7 +1897,7 @@ func (x *fastReflection_ExecutionPayload) ProtoMethods() *protoiface.Methods {
 					x.ExtraData = []byte{}
 				}
 				iNdEx = postIndex
-			case 12:
+			case 11:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field BaseFeePerGas", wireType)
 				}
@@ -2637,7 +1931,7 @@ func (x *fastReflection_ExecutionPayload) ProtoMethods() *protoiface.Methods {
 					x.BaseFeePerGas = []byte{}
 				}
 				iNdEx = postIndex
-			case 13:
+			case 12:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field BlockHash", wireType)
 				}
@@ -2671,7 +1965,7 @@ func (x *fastReflection_ExecutionPayload) ProtoMethods() *protoiface.Methods {
 					x.BlockHash = []byte{}
 				}
 				iNdEx = postIndex
-			case 14:
+			case 13:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Transactions", wireType)
 				}
@@ -2703,11 +1997,11 @@ func (x *fastReflection_ExecutionPayload) ProtoMethods() *protoiface.Methods {
 				x.Transactions = append(x.Transactions, make([]byte, postIndex-iNdEx))
 				copy(x.Transactions[len(x.Transactions)-1], dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 15:
+			case 14:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Withdrawals", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field BeaconRoot", wireType)
 				}
-				var msglen int
+				var byteLen int
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -2717,27 +2011,27 @@ func (x *fastReflection_ExecutionPayload) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					msglen |= int(b&0x7F) << shift
+					byteLen |= int(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
-				if msglen < 0 {
+				if byteLen < 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
-				postIndex := iNdEx + msglen
+				postIndex := iNdEx + byteLen
 				if postIndex < 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.Withdrawals = append(x.Withdrawals, &Withdrawal{})
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Withdrawals[len(x.Withdrawals)-1]); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				x.BeaconRoot = append(x.BeaconRoot[:0], dAtA[iNdEx:postIndex]...)
+				if x.BeaconRoot == nil {
+					x.BeaconRoot = []byte{}
 				}
 				iNdEx = postIndex
-			case 16:
+			case 15:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field BlobGasUsed", wireType)
 				}
@@ -2756,7 +2050,7 @@ func (x *fastReflection_ExecutionPayload) ProtoMethods() *protoiface.Methods {
 						break
 					}
 				}
-			case 17:
+			case 16:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ExcessBlobGas", wireType)
 				}
@@ -2823,70 +2117,6 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// The withdrawal receipt with the recipient address and amount withdrawn
-type Withdrawal struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// Withdrawal index for accounting purposes
-	Index uint64 `protobuf:"varint,1,opt,name=index,proto3" json:"index,omitempty"`
-	// Validator index for the withdrawal
-	ValidatorIndex uint64 `protobuf:"varint,2,opt,name=validator_index,json=validatorIndex,proto3" json:"validator_index,omitempty"`
-	// The execution address receiving the funds
-	Address []byte `protobuf:"bytes,3,opt,name=address,proto3" json:"address,omitempty"`
-	// The withdrawn amount in Gwei
-	Amount uint64 `protobuf:"varint,4,opt,name=amount,proto3" json:"amount,omitempty"`
-}
-
-func (x *Withdrawal) Reset() {
-	*x = Withdrawal{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_goat_goat_v1_goat_proto_msgTypes[0]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Withdrawal) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Withdrawal) ProtoMessage() {}
-
-// Deprecated: Use Withdrawal.ProtoReflect.Descriptor instead.
-func (*Withdrawal) Descriptor() ([]byte, []int) {
-	return file_goat_goat_v1_goat_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *Withdrawal) GetIndex() uint64 {
-	if x != nil {
-		return x.Index
-	}
-	return 0
-}
-
-func (x *Withdrawal) GetValidatorIndex() uint64 {
-	if x != nil {
-		return x.ValidatorIndex
-	}
-	return 0
-}
-
-func (x *Withdrawal) GetAddress() []byte {
-	if x != nil {
-		return x.Address
-	}
-	return nil
-}
-
-func (x *Withdrawal) GetAmount() uint64 {
-	if x != nil {
-		return x.Amount
-	}
-	return 0
-}
-
 // BlobsBundle is retrieved through engine-api from the execution layer client.
 type BlobsBundle struct {
 	state         protoimpl.MessageState
@@ -2904,7 +2134,7 @@ type BlobsBundle struct {
 func (x *BlobsBundle) Reset() {
 	*x = BlobsBundle{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_goat_goat_v1_goat_proto_msgTypes[1]
+		mi := &file_goat_goat_v1_goat_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2918,7 +2148,7 @@ func (*BlobsBundle) ProtoMessage() {}
 
 // Deprecated: Use BlobsBundle.ProtoReflect.Descriptor instead.
 func (*BlobsBundle) Descriptor() ([]byte, []int) {
-	return file_goat_goat_v1_goat_proto_rawDescGZIP(), []int{1}
+	return file_goat_goat_v1_goat_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *BlobsBundle) GetKzgCommitments() [][]byte {
@@ -2948,29 +2178,28 @@ type ExecutionPayload struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	ParentHash    []byte        `protobuf:"bytes,1,opt,name=parent_hash,json=parentHash,proto3" json:"parent_hash,omitempty"`
-	FeeRecipient  []byte        `protobuf:"bytes,2,opt,name=fee_recipient,json=feeRecipient,proto3" json:"fee_recipient,omitempty"`
-	StateRoot     []byte        `protobuf:"bytes,3,opt,name=state_root,json=stateRoot,proto3" json:"state_root,omitempty"`
-	ReceiptsRoot  []byte        `protobuf:"bytes,4,opt,name=receipts_root,json=receiptsRoot,proto3" json:"receipts_root,omitempty"`
-	LogsBloom     []byte        `protobuf:"bytes,5,opt,name=logs_bloom,json=logsBloom,proto3" json:"logs_bloom,omitempty"`
-	PrevRandao    []byte        `protobuf:"bytes,6,opt,name=prev_randao,json=prevRandao,proto3" json:"prev_randao,omitempty"`
-	BlockNumber   uint64        `protobuf:"varint,7,opt,name=block_number,json=blockNumber,proto3" json:"block_number,omitempty"`
-	GasLimit      uint64        `protobuf:"varint,8,opt,name=gas_limit,json=gasLimit,proto3" json:"gas_limit,omitempty"`
-	GasUsed       uint64        `protobuf:"varint,9,opt,name=gas_used,json=gasUsed,proto3" json:"gas_used,omitempty"`
-	Timestamp     uint64        `protobuf:"varint,10,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
-	ExtraData     []byte        `protobuf:"bytes,11,opt,name=extra_data,json=extraData,proto3" json:"extra_data,omitempty"`
-	BaseFeePerGas []byte        `protobuf:"bytes,12,opt,name=base_fee_per_gas,json=baseFeePerGas,proto3" json:"base_fee_per_gas,omitempty"`
-	BlockHash     []byte        `protobuf:"bytes,13,opt,name=block_hash,json=blockHash,proto3" json:"block_hash,omitempty"`
-	Transactions  [][]byte      `protobuf:"bytes,14,rep,name=transactions,proto3" json:"transactions,omitempty"`
-	Withdrawals   []*Withdrawal `protobuf:"bytes,15,rep,name=withdrawals,proto3" json:"withdrawals,omitempty"`
-	BlobGasUsed   uint64        `protobuf:"varint,16,opt,name=blob_gas_used,json=blobGasUsed,proto3" json:"blob_gas_used,omitempty"`
-	ExcessBlobGas uint64        `protobuf:"varint,17,opt,name=excess_blob_gas,json=excessBlobGas,proto3" json:"excess_blob_gas,omitempty"`
+	ParentHash    []byte   `protobuf:"bytes,1,opt,name=parent_hash,json=parentHash,proto3" json:"parent_hash,omitempty"`
+	StateRoot     []byte   `protobuf:"bytes,2,opt,name=state_root,json=stateRoot,proto3" json:"state_root,omitempty"`
+	ReceiptsRoot  []byte   `protobuf:"bytes,3,opt,name=receipts_root,json=receiptsRoot,proto3" json:"receipts_root,omitempty"`
+	LogsBloom     []byte   `protobuf:"bytes,4,opt,name=logs_bloom,json=logsBloom,proto3" json:"logs_bloom,omitempty"`
+	PrevRandao    []byte   `protobuf:"bytes,5,opt,name=prev_randao,json=prevRandao,proto3" json:"prev_randao,omitempty"`
+	BlockNumber   uint64   `protobuf:"varint,6,opt,name=block_number,json=blockNumber,proto3" json:"block_number,omitempty"`
+	GasLimit      uint64   `protobuf:"varint,7,opt,name=gas_limit,json=gasLimit,proto3" json:"gas_limit,omitempty"`
+	GasUsed       uint64   `protobuf:"varint,8,opt,name=gas_used,json=gasUsed,proto3" json:"gas_used,omitempty"`
+	Timestamp     uint64   `protobuf:"varint,9,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	ExtraData     []byte   `protobuf:"bytes,10,opt,name=extra_data,json=extraData,proto3" json:"extra_data,omitempty"`
+	BaseFeePerGas []byte   `protobuf:"bytes,11,opt,name=base_fee_per_gas,json=baseFeePerGas,proto3" json:"base_fee_per_gas,omitempty"`
+	BlockHash     []byte   `protobuf:"bytes,12,opt,name=block_hash,json=blockHash,proto3" json:"block_hash,omitempty"`
+	Transactions  [][]byte `protobuf:"bytes,13,rep,name=transactions,proto3" json:"transactions,omitempty"`
+	BeaconRoot    []byte   `protobuf:"bytes,14,opt,name=beacon_root,json=beaconRoot,proto3" json:"beacon_root,omitempty"`
+	BlobGasUsed   uint64   `protobuf:"varint,15,opt,name=blob_gas_used,json=blobGasUsed,proto3" json:"blob_gas_used,omitempty"`
+	ExcessBlobGas uint64   `protobuf:"varint,16,opt,name=excess_blob_gas,json=excessBlobGas,proto3" json:"excess_blob_gas,omitempty"`
 }
 
 func (x *ExecutionPayload) Reset() {
 	*x = ExecutionPayload{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_goat_goat_v1_goat_proto_msgTypes[2]
+		mi := &file_goat_goat_v1_goat_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2984,19 +2213,12 @@ func (*ExecutionPayload) ProtoMessage() {}
 
 // Deprecated: Use ExecutionPayload.ProtoReflect.Descriptor instead.
 func (*ExecutionPayload) Descriptor() ([]byte, []int) {
-	return file_goat_goat_v1_goat_proto_rawDescGZIP(), []int{2}
+	return file_goat_goat_v1_goat_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *ExecutionPayload) GetParentHash() []byte {
 	if x != nil {
 		return x.ParentHash
-	}
-	return nil
-}
-
-func (x *ExecutionPayload) GetFeeRecipient() []byte {
-	if x != nil {
-		return x.FeeRecipient
 	}
 	return nil
 }
@@ -3085,9 +2307,9 @@ func (x *ExecutionPayload) GetTransactions() [][]byte {
 	return nil
 }
 
-func (x *ExecutionPayload) GetWithdrawals() []*Withdrawal {
+func (x *ExecutionPayload) GetBeaconRoot() []byte {
 	if x != nil {
-		return x.Withdrawals
+		return x.BeaconRoot
 	}
 	return nil
 }
@@ -3111,71 +2333,59 @@ var File_goat_goat_v1_goat_proto protoreflect.FileDescriptor
 var file_goat_goat_v1_goat_proto_rawDesc = []byte{
 	0x0a, 0x17, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x76, 0x31, 0x2f, 0x67,
 	0x6f, 0x61, 0x74, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x0c, 0x67, 0x6f, 0x61, 0x74, 0x2e,
-	0x67, 0x6f, 0x61, 0x74, 0x2e, 0x76, 0x31, 0x22, 0x7d, 0x0a, 0x0a, 0x57, 0x69, 0x74, 0x68, 0x64,
-	0x72, 0x61, 0x77, 0x61, 0x6c, 0x12, 0x14, 0x0a, 0x05, 0x69, 0x6e, 0x64, 0x65, 0x78, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x04, 0x52, 0x05, 0x69, 0x6e, 0x64, 0x65, 0x78, 0x12, 0x27, 0x0a, 0x0f, 0x76,
-	0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x69, 0x6e, 0x64, 0x65, 0x78, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x04, 0x52, 0x0e, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x6f, 0x72, 0x49,
-	0x6e, 0x64, 0x65, 0x78, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18,
-	0x03, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x16,
-	0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06,
-	0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0x64, 0x0a, 0x0b, 0x42, 0x6c, 0x6f, 0x62, 0x73, 0x42,
-	0x75, 0x6e, 0x64, 0x6c, 0x65, 0x12, 0x27, 0x0a, 0x0f, 0x6b, 0x7a, 0x67, 0x5f, 0x63, 0x6f, 0x6d,
-	0x6d, 0x69, 0x74, 0x6d, 0x65, 0x6e, 0x74, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0c, 0x52, 0x0e,
-	0x6b, 0x7a, 0x67, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x74, 0x6d, 0x65, 0x6e, 0x74, 0x73, 0x12, 0x16,
-	0x0a, 0x06, 0x70, 0x72, 0x6f, 0x6f, 0x66, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0c, 0x52, 0x06,
-	0x70, 0x72, 0x6f, 0x6f, 0x66, 0x73, 0x12, 0x14, 0x0a, 0x05, 0x62, 0x6c, 0x6f, 0x62, 0x73, 0x18,
-	0x03, 0x20, 0x03, 0x28, 0x0c, 0x52, 0x05, 0x62, 0x6c, 0x6f, 0x62, 0x73, 0x22, 0xe8, 0x04, 0x0a,
-	0x10, 0x45, 0x78, 0x65, 0x63, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x50, 0x61, 0x79, 0x6c, 0x6f, 0x61,
-	0x64, 0x12, 0x1f, 0x0a, 0x0b, 0x70, 0x61, 0x72, 0x65, 0x6e, 0x74, 0x5f, 0x68, 0x61, 0x73, 0x68,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0a, 0x70, 0x61, 0x72, 0x65, 0x6e, 0x74, 0x48, 0x61,
-	0x73, 0x68, 0x12, 0x23, 0x0a, 0x0d, 0x66, 0x65, 0x65, 0x5f, 0x72, 0x65, 0x63, 0x69, 0x70, 0x69,
-	0x65, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0c, 0x66, 0x65, 0x65, 0x52, 0x65,
-	0x63, 0x69, 0x70, 0x69, 0x65, 0x6e, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x73, 0x74, 0x61, 0x74, 0x65,
-	0x5f, 0x72, 0x6f, 0x6f, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x09, 0x73, 0x74, 0x61,
-	0x74, 0x65, 0x52, 0x6f, 0x6f, 0x74, 0x12, 0x23, 0x0a, 0x0d, 0x72, 0x65, 0x63, 0x65, 0x69, 0x70,
-	0x74, 0x73, 0x5f, 0x72, 0x6f, 0x6f, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0c, 0x72,
-	0x65, 0x63, 0x65, 0x69, 0x70, 0x74, 0x73, 0x52, 0x6f, 0x6f, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x6c,
-	0x6f, 0x67, 0x73, 0x5f, 0x62, 0x6c, 0x6f, 0x6f, 0x6d, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0c, 0x52,
-	0x09, 0x6c, 0x6f, 0x67, 0x73, 0x42, 0x6c, 0x6f, 0x6f, 0x6d, 0x12, 0x1f, 0x0a, 0x0b, 0x70, 0x72,
-	0x65, 0x76, 0x5f, 0x72, 0x61, 0x6e, 0x64, 0x61, 0x6f, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0c, 0x52,
-	0x0a, 0x70, 0x72, 0x65, 0x76, 0x52, 0x61, 0x6e, 0x64, 0x61, 0x6f, 0x12, 0x21, 0x0a, 0x0c, 0x62,
-	0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x6e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x18, 0x07, 0x20, 0x01, 0x28,
-	0x04, 0x52, 0x0b, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x4e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x12, 0x1b,
-	0x0a, 0x09, 0x67, 0x61, 0x73, 0x5f, 0x6c, 0x69, 0x6d, 0x69, 0x74, 0x18, 0x08, 0x20, 0x01, 0x28,
-	0x04, 0x52, 0x08, 0x67, 0x61, 0x73, 0x4c, 0x69, 0x6d, 0x69, 0x74, 0x12, 0x19, 0x0a, 0x08, 0x67,
-	0x61, 0x73, 0x5f, 0x75, 0x73, 0x65, 0x64, 0x18, 0x09, 0x20, 0x01, 0x28, 0x04, 0x52, 0x07, 0x67,
-	0x61, 0x73, 0x55, 0x73, 0x65, 0x64, 0x12, 0x1c, 0x0a, 0x09, 0x74, 0x69, 0x6d, 0x65, 0x73, 0x74,
-	0x61, 0x6d, 0x70, 0x18, 0x0a, 0x20, 0x01, 0x28, 0x04, 0x52, 0x09, 0x74, 0x69, 0x6d, 0x65, 0x73,
-	0x74, 0x61, 0x6d, 0x70, 0x12, 0x1d, 0x0a, 0x0a, 0x65, 0x78, 0x74, 0x72, 0x61, 0x5f, 0x64, 0x61,
-	0x74, 0x61, 0x18, 0x0b, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x09, 0x65, 0x78, 0x74, 0x72, 0x61, 0x44,
-	0x61, 0x74, 0x61, 0x12, 0x27, 0x0a, 0x10, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x66, 0x65, 0x65, 0x5f,
-	0x70, 0x65, 0x72, 0x5f, 0x67, 0x61, 0x73, 0x18, 0x0c, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0d, 0x62,
-	0x61, 0x73, 0x65, 0x46, 0x65, 0x65, 0x50, 0x65, 0x72, 0x47, 0x61, 0x73, 0x12, 0x1d, 0x0a, 0x0a,
-	0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x68, 0x61, 0x73, 0x68, 0x18, 0x0d, 0x20, 0x01, 0x28, 0x0c,
-	0x52, 0x09, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x61, 0x73, 0x68, 0x12, 0x22, 0x0a, 0x0c, 0x74,
-	0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x0e, 0x20, 0x03, 0x28,
-	0x0c, 0x52, 0x0c, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12,
-	0x3a, 0x0a, 0x0b, 0x77, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x73, 0x18, 0x0f,
-	0x20, 0x03, 0x28, 0x0b, 0x32, 0x18, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x67, 0x6f, 0x61, 0x74,
-	0x2e, 0x76, 0x31, 0x2e, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x52, 0x0b,
-	0x77, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x73, 0x12, 0x22, 0x0a, 0x0d, 0x62,
-	0x6c, 0x6f, 0x62, 0x5f, 0x67, 0x61, 0x73, 0x5f, 0x75, 0x73, 0x65, 0x64, 0x18, 0x10, 0x20, 0x01,
-	0x28, 0x04, 0x52, 0x0b, 0x62, 0x6c, 0x6f, 0x62, 0x47, 0x61, 0x73, 0x55, 0x73, 0x65, 0x64, 0x12,
-	0x26, 0x0a, 0x0f, 0x65, 0x78, 0x63, 0x65, 0x73, 0x73, 0x5f, 0x62, 0x6c, 0x6f, 0x62, 0x5f, 0x67,
-	0x61, 0x73, 0x18, 0x11, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0d, 0x65, 0x78, 0x63, 0x65, 0x73, 0x73,
-	0x42, 0x6c, 0x6f, 0x62, 0x47, 0x61, 0x73, 0x42, 0xa4, 0x01, 0x0a, 0x10, 0x63, 0x6f, 0x6d, 0x2e,
-	0x67, 0x6f, 0x61, 0x74, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x76, 0x31, 0x42, 0x09, 0x47, 0x6f,
-	0x61, 0x74, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x33, 0x67, 0x69, 0x74, 0x68, 0x75,
-	0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72,
-	0x6b, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f,
-	0x67, 0x6f, 0x61, 0x74, 0x2f, 0x76, 0x31, 0x3b, 0x67, 0x6f, 0x61, 0x74, 0x76, 0x31, 0xa2, 0x02,
-	0x03, 0x47, 0x47, 0x58, 0xaa, 0x02, 0x0c, 0x47, 0x6f, 0x61, 0x74, 0x2e, 0x47, 0x6f, 0x61, 0x74,
-	0x2e, 0x56, 0x31, 0xca, 0x02, 0x0c, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x47, 0x6f, 0x61, 0x74, 0x5c,
-	0x56, 0x31, 0xe2, 0x02, 0x18, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x56,
-	0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0e,
-	0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x67, 0x6f, 0x61, 0x74, 0x2e, 0x76, 0x31, 0x22, 0x64, 0x0a, 0x0b, 0x42, 0x6c, 0x6f, 0x62, 0x73,
+	0x42, 0x75, 0x6e, 0x64, 0x6c, 0x65, 0x12, 0x27, 0x0a, 0x0f, 0x6b, 0x7a, 0x67, 0x5f, 0x63, 0x6f,
+	0x6d, 0x6d, 0x69, 0x74, 0x6d, 0x65, 0x6e, 0x74, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0c, 0x52,
+	0x0e, 0x6b, 0x7a, 0x67, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x74, 0x6d, 0x65, 0x6e, 0x74, 0x73, 0x12,
+	0x16, 0x0a, 0x06, 0x70, 0x72, 0x6f, 0x6f, 0x66, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0c, 0x52,
+	0x06, 0x70, 0x72, 0x6f, 0x6f, 0x66, 0x73, 0x12, 0x14, 0x0a, 0x05, 0x62, 0x6c, 0x6f, 0x62, 0x73,
+	0x18, 0x03, 0x20, 0x03, 0x28, 0x0c, 0x52, 0x05, 0x62, 0x6c, 0x6f, 0x62, 0x73, 0x22, 0xa8, 0x04,
+	0x0a, 0x10, 0x45, 0x78, 0x65, 0x63, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x50, 0x61, 0x79, 0x6c, 0x6f,
+	0x61, 0x64, 0x12, 0x1f, 0x0a, 0x0b, 0x70, 0x61, 0x72, 0x65, 0x6e, 0x74, 0x5f, 0x68, 0x61, 0x73,
+	0x68, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0a, 0x70, 0x61, 0x72, 0x65, 0x6e, 0x74, 0x48,
+	0x61, 0x73, 0x68, 0x12, 0x1d, 0x0a, 0x0a, 0x73, 0x74, 0x61, 0x74, 0x65, 0x5f, 0x72, 0x6f, 0x6f,
+	0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x09, 0x73, 0x74, 0x61, 0x74, 0x65, 0x52, 0x6f,
+	0x6f, 0x74, 0x12, 0x23, 0x0a, 0x0d, 0x72, 0x65, 0x63, 0x65, 0x69, 0x70, 0x74, 0x73, 0x5f, 0x72,
+	0x6f, 0x6f, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0c, 0x72, 0x65, 0x63, 0x65, 0x69,
+	0x70, 0x74, 0x73, 0x52, 0x6f, 0x6f, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x6c, 0x6f, 0x67, 0x73, 0x5f,
+	0x62, 0x6c, 0x6f, 0x6f, 0x6d, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x09, 0x6c, 0x6f, 0x67,
+	0x73, 0x42, 0x6c, 0x6f, 0x6f, 0x6d, 0x12, 0x1f, 0x0a, 0x0b, 0x70, 0x72, 0x65, 0x76, 0x5f, 0x72,
+	0x61, 0x6e, 0x64, 0x61, 0x6f, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0a, 0x70, 0x72, 0x65,
+	0x76, 0x52, 0x61, 0x6e, 0x64, 0x61, 0x6f, 0x12, 0x21, 0x0a, 0x0c, 0x62, 0x6c, 0x6f, 0x63, 0x6b,
+	0x5f, 0x6e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x18, 0x06, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0b, 0x62,
+	0x6c, 0x6f, 0x63, 0x6b, 0x4e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x12, 0x1b, 0x0a, 0x09, 0x67, 0x61,
+	0x73, 0x5f, 0x6c, 0x69, 0x6d, 0x69, 0x74, 0x18, 0x07, 0x20, 0x01, 0x28, 0x04, 0x52, 0x08, 0x67,
+	0x61, 0x73, 0x4c, 0x69, 0x6d, 0x69, 0x74, 0x12, 0x19, 0x0a, 0x08, 0x67, 0x61, 0x73, 0x5f, 0x75,
+	0x73, 0x65, 0x64, 0x18, 0x08, 0x20, 0x01, 0x28, 0x04, 0x52, 0x07, 0x67, 0x61, 0x73, 0x55, 0x73,
+	0x65, 0x64, 0x12, 0x1c, 0x0a, 0x09, 0x74, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x18,
+	0x09, 0x20, 0x01, 0x28, 0x04, 0x52, 0x09, 0x74, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70,
+	0x12, 0x1d, 0x0a, 0x0a, 0x65, 0x78, 0x74, 0x72, 0x61, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x18, 0x0a,
+	0x20, 0x01, 0x28, 0x0c, 0x52, 0x09, 0x65, 0x78, 0x74, 0x72, 0x61, 0x44, 0x61, 0x74, 0x61, 0x12,
+	0x27, 0x0a, 0x10, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x66, 0x65, 0x65, 0x5f, 0x70, 0x65, 0x72, 0x5f,
+	0x67, 0x61, 0x73, 0x18, 0x0b, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0d, 0x62, 0x61, 0x73, 0x65, 0x46,
+	0x65, 0x65, 0x50, 0x65, 0x72, 0x47, 0x61, 0x73, 0x12, 0x1d, 0x0a, 0x0a, 0x62, 0x6c, 0x6f, 0x63,
+	0x6b, 0x5f, 0x68, 0x61, 0x73, 0x68, 0x18, 0x0c, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x09, 0x62, 0x6c,
+	0x6f, 0x63, 0x6b, 0x48, 0x61, 0x73, 0x68, 0x12, 0x22, 0x0a, 0x0c, 0x74, 0x72, 0x61, 0x6e, 0x73,
+	0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x0d, 0x20, 0x03, 0x28, 0x0c, 0x52, 0x0c, 0x74,
+	0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x1f, 0x0a, 0x0b, 0x62,
+	0x65, 0x61, 0x63, 0x6f, 0x6e, 0x5f, 0x72, 0x6f, 0x6f, 0x74, 0x18, 0x0e, 0x20, 0x01, 0x28, 0x0c,
+	0x52, 0x0a, 0x62, 0x65, 0x61, 0x63, 0x6f, 0x6e, 0x52, 0x6f, 0x6f, 0x74, 0x12, 0x22, 0x0a, 0x0d,
+	0x62, 0x6c, 0x6f, 0x62, 0x5f, 0x67, 0x61, 0x73, 0x5f, 0x75, 0x73, 0x65, 0x64, 0x18, 0x0f, 0x20,
+	0x01, 0x28, 0x04, 0x52, 0x0b, 0x62, 0x6c, 0x6f, 0x62, 0x47, 0x61, 0x73, 0x55, 0x73, 0x65, 0x64,
+	0x12, 0x26, 0x0a, 0x0f, 0x65, 0x78, 0x63, 0x65, 0x73, 0x73, 0x5f, 0x62, 0x6c, 0x6f, 0x62, 0x5f,
+	0x67, 0x61, 0x73, 0x18, 0x10, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0d, 0x65, 0x78, 0x63, 0x65, 0x73,
+	0x73, 0x42, 0x6c, 0x6f, 0x62, 0x47, 0x61, 0x73, 0x42, 0xa4, 0x01, 0x0a, 0x10, 0x63, 0x6f, 0x6d,
+	0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x76, 0x31, 0x42, 0x09, 0x47,
+	0x6f, 0x61, 0x74, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x33, 0x67, 0x69, 0x74, 0x68,
+	0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x6e, 0x65, 0x74, 0x77, 0x6f,
+	0x72, 0x6b, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x61, 0x74,
+	0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x76, 0x31, 0x3b, 0x67, 0x6f, 0x61, 0x74, 0x76, 0x31, 0xa2,
+	0x02, 0x03, 0x47, 0x47, 0x58, 0xaa, 0x02, 0x0c, 0x47, 0x6f, 0x61, 0x74, 0x2e, 0x47, 0x6f, 0x61,
+	0x74, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x0c, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x47, 0x6f, 0x61, 0x74,
+	0x5c, 0x56, 0x31, 0xe2, 0x02, 0x18, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x47, 0x6f, 0x61, 0x74, 0x5c,
+	0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02,
+	0x0e, 0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x56, 0x31, 0x62,
+	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -3190,19 +2400,17 @@ func file_goat_goat_v1_goat_proto_rawDescGZIP() []byte {
 	return file_goat_goat_v1_goat_proto_rawDescData
 }
 
-var file_goat_goat_v1_goat_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_goat_goat_v1_goat_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_goat_goat_v1_goat_proto_goTypes = []interface{}{
-	(*Withdrawal)(nil),       // 0: goat.goat.v1.Withdrawal
-	(*BlobsBundle)(nil),      // 1: goat.goat.v1.BlobsBundle
-	(*ExecutionPayload)(nil), // 2: goat.goat.v1.ExecutionPayload
+	(*BlobsBundle)(nil),      // 0: goat.goat.v1.BlobsBundle
+	(*ExecutionPayload)(nil), // 1: goat.goat.v1.ExecutionPayload
 }
 var file_goat_goat_v1_goat_proto_depIdxs = []int32{
-	0, // 0: goat.goat.v1.ExecutionPayload.withdrawals:type_name -> goat.goat.v1.Withdrawal
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	0, // [0:0] is the sub-list for method output_type
+	0, // [0:0] is the sub-list for method input_type
+	0, // [0:0] is the sub-list for extension type_name
+	0, // [0:0] is the sub-list for extension extendee
+	0, // [0:0] is the sub-list for field type_name
 }
 
 func init() { file_goat_goat_v1_goat_proto_init() }
@@ -3212,18 +2420,6 @@ func file_goat_goat_v1_goat_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_goat_goat_v1_goat_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Withdrawal); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_goat_goat_v1_goat_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*BlobsBundle); i {
 			case 0:
 				return &v.state
@@ -3235,7 +2431,7 @@ func file_goat_goat_v1_goat_proto_init() {
 				return nil
 			}
 		}
-		file_goat_goat_v1_goat_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+		file_goat_goat_v1_goat_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ExecutionPayload); i {
 			case 0:
 				return &v.state
@@ -3254,7 +2450,7 @@ func file_goat_goat_v1_goat_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_goat_goat_v1_goat_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

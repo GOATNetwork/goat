@@ -36,7 +36,7 @@ type (
 		Relayer     collections.Item[types.Relayer]
 		Epoch       collections.Sequence
 		ProposalSeq collections.Sequence
-		Voters      collections.Map[string, types.Voter]
+		Voters      collections.Map[sdktypes.AccAddress, types.Voter]
 		Pubkeys     collections.KeySet[[]byte]
 		Randao      collections.Item[[]byte]
 		// this line is used by starport scaffolding # collection/type
@@ -69,7 +69,7 @@ func NewKeeper(
 		Relayer:     collections.NewItem(sb, types.RelayerKey, "relayer", codec.CollValue[types.Relayer](cdc)),
 		Epoch:       collections.NewSequence(sb, types.EpochKey, "epoch"),
 		ProposalSeq: collections.NewSequence(sb, types.ProposalKey, "proposal"),
-		Voters:      collections.NewMap(sb, types.VotersKey, "voters", collections.StringKey, codec.CollValue[types.Voter](cdc)),
+		Voters:      collections.NewMap(sb, types.VotersKey, "voters", sdktypes.AccAddressKey, codec.CollValue[types.Voter](cdc)),
 		Pubkeys:     collections.NewKeySet(sb, types.PubkeysKey, "pubkeys", collections.BytesKey),
 		Randao:      collections.NewItem(sb, types.RandDAOKey, "randao", collections.BytesValue),
 		// this line is used by starport scaffolding # collection/instantiate
@@ -122,7 +122,12 @@ func (k Keeper) VerifyProposal(ctx context.Context, req types.IVoteMsg, verifyFn
 	}
 
 	pubkeys := make([][]byte, 0, voterLen+1)
-	proposer, err := k.Voters.Get(ctx, relayer.Proposer)
+	p, err := k.AddrCodec.StringToBytes(relayer.Proposer)
+	if err != nil {
+		return 0, err
+	}
+
+	proposer, err := k.Voters.Get(ctx, p)
 	if err != nil {
 		return 0, err
 	}
@@ -133,7 +138,12 @@ func (k Keeper) VerifyProposal(ctx context.Context, req types.IVoteMsg, verifyFn
 			continue
 		}
 
-		voter, err := k.Voters.Get(ctx, relayer.GetVoters()[i])
+		v, err := k.AddrCodec.StringToBytes(relayer.GetVoters()[i])
+		if err != nil {
+			return 0, err
+		}
+
+		voter, err := k.Voters.Get(ctx, v)
 		if err != nil {
 			return 0, err
 		}
@@ -223,4 +233,12 @@ func (k Keeper) ElecteProposer(ctx context.Context) error {
 	}
 
 	return nil
+}
+
+func (k Keeper) GetCurrentProposer(ctx context.Context) (sdktypes.AccAddress, error) {
+	relayer, err := k.Relayer.Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return k.AddrCodec.StringToBytes(relayer.Proposer)
 }

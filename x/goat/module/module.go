@@ -13,10 +13,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
+	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 
 	// this line is used by starport scaffolding # 1
@@ -187,7 +186,9 @@ type ModuleInputs struct {
 	BankKeeper    types.BankKeeper
 	BitcoinKeeper types.BitcoinKeeper
 	LockingKeeper types.LockingKeeper
-	EngineClient  *ethrpc.Client `optional:"true"` // optinal for client context
+	TxConfig      client.TxConfig
+	PrivKey       cryptotypes.PrivKey `optional:"true"` // optinal for client context
+	EngineClient  *ethrpc.Client      `optional:"true"` // optinal for client context
 }
 
 type ModuleOutputs struct {
@@ -198,20 +199,16 @@ type ModuleOutputs struct {
 }
 
 func ProvideModule(in ModuleInputs) ModuleOutputs {
-	// default to governance authority if not provided
-	authority := authtypes.NewModuleAddress(govtypes.ModuleName)
-	if in.Config.Authority != "" {
-		authority = authtypes.NewModuleAddressOrBech32Address(in.Config.Authority)
-	}
 	k := keeper.NewKeeper(
 		in.Cdc,
 		in.AddressCodec,
 		in.StoreService,
 		in.Logger,
-		authority.String(),
 		in.BitcoinKeeper,
 		in.LockingKeeper,
 		in.EngineClient,
+		in.TxConfig,
+		in.PrivKey,
 	)
 	m := NewAppModule(
 		in.Cdc,

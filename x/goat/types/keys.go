@@ -14,7 +14,9 @@ const (
 )
 
 var (
-	ParamsKey = collections.NewPrefix("p_goat")
+	ParamsKey   = collections.NewPrefix(0)
+	BlockKey    = collections.NewPrefix(1)
+	ConsHashKey = collections.NewPrefix(2)
 )
 
 func KeyPrefix(p string) []byte {

@@ -16,5 +16,5 @@ message GenesisState {
     (amino.dont_omitempty) = true
   ];
   uint64 threshold = 2;
-  repeated Voter voters = 3;
+  map<string, Voter> voters = 3;
 }
