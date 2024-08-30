@@ -69,8 +69,8 @@ var (
 		stakingtypes.ModuleName,
 		// chain modules
 		// relayermoduletypes.ModuleName,
-		lockingmoduletypes.ModuleName,
-		goatmoduletypes.ModuleName,
+		// lockingmoduletypes.ModuleName,
+		// goatmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
