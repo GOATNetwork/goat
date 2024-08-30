@@ -224,6 +224,8 @@ func (k Keeper) ProcessProposalHandler(txVerifier baseapp.ProposalTxVerifier) sd
 				continue
 			}
 
+			// todo: using msg url to check if the tx is allowed
+			// we should deny many message types like x/bank and x/staking
 			for _, msg := range tx.GetMsgs() {
 				switch msg.(type) {
 				case *types.MsgNewEthBlock:
@@ -246,7 +248,7 @@ func (k Keeper) validateEthblock(sdkctx context.Context, expectProposer []byte, 
 	}
 
 	payload := ethBlock.Payload
-	if now := uint64(time.Now().UTC().Unix()); now > payload.Timestamp {
+	if now := uint64(time.Now().UTC().Unix()); payload.Timestamp > now {
 		return errors.New("invalid MsgNewEthBlock timestamp")
 	}
 

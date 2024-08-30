@@ -5,6 +5,7 @@ import (
 
 	"github.com/ethereum/go-ethereum/beacon/engine"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/params"
 )
 
 func (ec *Client) ForkchoiceUpdatedV3(ctx context.Context, update *engine.ForkchoiceStateV1, params *engine.PayloadAttributes) (engine.ForkChoiceResponse, error) {
@@ -50,4 +51,13 @@ func (ec *Client) GetClientVersionV1(ctx context.Context, info engine.ClientVers
 		return nil, err
 	}
 	return result, nil
+}
+
+func (ec *Client) GetChainConfig(ctx context.Context) (*params.ChainConfig, error) {
+	var result params.ChainConfig
+	err := ec.Client.Client().CallContext(ctx, &result, GetChainConfig)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
 }

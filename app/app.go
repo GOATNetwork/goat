@@ -35,6 +35,7 @@ import (
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 
 	"github.com/goatnetwork/goat/docs"
+	"github.com/goatnetwork/goat/pkg/ethrpc"
 	bitcoinmodulekeeper "github.com/goatnetwork/goat/x/bitcoin/keeper"
 	goatmodulekeeper "github.com/goatnetwork/goat/x/goat/keeper"
 	lockingmodulekeeper "github.com/goatnetwork/goat/x/locking/keeper"
@@ -65,6 +66,7 @@ type App struct {
 	appCodec          codec.Codec
 	txConfig          client.TxConfig
 	interfaceRegistry codectypes.InterfaceRegistry
+	ethClient         *ethrpc.Client
 
 	// keepers
 	AccountKeeper         authkeeper.AccountKeeper
@@ -124,9 +126,11 @@ func New(
 		// merge the AppConfig and other configuration in one config
 		appConfig = depinject.Configs(
 			AppConfig(),
-			depinject.Provide(ProvideEngineClient),
-			depinject.Provide(ProvideBitcoinNetworkConfig),
-			depinject.Provide(ProvideValidatorPrvKey),
+			depinject.Provide(
+				ProvideEngineClient,
+				ProvideBitcoinNetworkConfig,
+				ProvideValidatorPrvKey,
+			),
 			depinject.Supply(
 				appOpts, // supply app options
 				logger,  // supply logger
@@ -155,6 +159,7 @@ func New(
 		&app.BitcoinKeeper,
 		&app.LockingKeeper,
 		&app.GoatKeeper,
+		&app.ethClient,
 	); err != nil {
 		panic(err)
 	}

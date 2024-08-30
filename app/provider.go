@@ -15,12 +15,13 @@ import (
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/goatnetwork/goat/pkg/ethrpc"
+	"github.com/spf13/cast"
 )
 
 func ProvideBitcoinNetworkConfig(appOpts servertypes.AppOptions) *chaincfg.Params {
-	name, ok := appOpts.Get("goat.btc-network").(string)
-	if !ok {
-		panic("No bitcoin network config")
+	name := cast.ToString(appOpts.Get("goat.btc-network"))
+	if name == "" {
+		panic("no bitcoin network name provided")
 	}
 
 	switch name {
@@ -38,32 +39,49 @@ func ProvideBitcoinNetworkConfig(appOpts servertypes.AppOptions) *chaincfg.Param
 }
 
 func ProvideEngineClient(appOpts servertypes.AppOptions) *ethrpc.Client {
-	endpoint, ok := appOpts.Get("goat.geth").(string)
-	if !ok || endpoint == "" {
+	endpoint := cast.ToString(appOpts.Get("goat.geth"))
+	if endpoint == "" {
 		panic("goat execution node endpoint not found")
 	}
 
 	jwtSecret := func() []byte {
-		jwtPath, ok := appOpts.Get("goat.jwt-path").(string)
-		if ok && jwtPath != "" {
-			if data, err := os.ReadFile(jwtPath); err == nil {
-				jwtSecret := common.FromHex(strings.TrimSpace(string(data)))
-				if len(jwtSecret) == 32 {
-					return jwtSecret
-				}
+		if jwtPath := cast.ToString(appOpts.Get("goat.jwt-path")); jwtPath != "" {
+			data, err := os.ReadFile(jwtPath)
+			if err != nil {
+				panic("cannot open jwt secret file: " + jwtPath)
 			}
+
+			jwtSecret := common.FromHex(strings.TrimSpace(string(data)))
+			if len(jwtSecret) != 32 {
+				panic("jwt secret is not a 32 bytes hex string")
+			}
+			return jwtSecret
 		}
 		return nil
 	}()
 
 	var ethclient *ethrpc.Client
-	for i := 0; i < 10; i++ {
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
+	defer cancel()
+
+	for i := 0; i < 15; i++ {
 		var err error
-		ethclient, err = ethrpc.DialContext(context.Background(), endpoint, jwtSecret)
+		ethclient, err = ethrpc.DialContext(ctx, endpoint, jwtSecret)
 		if err == nil {
-			break
+			conf, err := ethclient.GetChainConfig(ctx)
+			if err == nil {
+				if conf.Goat == nil {
+					panic("No goat config found in the goat-geth, please verify if you're using correct steup")
+				}
+				break
+			}
 		}
 		<-time.After(time.Second / 2)
+	}
+
+	if ethclient == nil {
+		panic("can not connect to goat-geth via " + endpoint)
 	}
 
 	return ethclient

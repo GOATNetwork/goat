@@ -8,4 +8,5 @@ const (
 	GetPayloadMethodV4        = "engine_getPayloadV4"
 	ExchangeCapabilities      = "engine_exchangeCapabilities"
 	GetClientVersionV1        = "engine_getClientVersionV1"
+	GetChainConfig            = "engine_getChainConfig"
 )
