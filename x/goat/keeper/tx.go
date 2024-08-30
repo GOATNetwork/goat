@@ -3,7 +3,6 @@ package keeper
 import (
 	"bytes"
 	"context"
-	"errors"
 
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
 	"github.com/goatnetwork/goat/x/goat/types"
@@ -28,8 +27,8 @@ func (k msgServer) NewEthBlock(ctx context.Context, req *types.MsgNewEthBlock) (
 		return nil, err
 	}
 
-	if !bytes.Equal(proposer, sdkctx.CometInfo().GetProposerAddress()) {
-		return nil, errors.New("invalid MsgNewEthBlock proposer")
+	if !bytes.Equal(proposer, sdkctx.CometInfo().GetProposerAddress()) || !bytes.Equal(proposer, req.Payload.FeeRecipient) {
+		return nil, types.ErrInvalidRequest.Wrap("invalid proposer")
 	}
 
 	block, err := k.Block.Get(sdkctx)
@@ -39,7 +38,7 @@ func (k msgServer) NewEthBlock(ctx context.Context, req *types.MsgNewEthBlock) (
 
 	payload := req.Payload
 	if !bytes.Equal(block.ParentHash, payload.ParentHash) || block.BlockNumber+1 != payload.BlockNumber {
-		return nil, errors.New("refer to incorrect parent block")
+		return nil, types.ErrInvalidRequest.Wrap("refer to incorrect parent block")
 	}
 
 	beaconRoot, err := k.BeaconRoot.Get(sdkctx)
@@ -47,12 +46,14 @@ func (k msgServer) NewEthBlock(ctx context.Context, req *types.MsgNewEthBlock) (
 		return nil, err
 	}
 	if !bytes.Equal(beaconRoot, payload.BeaconRoot) {
-		return nil, errors.New("refer to incorrect beacon root")
+		return nil, types.ErrInvalidRequest.Wrap("refer to incorrect beacon root")
 	}
 
 	if err := k.VerifyDequeue(ctx, req.Payload.Transactions); err != nil {
-		return nil, err
+		return nil, types.ErrInvalidRequest.Wrapf("dequeue mismatched: %s", err.Error())
 	}
+
+	// todo: handle request from execution node
 
 	if err := k.Block.Set(ctx, *req.Payload); err != nil {
 		return nil, err

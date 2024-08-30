@@ -243,11 +243,21 @@ func (k Keeper) validateEthblock(sdkctx context.Context, expectProposer []byte, 
 		return err
 	}
 
-	if !sdk.AccAddress(proposer).Equals(sdk.AccAddress(expectProposer)) {
+	if !bytes.Equal(proposer, expectProposer) {
 		return errors.New("invalid MsgNewEthBlock proposer")
 	}
 
 	payload := ethBlock.Payload
+	if !bytes.Equal(proposer, ethBlock.Payload.FeeRecipient) {
+		return errors.New("fee recipient mismatched")
+	}
+
+	if payload.BlobGasUsed > 0 {
+		return errors.New("blob tx is not allowed")
+	}
+
+	// we don't use cometbft timestamp
+	// refer to the note in the PrepareProposalHandler for the details
 	if now := uint64(time.Now().UTC().Unix()); payload.Timestamp > now {
 		return errors.New("invalid MsgNewEthBlock timestamp")
 	}
@@ -278,7 +288,7 @@ func (k Keeper) validateEthblock(sdkctx context.Context, expectProposer []byte, 
 	defer cancel()
 
 	res, err := k.ethclient.NewPayloadV3(tmctx,
-		types.PayloadToExecutableData(payload, expectProposer), nil, common.BytesToHash(beaconRoot))
+		types.PayloadToExecutableData(payload), nil, common.BytesToHash(beaconRoot))
 	if err != nil {
 		return err
 	}

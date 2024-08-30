@@ -5,7 +5,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"cosmossdk.io/collections"
 	"cosmossdk.io/core/address"
@@ -180,15 +179,8 @@ func (k Keeper) ForkChoiceUpdate(ctx context.Context) error {
 		return err
 	}
 
-	newctx, cancel := context.WithTimeout(ctx, time.Second*2)
-	defer cancel()
-
-	sdkctx := sdktypes.UnwrapSDKContext(ctx)
-
-	proposer := sdkctx.CometInfo().GetProposerAddress()
-	plRes, err := k.ethclient.NewPayloadV3(newctx, types.PayloadToExecutableData(&block, proposer),
+	plRes, err := k.ethclient.NewPayloadV3(ctx, types.PayloadToExecutableData(&block),
 		nil, common.BytesToHash(block.BeaconRoot))
-
 	if err != nil {
 		return err
 	}
@@ -198,11 +190,10 @@ func (k Keeper) ForkChoiceUpdate(ctx context.Context) error {
 	}
 
 	// set current block hash to head state and set previous block hash to safe and finalized state
-	parentHash := common.BytesToHash(block.ParentHash)
-	forkRes, err := k.ethclient.ForkchoiceUpdatedV3(newctx, &engine.ForkchoiceStateV1{
+	forkRes, err := k.ethclient.ForkchoiceUpdatedV3(ctx, &engine.ForkchoiceStateV1{
 		HeadBlockHash:      common.BytesToHash(block.BlockHash),
-		SafeBlockHash:      parentHash,
-		FinalizedBlockHash: parentHash,
+		SafeBlockHash:      common.BytesToHash(block.ParentHash),
+		FinalizedBlockHash: common.BytesToHash(block.ParentHash),
 	}, nil)
 	if err != nil {
 		return err
@@ -213,8 +204,7 @@ func (k Keeper) ForkChoiceUpdate(ctx context.Context) error {
 	}
 
 	// Update beacon root
-	beaconRoot := sdkctx.HeaderInfo().Hash
-	if err := k.BeaconRoot.Set(ctx, beaconRoot); err != nil {
+	if err := k.BeaconRoot.Set(ctx, sdktypes.UnwrapSDKContext(ctx).HeaderHash()); err != nil {
 		return err
 	}
 

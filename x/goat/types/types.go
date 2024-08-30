@@ -21,6 +21,7 @@ func ExecutableDataToPayload(data *engine.ExecutableData) *ExecutionPayload {
 
 	return &ExecutionPayload{
 		ParentHash:    data.ParentHash.Bytes(),
+		FeeRecipient:  data.FeeRecipient.Bytes(),
 		StateRoot:     data.StateRoot.Bytes(),
 		ReceiptsRoot:  data.ReceiptsRoot.Bytes(),
 		LogsBloom:     data.LogsBloom,
@@ -38,10 +39,10 @@ func ExecutableDataToPayload(data *engine.ExecutableData) *ExecutionPayload {
 	}
 }
 
-func PayloadToExecutableData(data *ExecutionPayload, propser []byte) *engine.ExecutableData {
+func PayloadToExecutableData(data *ExecutionPayload) *engine.ExecutableData {
 	return &engine.ExecutableData{
 		ParentHash:    common.BytesToHash(data.ParentHash),
-		FeeRecipient:  common.BytesToAddress(propser),
+		FeeRecipient:  common.BytesToAddress(data.FeeRecipient),
 		StateRoot:     common.BytesToHash(data.StateRoot),
 		ReceiptsRoot:  common.BytesToHash(data.ReceiptsRoot),
 		LogsBloom:     data.LogsBloom,
