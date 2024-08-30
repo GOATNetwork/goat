@@ -8,7 +8,7 @@ import (
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 )
 
-func ExecutableDataToPayload(data *engine.ExecutableData) *ExecutionPayload {
+func ExecutableDataToPayload(data *engine.ExecutableData) ExecutionPayload {
 	var BlobGasUsed uint64
 	if data.BlobGasUsed != nil {
 		BlobGasUsed = *data.BlobGasUsed
@@ -19,7 +19,7 @@ func ExecutableDataToPayload(data *engine.ExecutableData) *ExecutionPayload {
 		ExcessBlobGas = *data.ExcessBlobGas
 	}
 
-	return &ExecutionPayload{
+	return ExecutionPayload{
 		ParentHash:    data.ParentHash.Bytes(),
 		FeeRecipient:  data.FeeRecipient.Bytes(),
 		StateRoot:     data.StateRoot.Bytes(),
@@ -39,7 +39,7 @@ func ExecutableDataToPayload(data *engine.ExecutableData) *ExecutionPayload {
 	}
 }
 
-func PayloadToExecutableData(data *ExecutionPayload) *engine.ExecutableData {
+func PayloadToExecutableData(data ExecutionPayload) *engine.ExecutableData {
 	return &engine.ExecutableData{
 		ParentHash:    common.BytesToHash(data.ParentHash),
 		FeeRecipient:  common.BytesToAddress(data.FeeRecipient),

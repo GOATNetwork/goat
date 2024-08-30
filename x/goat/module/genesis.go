@@ -13,6 +13,14 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	if err := k.Params.Set(ctx, genState.Params); err != nil {
 		panic(err)
 	}
+
+	if err := k.Block.Set(ctx, genState.EthBlock); err != nil {
+		panic(err)
+	}
+
+	if err := k.BeaconRoot.Set(ctx, genState.EthBlock.BeaconRoot); err != nil {
+		panic(err)
+	}
 }
 
 // ExportGenesis returns the module's exported genesis.
@@ -21,6 +29,11 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 
 	genesis := types.DefaultGenesis()
 	genesis.Params, err = k.Params.Get(ctx)
+	if err != nil {
+		panic(err)
+	}
+
+	genesis.EthBlock, err = k.Block.Get(ctx)
 	if err != nil {
 		panic(err)
 	}

@@ -12,734 +12,6 @@ import (
 	sync "sync"
 )
 
-var _ protoreflect.List = (*_BlobsBundle_1_list)(nil)
-
-type _BlobsBundle_1_list struct {
-	list *[][]byte
-}
-
-func (x *_BlobsBundle_1_list) Len() int {
-	if x.list == nil {
-		return 0
-	}
-	return len(*x.list)
-}
-
-func (x *_BlobsBundle_1_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfBytes((*x.list)[i])
-}
-
-func (x *_BlobsBundle_1_list) Set(i int, value protoreflect.Value) {
-	valueUnwrapped := value.Bytes()
-	concreteValue := valueUnwrapped
-	(*x.list)[i] = concreteValue
-}
-
-func (x *_BlobsBundle_1_list) Append(value protoreflect.Value) {
-	valueUnwrapped := value.Bytes()
-	concreteValue := valueUnwrapped
-	*x.list = append(*x.list, concreteValue)
-}
-
-func (x *_BlobsBundle_1_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message BlobsBundle at list field KzgCommitments as it is not of Message kind"))
-}
-
-func (x *_BlobsBundle_1_list) Truncate(n int) {
-	*x.list = (*x.list)[:n]
-}
-
-func (x *_BlobsBundle_1_list) NewElement() protoreflect.Value {
-	var v []byte
-	return protoreflect.ValueOfBytes(v)
-}
-
-func (x *_BlobsBundle_1_list) IsValid() bool {
-	return x.list != nil
-}
-
-var _ protoreflect.List = (*_BlobsBundle_2_list)(nil)
-
-type _BlobsBundle_2_list struct {
-	list *[][]byte
-}
-
-func (x *_BlobsBundle_2_list) Len() int {
-	if x.list == nil {
-		return 0
-	}
-	return len(*x.list)
-}
-
-func (x *_BlobsBundle_2_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfBytes((*x.list)[i])
-}
-
-func (x *_BlobsBundle_2_list) Set(i int, value protoreflect.Value) {
-	valueUnwrapped := value.Bytes()
-	concreteValue := valueUnwrapped
-	(*x.list)[i] = concreteValue
-}
-
-func (x *_BlobsBundle_2_list) Append(value protoreflect.Value) {
-	valueUnwrapped := value.Bytes()
-	concreteValue := valueUnwrapped
-	*x.list = append(*x.list, concreteValue)
-}
-
-func (x *_BlobsBundle_2_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message BlobsBundle at list field Proofs as it is not of Message kind"))
-}
-
-func (x *_BlobsBundle_2_list) Truncate(n int) {
-	*x.list = (*x.list)[:n]
-}
-
-func (x *_BlobsBundle_2_list) NewElement() protoreflect.Value {
-	var v []byte
-	return protoreflect.ValueOfBytes(v)
-}
-
-func (x *_BlobsBundle_2_list) IsValid() bool {
-	return x.list != nil
-}
-
-var _ protoreflect.List = (*_BlobsBundle_3_list)(nil)
-
-type _BlobsBundle_3_list struct {
-	list *[][]byte
-}
-
-func (x *_BlobsBundle_3_list) Len() int {
-	if x.list == nil {
-		return 0
-	}
-	return len(*x.list)
-}
-
-func (x *_BlobsBundle_3_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfBytes((*x.list)[i])
-}
-
-func (x *_BlobsBundle_3_list) Set(i int, value protoreflect.Value) {
-	valueUnwrapped := value.Bytes()
-	concreteValue := valueUnwrapped
-	(*x.list)[i] = concreteValue
-}
-
-func (x *_BlobsBundle_3_list) Append(value protoreflect.Value) {
-	valueUnwrapped := value.Bytes()
-	concreteValue := valueUnwrapped
-	*x.list = append(*x.list, concreteValue)
-}
-
-func (x *_BlobsBundle_3_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message BlobsBundle at list field Blobs as it is not of Message kind"))
-}
-
-func (x *_BlobsBundle_3_list) Truncate(n int) {
-	*x.list = (*x.list)[:n]
-}
-
-func (x *_BlobsBundle_3_list) NewElement() protoreflect.Value {
-	var v []byte
-	return protoreflect.ValueOfBytes(v)
-}
-
-func (x *_BlobsBundle_3_list) IsValid() bool {
-	return x.list != nil
-}
-
-var (
-	md_BlobsBundle                 protoreflect.MessageDescriptor
-	fd_BlobsBundle_kzg_commitments protoreflect.FieldDescriptor
-	fd_BlobsBundle_proofs          protoreflect.FieldDescriptor
-	fd_BlobsBundle_blobs           protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_goat_goat_v1_goat_proto_init()
-	md_BlobsBundle = File_goat_goat_v1_goat_proto.Messages().ByName("BlobsBundle")
-	fd_BlobsBundle_kzg_commitments = md_BlobsBundle.Fields().ByName("kzg_commitments")
-	fd_BlobsBundle_proofs = md_BlobsBundle.Fields().ByName("proofs")
-	fd_BlobsBundle_blobs = md_BlobsBundle.Fields().ByName("blobs")
-}
-
-var _ protoreflect.Message = (*fastReflection_BlobsBundle)(nil)
-
-type fastReflection_BlobsBundle BlobsBundle
-
-func (x *BlobsBundle) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_BlobsBundle)(x)
-}
-
-func (x *BlobsBundle) slowProtoReflect() protoreflect.Message {
-	mi := &file_goat_goat_v1_goat_proto_msgTypes[0]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_BlobsBundle_messageType fastReflection_BlobsBundle_messageType
-var _ protoreflect.MessageType = fastReflection_BlobsBundle_messageType{}
-
-type fastReflection_BlobsBundle_messageType struct{}
-
-func (x fastReflection_BlobsBundle_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_BlobsBundle)(nil)
-}
-func (x fastReflection_BlobsBundle_messageType) New() protoreflect.Message {
-	return new(fastReflection_BlobsBundle)
-}
-func (x fastReflection_BlobsBundle_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_BlobsBundle
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_BlobsBundle) Descriptor() protoreflect.MessageDescriptor {
-	return md_BlobsBundle
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_BlobsBundle) Type() protoreflect.MessageType {
-	return _fastReflection_BlobsBundle_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_BlobsBundle) New() protoreflect.Message {
-	return new(fastReflection_BlobsBundle)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_BlobsBundle) Interface() protoreflect.ProtoMessage {
-	return (*BlobsBundle)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_BlobsBundle) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if len(x.KzgCommitments) != 0 {
-		value := protoreflect.ValueOfList(&_BlobsBundle_1_list{list: &x.KzgCommitments})
-		if !f(fd_BlobsBundle_kzg_commitments, value) {
-			return
-		}
-	}
-	if len(x.Proofs) != 0 {
-		value := protoreflect.ValueOfList(&_BlobsBundle_2_list{list: &x.Proofs})
-		if !f(fd_BlobsBundle_proofs, value) {
-			return
-		}
-	}
-	if len(x.Blobs) != 0 {
-		value := protoreflect.ValueOfList(&_BlobsBundle_3_list{list: &x.Blobs})
-		if !f(fd_BlobsBundle_blobs, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_BlobsBundle) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "goat.goat.v1.BlobsBundle.kzg_commitments":
-		return len(x.KzgCommitments) != 0
-	case "goat.goat.v1.BlobsBundle.proofs":
-		return len(x.Proofs) != 0
-	case "goat.goat.v1.BlobsBundle.blobs":
-		return len(x.Blobs) != 0
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.BlobsBundle"))
-		}
-		panic(fmt.Errorf("message goat.goat.v1.BlobsBundle does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_BlobsBundle) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "goat.goat.v1.BlobsBundle.kzg_commitments":
-		x.KzgCommitments = nil
-	case "goat.goat.v1.BlobsBundle.proofs":
-		x.Proofs = nil
-	case "goat.goat.v1.BlobsBundle.blobs":
-		x.Blobs = nil
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.BlobsBundle"))
-		}
-		panic(fmt.Errorf("message goat.goat.v1.BlobsBundle does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_BlobsBundle) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "goat.goat.v1.BlobsBundle.kzg_commitments":
-		if len(x.KzgCommitments) == 0 {
-			return protoreflect.ValueOfList(&_BlobsBundle_1_list{})
-		}
-		listValue := &_BlobsBundle_1_list{list: &x.KzgCommitments}
-		return protoreflect.ValueOfList(listValue)
-	case "goat.goat.v1.BlobsBundle.proofs":
-		if len(x.Proofs) == 0 {
-			return protoreflect.ValueOfList(&_BlobsBundle_2_list{})
-		}
-		listValue := &_BlobsBundle_2_list{list: &x.Proofs}
-		return protoreflect.ValueOfList(listValue)
-	case "goat.goat.v1.BlobsBundle.blobs":
-		if len(x.Blobs) == 0 {
-			return protoreflect.ValueOfList(&_BlobsBundle_3_list{})
-		}
-		listValue := &_BlobsBundle_3_list{list: &x.Blobs}
-		return protoreflect.ValueOfList(listValue)
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.BlobsBundle"))
-		}
-		panic(fmt.Errorf("message goat.goat.v1.BlobsBundle does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_BlobsBundle) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "goat.goat.v1.BlobsBundle.kzg_commitments":
-		lv := value.List()
-		clv := lv.(*_BlobsBundle_1_list)
-		x.KzgCommitments = *clv.list
-	case "goat.goat.v1.BlobsBundle.proofs":
-		lv := value.List()
-		clv := lv.(*_BlobsBundle_2_list)
-		x.Proofs = *clv.list
-	case "goat.goat.v1.BlobsBundle.blobs":
-		lv := value.List()
-		clv := lv.(*_BlobsBundle_3_list)
-		x.Blobs = *clv.list
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.BlobsBundle"))
-		}
-		panic(fmt.Errorf("message goat.goat.v1.BlobsBundle does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_BlobsBundle) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "goat.goat.v1.BlobsBundle.kzg_commitments":
-		if x.KzgCommitments == nil {
-			x.KzgCommitments = [][]byte{}
-		}
-		value := &_BlobsBundle_1_list{list: &x.KzgCommitments}
-		return protoreflect.ValueOfList(value)
-	case "goat.goat.v1.BlobsBundle.proofs":
-		if x.Proofs == nil {
-			x.Proofs = [][]byte{}
-		}
-		value := &_BlobsBundle_2_list{list: &x.Proofs}
-		return protoreflect.ValueOfList(value)
-	case "goat.goat.v1.BlobsBundle.blobs":
-		if x.Blobs == nil {
-			x.Blobs = [][]byte{}
-		}
-		value := &_BlobsBundle_3_list{list: &x.Blobs}
-		return protoreflect.ValueOfList(value)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.BlobsBundle"))
-		}
-		panic(fmt.Errorf("message goat.goat.v1.BlobsBundle does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_BlobsBundle) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "goat.goat.v1.BlobsBundle.kzg_commitments":
-		list := [][]byte{}
-		return protoreflect.ValueOfList(&_BlobsBundle_1_list{list: &list})
-	case "goat.goat.v1.BlobsBundle.proofs":
-		list := [][]byte{}
-		return protoreflect.ValueOfList(&_BlobsBundle_2_list{list: &list})
-	case "goat.goat.v1.BlobsBundle.blobs":
-		list := [][]byte{}
-		return protoreflect.ValueOfList(&_BlobsBundle_3_list{list: &list})
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.BlobsBundle"))
-		}
-		panic(fmt.Errorf("message goat.goat.v1.BlobsBundle does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_BlobsBundle) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in goat.goat.v1.BlobsBundle", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_BlobsBundle) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_BlobsBundle) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_BlobsBundle) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_BlobsBundle) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*BlobsBundle)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		if len(x.KzgCommitments) > 0 {
-			for _, b := range x.KzgCommitments {
-				l = len(b)
-				n += 1 + l + runtime.Sov(uint64(l))
-			}
-		}
-		if len(x.Proofs) > 0 {
-			for _, b := range x.Proofs {
-				l = len(b)
-				n += 1 + l + runtime.Sov(uint64(l))
-			}
-		}
-		if len(x.Blobs) > 0 {
-			for _, b := range x.Blobs {
-				l = len(b)
-				n += 1 + l + runtime.Sov(uint64(l))
-			}
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*BlobsBundle)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if len(x.Blobs) > 0 {
-			for iNdEx := len(x.Blobs) - 1; iNdEx >= 0; iNdEx-- {
-				i -= len(x.Blobs[iNdEx])
-				copy(dAtA[i:], x.Blobs[iNdEx])
-				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Blobs[iNdEx])))
-				i--
-				dAtA[i] = 0x1a
-			}
-		}
-		if len(x.Proofs) > 0 {
-			for iNdEx := len(x.Proofs) - 1; iNdEx >= 0; iNdEx-- {
-				i -= len(x.Proofs[iNdEx])
-				copy(dAtA[i:], x.Proofs[iNdEx])
-				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Proofs[iNdEx])))
-				i--
-				dAtA[i] = 0x12
-			}
-		}
-		if len(x.KzgCommitments) > 0 {
-			for iNdEx := len(x.KzgCommitments) - 1; iNdEx >= 0; iNdEx-- {
-				i -= len(x.KzgCommitments[iNdEx])
-				copy(dAtA[i:], x.KzgCommitments[iNdEx])
-				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.KzgCommitments[iNdEx])))
-				i--
-				dAtA[i] = 0xa
-			}
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*BlobsBundle)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: BlobsBundle: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: BlobsBundle: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field KzgCommitments", wireType)
-				}
-				var byteLen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					byteLen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if byteLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + byteLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.KzgCommitments = append(x.KzgCommitments, make([]byte, postIndex-iNdEx))
-				copy(x.KzgCommitments[len(x.KzgCommitments)-1], dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 2:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Proofs", wireType)
-				}
-				var byteLen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					byteLen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if byteLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + byteLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Proofs = append(x.Proofs, make([]byte, postIndex-iNdEx))
-				copy(x.Proofs[len(x.Proofs)-1], dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 3:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Blobs", wireType)
-				}
-				var byteLen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					byteLen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if byteLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + byteLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Blobs = append(x.Blobs, make([]byte, postIndex-iNdEx))
-				copy(x.Blobs[len(x.Blobs)-1], dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
 var _ protoreflect.List = (*_ExecutionPayload_14_list)(nil)
 
 type _ExecutionPayload_14_list struct {
@@ -838,7 +110,7 @@ func (x *ExecutionPayload) ProtoReflect() protoreflect.Message {
 }
 
 func (x *ExecutionPayload) slowProtoReflect() protoreflect.Message {
-	mi := &file_goat_goat_v1_goat_proto_msgTypes[1]
+	mi := &file_goat_goat_v1_goat_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2185,61 +1457,6 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// BlobsBundle is retrieved through engine-api from the execution layer client.
-type BlobsBundle struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// The KZG commitments of the blobs.
-	KzgCommitments [][]byte `protobuf:"bytes,1,rep,name=kzg_commitments,json=kzgCommitments,proto3" json:"kzg_commitments,omitempty"`
-	// The proofs of the blobs.
-	Proofs [][]byte `protobuf:"bytes,2,rep,name=proofs,proto3" json:"proofs,omitempty"`
-	// The blobs itself.
-	Blobs [][]byte `protobuf:"bytes,3,rep,name=blobs,proto3" json:"blobs,omitempty"`
-}
-
-func (x *BlobsBundle) Reset() {
-	*x = BlobsBundle{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_goat_goat_v1_goat_proto_msgTypes[0]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *BlobsBundle) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*BlobsBundle) ProtoMessage() {}
-
-// Deprecated: Use BlobsBundle.ProtoReflect.Descriptor instead.
-func (*BlobsBundle) Descriptor() ([]byte, []int) {
-	return file_goat_goat_v1_goat_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *BlobsBundle) GetKzgCommitments() [][]byte {
-	if x != nil {
-		return x.KzgCommitments
-	}
-	return nil
-}
-
-func (x *BlobsBundle) GetProofs() [][]byte {
-	if x != nil {
-		return x.Proofs
-	}
-	return nil
-}
-
-func (x *BlobsBundle) GetBlobs() [][]byte {
-	if x != nil {
-		return x.Blobs
-	}
-	return nil
-}
-
 // ExecutionPayload
 type ExecutionPayload struct {
 	state         protoimpl.MessageState
@@ -2268,7 +1485,7 @@ type ExecutionPayload struct {
 func (x *ExecutionPayload) Reset() {
 	*x = ExecutionPayload{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_goat_goat_v1_goat_proto_msgTypes[1]
+		mi := &file_goat_goat_v1_goat_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2282,7 +1499,7 @@ func (*ExecutionPayload) ProtoMessage() {}
 
 // Deprecated: Use ExecutionPayload.ProtoReflect.Descriptor instead.
 func (*ExecutionPayload) Descriptor() ([]byte, []int) {
-	return file_goat_goat_v1_goat_proto_rawDescGZIP(), []int{1}
+	return file_goat_goat_v1_goat_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *ExecutionPayload) GetParentHash() []byte {
@@ -2409,61 +1626,55 @@ var File_goat_goat_v1_goat_proto protoreflect.FileDescriptor
 var file_goat_goat_v1_goat_proto_rawDesc = []byte{
 	0x0a, 0x17, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x76, 0x31, 0x2f, 0x67,
 	0x6f, 0x61, 0x74, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x0c, 0x67, 0x6f, 0x61, 0x74, 0x2e,
-	0x67, 0x6f, 0x61, 0x74, 0x2e, 0x76, 0x31, 0x22, 0x64, 0x0a, 0x0b, 0x42, 0x6c, 0x6f, 0x62, 0x73,
-	0x42, 0x75, 0x6e, 0x64, 0x6c, 0x65, 0x12, 0x27, 0x0a, 0x0f, 0x6b, 0x7a, 0x67, 0x5f, 0x63, 0x6f,
-	0x6d, 0x6d, 0x69, 0x74, 0x6d, 0x65, 0x6e, 0x74, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0c, 0x52,
-	0x0e, 0x6b, 0x7a, 0x67, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x74, 0x6d, 0x65, 0x6e, 0x74, 0x73, 0x12,
-	0x16, 0x0a, 0x06, 0x70, 0x72, 0x6f, 0x6f, 0x66, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0c, 0x52,
-	0x06, 0x70, 0x72, 0x6f, 0x6f, 0x66, 0x73, 0x12, 0x14, 0x0a, 0x05, 0x62, 0x6c, 0x6f, 0x62, 0x73,
-	0x18, 0x03, 0x20, 0x03, 0x28, 0x0c, 0x52, 0x05, 0x62, 0x6c, 0x6f, 0x62, 0x73, 0x22, 0xcd, 0x04,
-	0x0a, 0x10, 0x45, 0x78, 0x65, 0x63, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x50, 0x61, 0x79, 0x6c, 0x6f,
-	0x61, 0x64, 0x12, 0x1f, 0x0a, 0x0b, 0x70, 0x61, 0x72, 0x65, 0x6e, 0x74, 0x5f, 0x68, 0x61, 0x73,
-	0x68, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0a, 0x70, 0x61, 0x72, 0x65, 0x6e, 0x74, 0x48,
-	0x61, 0x73, 0x68, 0x12, 0x23, 0x0a, 0x0d, 0x66, 0x65, 0x65, 0x5f, 0x72, 0x65, 0x63, 0x69, 0x70,
-	0x69, 0x65, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0c, 0x66, 0x65, 0x65, 0x52,
-	0x65, 0x63, 0x69, 0x70, 0x69, 0x65, 0x6e, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x73, 0x74, 0x61, 0x74,
-	0x65, 0x5f, 0x72, 0x6f, 0x6f, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x09, 0x73, 0x74,
-	0x61, 0x74, 0x65, 0x52, 0x6f, 0x6f, 0x74, 0x12, 0x23, 0x0a, 0x0d, 0x72, 0x65, 0x63, 0x65, 0x69,
-	0x70, 0x74, 0x73, 0x5f, 0x72, 0x6f, 0x6f, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0c,
-	0x72, 0x65, 0x63, 0x65, 0x69, 0x70, 0x74, 0x73, 0x52, 0x6f, 0x6f, 0x74, 0x12, 0x1d, 0x0a, 0x0a,
-	0x6c, 0x6f, 0x67, 0x73, 0x5f, 0x62, 0x6c, 0x6f, 0x6f, 0x6d, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0c,
-	0x52, 0x09, 0x6c, 0x6f, 0x67, 0x73, 0x42, 0x6c, 0x6f, 0x6f, 0x6d, 0x12, 0x1f, 0x0a, 0x0b, 0x70,
-	0x72, 0x65, 0x76, 0x5f, 0x72, 0x61, 0x6e, 0x64, 0x61, 0x6f, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0c,
-	0x52, 0x0a, 0x70, 0x72, 0x65, 0x76, 0x52, 0x61, 0x6e, 0x64, 0x61, 0x6f, 0x12, 0x21, 0x0a, 0x0c,
-	0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x6e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x18, 0x07, 0x20, 0x01,
-	0x28, 0x04, 0x52, 0x0b, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x4e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x12,
-	0x1b, 0x0a, 0x09, 0x67, 0x61, 0x73, 0x5f, 0x6c, 0x69, 0x6d, 0x69, 0x74, 0x18, 0x08, 0x20, 0x01,
-	0x28, 0x04, 0x52, 0x08, 0x67, 0x61, 0x73, 0x4c, 0x69, 0x6d, 0x69, 0x74, 0x12, 0x19, 0x0a, 0x08,
-	0x67, 0x61, 0x73, 0x5f, 0x75, 0x73, 0x65, 0x64, 0x18, 0x09, 0x20, 0x01, 0x28, 0x04, 0x52, 0x07,
-	0x67, 0x61, 0x73, 0x55, 0x73, 0x65, 0x64, 0x12, 0x1c, 0x0a, 0x09, 0x74, 0x69, 0x6d, 0x65, 0x73,
-	0x74, 0x61, 0x6d, 0x70, 0x18, 0x0a, 0x20, 0x01, 0x28, 0x04, 0x52, 0x09, 0x74, 0x69, 0x6d, 0x65,
-	0x73, 0x74, 0x61, 0x6d, 0x70, 0x12, 0x1d, 0x0a, 0x0a, 0x65, 0x78, 0x74, 0x72, 0x61, 0x5f, 0x64,
-	0x61, 0x74, 0x61, 0x18, 0x0b, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x09, 0x65, 0x78, 0x74, 0x72, 0x61,
-	0x44, 0x61, 0x74, 0x61, 0x12, 0x27, 0x0a, 0x10, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x66, 0x65, 0x65,
-	0x5f, 0x70, 0x65, 0x72, 0x5f, 0x67, 0x61, 0x73, 0x18, 0x0c, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0d,
-	0x62, 0x61, 0x73, 0x65, 0x46, 0x65, 0x65, 0x50, 0x65, 0x72, 0x47, 0x61, 0x73, 0x12, 0x1d, 0x0a,
-	0x0a, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x68, 0x61, 0x73, 0x68, 0x18, 0x0d, 0x20, 0x01, 0x28,
-	0x0c, 0x52, 0x09, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x61, 0x73, 0x68, 0x12, 0x22, 0x0a, 0x0c,
-	0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x0e, 0x20, 0x03,
-	0x28, 0x0c, 0x52, 0x0c, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x73,
-	0x12, 0x1f, 0x0a, 0x0b, 0x62, 0x65, 0x61, 0x63, 0x6f, 0x6e, 0x5f, 0x72, 0x6f, 0x6f, 0x74, 0x18,
-	0x0f, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0a, 0x62, 0x65, 0x61, 0x63, 0x6f, 0x6e, 0x52, 0x6f, 0x6f,
-	0x74, 0x12, 0x22, 0x0a, 0x0d, 0x62, 0x6c, 0x6f, 0x62, 0x5f, 0x67, 0x61, 0x73, 0x5f, 0x75, 0x73,
-	0x65, 0x64, 0x18, 0x10, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0b, 0x62, 0x6c, 0x6f, 0x62, 0x47, 0x61,
-	0x73, 0x55, 0x73, 0x65, 0x64, 0x12, 0x26, 0x0a, 0x0f, 0x65, 0x78, 0x63, 0x65, 0x73, 0x73, 0x5f,
-	0x62, 0x6c, 0x6f, 0x62, 0x5f, 0x67, 0x61, 0x73, 0x18, 0x11, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0d,
-	0x65, 0x78, 0x63, 0x65, 0x73, 0x73, 0x42, 0x6c, 0x6f, 0x62, 0x47, 0x61, 0x73, 0x42, 0xa4, 0x01,
-	0x0a, 0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e,
-	0x76, 0x31, 0x42, 0x09, 0x47, 0x6f, 0x61, 0x74, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a,
-	0x33, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x61, 0x74,
-	0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x61, 0x70, 0x69,
-	0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x76, 0x31, 0x3b, 0x67, 0x6f,
-	0x61, 0x74, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x47, 0x47, 0x58, 0xaa, 0x02, 0x0c, 0x47, 0x6f, 0x61,
-	0x74, 0x2e, 0x47, 0x6f, 0x61, 0x74, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x0c, 0x47, 0x6f, 0x61, 0x74,
-	0x5c, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x18, 0x47, 0x6f, 0x61, 0x74, 0x5c,
-	0x47, 0x6f, 0x61, 0x74, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64,
-	0x61, 0x74, 0x61, 0xea, 0x02, 0x0e, 0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x47, 0x6f, 0x61, 0x74,
-	0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x67, 0x6f, 0x61, 0x74, 0x2e, 0x76, 0x31, 0x22, 0xcd, 0x04, 0x0a, 0x10, 0x45, 0x78, 0x65, 0x63,
+	0x75, 0x74, 0x69, 0x6f, 0x6e, 0x50, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x12, 0x1f, 0x0a, 0x0b,
+	0x70, 0x61, 0x72, 0x65, 0x6e, 0x74, 0x5f, 0x68, 0x61, 0x73, 0x68, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x0c, 0x52, 0x0a, 0x70, 0x61, 0x72, 0x65, 0x6e, 0x74, 0x48, 0x61, 0x73, 0x68, 0x12, 0x23, 0x0a,
+	0x0d, 0x66, 0x65, 0x65, 0x5f, 0x72, 0x65, 0x63, 0x69, 0x70, 0x69, 0x65, 0x6e, 0x74, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x0c, 0x52, 0x0c, 0x66, 0x65, 0x65, 0x52, 0x65, 0x63, 0x69, 0x70, 0x69, 0x65,
+	0x6e, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x73, 0x74, 0x61, 0x74, 0x65, 0x5f, 0x72, 0x6f, 0x6f, 0x74,
+	0x18, 0x03, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x09, 0x73, 0x74, 0x61, 0x74, 0x65, 0x52, 0x6f, 0x6f,
+	0x74, 0x12, 0x23, 0x0a, 0x0d, 0x72, 0x65, 0x63, 0x65, 0x69, 0x70, 0x74, 0x73, 0x5f, 0x72, 0x6f,
+	0x6f, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0c, 0x72, 0x65, 0x63, 0x65, 0x69, 0x70,
+	0x74, 0x73, 0x52, 0x6f, 0x6f, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x6c, 0x6f, 0x67, 0x73, 0x5f, 0x62,
+	0x6c, 0x6f, 0x6f, 0x6d, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x09, 0x6c, 0x6f, 0x67, 0x73,
+	0x42, 0x6c, 0x6f, 0x6f, 0x6d, 0x12, 0x1f, 0x0a, 0x0b, 0x70, 0x72, 0x65, 0x76, 0x5f, 0x72, 0x61,
+	0x6e, 0x64, 0x61, 0x6f, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0a, 0x70, 0x72, 0x65, 0x76,
+	0x52, 0x61, 0x6e, 0x64, 0x61, 0x6f, 0x12, 0x21, 0x0a, 0x0c, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f,
+	0x6e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x18, 0x07, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0b, 0x62, 0x6c,
+	0x6f, 0x63, 0x6b, 0x4e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x12, 0x1b, 0x0a, 0x09, 0x67, 0x61, 0x73,
+	0x5f, 0x6c, 0x69, 0x6d, 0x69, 0x74, 0x18, 0x08, 0x20, 0x01, 0x28, 0x04, 0x52, 0x08, 0x67, 0x61,
+	0x73, 0x4c, 0x69, 0x6d, 0x69, 0x74, 0x12, 0x19, 0x0a, 0x08, 0x67, 0x61, 0x73, 0x5f, 0x75, 0x73,
+	0x65, 0x64, 0x18, 0x09, 0x20, 0x01, 0x28, 0x04, 0x52, 0x07, 0x67, 0x61, 0x73, 0x55, 0x73, 0x65,
+	0x64, 0x12, 0x1c, 0x0a, 0x09, 0x74, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x18, 0x0a,
+	0x20, 0x01, 0x28, 0x04, 0x52, 0x09, 0x74, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x12,
+	0x1d, 0x0a, 0x0a, 0x65, 0x78, 0x74, 0x72, 0x61, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x18, 0x0b, 0x20,
+	0x01, 0x28, 0x0c, 0x52, 0x09, 0x65, 0x78, 0x74, 0x72, 0x61, 0x44, 0x61, 0x74, 0x61, 0x12, 0x27,
+	0x0a, 0x10, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x66, 0x65, 0x65, 0x5f, 0x70, 0x65, 0x72, 0x5f, 0x67,
+	0x61, 0x73, 0x18, 0x0c, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0d, 0x62, 0x61, 0x73, 0x65, 0x46, 0x65,
+	0x65, 0x50, 0x65, 0x72, 0x47, 0x61, 0x73, 0x12, 0x1d, 0x0a, 0x0a, 0x62, 0x6c, 0x6f, 0x63, 0x6b,
+	0x5f, 0x68, 0x61, 0x73, 0x68, 0x18, 0x0d, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x09, 0x62, 0x6c, 0x6f,
+	0x63, 0x6b, 0x48, 0x61, 0x73, 0x68, 0x12, 0x22, 0x0a, 0x0c, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61,
+	0x63, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x0e, 0x20, 0x03, 0x28, 0x0c, 0x52, 0x0c, 0x74, 0x72,
+	0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x1f, 0x0a, 0x0b, 0x62, 0x65,
+	0x61, 0x63, 0x6f, 0x6e, 0x5f, 0x72, 0x6f, 0x6f, 0x74, 0x18, 0x0f, 0x20, 0x01, 0x28, 0x0c, 0x52,
+	0x0a, 0x62, 0x65, 0x61, 0x63, 0x6f, 0x6e, 0x52, 0x6f, 0x6f, 0x74, 0x12, 0x22, 0x0a, 0x0d, 0x62,
+	0x6c, 0x6f, 0x62, 0x5f, 0x67, 0x61, 0x73, 0x5f, 0x75, 0x73, 0x65, 0x64, 0x18, 0x10, 0x20, 0x01,
+	0x28, 0x04, 0x52, 0x0b, 0x62, 0x6c, 0x6f, 0x62, 0x47, 0x61, 0x73, 0x55, 0x73, 0x65, 0x64, 0x12,
+	0x26, 0x0a, 0x0f, 0x65, 0x78, 0x63, 0x65, 0x73, 0x73, 0x5f, 0x62, 0x6c, 0x6f, 0x62, 0x5f, 0x67,
+	0x61, 0x73, 0x18, 0x11, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0d, 0x65, 0x78, 0x63, 0x65, 0x73, 0x73,
+	0x42, 0x6c, 0x6f, 0x62, 0x47, 0x61, 0x73, 0x42, 0xa4, 0x01, 0x0a, 0x10, 0x63, 0x6f, 0x6d, 0x2e,
+	0x67, 0x6f, 0x61, 0x74, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x76, 0x31, 0x42, 0x09, 0x47, 0x6f,
+	0x61, 0x74, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x33, 0x67, 0x69, 0x74, 0x68, 0x75,
+	0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72,
+	0x6b, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f,
+	0x67, 0x6f, 0x61, 0x74, 0x2f, 0x76, 0x31, 0x3b, 0x67, 0x6f, 0x61, 0x74, 0x76, 0x31, 0xa2, 0x02,
+	0x03, 0x47, 0x47, 0x58, 0xaa, 0x02, 0x0c, 0x47, 0x6f, 0x61, 0x74, 0x2e, 0x47, 0x6f, 0x61, 0x74,
+	0x2e, 0x56, 0x31, 0xca, 0x02, 0x0c, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x47, 0x6f, 0x61, 0x74, 0x5c,
+	0x56, 0x31, 0xe2, 0x02, 0x18, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x56,
+	0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0e,
+	0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -2478,10 +1689,9 @@ func file_goat_goat_v1_goat_proto_rawDescGZIP() []byte {
 	return file_goat_goat_v1_goat_proto_rawDescData
 }
 
-var file_goat_goat_v1_goat_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_goat_goat_v1_goat_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_goat_goat_v1_goat_proto_goTypes = []interface{}{
-	(*BlobsBundle)(nil),      // 0: goat.goat.v1.BlobsBundle
-	(*ExecutionPayload)(nil), // 1: goat.goat.v1.ExecutionPayload
+	(*ExecutionPayload)(nil), // 0: goat.goat.v1.ExecutionPayload
 }
 var file_goat_goat_v1_goat_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -2498,18 +1708,6 @@ func file_goat_goat_v1_goat_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_goat_goat_v1_goat_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*BlobsBundle); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_goat_goat_v1_goat_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ExecutionPayload); i {
 			case 0:
 				return &v.state
@@ -2528,7 +1726,7 @@ func file_goat_goat_v1_goat_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_goat_goat_v1_goat_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   1,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

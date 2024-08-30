@@ -55,7 +55,7 @@ func (k msgServer) NewEthBlock(ctx context.Context, req *types.MsgNewEthBlock) (
 
 	// todo: handle request from execution node
 
-	if err := k.Block.Set(ctx, *req.Payload); err != nil {
+	if err := k.Block.Set(ctx, req.Payload); err != nil {
 		return nil, err
 	}
 

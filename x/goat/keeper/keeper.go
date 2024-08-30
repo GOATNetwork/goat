@@ -179,7 +179,7 @@ func (k Keeper) ForkChoiceUpdate(ctx context.Context) error {
 		return err
 	}
 
-	plRes, err := k.ethclient.NewPayloadV3(ctx, types.PayloadToExecutableData(&block),
+	plRes, err := k.ethclient.NewPayloadV3(ctx, types.PayloadToExecutableData(block),
 		nil, common.BytesToHash(block.BeaconRoot))
 	if err != nil {
 		return err

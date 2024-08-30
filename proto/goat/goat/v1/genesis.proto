@@ -2,6 +2,7 @@ syntax = "proto3";
 package goat.goat.v1;
 
 import "amino/amino.proto";
+import "goat/goat/v1/goat.proto";
 import "goat/goat/v1/params.proto";
 import "gogoproto/gogo.proto";
 
@@ -11,6 +12,10 @@ option go_package = "github.com/goatnetwork/goat/x/goat/types";
 message GenesisState {
   // params defines all the parameters of the module.
   Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  ExecutionPayload eth_block = 2 [
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
