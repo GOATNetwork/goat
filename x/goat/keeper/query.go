@@ -24,12 +24,12 @@ type queryServer struct {
 	k Keeper
 }
 
-func (q queryServer) Params(ctx context.Context, req *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
+func (q queryServer) EthBlock(ctx context.Context, req *types.QueryEthBlockRequest) (*types.QueryEthBlockResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	params, err := q.k.Params.Get(ctx)
+	block, err := q.k.Block.Get(ctx)
 	if err != nil {
 		if errors.Is(err, collections.ErrNotFound) {
 			return nil, status.Error(codes.NotFound, "not found")
@@ -38,5 +38,5 @@ func (q queryServer) Params(ctx context.Context, req *types.QueryParamsRequest) 
 		return nil, status.Error(codes.Internal, "internal error")
 	}
 
-	return &types.QueryParamsResponse{Params: params}, nil
+	return &types.QueryEthBlockResponse{Block: &block}, nil
 }

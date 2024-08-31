@@ -39,7 +39,7 @@ func ExecutableDataToPayload(data *engine.ExecutableData) ExecutionPayload {
 	}
 }
 
-func PayloadToExecutableData(data ExecutionPayload) *engine.ExecutableData {
+func PayloadToExecutableData(data *ExecutionPayload) *engine.ExecutableData {
 	return &engine.ExecutableData{
 		ParentHash:    common.BytesToHash(data.ParentHash),
 		FeeRecipient:  common.BytesToAddress(data.FeeRecipient),

@@ -123,8 +123,12 @@ func ProvideClientContext(
 		WithHomeDir(app.DefaultNodeHome).
 		WithViper(app.Name) // env variable prefix
 
+	var err error
 	// Read the config again to overwrite the default values with the values from the config file
-	clientCtx, _ = config.ReadFromClientConfig(clientCtx)
+	clientCtx, err = config.ReadFromClientConfig(clientCtx)
+	if err != nil {
+		panic(err)
+	}
 
 	// textual is enabled by default, we need to re-create the tx config grpc instead of bank keeper.
 	txConfigOpts.TextualCoinMetadataQueryFn = authtxconfig.NewGRPCCoinMetadataQueryFn(clientCtx)

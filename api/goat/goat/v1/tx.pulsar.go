@@ -890,7 +890,6 @@ type MsgNewEthBlock struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// authority is the address that controls the module (defaults to x/gov unless overwritten).
 	Proposer string            `protobuf:"bytes,1,opt,name=proposer,proto3" json:"proposer,omitempty"`
 	Payload  *ExecutionPayload `protobuf:"bytes,2,opt,name=payload,proto3" json:"payload,omitempty"`
 }

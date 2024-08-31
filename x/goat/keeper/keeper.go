@@ -29,10 +29,6 @@ type (
 		storeService store.KVStoreService
 		logger       log.Logger
 
-		// the address capable of executing a MsgUpdateParams message.
-		// Typically, this should be the x/gov module account.
-		authority string
-
 		Schema     collections.Schema
 		Params     collections.Item[types.Params]
 		BeaconRoot collections.Item[[]byte] // the cometbft blockhash
@@ -87,11 +83,6 @@ func NewKeeper(
 	k.Schema = schema
 
 	return k
-}
-
-// GetAuthority returns the module's authority.
-func (k Keeper) GetAuthority() string {
-	return k.authority
 }
 
 // Logger returns a module-specific logger.
@@ -173,23 +164,32 @@ func (k Keeper) VerifyDequeue(ctx context.Context, txs [][]byte) error {
 	return nil
 }
 
-func (k Keeper) ForkChoiceUpdate(ctx context.Context) error {
+// Finalized notifies goat-geth to update fork choice state
+// if there are any errors, the FinalizeBlock phase will be failed
+func (k Keeper) Finalized(ctx context.Context) error { // EndBlock phase only!
 	block, err := k.Block.Get(ctx)
 	if err != nil {
 		return err
 	}
 
-	plRes, err := k.ethclient.NewPayloadV3(ctx, types.PayloadToExecutableData(block),
+	// Update beacon root
+	if err := k.BeaconRoot.Set(ctx, sdktypes.UnwrapSDKContext(ctx).HeaderHash()); err != nil {
+		return err
+	}
+
+	k.Logger().Info("notify NewPayload", "number", block.BlockNumber)
+	plRes, err := k.ethclient.NewPayloadV3(ctx, types.PayloadToExecutableData(&block),
 		nil, common.BytesToHash(block.BeaconRoot))
 	if err != nil {
 		return err
 	}
 
 	if plRes.Status == engine.INVALID {
-		return fmt.Errorf("got invalid status from NewPayloadV3 engine api")
+		return errors.New("invalid from NewPayloadV3 api")
 	}
 
 	// set current block hash to head state and set previous block hash to safe and finalized state
+	k.Logger().Info("notify ForkchoiceUpdated", "head", block.BlockHash, "finalized", block.ParentHash)
 	forkRes, err := k.ethclient.ForkchoiceUpdatedV3(ctx, &engine.ForkchoiceStateV1{
 		HeadBlockHash:      common.BytesToHash(block.BlockHash),
 		SafeBlockHash:      common.BytesToHash(block.ParentHash),
@@ -200,12 +200,7 @@ func (k Keeper) ForkChoiceUpdate(ctx context.Context) error {
 	}
 
 	if forkRes.PayloadStatus.Status == engine.INVALID {
-		return fmt.Errorf("got invalid status from ForkchoiceUpdatedV3 engine api")
-	}
-
-	// Update beacon root
-	if err := k.BeaconRoot.Set(ctx, sdktypes.UnwrapSDKContext(ctx).HeaderHash()); err != nil {
-		return err
+		return errors.New("invalid from ForkchoiceUpdatedV3 api")
 	}
 
 	return nil

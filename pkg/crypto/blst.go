@@ -1,8 +1,12 @@
 package crypto
 
-import blst "github.com/supranational/blst/bindings/go"
+import (
+	"errors"
 
-var BLSMode = []byte("BLS_SIG_BLS12381G2_XMD:SHA-256_SSWU_RO_POP_")
+	blst "github.com/supranational/blst/bindings/go"
+)
+
+var blsMode = []byte("BLS_SIG_BLS12381G2_XMD:SHA-256_SSWU_RO_POP_")
 
 type PrivateKey = blst.SecretKey
 type PublicKey = blst.P2Affine
@@ -11,42 +15,52 @@ type Signature = blst.P1Affine
 type AggregatePublicKey = blst.P2Aggregate
 type AggregateSignature = blst.P1Aggregate
 
+const (
+	PubkeyLength    = blst.BLST_P2_COMPRESS_BYTES
+	SignatureLength = blst.BLST_P1_COMPRESS_BYTES
+)
+
+var (
+	ErrorAggregation = errors.New("crypto: failed to aggregate bls signatures")
+)
+
 func AggregateVerify(pks [][]byte, msg, sig []byte) bool {
-	dsig := new(Signature).Uncompress(sig)
-	if dsig == nil {
+	if len(pks) == 0 {
 		return false
 	}
 
-	dpks := new(AggregatePublicKey)
+	signature := new(Signature).Uncompress(sig)
+	if signature == nil {
+		return false
+	}
+
+	pubkeys := make([]*PublicKey, 0, len(pks))
 	for _, v := range pks {
 		pk := new(PublicKey).Uncompress(v)
 		if pk == nil {
 			return false
 		}
-		if !dpks.Add(pk, true) {
-			return false
-		}
+		pubkeys = append(pubkeys, pk)
 	}
-	return dsig.Verify(true, dpks.ToAffine(), true, msg, BLSMode)
+	return signature.FastAggregateVerify(true, pubkeys, msg, blsMode)
 }
 
-func Verify(pk, msg, sig []byte) bool {
+func AggregateSignatures(sigs [][]byte) ([]byte, error) {
+	signature := new(AggregateSignature)
+	if !signature.AggregateCompressed(sigs, true) {
+		return nil, ErrorAggregation
+	}
+	return signature.ToAffine().Compress(), nil
+}
+
+func Verify(pk *PublicKey, msg, sig []byte) bool {
 	signature := new(Signature).Uncompress(sig)
 	if signature == nil {
 		return false
 	}
-	pubkey := new(PublicKey).Uncompress(pk)
-	if pubkey == nil {
-		return false
-	}
-	return signature.Verify(true, pubkey, false, msg, BLSMode)
+	return signature.Verify(true, pk, false, msg, blsMode)
 }
 
-func Sign(sk, msg []byte) []byte {
-	prvkey := new(PrivateKey).FromBEndian(sk)
-	if prvkey == nil {
-		return nil
-	}
-	sig2 := new(Signature).Sign(prvkey, msg, BLSMode)
-	return sig2.Compress()
+func Sign(sk *PrivateKey, msg []byte) []byte {
+	return new(Signature).Sign(sk, msg, blsMode).Compress()
 }

@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"cosmossdk.io/log"
 	"github.com/btcsuite/btcd/chaincfg"
 	cmtjson "github.com/cometbft/cometbft/libs/json"
 	"github.com/cometbft/cometbft/privval"
@@ -38,7 +39,7 @@ func ProvideBitcoinNetworkConfig(appOpts servertypes.AppOptions) *chaincfg.Param
 	}
 }
 
-func ProvideEngineClient(appOpts servertypes.AppOptions) *ethrpc.Client {
+func ProvideEngineClient(logger log.Logger, appOpts servertypes.AppOptions) *ethrpc.Client {
 	endpoint := cast.ToString(appOpts.Get("goat.geth"))
 	if endpoint == "" {
 		panic("goat execution node endpoint not found")
@@ -62,21 +63,23 @@ func ProvideEngineClient(appOpts servertypes.AppOptions) *ethrpc.Client {
 
 	var ethclient *ethrpc.Client
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*7)
 	defer cancel()
 
-	for i := 0; i < 15; i++ {
+	for i := 0; i < 10; i++ {
 		var err error
+		logger.Info("try to connect goat-geth", "endpoint", endpoint)
 		ethclient, err = ethrpc.DialContext(ctx, endpoint, jwtSecret)
 		if err == nil {
 			conf, err := ethclient.GetChainConfig(ctx)
 			if err == nil {
 				if conf.Goat == nil {
-					panic("No goat config found in the goat-geth, please verify if you're using correct steup")
+					panic("No goat config found in the goat-geth, please verify if you're using correct setup")
 				}
 				break
 			}
 		}
+		logger.Error("retry to connect goat-geth", "err", err.Error())
 		<-time.After(time.Second / 2)
 	}
 

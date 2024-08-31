@@ -4,8 +4,8 @@ import (
 	"encoding/binary"
 	"errors"
 
+	"github.com/goatnetwork/goat/pkg/crypto"
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
-	blst "github.com/supranational/blst/bindings/go"
 )
 
 type IVoteMsg interface {
@@ -16,7 +16,7 @@ type IVoteMsg interface {
 }
 
 func (v *Votes) Validate() error {
-	if len(v.Signature) != blst.BLST_P1_COMPRESS_BYTES {
+	if len(v.Signature) != crypto.SignatureLength {
 		return errors.New("invalid bls signature length")
 	}
 	return nil

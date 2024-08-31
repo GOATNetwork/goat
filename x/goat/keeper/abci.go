@@ -101,8 +101,11 @@ func (k Keeper) PrepareProposalHandler(txpool mempool.Mempool, txVerifier baseap
 				return err
 			}
 
-			if forkChoiceResp.PayloadStatus.Status != engine.VALID {
-				return fmt.Errorf("failed to build goat-geth txs")
+			if status := forkChoiceResp.PayloadStatus; status.Status != engine.VALID {
+				if status.ValidationError != nil {
+					return fmt.Errorf("failed to build goat-geth txs: %s", *status.ValidationError)
+				}
+				return errors.New("failed to build goat-geth txs")
 			}
 
 			envelope, err := k.ethclient.GetPayloadV3(tmctx, *forkChoiceResp.PayloadID)
@@ -218,7 +221,7 @@ func (k Keeper) ProcessProposalHandler(txVerifier baseapp.ProposalTxVerifier) sd
 				if !ok {
 					return nil, errors.New("the first tx should be MsgNewEthBlock")
 				}
-				if err := k.validateEthblock(sdkctx, rpp.ProposerAddress, ethBlock); err != nil {
+				if err := k.verifyEthBlockProposal(sdkctx, rpp.ProposerAddress, ethBlock); err != nil {
 					return nil, err
 				}
 				continue
@@ -237,7 +240,7 @@ func (k Keeper) ProcessProposalHandler(txVerifier baseapp.ProposalTxVerifier) sd
 	}
 }
 
-func (k Keeper) validateEthblock(sdkctx context.Context, expectProposer []byte, ethBlock *types.MsgNewEthBlock) error {
+func (k Keeper) verifyEthBlockProposal(sdkctx context.Context, expectProposer []byte, ethBlock *types.MsgNewEthBlock) error {
 	proposer, err := k.addressCodec.StringToBytes(ethBlock.Proposer)
 	if err != nil {
 		return err
@@ -284,15 +287,16 @@ func (k Keeper) validateEthblock(sdkctx context.Context, expectProposer []byte, 
 		return err
 	}
 
-	tmctx, cancel := context.WithTimeout(sdkctx, time.Second*2)
-	defer cancel()
-
-	res, err := k.ethclient.NewPayloadV3(tmctx,
-		types.PayloadToExecutableData(payload), nil, common.BytesToHash(beaconRoot))
+	res, err := k.ethclient.NewPayloadV3(sdkctx,
+		types.PayloadToExecutableData(&payload), nil, common.BytesToHash(beaconRoot))
 	if err != nil {
 		return err
 	}
+
 	if res.Status != engine.VALID {
+		if res.ValidationError != nil {
+			return fmt.Errorf("NewPayloadV3 non-VALID status(%s): %s", res.Status, *res.ValidationError)
+		}
 		return fmt.Errorf("NewPayloadV3 non-VALID status: %s", res.Status)
 	}
 	return nil

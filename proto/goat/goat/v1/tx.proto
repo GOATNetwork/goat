@@ -22,7 +22,6 @@ message MsgNewEthBlock {
   option (cosmos.msg.v1.signer) = "proposer";
   option (amino.name) = "goat/x/goat/MsgNewEthBlock";
 
-  // authority is the address that controls the module (defaults to x/gov unless overwritten).
   string proposer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   ExecutionPayload payload = 2 [
     (gogoproto.nullable) = false,

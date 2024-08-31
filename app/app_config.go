@@ -96,6 +96,7 @@ var (
 		{Account: minttypes.ModuleName, Permissions: []string{authtypes.Minter}},
 		{Account: stakingtypes.BondedPoolName, Permissions: []string{authtypes.Burner, stakingtypes.ModuleName}},
 		{Account: stakingtypes.NotBondedPoolName, Permissions: []string{authtypes.Burner, stakingtypes.ModuleName}},
+		{Account: goatmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner, stakingtypes.ModuleName}},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 
@@ -143,7 +144,7 @@ var (
 			},
 			{
 				Name:   "tx",
-				Config: appconfig.WrapAny(&txconfigv1.Config{}),
+				Config: appconfig.WrapAny(&txconfigv1.Config{SkipAnteHandler: true}),
 			},
 			{
 				Name: banktypes.ModuleName,

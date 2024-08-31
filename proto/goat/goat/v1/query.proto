@@ -1,30 +1,23 @@
 syntax = "proto3";
 package goat.goat.v1;
 
-import "amino/amino.proto";
-// import "cosmos/base/query/v1beta1/pagination.proto";
-import "goat/goat/v1/params.proto";
-import "gogoproto/gogo.proto";
+import "goat/goat/v1/goat.proto";
 import "google/api/annotations.proto";
 
 option go_package = "github.com/goatnetwork/goat/x/goat/types";
 
 // Query defines the gRPC querier service.
 service Query {
-  // Parameters queries the parameters of the module.
-  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/goatnetwork/goat/goat/v1/params";
+  // EthBlock
+  rpc EthBlock(QueryEthBlockRequest) returns (QueryEthBlockResponse) {
+    option (google.api.http).get = "/goatnetwork/goat/goat/v1/ethblock";
   }
 }
 
-// QueryParamsRequest is request type for the Query/Params RPC method.
-message QueryParamsRequest {}
+// QueryEthBlockRequest is request type for the Query/EthBlock RPC method.
+message QueryEthBlockRequest {}
 
-// QueryParamsResponse is response type for the Query/Params RPC method.
-message QueryParamsResponse {
-  // params holds all the parameters of this module.
-  Params params = 1 [
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
-  ];
+// QueryEthBlockResponse is response type for the Query/EthBlock RPC method.
+message QueryEthBlockResponse {
+  ExecutionPayload block = 1;
 }

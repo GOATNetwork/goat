@@ -66,7 +66,6 @@ type App struct {
 	appCodec          codec.Codec
 	txConfig          client.TxConfig
 	interfaceRegistry codectypes.InterfaceRegistry
-	ethClient         *ethrpc.Client
 
 	// keepers
 	AccountKeeper         authkeeper.AccountKeeper
@@ -75,6 +74,7 @@ type App struct {
 	DistrKeeper           distrkeeper.Keeper
 	ConsensusParamsKeeper consensuskeeper.Keeper
 
+	EthClient     *ethrpc.Client
 	RelayerKeeper relayermodulekeeper.Keeper
 	BitcoinKeeper bitcoinmodulekeeper.Keeper
 	LockingKeeper lockingmodulekeeper.Keeper
@@ -159,7 +159,7 @@ func New(
 		&app.BitcoinKeeper,
 		&app.LockingKeeper,
 		&app.GoatKeeper,
-		&app.ethClient,
+		&app.EthClient,
 	); err != nil {
 		panic(err)
 	}
@@ -171,10 +171,6 @@ func New(
 	// build app
 	app.App = appBuilder.Build(db, traceStore, baseAppOptions...)
 
-	// register goat handlers
-	app.SetPrepareProposal(app.GoatKeeper.PrepareProposalHandler(app.Mempool(), app))
-	app.SetProcessProposal(app.GoatKeeper.ProcessProposalHandler(app))
-
 	// register streaming services
 	if err := app.RegisterStreamingServices(appOpts, app.kvStoreKeys()); err != nil {
 		return nil, err
@@ -183,6 +179,10 @@ func New(
 	// create the simulation manager and define the order of the modules for deterministic simulations
 	app.sm = module.NewSimulationManagerFromAppModules(app.ModuleManager.Modules, make(map[string]module.AppModuleSimulation))
 	app.sm.RegisterStoreDecoders()
+
+	// register goat handlers
+	app.SetPrepareProposal(app.GoatKeeper.PrepareProposalHandler(app.Mempool(), app))
+	app.SetProcessProposal(app.GoatKeeper.ProcessProposalHandler(app))
 
 	if err := app.Load(loadLatest); err != nil {
 		return nil, err
