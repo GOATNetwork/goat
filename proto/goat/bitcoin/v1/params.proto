@@ -10,4 +10,7 @@ option go_package = "github.com/goatnetwork/goat/x/bitcoin/types";
 message Params {
   option (amino.name) = "goat/x/bitcoin/Params";
   option (gogoproto.equal) = true;
+
+  uint32 safe_confirmation_block = 1;
+  uint32 hard_confirmation_block = 2;
 }

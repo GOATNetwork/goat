@@ -2,6 +2,7 @@ package relayer
 
 import (
 	"bytes"
+	"fmt"
 	"slices"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -36,15 +37,21 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 		LastElected: ctx.BlockTime(),
 	}
 
+	keySet := make(map[string]bool)
 	for addr, v := range genState.Voters {
 		addrByte, err := k.AddrCodec.StringToBytes(addr)
 		if err != nil {
 			panic(err)
 		}
 
-		if len(v.VoteKey) != 96 {
-			panic("invalid vote key")
+		if err := v.Validate(); err != nil {
+			panic(err)
 		}
+
+		if keySet[string(v.VoteKey)] {
+			panic(fmt.Sprintf("duplicated key: %x", v.VoteKey))
+		}
+		keySet[string(v.VoteKey)] = true
 
 		relayer.Voters = append(relayer.Voters, addr)
 		v.Status = types.Activated

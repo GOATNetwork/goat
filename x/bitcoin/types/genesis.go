@@ -3,9 +3,7 @@ package types
 import (
 	"bytes"
 	"errors"
-
-	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
-	relayer "github.com/goatnetwork/goat/x/relayer/types"
+	"fmt"
 )
 
 // DefaultIndex is the default global index
@@ -13,16 +11,11 @@ const DefaultIndex uint64 = 1
 
 // DefaultGenesis returns the default genesis state
 func DefaultGenesis() *GenesisState {
-	txkey := &secp256k1.PrivKey{Key: bytes.Repeat([]byte{0xde, 0xad}, 16)}
-
 	return &GenesisState{
 		// this line is used by starport scaffolding # genesis/types/default
 		Params:           DefaultParams(),
 		StartBlockNumber: 0,
 		BlockHash:        [][]byte{bytes.Repeat([]byte{0}, 32)},
-		Pubkey: &relayer.PublicKey{Key: &relayer.PublicKey_Secp256K1{
-			Secp256K1: txkey.PubKey().Bytes(),
-		}},
 	}
 }
 
@@ -35,12 +28,20 @@ func (gs GenesisState) Validate() error {
 		return err
 	}
 
-	if err := gs.Pubkey.Validate(); err != nil {
-		return err
+	if gs.Pubkey != nil {
+		if err := gs.Pubkey.Validate(); err != nil {
+			return err
+		}
 	}
 
 	if len(gs.BlockHash) == 0 {
 		return errors.New("No block hash provided in the genesis state")
+	}
+
+	for _, v := range gs.BlockHash {
+		if len(v) != 32 {
+			return fmt.Errorf("invalid block hash: %x", v)
+		}
 	}
 
 	return nil

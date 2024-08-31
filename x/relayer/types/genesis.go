@@ -2,6 +2,7 @@ package types
 
 import (
 	"errors"
+	"fmt"
 )
 
 // DefaultIndex is the default global index
@@ -26,12 +27,18 @@ func (gs GenesisState) Validate() error {
 		return err
 	}
 
-	if len(gs.Voters) == 0 {
-		return errors.New("No voters")
+	if gs.Threshold != 0 && gs.Threshold > uint64(len(gs.Voters)) {
+		return errors.New("invalid proposal threshold")
 	}
 
-	if gs.Threshold == 0 || gs.Threshold > uint64(len(gs.Voters)) {
-		return errors.New("invalid proposal threshold")
+	if gs.Threshold == 0 && len(gs.Voters) != 0 {
+		return errors.New("threshold shuould not be 0 if voter length is not 0")
+	}
+
+	for addr, vote := range gs.Voters {
+		if err := vote.Validate(); err != nil {
+			return fmt.Errorf("invalid vote key of %s", addr)
+		}
 	}
 
 	return nil

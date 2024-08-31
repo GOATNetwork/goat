@@ -1,22 +1,18 @@
 version: 1
 validation: sovereign
-accounts: 
-- name: alice
-  coins:
-  - 20000token
-  - 200000000stake
-- name: bob
-  coins:
-  - 10000token
-  - 100000000stake
+accounts:
+  - name: alice
+    coins:
+      - 1000gas
+      - 1000bond
 client:
   openapi:
     path: docs/static/openapi.yml
-faucet:
-  name: bob
-  coins:
-  - 5token
-  - 100000stake
 validators:
-- name: alice
-  bonded: 100000000stake
+  - name: alice
+    bonded: 100bond
+    home: "./tmp/alice"
+    config:
+      moniker: "alice"
+    client:
+      output: "json"

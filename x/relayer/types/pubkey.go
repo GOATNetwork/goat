@@ -24,6 +24,9 @@ func (p *PublicKey) Validate() error {
 		if len(t.Secp256K1) != btcec.PubKeyBytesLenCompressed {
 			return errors.New("invalid secp256k1 key")
 		}
+		if prefix := t.Secp256K1[0]; prefix != 2 && prefix != 3 {
+			return errors.New("invalid compressed secp256k1 prefix")
+		}
 	case *PublicKey_Schnorr:
 		if len(t.Schnorr) != schnorr.PubKeyBytesLen {
 			return errors.New("invalid schnoor key")

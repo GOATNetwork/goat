@@ -39,7 +39,8 @@ func initAppConfig() (string, interface{}) {
 	}
 
 	srvCfg := serverconfig.DefaultConfig()
-	srvCfg.MinGasPrices = "0goat"
+	srvCfg.MinGasPrices = "0gas"
+	srvCfg.Mempool.MaxTxs = 10
 
 	customAppConfig := GoatAppConfig{
 		Config: *srvCfg,
@@ -48,11 +49,11 @@ func initAppConfig() (string, interface{}) {
 	customAppTemplate := serverconfig.DefaultConfigTemplate + `
 [goat]
 # the goat-geth node endpoint, using ipc is recommended
-geth = {{ .Goat.Geth }}
+geth = "{{ .Goat.Geth }}"
 # the jwt secret file for engine api, it's only required if connecting to an execution node via HTTP.
-jwt-secret = {{ .Goat.JwtSecret }}
+jwt-secret = "{{ .Goat.JwtSecret }}"
 # the bitcoin network name
-btc-network = {{ .Goat.BtcNetwork }}
+btc-network = "{{ .Goat.BtcNetwork }}"
 `
 
 	return customAppTemplate, customAppConfig
