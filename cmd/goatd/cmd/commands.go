@@ -23,6 +23,7 @@ import (
 	"github.com/spf13/viper"
 
 	"github.com/goatnetwork/goat/app"
+	"github.com/goatnetwork/goat/cmd/goatd/cmd/modgen"
 )
 
 func initRootCmd(
@@ -32,7 +33,7 @@ func initRootCmd(
 ) {
 	rootCmd.AddCommand(
 		InitCmd(basicManager),
-		SubgenCommand(),
+		ModgenCommand(),
 		debug.Cmd(),
 		confixcmd.ConfigCommand(),
 		pruning.Cmd(newApp, app.DefaultNodeHome),
@@ -186,4 +187,19 @@ func appExport(
 	}
 
 	return bApp.ExportAppStateAndValidators(forZeroHeight, jailAllowedAddrs, modulesToExport)
+}
+
+func ModgenCommand() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "modgen",
+		Short: "update module genesis",
+		RunE:  client.ValidateCmd,
+	}
+	cmd.PersistentFlags().String(flags.FlagHome, app.DefaultNodeHome, "node's home directory")
+	cmd.AddCommand(
+		modgen.Bitcoin(),
+		modgen.Relayer(),
+		modgen.Goat(),
+	)
+	return cmd
 }

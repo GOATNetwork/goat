@@ -1,4 +1,4 @@
-package subgen
+package modgen
 
 import (
 	"bytes"
