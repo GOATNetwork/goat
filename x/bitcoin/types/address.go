@@ -165,7 +165,7 @@ func VerifyDespositScriptV1(pubkey *relayer.PublicKey, magicPrefix, evmAddress, 
 			return errors.New("invalid OP_RETURNS script length")
 		}
 
-		if txout0[0] != txscript.OP_RETURN || txout0[1] != txscript.OP_DATA_24 {
+		if txout1[0] != txscript.OP_RETURN || txout1[1] != txscript.OP_DATA_24 {
 			return errors.New("invalid OP_RETURNS output")
 		}
 
