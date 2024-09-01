@@ -123,6 +123,10 @@ func Relayer() *cobra.Command {
 					}
 				}
 
+				if err := baseAccount.SetAccountNumber(uint64(len(genesis.GetAccounts()))); err != nil {
+					return err
+				}
+
 				baseAccountAny, err := codectypes.NewAnyWithValue(baseAccount)
 				if err != nil {
 					return err
