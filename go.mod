@@ -51,7 +51,7 @@ replace (
 	// see https://github.com/cometbft/cometbft/pull/3728
 	github.com/cometbft/cometbft => github.com/cometbft/cometbft v0.38.12-0.20240822191256-12fa0fa13bad
 	// goat-geth implemention
-	github.com/ethereum/go-ethereum => github.com/goatnetwork/go-ethereum v0.0.0-20240822134253-c6b70a0bd18c
+	github.com/ethereum/go-ethereum => github.com/goatnetwork/go-ethereum v0.0.0-20240901120451-6dffae2fca53
 	// fix upstream GHSA-h395-qcrw-5vmq vulnerability.
 	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.7.0
 	// replace broken goleveldb

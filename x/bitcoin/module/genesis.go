@@ -29,7 +29,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 		}
 		blockNumber++
 	}
-	if err := k.BlockHeight.Set(ctx, blockNumber); err != nil {
+	if err := k.BlockTip.Set(ctx, blockNumber); err != nil {
 		panic(err)
 	}
 }

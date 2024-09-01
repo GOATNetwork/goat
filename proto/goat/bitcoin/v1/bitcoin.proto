@@ -1,10 +1,10 @@
 syntax = "proto3";
 package goat.bitcoin.v1;
 
-import "amino/amino.proto";
-import "cosmos_proto/cosmos.proto";
+// import "amino/amino.proto";
+// import "cosmos_proto/cosmos.proto";
 import "goat/relayer/v1/relayer.proto";
-import "gogoproto/gogo.proto";
+// import "gogoproto/gogo.proto";
 
 option go_package = "github.com/goatnetwork/goat/x/bitcoin/types";
 
@@ -28,36 +28,32 @@ message Deposit {
   goat.relayer.v1.PublicKey relayer_pubkey = 8;
 }
 
-// ExecuableDeposit
-message ExecuableDeposit {
+// DepositReceipt
+message DepositReceipt {
   bytes txid = 1;
   uint32 txout = 2;
   bytes address = 3;
-  string amount = 4 [
-    (cosmos_proto.scalar) = "cosmos.Int",
-    (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
-  ];
+  uint64 amount = 4;
+  // string amount = 4 [
+  //   (cosmos_proto.scalar) = "cosmos.Int",
+  //   (gogoproto.customtype) = "cosmossdk.io/math.Int",
+  //   (gogoproto.nullable) = false,
+  //   (amino.dont_omitempty) = true
+  // ];
 }
 
-// ExecuableWithdrawal
-message ExecuableWithdrawalReceipt {
+// WithdrawalReceipt
+message WithdrawalReceipt {
   uint64 id = 1;
   bytes txid = 2;
   uint32 txout = 3;
-  string amount = 4 [
-    (cosmos_proto.scalar) = "cosmos.Int",
-    (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
-  ];
+  uint64 amount = 4;
 }
 
 // ExecuableQueue
 message ExecuableQueue {
   uint64 block_number = 1;
-  repeated ExecuableDeposit deposits = 2;
-  repeated ExecuableWithdrawalReceipt paid_withdrawals = 3;
+  repeated DepositReceipt deposits = 2;
+  repeated WithdrawalReceipt paid_withdrawals = 3;
   repeated uint64 rejected_withdrawals = 4;
 }

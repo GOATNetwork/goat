@@ -33,21 +33,23 @@ func (k msgServer) NewDeposits(ctx context.Context, req *types.MsgNewDeposits) (
 		return nil, err
 	}
 
-	exec := make([]*types.ExecuableDeposit, 0, len(req.Deposits))
+	events := make(sdktypes.Events, 0, len(req.Deposits))
+	deposits := make([]*types.DepositReceipt, 0, len(req.Deposits))
 	for _, v := range req.Deposits {
-		depoist, err := k.NewDeposit(ctx, v)
+		depoist, err := k.VerifyDeposit(ctx, v)
 		if err != nil {
 			return nil, err
 		}
-		sdkctx.EventManager().EmitEvent(types.NewDepositEvent(depoist))
-		exec = append(exec, depoist)
+		events = append(events, types.NewDepositEvent(depoist))
+		deposits = append(deposits, depoist)
 	}
 
-	queue.Deposits = append(queue.Deposits, exec...)
+	queue.Deposits = append(queue.Deposits, deposits...)
 	if err := k.ExecuableQueue.Set(ctx, queue); err != nil {
 		return nil, err
 	}
 
+	sdkctx.EventManager().EmitEvents(events)
 	return &types.MsgNewDepositsResponse{}, nil
 }
 
@@ -56,7 +58,7 @@ func (k msgServer) NewBlockHashes(ctx context.Context, req *types.MsgNewBlockHas
 		return nil, types.ErrInvalidRequest.Wrap(err.Error())
 	}
 
-	parentHeight, err := k.BlockHeight.Peek(ctx)
+	parentHeight, err := k.BlockTip.Peek(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +78,7 @@ func (k msgServer) NewBlockHashes(ctx context.Context, req *types.MsgNewBlockHas
 		}
 	}
 
-	if err := k.BlockHeight.Set(ctx, parentHeight); err != nil {
+	if err := k.BlockTip.Set(ctx, parentHeight); err != nil {
 		return nil, err
 	}
 

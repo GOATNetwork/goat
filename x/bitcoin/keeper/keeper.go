@@ -9,7 +9,6 @@ import (
 	"cosmossdk.io/core/address"
 	"cosmossdk.io/core/store"
 	"cosmossdk.io/log"
-	"cosmossdk.io/math"
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/wire"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -30,9 +29,10 @@ type (
 
 		Params         collections.Item[types.Params]
 		Pubkey         collections.Item[relayertypes.PublicKey]
-		BlockHeight    collections.Sequence
+		BlockTip       collections.Sequence
 		BlockHashes    collections.Map[uint64, []byte]
 		Deposited      collections.Map[collections.Pair[[]byte, uint32], int64]
+		EthNonce       collections.Sequence
 		ExecuableQueue collections.Item[types.ExecuableQueue]
 		BtcChainConfig *chaincfg.Params
 		// this line is used by starport scaffolding # collection/type
@@ -63,7 +63,7 @@ func NewKeeper(
 		Params:         collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 		BtcChainConfig: btcConfig,
 		Pubkey:         collections.NewItem(sb, types.LatestPubkeyKey, "latest_pubkey", codec.CollValue[relayertypes.PublicKey](cdc)),
-		BlockHeight:    collections.NewSequence(sb, types.LatestHeightKey, "latest_height"),
+		BlockTip:       collections.NewSequence(sb, types.LatestHeightKey, "latest_height"),
 		BlockHashes:    collections.NewMap(sb, types.BlockHashsKey, "block_hashs", collections.Uint64Key, collections.BytesValue),
 		Deposited:      collections.NewMap(sb, types.DepositedKey, "deposited", collections.PairKeyCodec(collections.BytesKey, collections.Uint32Key), collections.Int64Value),
 		ExecuableQueue: collections.NewItem(sb, types.ExecuableQueueKey, "queue", codec.CollValue[types.ExecuableQueue](cdc)),
@@ -84,7 +84,7 @@ func (k Keeper) Logger() log.Logger {
 	return k.logger.With("module", fmt.Sprintf("x/%s", types.ModuleName))
 }
 
-func (k Keeper) NewDeposit(ctx context.Context, deposit *types.Deposit) (*types.ExecuableDeposit, error) {
+func (k Keeper) VerifyDeposit(ctx context.Context, deposit *types.Deposit) (*types.DepositReceipt, error) {
 	// check if the pubkey is existed
 	hasKey, err := k.relayerKeeper.HasPubkey(ctx, relayertypes.EncodePublicKey(deposit.RelayerPubkey))
 	if err != nil {
@@ -135,15 +135,16 @@ func (k Keeper) NewDeposit(ctx context.Context, deposit *types.Deposit) (*types.
 	}
 
 	// check if the spv is valid
-	if !types.VerifyMerkelProof(txid, deposit.BlockHeader[36:68], deposit.IntermediateProof, deposit.TxIndex) {
+	merkelRoot := deposit.BlockHeader[36:68]
+	if !types.VerifyMerkelProof(txid, merkelRoot, deposit.IntermediateProof, deposit.TxIndex) {
 		return nil, types.ErrInvalidRequest.Wrap("invalid spv")
 	}
 
-	return &types.ExecuableDeposit{
+	return &types.DepositReceipt{
 		Address: deposit.EvmAddress,
 		Txid:    txid,
 		Txout:   deposit.OutputIndex,
-		Amount:  math.NewInt(txout.Value).Mul(types.Satoshi),
+		Amount:  uint64(txout.Value),
 	}, nil
 }
 
@@ -154,6 +155,54 @@ func (k Keeper) NewPubkey(ctx context.Context, pubkey *relayertypes.PublicKey) e
 	return k.Pubkey.Set(ctx, *pubkey)
 }
 
-func (k Keeper) DequeueBitcoinModuleTx(ctx context.Context) ([]*ethtypes.Transaction, error) {
-	return nil, nil
+func (k Keeper) DequeueBitcoinModuleTx(ctx context.Context) (txs []*ethtypes.Transaction, err error) {
+	queue, err := k.ExecuableQueue.Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	txNonce, err := k.EthNonce.Peek(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	// pop block hash up to 1
+	{
+		tip, err := k.BlockTip.Peek(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		if queue.BlockNumber < tip {
+			queue.BlockNumber++
+
+			blockHash, err := k.BlockHashes.Get(ctx, queue.BlockNumber)
+			if err != nil {
+				return nil, err
+			}
+			txs = append(txs, types.NewBitcoinHashEthTx(txNonce, blockHash))
+			txNonce++
+		}
+	}
+
+	// pop deposit up to 8
+	{
+		var n int
+		for i := 0; n < len(queue.Deposits) && i < 8; i++ {
+			deposit := queue.Deposits[i]
+			txs = append(txs, deposit.EthTx(txNonce))
+
+			n++
+			txNonce++
+		}
+		queue.Deposits = queue.Deposits[n:]
+	}
+
+	if err := k.ExecuableQueue.Set(ctx, queue); err != nil {
+		return nil, err
+	}
+	if err := k.EthNonce.Set(ctx, txNonce); err != nil {
+		return nil, err
+	}
+	return txs, nil
 }

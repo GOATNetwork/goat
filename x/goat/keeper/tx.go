@@ -27,7 +27,8 @@ func (k msgServer) NewEthBlock(ctx context.Context, req *types.MsgNewEthBlock) (
 		return nil, err
 	}
 
-	if !bytes.Equal(proposer, sdkctx.CometInfo().GetProposerAddress()) || !bytes.Equal(proposer, req.Payload.FeeRecipient) {
+	cometProposer := sdkctx.CometInfo().GetProposerAddress()
+	if !bytes.Equal(proposer, cometProposer) || !bytes.Equal(proposer, req.Payload.FeeRecipient) {
 		return nil, types.ErrInvalidRequest.Wrap("invalid proposer")
 	}
 
@@ -39,6 +40,14 @@ func (k msgServer) NewEthBlock(ctx context.Context, req *types.MsgNewEthBlock) (
 	payload := req.Payload
 	if !bytes.Equal(block.ParentHash, payload.ParentHash) || block.BlockNumber+1 != payload.BlockNumber {
 		return nil, types.ErrInvalidRequest.Wrap("refer to incorrect parent block")
+	}
+
+	if payload.BlobGasUsed > 0 {
+		return nil, types.ErrInvalidRequest.Wrap("blob tx is not allowed")
+	}
+
+	if cometTime := uint64(sdkctx.BlockTime().UTC().Unix()); payload.Timestamp < cometTime {
+		return nil, types.ErrInvalidRequest.Wrap("invalid timestamp")
 	}
 
 	beaconRoot, err := k.BeaconRoot.Get(sdkctx)
@@ -58,6 +67,15 @@ func (k msgServer) NewEthBlock(ctx context.Context, req *types.MsgNewEthBlock) (
 	if err := k.Block.Set(ctx, req.Payload); err != nil {
 		return nil, err
 	}
+
+	// Update beacon root
+	if err := k.BeaconRoot.Set(ctx, sdkctx.HeaderHash()); err != nil {
+		return nil, err
+	}
+
+	sdkctx.EventManager().EmitEvent(
+		types.NewEthBlockEvent(req.Payload.BlockNumber, req.Payload.BlockHash),
+	)
 
 	return &types.MsgNewEthBlockResponse{}, nil
 }

@@ -20,12 +20,12 @@ func NewKeyEvent(key []byte) sdktypes.Event {
 	)
 }
 
-func NewDepositEvent(deposit *ExecuableDeposit) sdktypes.Event {
+func NewDepositEvent(deposit *DepositReceipt) sdktypes.Event {
 	return sdktypes.NewEvent(
 		EventTypeNewDeposit,
 		sdktypes.NewAttribute("txid", hex.EncodeToString(deposit.Txid)),
 		sdktypes.NewAttribute("txout", strconv.FormatUint(uint64(deposit.Txout), 10)),
 		sdktypes.NewAttribute("address", hex.EncodeToString(deposit.Address)),
-		sdktypes.NewAttribute("amount", deposit.Amount.String()),
+		sdktypes.NewAttribute("amount", strconv.FormatUint(deposit.Amount, 10)),
 	)
 }

@@ -4,11 +4,8 @@ import (
 	"encoding/binary"
 	"errors"
 
-	"cosmossdk.io/math"
 	relayertypes "github.com/goatnetwork/goat/x/relayer/types"
 )
-
-var Satoshi = math.NewInt(1e10)
 
 const (
 	NewPubkeyMethodSigName = "Bitcoin/NewPubkey"

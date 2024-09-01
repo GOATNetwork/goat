@@ -15,7 +15,7 @@ import (
 func NewAnteHandler(accKeeper ante.AccountKeeper, relayerKeeper goattypes.RelayerKeeper, signModeHandler *txsigning.HandlerMap) sdk.AnteHandler {
 	anteDecorators := []sdk.AnteDecorator{
 		ante.NewSetUpContextDecorator(), // outermost AnteDecorator. SetUpContext must be called first
-		CheckIfTxAllowedHandler{relayerKeeper},
+		GoatGuardHandler{relayerKeeper},
 		ante.NewValidateBasicDecorator(),
 		TxTimeoutHeightDecorator{},
 		ante.NewSetPubKeyDecorator(accKeeper),
@@ -26,11 +26,11 @@ func NewAnteHandler(accKeeper ante.AccountKeeper, relayerKeeper goattypes.Relaye
 	return sdk.ChainAnteDecorators(anteDecorators...)
 }
 
-type CheckIfTxAllowedHandler struct {
+type GoatGuardHandler struct {
 	relayerKeeper goattypes.RelayerKeeper
 }
 
-func (ante CheckIfTxAllowedHandler) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {
+func (ante GoatGuardHandler) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {
 	// memo length check
 	memoTx, ok := tx.(sdk.TxWithMemo)
 	if !ok {

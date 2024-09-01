@@ -61,7 +61,10 @@ func (k Keeper) PrepareProposalHandler(txpool mempool.Mempool, txVerifier baseap
 			forkChoiceResp, err := k.ethclient.ForkchoiceUpdatedV3(tmctx,
 				&engine.ForkchoiceStateV1{HeadBlockHash: common.BytesToHash(block.BlockHash)},
 				&engine.PayloadAttributes{
-					// Note: proposer-based timestamps (PBTS) is not enable on cometbft 0.38
+					// Why we use system timestamp instead of CometBFT timestamp?
+					// CometBFT 0.38 uses last vote median time by all voters
+					// The proposer-based timestamps (PBTS) will be enabled on CometBFT 1.0
+					// We can use the consensus layer timestamp after migrating to 1.0
 					Timestamp:             uint64(time.Now().UTC().Unix()),
 					Random:                random,
 					SuggestedFeeRecipient: common.BytesToAddress(rpp.ProposerAddress),
@@ -163,7 +166,7 @@ func (k Keeper) PrepareProposalHandler(txpool mempool.Mempool, txVerifier baseap
 func (k Keeper) ProcessProposalHandler(txVerifier baseapp.ProposalTxVerifier) sdk.ProcessProposalHandler {
 	return func(sdkctx sdk.Context, rpp *abci.RequestProcessProposal) (*abci.ResponseProcessProposal, error) {
 		if len(rpp.Txs) == 0 {
-			return nil, errors.New("No transactions")
+			return nil, errors.New("empty block")
 		}
 
 		for txIdx, rawTx := range rpp.Txs {
@@ -189,8 +192,9 @@ func (k Keeper) ProcessProposalHandler(txVerifier baseapp.ProposalTxVerifier) sd
 				continue
 			}
 
-			// the rest should be belong to goad namespace but not a MsgNewEthBlock
-			// the CheckIfTxAllowedAnteHandler checks the first case is matched, we check the second case here
+			// the rest txs should be belong to goat package but must not be MsgNewEthBlock
+			// the GoatGuardHandler checks the first case is matched
+			// and we check the second case here
 			for _, msg := range msgs {
 				switch msg.(type) {
 				case *types.MsgNewEthBlock:
@@ -202,13 +206,13 @@ func (k Keeper) ProcessProposalHandler(txVerifier baseapp.ProposalTxVerifier) sd
 	}
 }
 
-func (k Keeper) verifyEthBlockProposal(sdkctx context.Context, expectProposer []byte, ethBlock *types.MsgNewEthBlock) error {
+func (k Keeper) verifyEthBlockProposal(sdkctx sdk.Context, cometProposer []byte, ethBlock *types.MsgNewEthBlock) error {
 	proposer, err := k.addressCodec.StringToBytes(ethBlock.Proposer)
 	if err != nil {
 		return err
 	}
 
-	if !bytes.Equal(proposer, expectProposer) {
+	if !bytes.Equal(proposer, cometProposer) {
 		return errors.New("invalid MsgNewEthBlock proposer")
 	}
 
@@ -223,7 +227,8 @@ func (k Keeper) verifyEthBlockProposal(sdkctx context.Context, expectProposer []
 
 	// we don't use cometbft timestamp
 	// refer to the note in the PrepareProposalHandler for the details
-	if now := uint64(time.Now().UTC().Unix()); payload.Timestamp > now {
+	systemTime, cometTime := uint64(time.Now().UTC().Unix()), uint64(sdkctx.BlockTime().UTC().Unix())
+	if payload.Timestamp > systemTime || payload.Timestamp < cometTime {
 		return errors.New("invalid MsgNewEthBlock timestamp")
 	}
 
@@ -234,6 +239,10 @@ func (k Keeper) verifyEthBlockProposal(sdkctx context.Context, expectProposer []
 
 	if !bytes.Equal(block.ParentHash, payload.ParentHash) || block.BlockNumber+1 != payload.BlockNumber {
 		return errors.New("refer to incorrect parent block")
+	}
+
+	if payload.BlobGasUsed > 0 {
+		return errors.New("blob tx type is not activated")
 	}
 
 	beaconRoot, err := k.BeaconRoot.Get(sdkctx)

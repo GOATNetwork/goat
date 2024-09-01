@@ -380,8 +380,8 @@ github.com/go-playground/validator/v10 v10.11.1/go.mod h1:i+3WkQ1FvaUjjxh1kSvIA4
 github.com/go-sql-driver/mysql v1.4.0/go.mod h1:zAC/RDZ24gD3HViQzih4MyKcchzm+sOG5ZlKdlhCg5w=
 github.com/go-stack/stack v1.8.0/go.mod h1:v0f6uXyyMGvRgIKkXu+yp6POWl0qKG85gN/melR3HDY=
 github.com/go-task/slim-sprig v0.0.0-20210107165309-348f09dbbbc0/go.mod h1:fyg7847qk6SyHyPtNmDHnmrv/HOrqktSC+C9fM+CJOE=
-github.com/goatnetwork/go-ethereum v0.0.0-20240822134253-c6b70a0bd18c h1:1KfsT3lJb4tpc6SETkgYWgJ4igBwOHwMo5qNcpAz9zQ=
-github.com/goatnetwork/go-ethereum v0.0.0-20240822134253-c6b70a0bd18c/go.mod h1:YCEdg2FZYgTkMzoYLskRS6or9lw0seVvXDQ3Tx2JCsM=
+github.com/goatnetwork/go-ethereum v0.0.0-20240901120451-6dffae2fca53 h1:duHWY1XmSjhxTmrGYpmEcJV96/vKlcucHZvnsemflRg=
+github.com/goatnetwork/go-ethereum v0.0.0-20240901120451-6dffae2fca53/go.mod h1:YCEdg2FZYgTkMzoYLskRS6or9lw0seVvXDQ3Tx2JCsM=
 github.com/gobwas/httphead v0.0.0-20180130184737-2c6c146eadee/go.mod h1:L0fX3K22YWvt/FAX9NnzrNzcI4wNYi9Yku4O0LKYflo=
 github.com/gobwas/httphead v0.1.0 h1:exrUm0f4YX0L7EBwZHuCF4GDp8aJfVeBrlLQrs6NqWU=
 github.com/gobwas/httphead v0.1.0/go.mod h1:O/RXo79gxV8G+RqlR/otEwx4Q36zl9rqC5u12GKvMCM=

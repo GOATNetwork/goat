@@ -13,7 +13,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
-	sdktypes "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/beacon/engine"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
@@ -171,11 +170,6 @@ func (k Keeper) VerifyDequeue(ctx context.Context, txs [][]byte) error {
 func (k Keeper) Finalized(ctx context.Context) error { // EndBlock phase only!
 	block, err := k.Block.Get(ctx)
 	if err != nil {
-		return err
-	}
-
-	// Update beacon root
-	if err := k.BeaconRoot.Set(ctx, sdktypes.UnwrapSDKContext(ctx).HeaderHash()); err != nil {
 		return err
 	}
 
