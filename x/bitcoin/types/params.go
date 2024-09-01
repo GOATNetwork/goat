@@ -26,8 +26,8 @@ func (p Params) Validate() error {
 		return errors.New("minimal deposit amount can't be less than dust value")
 	}
 
-	if len(p.DepositMagicPrefix) == 0 {
-		return errors.New("no DepositMagicPrefix")
+	if len(p.DepositMagicPrefix) != 4 {
+		return errors.New("invalid DepositMagicPrefix length")
 	}
 
 	if p.HardConfirmationBlock == 0 || p.SafeConfirmationBlock == 0 {
