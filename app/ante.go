@@ -67,20 +67,32 @@ func (ante CheckIfTxAllowedHandler) AnteHandle(ctx sdk.Context, tx sdk.Tx, simul
 		return ctx, nil
 	}
 
-	// the message should be belong to goad namespace
-	for _, msg := range msgs {
-		msgName := msg.ProtoReflect().Descriptor().FullName()
-		if !strings.HasPrefix(string(msgName), "goat.") {
-			return ctx, errorsmod.Wrapf(sdkerrors.ErrTxDecode, "%s is not a goat tx", msgName)
+	var relayerTxOnly = func(msgName string) error {
+		if !strings.HasPrefix(msgName, "goat.bitcoin.") && !strings.HasPrefix(msgName, "goat.relayer.") {
+			return errorsmod.Wrapf(sdkerrors.ErrTxDecode, "%s is not a relayer message", msgName)
 		}
+		if !relayerProposer.Equals(sdk.AccAddress(signers[0])) {
+			return errorsmod.Wrapf(sdkerrors.ErrorInvalidSigner, "%s is not current relayer proposer", signers[0])
+		}
+		return nil
+	}
 
-		switch ctx.ExecMode() {
-		case sdk.ExecModeCheck, sdk.ExecModeReCheck, sdk.ExecModePrepareProposal: // only accept relayer txs in the mempool
-			if !strings.HasPrefix(string(msgName), "goat.bitcoin.") && !strings.HasPrefix(string(msgName), "goat.relayer.") {
-				return ctx, errorsmod.Wrapf(sdkerrors.ErrTxDecode, "%s is not a relayer message", msgName)
-			}
-			if !relayerProposer.Equals(sdk.AccAddress(signers[0])) {
-				return ctx, errorsmod.Wrapf(sdkerrors.ErrorInvalidSigner, "%s is not current relayer proposer", signers[0])
+	if !simulate {
+		// the message should be belong to goad namespace
+		for _, msg := range msgs {
+			msgName := msg.ProtoReflect().Descriptor().FullName()
+			switch ctx.ExecMode() {
+			case sdk.ExecModeCheck, sdk.ExecModeReCheck, sdk.ExecModePrepareProposal: // only accept relayer txs in the mempool
+				if err := relayerTxOnly(string(msgName)); err != nil {
+					return ctx, err
+				}
+			case sdk.ExecModeProcessProposal, sdk.ExecModeFinalize:
+				if string(msgName) == "goat.goat.v1.MsgNewEthBlock" {
+					continue
+				}
+				if err := relayerTxOnly(string(msgName)); err != nil {
+					return ctx, err
+				}
 			}
 		}
 	}
