@@ -32,6 +32,13 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	if err := k.BlockTip.Set(ctx, blockNumber); err != nil {
 		panic(err)
 	}
+
+	queue := types.ExecuableQueue{
+		BlockNumber: blockNumber,
+	}
+	if err := k.ExecuableQueue.Set(ctx, queue); err != nil {
+		panic(err)
+	}
 }
 
 // ExportGenesis returns the module's exported genesis.
