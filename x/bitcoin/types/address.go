@@ -47,7 +47,11 @@ func DepositAddressV0(pubkey *relayer.PublicKey, evmAddress []byte, netwk *chain
 
 func DepositAddressV1(pubkey *relayer.PublicKey, magic, evmAddress []byte, netwk *chaincfg.Params) (btcutil.Address, []byte, error) {
 	if len(evmAddress) != 20 {
-		return nil, nil, fmt.Errorf("invalid evm address")
+		return nil, nil, errors.New("invalid evm address")
+	}
+
+	if len(magic) != 4 {
+		return nil, nil, errors.New("invalid deposit prefix")
 	}
 
 	if err := pubkey.Validate(); err != nil {
@@ -97,6 +101,10 @@ func VerifyDespositScriptV0(pubkey *relayer.PublicKey, evmAddress, txout []byte)
 		return errors.New("invalid output script")
 	}
 
+	if len(evmAddress) != 20 {
+		return errors.New("invalid evm address")
+	}
+
 	switch v := pubkey.GetKey().(type) {
 	case *relayer.PublicKey_Secp256K1:
 		if txout[0] != txscript.OP_0 || txout[1] != txscript.OP_DATA_32 {
@@ -131,6 +139,14 @@ func VerifyDespositScriptV0(pubkey *relayer.PublicKey, evmAddress, txout []byte)
 }
 
 func VerifyDespositScriptV1(pubkey *relayer.PublicKey, magicPrefix, evmAddress, txout0, txout1 []byte) error {
+	if len(magicPrefix) != 4 {
+		return errors.New("invalid deposit prefix")
+	}
+
+	if len(evmAddress) != 20 {
+		return errors.New("invalid evm address")
+	}
+
 	switch v := pubkey.GetKey().(type) {
 	case *relayer.PublicKey_Secp256K1:
 		if len(txout0) != 22 {
@@ -145,14 +161,16 @@ func VerifyDespositScriptV1(pubkey *relayer.PublicKey, magicPrefix, evmAddress, 
 			return errors.New("p2wpkh script mismatched")
 		}
 
-		script, err := txscript.NewScriptBuilder().
-			AddFullData(slices.Concat(magicPrefix, evmAddress)).Script()
-		if err != nil {
-			return err
+		if len(txout1) != 26 {
+			return errors.New("invalid OP_RETURNS script length")
 		}
 
-		if !bytes.Equal(txout1, script) {
-			return fmt.Errorf("OP_RETRURNS mismatched: expected %x got %x", script, txout1)
+		if txout0[0] != txscript.OP_RETURN || txout0[1] != txscript.OP_DATA_24 {
+			return errors.New("invalid OP_RETURNS output")
+		}
+
+		if script := slices.Concat(magicPrefix, evmAddress); !bytes.Equal(txout1[2:], script) {
+			return fmt.Errorf("OP_RETRURNS mismatched: expected 6a18%x got %x", script, txout1)
 		}
 
 		return nil
