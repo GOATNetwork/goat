@@ -12,7 +12,7 @@ message Params {
   option (amino.name) = "goat/x/relayer/Params";
   option (gogoproto.equal) = true;
 
-  google.protobuf.Duration electing_period = 2 [
+  google.protobuf.Duration electing_period = 1 [
     (gogoproto.stdduration) = true,
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
