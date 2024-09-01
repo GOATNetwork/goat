@@ -198,11 +198,13 @@ func (k Keeper) DequeueBitcoinModuleTx(ctx context.Context) (txs []*ethtypes.Tra
 		queue.Deposits = queue.Deposits[n:]
 	}
 
-	if err := k.ExecuableQueue.Set(ctx, queue); err != nil {
-		return nil, err
-	}
-	if err := k.EthNonce.Set(ctx, txNonce); err != nil {
-		return nil, err
+	if len(txs) > 0 {
+		if err := k.ExecuableQueue.Set(ctx, queue); err != nil {
+			return nil, err
+		}
+		if err := k.EthNonce.Set(ctx, txNonce); err != nil {
+			return nil, err
+		}
 	}
 	return txs, nil
 }
