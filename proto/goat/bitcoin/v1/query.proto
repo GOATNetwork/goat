@@ -58,13 +58,15 @@ message QueryPubkeyResponse {
 
 // QueryDepositAddress is request type for the Query/DepositAddress RPC method
 message QueryDepositAddress {
-  goat.relayer.v1.PublicKey public_key = 1;
+  uint32 version = 1;
   bytes evm_address = 2;
 }
 
 // QueryDepositAddressResponse is response type for the Query/DepositAddress RPC method
 message QueryDepositAddressResponse {
   string address = 1;
+  goat.relayer.v1.PublicKey public_key = 2;
+  bytes op_return_script = 3;
 }
 
 // QueryWithdrawalAddress is request type for the Query/WithdrawalAddress RPC method

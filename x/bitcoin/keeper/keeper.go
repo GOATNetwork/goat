@@ -10,6 +10,7 @@ import (
 	"cosmossdk.io/core/store"
 	"cosmossdk.io/log"
 	"github.com/btcsuite/btcd/chaincfg"
+	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/wire"
 	"github.com/cosmos/cosmos-sdk/codec"
 
@@ -124,14 +125,34 @@ func (k Keeper) VerifyDeposit(ctx context.Context, deposit *types.Deposit) (*typ
 		return nil, types.ErrInvalidRequest.Wrap("duplicated deposit")
 	}
 
-	// check if the deposit script is valid
-	txout := tx.TxOut[deposit.OutputIndex]
-	if txout.Value <= 0 {
-		return nil, types.ErrInvalidRequest.Wrap("invalid txout amount")
+	param, err := k.Params.Get(ctx)
+	if err != nil {
+		return nil, err
 	}
 
-	if err := types.VerifyDespositScript(deposit.RelayerPubkey, deposit.EvmAddress, txout.PkScript); err != nil {
-		return nil, types.ErrInvalidRequest.Wrapf("invalid txout script: %s", err.Error())
+	// check if the deposit script is valid
+	txout := tx.TxOut[deposit.OutputIndex]
+	if txout.Value < int64(param.MinDepositAmount) {
+		return nil, types.ErrInvalidRequest.Wrapf("txout amount < MinDepositAmount")
+	}
+
+	switch deposit.Version {
+	case 0:
+		if err := types.VerifyDespositScriptV0(deposit.RelayerPubkey, deposit.EvmAddress, txout.PkScript); err != nil {
+			k.logger.Debug("invalid deposit version 0 script", "txid", chainhash.Hash(txid).String(), "txout", deposit.OutputIndex, "err", err.Error())
+			return nil, types.ErrInvalidRequest.Wrap("invalid deposit version 0 script")
+		}
+	case 1:
+		if deposit.OutputIndex != 0 || len(tx.TxOut) < 2 {
+			return nil, types.ErrInvalidRequest.Wrap("invalid txout index for version 1 deposit")
+		}
+		if err := types.VerifyDespositScriptV1(deposit.RelayerPubkey,
+			param.DepositMagicPrefix, deposit.EvmAddress, txout.PkScript, tx.TxOut[1].PkScript); err != nil {
+			k.logger.Debug("invalid deposit version 1 script", "txid", chainhash.Hash(txid).String(), "txout", deposit.OutputIndex, "err", err.Error())
+			return nil, types.ErrInvalidRequest.Wrap("invalid deposit version 1 script")
+		}
+	default:
+		return nil, types.ErrInvalidRequest.Wrapf("unknown deposit version")
 	}
 
 	// check if the spv is valid

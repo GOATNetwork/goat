@@ -15,10 +15,12 @@ import (
 
 func Bitcoin() *cobra.Command {
 	const (
-		FlagSafe       = "safe"
-		FlagHard       = "hard"
-		FlagPubkey     = "pubkey"
-		FlagPubkeyType = "pubkey-type"
+		FlagSafe               = "safe"
+		FlagHard               = "hard"
+		FlagPubkey             = "pubkey"
+		FlagPubkeyType         = "pubkey-type"
+		FlagMinDeposit         = "min-deposit"
+		FlagDepositMagicPrefix = "deposit-magic-prefix"
 	)
 
 	parsePubkey := func(raw []byte, typ string) (*relayer.PublicKey, error) {
@@ -56,9 +58,21 @@ func Bitcoin() *cobra.Command {
 					return err
 				}
 
+				depositMagicPreifx, err := cmd.Flags().GetString(FlagDepositMagicPrefix)
+				if err != nil {
+					return err
+				}
+
+				minDeposit, err := cmd.Flags().GetUint64(FlagMinDeposit)
+				if err != nil {
+					return err
+				}
+
 				genesis.Params = types.Params{
 					SafeConfirmationBlock: safe,
 					HardConfirmationBlock: hard,
+					DepositMagicPrefix:    []byte(depositMagicPreifx),
+					MinDepositAmount:      minDeposit,
 				}
 
 				pubkey, err := cmd.Flags().GetBytesHex(FlagPubkey)
@@ -99,6 +113,8 @@ func Bitcoin() *cobra.Command {
 	cmd.Flags().Uint32(FlagHard, param.HardConfirmationBlock, "the hard confirmation number")
 	cmd.Flags().BytesHex(FlagPubkey, nil, "the hard confirmation number")
 	cmd.Flags().String(FlagPubkeyType, "secp256k1", "the public key type [secp256k1,schnorr]")
+	cmd.Flags().String(FlagDepositMagicPrefix, string(param.DepositMagicPrefix), "the deposit magic prefix for OP_RETURNS")
+	cmd.Flags().Uint64(FlagMinDeposit, param.MinDepositAmount, "minimal allowed deposit amount")
 
 	return cmd
 }

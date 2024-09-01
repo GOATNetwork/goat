@@ -13,4 +13,6 @@ message Params {
 
   uint32 safe_confirmation_block = 1;
   uint32 hard_confirmation_block = 2;
+  uint64 min_deposit_amount = 3;
+  bytes deposit_magic_prefix = 4;
 }

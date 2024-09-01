@@ -10,6 +10,8 @@ func NewParams() Params {
 	return Params{
 		SafeConfirmationBlock: 3,
 		HardConfirmationBlock: 6,
+		MinDepositAmount:      546,
+		DepositMagicPrefix:    []byte("GTT0"),
 	}
 }
 
@@ -20,6 +22,14 @@ func DefaultParams() Params {
 
 // Validate validates the set of params.
 func (p Params) Validate() error {
+	if p.MinDepositAmount < 546 {
+		return errors.New("minimal deposit amount can't be less than dust value")
+	}
+
+	if len(p.DepositMagicPrefix) == 0 {
+		return errors.New("no DepositMagicPrefix")
+	}
+
 	if p.HardConfirmationBlock == 0 || p.SafeConfirmationBlock == 0 {
 		return errors.New("mempool txs are not reliable (confirmation number can't set to zero)")
 	}

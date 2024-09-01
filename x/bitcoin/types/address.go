@@ -14,7 +14,7 @@ import (
 	relayer "github.com/goatnetwork/goat/x/relayer/types"
 )
 
-func DepositAddress(pubkey *relayer.PublicKey, evmAddress []byte, netwk *chaincfg.Params) (btcutil.Address, error) {
+func DepositAddressV0(pubkey *relayer.PublicKey, evmAddress []byte, netwk *chaincfg.Params) (btcutil.Address, error) {
 	if len(evmAddress) != 20 {
 		return nil, fmt.Errorf("invalid evm address")
 	}
@@ -45,6 +45,32 @@ func DepositAddress(pubkey *relayer.PublicKey, evmAddress []byte, netwk *chaincf
 	return nil, errors.New("unknown key type")
 }
 
+func DepositAddressV1(pubkey *relayer.PublicKey, magic, evmAddress []byte, netwk *chaincfg.Params) (btcutil.Address, []byte, error) {
+	if len(evmAddress) != 20 {
+		return nil, nil, fmt.Errorf("invalid evm address")
+	}
+
+	if err := pubkey.Validate(); err != nil {
+		return nil, nil, err
+	}
+
+	switch v := pubkey.GetKey().(type) {
+	case *relayer.PublicKey_Secp256K1:
+		addr, err := btcutil.NewAddressWitnessPubKeyHash(btcutil.Hash160(v.Secp256K1), netwk)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		script, err := txscript.NewScriptBuilder().
+			AddFullData(slices.Concat(magic, evmAddress)).Script()
+		if err != nil {
+			return nil, nil, err
+		}
+		return addr, script, nil
+	}
+	return nil, nil, errors.New("unknown key type")
+}
+
 func WithdrawalAddress(address string, netwk *chaincfg.Params) ([]byte, error) {
 	addr, err := btcutil.DecodeAddress(address, netwk)
 	if err != nil {
@@ -63,10 +89,10 @@ func WithdrawalAddress(address string, netwk *chaincfg.Params) ([]byte, error) {
 	case *btcutil.AddressTaproot:
 		return append([]byte{4}, v.ScriptAddress()...), nil
 	}
-	return nil, errors.New("not supported address type")
+	return nil, errors.New("unknown address type")
 }
 
-func VerifyDespositScript(pubkey *relayer.PublicKey, evmAddress, txout []byte) error {
+func VerifyDespositScriptV0(pubkey *relayer.PublicKey, evmAddress, txout []byte) error {
 	if len(txout) != 34 {
 		return errors.New("invalid output script")
 	}
@@ -74,7 +100,7 @@ func VerifyDespositScript(pubkey *relayer.PublicKey, evmAddress, txout []byte) e
 	switch v := pubkey.GetKey().(type) {
 	case *relayer.PublicKey_Secp256K1:
 		if txout[0] != txscript.OP_0 || txout[1] != txscript.OP_DATA_32 {
-			return errors.New("invalid p2sh output")
+			return errors.New("invalid p2wsh output")
 		}
 		script, err := txscript.NewScriptBuilder().AddData(evmAddress).AddOp(txscript.OP_DROP).
 			AddData(v.Secp256K1).AddOp(txscript.OP_CHECKSIGVERIFY).Script()
@@ -99,6 +125,36 @@ func VerifyDespositScript(pubkey *relayer.PublicKey, evmAddress, txout []byte) e
 		if !bytes.Equal(witnessProg, txout[2:]) {
 			return errors.New("p2tr script mismatched")
 		}
+		return nil
+	}
+	return errors.New("unknown key type")
+}
+
+func VerifyDespositScriptV1(pubkey *relayer.PublicKey, magicPrefix, evmAddress, txout0, txout1 []byte) error {
+	switch v := pubkey.GetKey().(type) {
+	case *relayer.PublicKey_Secp256K1:
+		if len(txout0) != 22 {
+			return errors.New("invalid output script")
+		}
+
+		if txout0[0] != txscript.OP_0 || txout0[1] != txscript.OP_DATA_20 {
+			return errors.New("invalid p2wpkh output")
+		}
+
+		if !bytes.Equal(btcutil.Hash160(v.Secp256K1), txout0[2:]) {
+			return errors.New("p2wpkh script mismatched")
+		}
+
+		script, err := txscript.NewScriptBuilder().
+			AddFullData(slices.Concat(magicPrefix, evmAddress)).Script()
+		if err != nil {
+			return err
+		}
+
+		if !bytes.Equal(txout1, script) {
+			return fmt.Errorf("OP_RETRURNS mismatched: expected %x got %x", script, txout1)
+		}
+
 		return nil
 	}
 	return errors.New("unknown key type")

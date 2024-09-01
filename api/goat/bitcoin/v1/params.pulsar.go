@@ -18,6 +18,8 @@ var (
 	md_Params                         protoreflect.MessageDescriptor
 	fd_Params_safe_confirmation_block protoreflect.FieldDescriptor
 	fd_Params_hard_confirmation_block protoreflect.FieldDescriptor
+	fd_Params_min_deposit_amount      protoreflect.FieldDescriptor
+	fd_Params_deposit_magic_prefix    protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -25,6 +27,8 @@ func init() {
 	md_Params = File_goat_bitcoin_v1_params_proto.Messages().ByName("Params")
 	fd_Params_safe_confirmation_block = md_Params.Fields().ByName("safe_confirmation_block")
 	fd_Params_hard_confirmation_block = md_Params.Fields().ByName("hard_confirmation_block")
+	fd_Params_min_deposit_amount = md_Params.Fields().ByName("min_deposit_amount")
+	fd_Params_deposit_magic_prefix = md_Params.Fields().ByName("deposit_magic_prefix")
 }
 
 var _ protoreflect.Message = (*fastReflection_Params)(nil)
@@ -104,6 +108,18 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 			return
 		}
 	}
+	if x.MinDepositAmount != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.MinDepositAmount)
+		if !f(fd_Params_min_deposit_amount, value) {
+			return
+		}
+	}
+	if len(x.DepositMagicPrefix) != 0 {
+		value := protoreflect.ValueOfBytes(x.DepositMagicPrefix)
+		if !f(fd_Params_deposit_magic_prefix, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -123,6 +139,10 @@ func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.SafeConfirmationBlock != uint32(0)
 	case "goat.bitcoin.v1.Params.hard_confirmation_block":
 		return x.HardConfirmationBlock != uint32(0)
+	case "goat.bitcoin.v1.Params.min_deposit_amount":
+		return x.MinDepositAmount != uint64(0)
+	case "goat.bitcoin.v1.Params.deposit_magic_prefix":
+		return len(x.DepositMagicPrefix) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.Params"))
@@ -143,6 +163,10 @@ func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 		x.SafeConfirmationBlock = uint32(0)
 	case "goat.bitcoin.v1.Params.hard_confirmation_block":
 		x.HardConfirmationBlock = uint32(0)
+	case "goat.bitcoin.v1.Params.min_deposit_amount":
+		x.MinDepositAmount = uint64(0)
+	case "goat.bitcoin.v1.Params.deposit_magic_prefix":
+		x.DepositMagicPrefix = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.Params"))
@@ -165,6 +189,12 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 	case "goat.bitcoin.v1.Params.hard_confirmation_block":
 		value := x.HardConfirmationBlock
 		return protoreflect.ValueOfUint32(value)
+	case "goat.bitcoin.v1.Params.min_deposit_amount":
+		value := x.MinDepositAmount
+		return protoreflect.ValueOfUint64(value)
+	case "goat.bitcoin.v1.Params.deposit_magic_prefix":
+		value := x.DepositMagicPrefix
+		return protoreflect.ValueOfBytes(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.Params"))
@@ -189,6 +219,10 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 		x.SafeConfirmationBlock = uint32(value.Uint())
 	case "goat.bitcoin.v1.Params.hard_confirmation_block":
 		x.HardConfirmationBlock = uint32(value.Uint())
+	case "goat.bitcoin.v1.Params.min_deposit_amount":
+		x.MinDepositAmount = value.Uint()
+	case "goat.bitcoin.v1.Params.deposit_magic_prefix":
+		x.DepositMagicPrefix = value.Bytes()
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.Params"))
@@ -213,6 +247,10 @@ func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protore
 		panic(fmt.Errorf("field safe_confirmation_block of message goat.bitcoin.v1.Params is not mutable"))
 	case "goat.bitcoin.v1.Params.hard_confirmation_block":
 		panic(fmt.Errorf("field hard_confirmation_block of message goat.bitcoin.v1.Params is not mutable"))
+	case "goat.bitcoin.v1.Params.min_deposit_amount":
+		panic(fmt.Errorf("field min_deposit_amount of message goat.bitcoin.v1.Params is not mutable"))
+	case "goat.bitcoin.v1.Params.deposit_magic_prefix":
+		panic(fmt.Errorf("field deposit_magic_prefix of message goat.bitcoin.v1.Params is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.Params"))
@@ -230,6 +268,10 @@ func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protor
 		return protoreflect.ValueOfUint32(uint32(0))
 	case "goat.bitcoin.v1.Params.hard_confirmation_block":
 		return protoreflect.ValueOfUint32(uint32(0))
+	case "goat.bitcoin.v1.Params.min_deposit_amount":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "goat.bitcoin.v1.Params.deposit_magic_prefix":
+		return protoreflect.ValueOfBytes(nil)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.Params"))
@@ -305,6 +347,13 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		if x.HardConfirmationBlock != 0 {
 			n += 1 + runtime.Sov(uint64(x.HardConfirmationBlock))
 		}
+		if x.MinDepositAmount != 0 {
+			n += 1 + runtime.Sov(uint64(x.MinDepositAmount))
+		}
+		l = len(x.DepositMagicPrefix)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -333,6 +382,18 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.DepositMagicPrefix) > 0 {
+			i -= len(x.DepositMagicPrefix)
+			copy(dAtA[i:], x.DepositMagicPrefix)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DepositMagicPrefix)))
+			i--
+			dAtA[i] = 0x22
+		}
+		if x.MinDepositAmount != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.MinDepositAmount))
+			i--
+			dAtA[i] = 0x18
 		}
 		if x.HardConfirmationBlock != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.HardConfirmationBlock))
@@ -431,6 +492,59 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 						break
 					}
 				}
+			case 3:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field MinDepositAmount", wireType)
+				}
+				x.MinDepositAmount = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.MinDepositAmount |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DepositMagicPrefix", wireType)
+				}
+				var byteLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					byteLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if byteLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + byteLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.DepositMagicPrefix = append(x.DepositMagicPrefix[:0], dAtA[iNdEx:postIndex]...)
+				if x.DepositMagicPrefix == nil {
+					x.DepositMagicPrefix = []byte{}
+				}
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -487,6 +601,8 @@ type Params struct {
 
 	SafeConfirmationBlock uint32 `protobuf:"varint,1,opt,name=safe_confirmation_block,json=safeConfirmationBlock,proto3" json:"safe_confirmation_block,omitempty"`
 	HardConfirmationBlock uint32 `protobuf:"varint,2,opt,name=hard_confirmation_block,json=hardConfirmationBlock,proto3" json:"hard_confirmation_block,omitempty"`
+	MinDepositAmount      uint64 `protobuf:"varint,3,opt,name=min_deposit_amount,json=minDepositAmount,proto3" json:"min_deposit_amount,omitempty"`
+	DepositMagicPrefix    []byte `protobuf:"bytes,4,opt,name=deposit_magic_prefix,json=depositMagicPrefix,proto3" json:"deposit_magic_prefix,omitempty"`
 }
 
 func (x *Params) Reset() {
@@ -523,6 +639,20 @@ func (x *Params) GetHardConfirmationBlock() uint32 {
 	return 0
 }
 
+func (x *Params) GetMinDepositAmount() uint64 {
+	if x != nil {
+		return x.MinDepositAmount
+	}
+	return 0
+}
+
+func (x *Params) GetDepositMagicPrefix() []byte {
+	if x != nil {
+		return x.DepositMagicPrefix
+	}
+	return nil
+}
+
 var File_goat_bitcoin_v1_params_proto protoreflect.FileDescriptor
 
 var file_goat_bitcoin_v1_params_proto_rawDesc = []byte{
@@ -531,7 +661,7 @@ var file_goat_bitcoin_v1_params_proto_rawDesc = []byte{
 	0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x1a,
 	0x11, 0x61, 0x6d, 0x69, 0x6e, 0x6f, 0x2f, 0x61, 0x6d, 0x69, 0x6e, 0x6f, 0x2e, 0x70, 0x72, 0x6f,
 	0x74, 0x6f, 0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f,
-	0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x98, 0x01, 0x0a, 0x06, 0x50, 0x61, 0x72,
+	0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xf8, 0x01, 0x0a, 0x06, 0x50, 0x61, 0x72,
 	0x61, 0x6d, 0x73, 0x12, 0x36, 0x0a, 0x17, 0x73, 0x61, 0x66, 0x65, 0x5f, 0x63, 0x6f, 0x6e, 0x66,
 	0x69, 0x72, 0x6d, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x18, 0x01,
 	0x20, 0x01, 0x28, 0x0d, 0x52, 0x15, 0x73, 0x61, 0x66, 0x65, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x72,
@@ -539,7 +669,13 @@ var file_goat_bitcoin_v1_params_proto_rawDesc = []byte{
 	0x61, 0x72, 0x64, 0x5f, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x61, 0x74, 0x69, 0x6f, 0x6e,
 	0x5f, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x15, 0x68, 0x61,
 	0x72, 0x64, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x6c,
-	0x6f, 0x63, 0x6b, 0x3a, 0x1e, 0xe8, 0xa0, 0x1f, 0x01, 0x8a, 0xe7, 0xb0, 0x2a, 0x15, 0x67, 0x6f,
+	0x6f, 0x63, 0x6b, 0x12, 0x2c, 0x0a, 0x12, 0x6d, 0x69, 0x6e, 0x5f, 0x64, 0x65, 0x70, 0x6f, 0x73,
+	0x69, 0x74, 0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52,
+	0x10, 0x6d, 0x69, 0x6e, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e,
+	0x74, 0x12, 0x30, 0x0a, 0x14, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x5f, 0x6d, 0x61, 0x67,
+	0x69, 0x63, 0x5f, 0x70, 0x72, 0x65, 0x66, 0x69, 0x78, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0c, 0x52,
+	0x12, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x4d, 0x61, 0x67, 0x69, 0x63, 0x50, 0x72, 0x65,
+	0x66, 0x69, 0x78, 0x3a, 0x1e, 0xe8, 0xa0, 0x1f, 0x01, 0x8a, 0xe7, 0xb0, 0x2a, 0x15, 0x67, 0x6f,
 	0x61, 0x74, 0x2f, 0x78, 0x2f, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2f, 0x50, 0x61, 0x72,
 	0x61, 0x6d, 0x73, 0x42, 0xbb, 0x01, 0x0a, 0x13, 0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x6f, 0x61, 0x74,
 	0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x42, 0x0b, 0x50, 0x61, 0x72,
