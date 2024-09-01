@@ -183,6 +183,7 @@ func New(
 	// register goat handlers
 	app.SetPrepareProposal(app.GoatKeeper.PrepareProposalHandler(app.Mempool(), app))
 	app.SetProcessProposal(app.GoatKeeper.ProcessProposalHandler(app))
+	app.SetAnteHandler(NewAnteHandler(app.AccountKeeper, app.RelayerKeeper, app.txConfig.SignModeHandler()))
 
 	if err := app.Load(loadLatest); err != nil {
 		return nil, err

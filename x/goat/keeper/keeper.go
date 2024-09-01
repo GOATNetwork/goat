@@ -53,6 +53,7 @@ func NewKeeper(
 
 	bitcoinKeeper types.BitcoinKeeper,
 	lockingKeeper types.LockingKeeper,
+	relayerKeeper types.RelayerKeeper,
 	ethclient *ethrpc.Client,
 	txConfig client.TxConfig,
 	privKey cryptotypes.PrivKey,
@@ -67,6 +68,7 @@ func NewKeeper(
 
 		bitcoinKeeper: bitcoinKeeper,
 		lockingKeeper: lockingKeeper,
+		relayerKeeper: relayerKeeper,
 		Params:        collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 		Block:         collections.NewItem(sb, types.BlockKey, "block", codec.CollValue[types.ExecutionPayload](cdc)),
 		BeaconRoot:    collections.NewItem(sb, types.ConsHashKey, "consensus_hash", collections.BytesValue),

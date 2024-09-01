@@ -36,6 +36,10 @@ func Goat() *cobra.Command {
 				return fmt.Errorf("No withdrawals required")
 			}
 
+			if header.GasUsed != 0 || header.TxHash != ethtypes.EmptyTxsHash {
+				return fmt.Errorf("No txs required")
+			}
+
 			if header.BlobGasUsed == nil || header.ExcessBlobGas == nil || header.ParentBeaconRoot == nil {
 				return fmt.Errorf("cancun upgrade should be activated")
 			}

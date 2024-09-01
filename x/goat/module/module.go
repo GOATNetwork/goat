@@ -179,6 +179,7 @@ type ModuleInputs struct {
 	BankKeeper    types.BankKeeper
 	BitcoinKeeper types.BitcoinKeeper
 	LockingKeeper types.LockingKeeper
+	RelayerKeeper types.RelayerKeeper
 	TxConfig      client.TxConfig
 	PrivKey       cryptotypes.PrivKey `optional:"true"` // optinal for client context
 	EngineClient  *ethrpc.Client      `optional:"true"` // optinal for client context
@@ -199,6 +200,7 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.Logger,
 		in.BitcoinKeeper,
 		in.LockingKeeper,
+		in.RelayerKeeper,
 		in.EngineClient,
 		in.TxConfig,
 		in.PrivKey,

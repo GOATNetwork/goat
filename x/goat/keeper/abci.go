@@ -8,10 +8,12 @@ import (
 	"fmt"
 	"time"
 
+	errorsmod "cosmossdk.io/errors"
 	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/mempool"
 	"github.com/cosmos/cosmos-sdk/types/tx/signing"
 	xauthsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
@@ -22,36 +24,6 @@ import (
 )
 
 func (k Keeper) PrepareProposalHandler(txpool mempool.Mempool, txVerifier baseapp.ProposalTxVerifier) sdk.PrepareProposalHandler {
-	signerAdapter := mempool.NewDefaultSignerExtractionAdapter()
-
-	txSelector := func(proposer sdk.AccAddress, seq uint64, memTx sdk.Tx) ([]byte, error) {
-		signerData, err := signerAdapter.GetSigners(memTx)
-		if err != nil {
-			return nil, err
-		}
-
-		if len(signerData) != 1 {
-			return nil, errors.New("Not a relayer tx")
-		}
-
-		signer := signerData[0]
-		if !proposer.Equals(signer.Signer) {
-			return nil, errors.New("Not a relayer proposer")
-		}
-
-		if signer.Sequence != seq {
-			return nil, errors.New("Not next relayer proposer sequence")
-		}
-
-		for _, msg := range memTx.GetMsgs() {
-			switch msg.(type) {
-			case *types.MsgNewEthBlock:
-				return nil, errors.New("MsgNewEthBlock should not be placed in the mempool")
-			}
-		}
-		return txVerifier.PrepareProposalVerifyTx(memTx)
-	}
-
 	return func(sdkctx sdk.Context, rpp *abci.RequestPrepareProposal) (*abci.ResponsePrepareProposal, error) {
 		var ethBlockTxByte []byte
 
@@ -161,20 +133,10 @@ func (k Keeper) PrepareProposalHandler(txpool mempool.Mempool, txVerifier baseap
 		// select relayer message from mempool
 		var memTxs [][]byte
 		eg.Go(func() error {
-			proposer, err := k.relayerKeeper.GetCurrentProposer(sdkctx)
-			if err != nil {
-				return err
-			}
-
-			sequence, err := k.accountKeeper.GetSequence(sdkctx, proposer)
-			if err != nil {
-				return err
-			}
-
 			iterator := txpool.Select(sdkctx, rpp.Txs)
 			for iterator != nil {
 				memTx := iterator.Tx()
-				txBytes, err := txSelector(proposer, sequence, memTx)
+				txBytes, err := txVerifier.PrepareProposalVerifyTx(memTx)
 				if err != nil {
 					k.Logger().Debug("Remove mempool tx", "reason", err.Error())
 
@@ -187,9 +149,7 @@ func (k Keeper) PrepareProposalHandler(txpool mempool.Mempool, txVerifier baseap
 				}
 				memTxs = append(memTxs, txBytes)
 				iterator = iterator.Next()
-				sequence++
 			}
-
 			return nil
 		})
 
@@ -212,27 +172,29 @@ func (k Keeper) ProcessProposalHandler(txVerifier baseapp.ProposalTxVerifier) sd
 				return nil, errors.New("invalid message")
 			}
 
+			msgs := tx.GetMsgs()
+
+			// the first tx should be for MsgNewEthBlock
 			if txIdx == 0 {
-				msgs := tx.GetMsgs()
 				if len(msgs) != 1 {
-					return nil, errors.New("invalid MsgNewEthBlock message")
+					return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "invalid MsgNewEthBlock message")
 				}
 				ethBlock, ok := msgs[0].(*types.MsgNewEthBlock)
 				if !ok {
-					return nil, errors.New("the first tx should be MsgNewEthBlock")
+					return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "the first tx should be MsgNewEthBlock")
 				}
 				if err := k.verifyEthBlockProposal(sdkctx, rpp.ProposerAddress, ethBlock); err != nil {
-					return nil, err
+					return nil, errorsmod.Wrapf(sdkerrors.ErrLogic, "invalid MsgNewEthBlock: %s", err.Error())
 				}
 				continue
 			}
 
-			// todo: using msg url to check if the tx is allowed
-			// we should deny many message types like x/bank and x/staking
-			for _, msg := range tx.GetMsgs() {
+			// the rest should be belong to goad namespace but not a MsgNewEthBlock
+			// the CheckIfTxAllowedAnteHandler checks the first case is matched, we check the second case here
+			for _, msg := range msgs {
 				switch msg.(type) {
 				case *types.MsgNewEthBlock:
-					return nil, errors.New("MsgNewEthBlock should be first tx in block")
+					return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "MsgNewEthBlock should be first tx in block")
 				}
 			}
 		}
