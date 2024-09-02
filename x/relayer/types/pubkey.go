@@ -1,6 +1,7 @@
 package types
 
 import (
+	"crypto/sha256"
 	"errors"
 	"slices"
 
@@ -39,7 +40,7 @@ func (p *PublicKey) Validate() error {
 
 func (p *PublicKey) VerifySign(msg, sig []byte) bool {
 	// note: msg is 32 bytes, sig is 64 bytes
-	if len(msg) != 32 || len(sig) != schnorr.SignatureSize {
+	if len(msg) != sha256.Size || len(sig) != schnorr.SignatureSize {
 		return false
 	}
 

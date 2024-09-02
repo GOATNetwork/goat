@@ -1,6 +1,7 @@
 package types
 
 import (
+	"crypto/sha256"
 	"encoding/binary"
 	"errors"
 
@@ -53,7 +54,7 @@ func (req *MsgNewBlockHashes) Validate() error {
 	}
 
 	for _, v := range req.BlockHash {
-		if len(v) != 32 {
+		if len(v) != sha256.Size {
 			return errors.New("block hash should be 32 bytes")
 		}
 	}

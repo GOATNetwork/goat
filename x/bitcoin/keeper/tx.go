@@ -26,13 +26,6 @@ func (k msgServer) NewDeposits(ctx context.Context, req *types.MsgNewDeposits) (
 		return nil, types.ErrInvalidRequest.Wrap(err.Error())
 	}
 
-	sdkctx := sdktypes.UnwrapSDKContext(ctx)
-
-	queue, err := k.ExecuableQueue.Get(ctx)
-	if err != nil {
-		return nil, err
-	}
-
 	events := make(sdktypes.Events, 0, len(req.Deposits))
 	deposits := make([]*types.DepositReceipt, 0, len(req.Deposits))
 	for _, v := range req.Deposits {
@@ -44,12 +37,17 @@ func (k msgServer) NewDeposits(ctx context.Context, req *types.MsgNewDeposits) (
 		deposits = append(deposits, depoist)
 	}
 
+	queue, err := k.ExecuableQueue.Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	queue.Deposits = append(queue.Deposits, deposits...)
 	if err := k.ExecuableQueue.Set(ctx, queue); err != nil {
 		return nil, err
 	}
 
-	sdkctx.EventManager().EmitEvents(events)
+	sdktypes.UnwrapSDKContext(ctx).EventManager().EmitEvents(events)
 	return &types.MsgNewDepositsResponse{}, nil
 }
 
@@ -71,11 +69,13 @@ func (k msgServer) NewBlockHashes(ctx context.Context, req *types.MsgNewBlockHas
 		return nil, err
 	}
 
+	events := make(sdktypes.Events, 0, len(req.BlockHash))
 	for _, v := range req.BlockHash {
 		parentHeight++
 		if err := k.BlockHashes.Set(ctx, parentHeight, v); err != nil {
 			return nil, err
 		}
+		events = append(events, types.NewBlockHashEvent(parentHeight, v))
 	}
 
 	if err := k.BlockTip.Set(ctx, parentHeight); err != nil {
@@ -90,6 +90,7 @@ func (k msgServer) NewBlockHashes(ctx context.Context, req *types.MsgNewBlockHas
 		return nil, err
 	}
 
+	sdktypes.UnwrapSDKContext(ctx).EventManager().EmitEvents(events)
 	return &types.MsgNewBlockHashesResponse{}, nil
 }
 
@@ -127,7 +128,7 @@ func (k msgServer) NewPubkey(ctx context.Context, req *types.MsgNewPubkey) (*typ
 	}
 
 	sdktypes.UnwrapSDKContext(ctx).EventManager().EmitEvents(
-		sdktypes.Events{types.NewKeyEvent(rawKey), relayertypes.ProposalDoneEvent(sequence)},
+		sdktypes.Events{types.NewKeyEvent(req.Pubkey), relayertypes.ProposalDoneEvent(sequence)},
 	)
 
 	k.Logger().Debug("NewKey added", "type", rawKey[0], "key", hex.EncodeToString(rawKey[1:]))
