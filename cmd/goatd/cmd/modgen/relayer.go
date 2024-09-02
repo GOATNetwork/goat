@@ -2,7 +2,6 @@ package modgen
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"time"
 
@@ -33,7 +32,7 @@ func Relayer() *cobra.Command {
 			config := serverCtx.Config.SetRoot(clientCtx.HomeDir)
 			genesisFile := config.GenesisFile()
 
-			return UpdateGensis(genesisFile, types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
+			return UpdateModuleGenesis(genesisFile, types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
 				period, err := cmd.Flags().GetDuration(FlagParamElectingPeriod)
 				if err != nil {
 					return err
@@ -63,13 +62,27 @@ func Relayer() *cobra.Command {
 				return fmt.Errorf("invalid address: %s", addr)
 			}
 
-			voteKey, err := cmd.Flags().GetBytesHex(FlagVoteKey)
+			voteKeyStr, err := cmd.Flags().GetString(FlagVoteKey)
 			if err != nil {
 				return err
 			}
 
-			txRawKey, err := cmd.Flags().GetBytesHex(FlagPubkey)
+			voteKey, err := DecodeHexOrBase64String(voteKeyStr)
 			if err != nil {
+				return err
+			}
+
+			txKeyStr, err := cmd.Flags().GetString(FlagPubkey)
+			if err != nil {
+				return err
+			}
+
+			txRawKey, err := DecodeHexOrBase64String(txKeyStr)
+			if err != nil {
+				return err
+			}
+
+			if err := IsValidSecp256Pubkey(txRawKey); err != nil {
 				return err
 			}
 
@@ -78,17 +91,13 @@ func Relayer() *cobra.Command {
 				return err
 			}
 
-			if len(txRawKey) != secp256k1.PubKeySize || (txRawKey[0] != 2 && txRawKey[0] != 3) {
-				return errors.New("not a valid secp256k1 compressed key")
-			}
-
 			txKey := &secp256k1.PubKey{Key: txRawKey}
 			if txKeyAddr := txKey.Address().Bytes(); !bytes.Equal(txKeyAddr, addrByte) {
 				addr, _ := addrcodec.BytesToString(txKeyAddr)
 				return fmt.Errorf("address and public key not matched, expected address %s", addr)
 			}
 
-			if err := UpdateGensis(genesisFile, types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
+			if err := UpdateModuleGenesis(genesisFile, types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
 				if threshold != 0 {
 					genesis.Threshold = threshold
 				}
@@ -102,7 +111,7 @@ func Relayer() *cobra.Command {
 			}
 
 			// Add the relayer account to auth module to allow it sending tx
-			return UpdateGensis(genesisFile, authtypes.ModuleName, new(authtypes.GenesisState), clientCtx.Codec, func(genesis *authtypes.GenesisState) error {
+			return UpdateModuleGenesis(genesisFile, authtypes.ModuleName, new(authtypes.GenesisState), clientCtx.Codec, func(genesis *authtypes.GenesisState) error {
 				baseAccount, err := authtypes.NewBaseAccountWithPubKey(txKey)
 				if err != nil {
 					return err
@@ -140,8 +149,8 @@ func Relayer() *cobra.Command {
 	cmd.Flags().Duration(FlagParamElectingPeriod, time.Minute*10, "")
 
 	appendVoter.Flags().Uint64(FlagThreshold, 0, "voter threshold")
-	appendVoter.Flags().BytesHex(FlagPubkey, nil, "the voter tx public key(compressed secp256k1)")
-	appendVoter.Flags().BytesHex(FlagVoteKey, nil, "the voter vote public key(compressed bls12381 G2)")
+	appendVoter.Flags().String(FlagPubkey, "", "the voter tx public key(compressed secp256k1)")
+	appendVoter.Flags().String(FlagVoteKey, "", "the voter vote public key(compressed bls12381 G2)")
 	cmd.AddCommand(appendVoter)
 	return cmd
 }

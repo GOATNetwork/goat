@@ -54,7 +54,7 @@ func Goat() *cobra.Command {
 			config := serverCtx.Config.SetRoot(clientCtx.HomeDir)
 			genesisFile := config.GenesisFile()
 
-			return UpdateGensis(genesisFile, types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
+			return UpdateModuleGenesis(genesisFile, types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
 				genesis.EthBlock = types.ExecutionPayload{
 					ParentHash:    header.ParentHash.Bytes(),
 					FeeRecipient:  header.Coinbase.Bytes(),

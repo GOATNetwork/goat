@@ -11,7 +11,7 @@ import (
 	"github.com/cosmos/gogoproto/proto"
 )
 
-func UpdateGensis[T proto.Message](path, module string, state T, codec codec.JSONCodec, updateFn func(state T) error) error {
+func UpdateModuleGenesis[T proto.Message](path, module string, state T, codec codec.JSONCodec, updateFn func(state T) error) error {
 	if updateFn == nil {
 		return errors.New("updateFn is nil")
 	}
@@ -54,6 +54,25 @@ func UpdateGensis[T proto.Message](path, module string, state T, codec codec.JSO
 		return err
 	}
 	origin.AppState = newAppState
+
+	// wirte back to the genesis file
+	return genutil.ExportGenesisFile(origin, path)
+}
+
+func UpdateGenesis(path string, updateFn func(state *types.AppGenesis) error) error {
+	if updateFn == nil {
+		return errors.New("updateFn is nil")
+	}
+
+	origin, err := types.AppGenesisFromFile(path)
+	if err != nil {
+		return err
+	}
+
+	// update the module genesis
+	if err := updateFn(origin); err != nil {
+		return err
+	}
 
 	// wirte back to the genesis file
 	return genutil.ExportGenesisFile(origin, path)
