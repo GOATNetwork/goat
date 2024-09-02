@@ -51,7 +51,7 @@ replace (
 	// see https://github.com/cometbft/cometbft/pull/3728
 	github.com/cometbft/cometbft => github.com/cometbft/cometbft v0.38.12-0.20240822191256-12fa0fa13bad
 	// goat-geth implemention
-	github.com/ethereum/go-ethereum => github.com/goatnetwork/go-ethereum v0.0.0-20240901120451-6dffae2fca53
+	github.com/ethereum/go-ethereum => github.com/goatnetwork/go-ethereum v0.0.0-20240902063417-5326e8c751b0
 	// fix upstream GHSA-h395-qcrw-5vmq vulnerability.
 	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.7.0
 	// replace broken goleveldb
@@ -125,7 +125,7 @@ require (
 	github.com/dvsekhvalnov/jose2go v1.6.0 // indirect
 	github.com/emicklei/dot v1.6.1 // indirect
 	github.com/ethereum/c-kzg-4844 v1.0.0 // indirect
-	github.com/ethereum/go-verkle v0.1.1-0.20240726143912-7dc5142667fa // indirect
+	github.com/ethereum/go-verkle v0.1.1-0.20240829091221-dffa7562dbe9 // indirect
 	github.com/fatih/color v1.16.0 // indirect
 	github.com/felixge/fgprof v0.9.4 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
