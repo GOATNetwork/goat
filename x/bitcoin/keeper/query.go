@@ -66,23 +66,38 @@ func (q queryServer) DepositAddress(ctx context.Context, req *types.QueryDeposit
 		return nil, status.Error(codes.Internal, "internal error")
 	}
 
+	param, err := q.k.Params.Get(ctx)
+	if err != nil {
+		return nil, status.Error(codes.Internal, "internal error")
+	}
+
+	chainConfig, ok := types.BitcoinNetworks[param.NetworkName]
+	if !ok {
+		return nil, status.Errorf(codes.Internal, "internal error: undefined network %s", param.NetworkName)
+	}
+
 	switch req.Version {
 	case 0:
-		address, err := types.DepositAddressV0(&pubkey, req.EvmAddress, q.k.BtcChainConfig)
+		address, err := types.DepositAddressV0(&pubkey, req.EvmAddress, chainConfig)
 		if err != nil {
 			return nil, status.Errorf(codes.InvalidArgument, "invalid request: %s", err.Error())
 		}
-		return &types.QueryDepositAddressResponse{Address: address.EncodeAddress(), PublicKey: &pubkey}, nil
+		return &types.QueryDepositAddressResponse{
+			Address:     address.EncodeAddress(),
+			PublicKey:   &pubkey,
+			NetworkName: param.NetworkName,
+		}, nil
 	case 1:
-		param, err := q.k.Params.Get(ctx)
-		if err != nil {
-			return nil, status.Error(codes.Internal, "internal error")
-		}
-		address, script, err := types.DepositAddressV1(&pubkey, param.DepositMagicPrefix, req.EvmAddress, q.k.BtcChainConfig)
+		address, script, err := types.DepositAddressV1(&pubkey, param.DepositMagicPrefix, req.EvmAddress, chainConfig)
 		if err != nil {
 			return nil, status.Errorf(codes.InvalidArgument, "invalid request: %s", err.Error())
 		}
-		return &types.QueryDepositAddressResponse{Address: address.EncodeAddress(), OpReturnScript: script, PublicKey: &pubkey}, nil
+		return &types.QueryDepositAddressResponse{
+			NetworkName:    param.NetworkName,
+			PublicKey:      &pubkey,
+			Address:        address.EncodeAddress(),
+			OpReturnScript: script,
+		}, nil
 	}
 	return nil, status.Error(codes.InvalidArgument, "unknown deposit version")
 }
@@ -92,7 +107,17 @@ func (q queryServer) WithdrawalAddress(ctx context.Context, req *types.QueryWith
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	address, err := types.WithdrawalAddress(req.Address, q.k.BtcChainConfig)
+	param, err := q.k.Params.Get(ctx)
+	if err != nil {
+		return nil, status.Error(codes.Internal, "internal error")
+	}
+
+	chainConfig, ok := types.BitcoinNetworks[param.NetworkName]
+	if !ok {
+		return nil, status.Errorf(codes.Internal, "internal error: undefined network %s", param.NetworkName)
+	}
+
+	address, err := types.WithdrawalAddress(req.Address, chainConfig)
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "invalid request: %s", err.Error())
 	}

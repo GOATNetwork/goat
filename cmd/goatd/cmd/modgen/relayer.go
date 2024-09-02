@@ -140,8 +140,8 @@ func Relayer() *cobra.Command {
 	cmd.Flags().Duration(FlagParamElectingPeriod, time.Minute*10, "")
 
 	appendVoter.Flags().Uint64(FlagThreshold, 0, "voter threshold")
-	appendVoter.Flags().BytesHex(FlagPubkey, nil, "the voter tx public key(compressed secp256k1 public key)")
-	appendVoter.Flags().BytesHex(FlagVoteKey, nil, "the voter vote public key(bls12381 public key)")
+	appendVoter.Flags().BytesHex(FlagPubkey, nil, "the voter tx public key(compressed secp256k1)")
+	appendVoter.Flags().BytesHex(FlagVoteKey, nil, "the voter vote public key(compressed bls12381 G2)")
 	cmd.AddCommand(appendVoter)
 	return cmd
 }

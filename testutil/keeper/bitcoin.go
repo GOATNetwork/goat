@@ -39,7 +39,6 @@ func BitcoinKeeper(t testing.TB) (keeper.Keeper, sdk.Context, address.Codec) {
 		runtime.NewKVStoreService(storeKey),
 		log.NewNopLogger(),
 		nil,
-		nil,
 	)
 
 	ctx := sdk.NewContext(stateStore, cmtproto.Header{}, false, log.NewNopLogger())

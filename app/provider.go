@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"cosmossdk.io/log"
-	"github.com/btcsuite/btcd/chaincfg"
 	cmtjson "github.com/cometbft/cometbft/libs/json"
 	"github.com/cometbft/cometbft/privval"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
@@ -18,26 +17,6 @@ import (
 	"github.com/goatnetwork/goat/pkg/ethrpc"
 	"github.com/spf13/cast"
 )
-
-func ProvideBitcoinNetworkConfig(appOpts servertypes.AppOptions) *chaincfg.Params {
-	name := cast.ToString(appOpts.Get("goat.btc-network"))
-	if name == "" {
-		panic("no bitcoin network name provided")
-	}
-
-	switch name {
-	case chaincfg.MainNetParams.Name:
-		return &chaincfg.MainNetParams
-	case chaincfg.TestNet3Params.Name:
-		return &chaincfg.TestNet3Params
-	case chaincfg.SigNetParams.Name:
-		return &chaincfg.SigNetParams
-	case chaincfg.RegressionNetParams.Name:
-		return &chaincfg.RegressionNetParams
-	default:
-		panic("Undefined bitcoin network name: " + name)
-	}
-}
 
 func ProvideEngineClient(logger log.Logger, appOpts servertypes.AppOptions) *ethrpc.Client {
 	endpoint := cast.ToString(appOpts.Get("goat.geth"))

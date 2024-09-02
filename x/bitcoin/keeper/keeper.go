@@ -9,7 +9,6 @@ import (
 	"cosmossdk.io/core/address"
 	"cosmossdk.io/core/store"
 	"cosmossdk.io/log"
-	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/wire"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -35,7 +34,6 @@ type (
 		Deposited      collections.Map[collections.Pair[[]byte, uint32], int64]
 		EthNonce       collections.Sequence
 		ExecuableQueue collections.Item[types.ExecuableQueue]
-		BtcChainConfig *chaincfg.Params
 		// this line is used by starport scaffolding # collection/type
 
 		relayerKeeper types.RelayerKeeper
@@ -47,8 +45,6 @@ func NewKeeper(
 	addressCodec address.Codec,
 	storeService store.KVStoreService,
 	logger log.Logger,
-	btcConfig *chaincfg.Params,
-
 	relayerKeeper types.RelayerKeeper,
 ) Keeper {
 
@@ -62,7 +58,6 @@ func NewKeeper(
 
 		relayerKeeper:  relayerKeeper,
 		Params:         collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
-		BtcChainConfig: btcConfig,
 		Pubkey:         collections.NewItem(sb, types.LatestPubkeyKey, "latest_pubkey", codec.CollValue[relayertypes.PublicKey](cdc)),
 		BlockTip:       collections.NewSequence(sb, types.LatestHeightKey, "latest_height"),
 		BlockHashes:    collections.NewMap(sb, types.BlockHashsKey, "block_hashs", collections.Uint64Key, collections.BytesValue),

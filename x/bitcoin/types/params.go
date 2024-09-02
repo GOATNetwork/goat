@@ -3,15 +3,18 @@ package types
 import (
 	"errors"
 	"fmt"
+
+	"github.com/btcsuite/btcd/chaincfg"
 )
 
 // NewParams creates a new Params instance.
 func NewParams() Params {
 	return Params{
+		NetworkName:           chaincfg.MainNetParams.Name,
 		SafeConfirmationBlock: 3,
 		HardConfirmationBlock: 6,
-		MinDepositAmount:      546,
-		DepositMagicPrefix:    []byte("GTT0"),
+		MinDepositAmount:      DustTxoutAmount,
+		DepositMagicPrefix:    []byte("GTV2"),
 	}
 }
 
@@ -22,11 +25,15 @@ func DefaultParams() Params {
 
 // Validate validates the set of params.
 func (p Params) Validate() error {
-	if p.MinDepositAmount < 546 {
+	if BitcoinNetworks[p.NetworkName] == nil {
+		return fmt.Errorf("unknown bitcoin network: %s", p.NetworkName)
+	}
+
+	if p.MinDepositAmount < DustTxoutAmount {
 		return errors.New("minimal deposit amount can't be less than dust value")
 	}
 
-	if len(p.DepositMagicPrefix) != 4 {
+	if len(p.DepositMagicPrefix) != DepositMagicLen {
 		return errors.New("invalid DepositMagicPrefix length")
 	}
 

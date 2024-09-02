@@ -15,7 +15,7 @@ import (
 )
 
 func DepositAddressV0(pubkey *relayer.PublicKey, evmAddress []byte, netwk *chaincfg.Params) (btcutil.Address, error) {
-	if len(evmAddress) != 20 {
+	if len(evmAddress) != EVMAddressLen {
 		return nil, fmt.Errorf("invalid evm address")
 	}
 
@@ -45,12 +45,12 @@ func DepositAddressV0(pubkey *relayer.PublicKey, evmAddress []byte, netwk *chain
 	return nil, errors.New("unknown key type")
 }
 
-func DepositAddressV1(pubkey *relayer.PublicKey, magic, evmAddress []byte, netwk *chaincfg.Params) (btcutil.Address, []byte, error) {
-	if len(evmAddress) != 20 {
+func DepositAddressV1(pubkey *relayer.PublicKey, magicPrefix, evmAddress []byte, netwk *chaincfg.Params) (btcutil.Address, []byte, error) {
+	if len(evmAddress) != EVMAddressLen {
 		return nil, nil, errors.New("invalid evm address")
 	}
 
-	if len(magic) != 4 {
+	if len(magicPrefix) != DepositMagicLen {
 		return nil, nil, errors.New("invalid deposit prefix")
 	}
 
@@ -66,7 +66,7 @@ func DepositAddressV1(pubkey *relayer.PublicKey, magic, evmAddress []byte, netwk
 		}
 
 		script, err := txscript.NewScriptBuilder().
-			AddFullData(slices.Concat(magic, evmAddress)).Script()
+			AddFullData(slices.Concat(magicPrefix, evmAddress)).Script()
 		if err != nil {
 			return nil, nil, err
 		}
@@ -101,7 +101,7 @@ func VerifyDespositScriptV0(pubkey *relayer.PublicKey, evmAddress, txout []byte)
 		return errors.New("invalid output script")
 	}
 
-	if len(evmAddress) != 20 {
+	if len(evmAddress) != EVMAddressLen {
 		return errors.New("invalid evm address")
 	}
 
@@ -139,11 +139,11 @@ func VerifyDespositScriptV0(pubkey *relayer.PublicKey, evmAddress, txout []byte)
 }
 
 func VerifyDespositScriptV1(pubkey *relayer.PublicKey, magicPrefix, evmAddress, txout0, txout1 []byte) error {
-	if len(magicPrefix) != 4 {
+	if len(magicPrefix) != DepositMagicLen {
 		return errors.New("invalid deposit prefix")
 	}
 
-	if len(evmAddress) != 20 {
+	if len(evmAddress) != EVMAddressLen {
 		return errors.New("invalid evm address")
 	}
 

@@ -2,17 +2,16 @@ syntax = "proto3";
 package goat.bitcoin.v1;
 
 import "amino/amino.proto";
-import "gogoproto/gogo.proto";
 
 option go_package = "github.com/goatnetwork/goat/x/bitcoin/types";
 
 // Params defines the parameters for the module.
 message Params {
   option (amino.name) = "goat/x/bitcoin/Params";
-  option (gogoproto.equal) = true;
 
-  uint32 safe_confirmation_block = 1;
-  uint32 hard_confirmation_block = 2;
-  uint64 min_deposit_amount = 3;
-  bytes deposit_magic_prefix = 4;
+  string network_name = 1;
+  uint32 safe_confirmation_block = 2;
+  uint32 hard_confirmation_block = 3;
+  uint64 min_deposit_amount = 4;
+  bytes deposit_magic_prefix = 5;
 }

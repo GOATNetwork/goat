@@ -6,15 +6,13 @@ import (
 )
 
 const (
-	FlagGoatGeth       = "goat.geth"
-	FlagGoatJwtSecret  = "goat.jwt-secret"
-	FlagGoatBtcNetwork = "goat.btc-network"
+	FlagGoatGeth      = "goat.geth"
+	FlagGoatJwtSecret = "goat.jwt-secret"
 )
 
 type GoatConfig struct {
-	Geth       string `mapstructure:"geth"`
-	JwtSecret  string `mapstructure:"jwt-secret"`
-	BtcNetwork string `mapstructure:"btc-network"`
+	Geth      string `mapstructure:"geth"`
+	JwtSecret string `mapstructure:"jwt-secret"`
 }
 
 // initCometBFTConfig helps to override default CometBFT Config values.
@@ -52,8 +50,6 @@ func initAppConfig() (string, interface{}) {
 geth = "{{ .Goat.Geth }}"
 # the jwt secret file for engine api, it's only required if connecting to an execution node via HTTP.
 jwt-secret = "{{ .Goat.JwtSecret }}"
-# the bitcoin network name
-btc-network = "{{ .Goat.BtcNetwork }}"
 `
 
 	return customAppTemplate, customAppConfig

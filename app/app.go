@@ -128,7 +128,6 @@ func New(
 			AppConfig(),
 			depinject.Provide(
 				ProvideEngineClient,
-				ProvideBitcoinNetworkConfig,
 				ProvideValidatorPrvKey,
 			),
 			depinject.Supply(

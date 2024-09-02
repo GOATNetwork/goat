@@ -44,7 +44,6 @@ func initRootCmd(
 		AddFlags: func(cmd *cobra.Command) {
 			cmd.Flags().String(FlagGoatGeth, "http://127.0.0.1:8545", "the goat-geth endpoint, ipc is recommended")
 			cmd.Flags().String(FlagGoatJwtSecret, "", "the jwt secret file for engine api, it's only required if connecting to an goat-geth via http")
-			cmd.Flags().String(FlagGoatBtcNetwork, "regtest", "the bitcoin network name(mainnet|testnet3|regtest|signet)")
 		},
 	})
 

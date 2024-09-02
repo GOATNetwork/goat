@@ -12,6 +12,12 @@ const (
 	NewBlocksMethodSigName = "Bitcoin/NewBlocks"
 )
 
+const (
+	EVMAddressLen   = 20
+	DepositMagicLen = 4
+	DustTxoutAmount = 546
+)
+
 func (req *MsgNewPubkey) Validate() error {
 	if req == nil {
 		return errors.New("empty MsgNewKey")

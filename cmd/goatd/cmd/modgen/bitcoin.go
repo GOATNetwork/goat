@@ -21,6 +21,7 @@ func Bitcoin() *cobra.Command {
 		FlagPubkeyType         = "pubkey-type"
 		FlagMinDeposit         = "min-deposit"
 		FlagDepositMagicPrefix = "deposit-magic-prefix"
+		FlagNetworkName        = "network"
 	)
 
 	parsePubkey := func(raw []byte, typ string) (*relayer.PublicKey, error) {
@@ -48,6 +49,10 @@ func Bitcoin() *cobra.Command {
 			genesisFile := config.GenesisFile()
 
 			return UpdateGensis(genesisFile, types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
+				networkName, err := cmd.Flags().GetString(FlagNetworkName)
+				if err != nil {
+					return err
+				}
 				safe, err := cmd.Flags().GetUint32(FlagSafe)
 				if err != nil {
 					return err
@@ -69,6 +74,7 @@ func Bitcoin() *cobra.Command {
 				}
 
 				genesis.Params = types.Params{
+					NetworkName:           networkName,
 					SafeConfirmationBlock: safe,
 					HardConfirmationBlock: hard,
 					DepositMagicPrefix:    []byte(depositMagicPreifx),
@@ -111,8 +117,9 @@ func Bitcoin() *cobra.Command {
 	param := types.DefaultParams()
 	cmd.Flags().Uint32(FlagSafe, param.SafeConfirmationBlock, "the safe confirmation number")
 	cmd.Flags().Uint32(FlagHard, param.HardConfirmationBlock, "the hard confirmation number")
-	cmd.Flags().BytesHex(FlagPubkey, nil, "the hard confirmation number")
+	cmd.Flags().BytesHex(FlagPubkey, nil, "the initial relayer public key")
 	cmd.Flags().String(FlagPubkeyType, "secp256k1", "the public key type [secp256k1,schnorr]")
+	cmd.Flags().String(FlagNetworkName, string(param.NetworkName), "the bitcoin network name(mainnet|testnet3|regtest|signet)")
 	cmd.Flags().String(FlagDepositMagicPrefix, string(param.DepositMagicPrefix), "the deposit magic prefix for OP_RETURNS")
 	cmd.Flags().Uint64(FlagMinDeposit, param.MinDepositAmount, "minimal allowed deposit amount")
 
