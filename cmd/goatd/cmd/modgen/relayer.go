@@ -97,12 +97,14 @@ func Relayer() *cobra.Command {
 				return fmt.Errorf("address and public key not matched, expected address %s", addr)
 			}
 
+			serverCtx.Logger.Info("update genesis", "module", types.ModuleName)
 			if err := UpdateModuleGenesis(genesisFile, types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
 				if threshold != 0 {
 					genesis.Threshold = threshold
 				}
 				if _, ok := genesis.Voters[addr]; ok {
-					return fmt.Errorf("%s already added", addr)
+					serverCtx.Logger.Info("relayer already added", "addr", addr)
+					return nil
 				}
 				genesis.Voters[addr] = &types.Voter{VoteKey: voteKey}
 				return genesis.Validate()
@@ -110,6 +112,7 @@ func Relayer() *cobra.Command {
 				return err
 			}
 
+			serverCtx.Logger.Info("update genesis", "module", authtypes.ModuleName)
 			// Add the relayer account to auth module to allow it sending tx
 			return UpdateModuleGenesis(genesisFile, authtypes.ModuleName, new(authtypes.GenesisState), clientCtx.Codec, func(genesis *authtypes.GenesisState) error {
 				baseAccount, err := authtypes.NewBaseAccountWithPubKey(txKey)
@@ -122,12 +125,12 @@ func Relayer() *cobra.Command {
 				}
 
 				for _, v := range genesis.GetAccounts() {
-					var acc authtypes.BaseAccount
+					var acc authtypes.GenesisAccount
 					if err := clientCtx.Codec.UnpackAny(v, &acc); err != nil {
 						return err
 					}
 
-					if acc.Address == addr {
+					if bytes.Equal(acc.GetAddress().Bytes(), addrByte) {
 						return nil
 					}
 				}

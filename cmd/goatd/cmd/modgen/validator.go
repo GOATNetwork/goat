@@ -52,6 +52,7 @@ func Validator() *cobra.Command {
 				return err
 			}
 
+			serverCtx.Logger.Info("update genesis", "module", "cometbft", "geneis", genesisFile)
 			if err := UpdateGenesis(genesisFile, func(state *genutiltypes.AppGenesis) error {
 				pubkey := cmt256k1.PubKey(pubkeyRaw)
 				address := pubkey.Address()
@@ -77,16 +78,10 @@ func Validator() *cobra.Command {
 				return err
 			}
 
+			serverCtx.Logger.Info("update genesis", "module", authtypes.ModuleName, "geneis", genesisFile)
 			// Add the validator account to auth module to allow it sending tx
 			return UpdateModuleGenesis(genesisFile, authtypes.ModuleName, new(authtypes.GenesisState), clientCtx.Codec, func(genesis *authtypes.GenesisState) error {
 				pubkey := &secp256k1.PubKey{Key: pubkeyRaw}
-
-				addrcodec := clientCtx.TxConfig.SigningContext().AddressCodec()
-				address, err := addrcodec.BytesToString(pubkey.Address())
-				if err != nil {
-					return fmt.Errorf("invalid address: %x", pubkey.Address())
-				}
-
 				baseAccount, err := authtypes.NewBaseAccountWithPubKey(pubkey)
 				if err != nil {
 					return err
@@ -97,12 +92,12 @@ func Validator() *cobra.Command {
 				}
 
 				for _, v := range genesis.GetAccounts() {
-					var acc authtypes.BaseAccount
+					var acc authtypes.GenesisAccount
 					if err := clientCtx.Codec.UnpackAny(v, &acc); err != nil {
 						return err
 					}
 
-					if acc.Address == address {
+					if bytes.Equal(acc.GetAddress().Bytes(), pubkey.Address()) {
 						return nil
 					}
 				}

@@ -48,6 +48,7 @@ func Bitcoin() *cobra.Command {
 			config := serverCtx.Config.SetRoot(clientCtx.HomeDir)
 			genesisFile := config.GenesisFile()
 
+			serverCtx.Logger.Info("update genesis", "module", types.ModuleName, "geneis", genesisFile)
 			return UpdateModuleGenesis(genesisFile, types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
 				networkName, err := cmd.Flags().GetString(FlagNetworkName)
 				if err != nil {
@@ -101,7 +102,7 @@ func Bitcoin() *cobra.Command {
 					return fmt.Errorf("invalid height: %s", args[0])
 				}
 
-				genesis.BlockHash = genesis.BlockHash[0:]
+				genesis.BlockHash = genesis.BlockHash[1:]
 				for _, hash := range args[1:] {
 					r, err := chainhash.NewHashFromStr(hash)
 					if err != nil {
