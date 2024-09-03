@@ -98,7 +98,7 @@ func (req *MsgNewDeposits) Validate() error {
 
 	depositLen := len(req.Deposits)
 	if depositLen == 0 || depositLen > 16 {
-		return errors.New("deposit list too large")
+		return errors.New("invalid deposit list length")
 	}
 
 	if h := len(req.BlockHeaders); h == 0 || h > depositLen {
