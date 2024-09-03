@@ -25,7 +25,7 @@ import (
 
 func (k Keeper) PrepareProposalHandler(txpool mempool.Mempool, txVerifier baseapp.ProposalTxVerifier) sdk.PrepareProposalHandler {
 	return func(sdkctx sdk.Context, rpp *abci.RequestPrepareProposal) (*abci.ResponsePrepareProposal, error) {
-		var ethBlockTxByte []byte
+		var ethTx []byte
 
 		var eg = new(errgroup.Group)
 
@@ -125,7 +125,7 @@ func (k Keeper) PrepareProposalHandler(txpool mempool.Mempool, txVerifier baseap
 				return err
 			}
 
-			ethBlockTxByte, err = k.txConfig.TxEncoder()(txBuilder.GetTx())
+			ethTx, err = k.txConfig.TxEncoder()(txBuilder.GetTx())
 			if err != nil {
 				return err
 			}
@@ -159,7 +159,7 @@ func (k Keeper) PrepareProposalHandler(txpool mempool.Mempool, txVerifier baseap
 		if err := eg.Wait(); err != nil {
 			return nil, err
 		}
-		return &abci.ResponsePrepareProposal{Txs: append([][]byte{ethBlockTxByte}, memTxs...)}, nil
+		return &abci.ResponsePrepareProposal{Txs: append([][]byte{ethTx}, memTxs...)}, nil
 	}
 }
 
@@ -207,68 +207,79 @@ func (k Keeper) ProcessProposalHandler(txVerifier baseapp.ProposalTxVerifier) sd
 }
 
 func (k Keeper) verifyEthBlockProposal(sdkctx sdk.Context, cometProposer []byte, ethBlock *types.MsgNewEthBlock) error {
-	proposer, err := k.addressCodec.StringToBytes(ethBlock.Proposer)
-	if err != nil {
-		return err
-	}
+	eg, egctx := errgroup.WithContext(sdkctx)
 
-	if !bytes.Equal(proposer, cometProposer) {
-		return errors.New("invalid MsgNewEthBlock proposer")
-	}
-
-	payload := ethBlock.Payload
-	if !bytes.Equal(proposer, ethBlock.Payload.FeeRecipient) {
-		return errors.New("fee recipient mismatched")
-	}
-
-	if payload.BlobGasUsed > 0 {
-		return errors.New("blob tx is not allowed")
-	}
-
-	// we don't use cometbft timestamp
-	// refer to the note in the PrepareProposalHandler for the details
-	systemTime, cometTime := uint64(time.Now().UTC().Unix()), uint64(sdkctx.BlockTime().UTC().Unix())
-	if payload.Timestamp > systemTime || payload.Timestamp < cometTime {
-		return errors.New("invalid MsgNewEthBlock timestamp")
-	}
-
-	block, err := k.Block.Get(sdkctx)
-	if err != nil {
-		return err
-	}
-
-	if !bytes.Equal(block.ParentHash, payload.ParentHash) || block.BlockNumber+1 != payload.BlockNumber {
-		return errors.New("refer to incorrect parent block")
-	}
-
-	if payload.BlobGasUsed > 0 {
-		return errors.New("blob tx type is not activated")
-	}
-
-	beaconRoot, err := k.BeaconRoot.Get(sdkctx)
-	if err != nil {
-		return err
-	}
-
-	if !bytes.Equal(beaconRoot, payload.BeaconRoot) {
-		return errors.New("refer to incorrect beacon root")
-	}
-
-	if err := k.VerifyDequeue(sdkctx, payload.ExtraData, payload.Transactions); err != nil {
-		return err
-	}
-
-	res, err := k.ethclient.NewPayloadV3(sdkctx,
-		types.PayloadToExecutableData(&payload), []common.Hash{}, common.BytesToHash(beaconRoot))
-	if err != nil {
-		return err
-	}
-
-	if res.Status != engine.VALID {
-		if res.ValidationError != nil {
-			return fmt.Errorf("NewPayloadV3 non-VALID status(%s): %s", res.Status, *res.ValidationError)
+	eg.Go(func() error {
+		proposer, err := k.addressCodec.StringToBytes(ethBlock.Proposer)
+		if err != nil {
+			return err
 		}
-		return fmt.Errorf("NewPayloadV3 non-VALID status: %s", res.Status)
-	}
-	return nil
+
+		if !bytes.Equal(proposer, cometProposer) {
+			return errors.New("invalid MsgNewEthBlock proposer")
+		}
+
+		payload := ethBlock.Payload
+		if !bytes.Equal(proposer, ethBlock.Payload.FeeRecipient) {
+			return errors.New("fee recipient mismatched")
+		}
+
+		if payload.BlobGasUsed > 0 {
+			return errors.New("blob tx is not allowed")
+		}
+
+		// we don't use cometbft timestamp
+		// refer to the note in the PrepareProposalHandler for the details
+		systemTime, cometTime := uint64(time.Now().UTC().Unix()), uint64(sdkctx.BlockTime().UTC().Unix())
+		if payload.Timestamp > systemTime || payload.Timestamp < cometTime {
+			return errors.New("invalid MsgNewEthBlock timestamp")
+		}
+
+		block, err := k.Block.Get(sdkctx)
+		if err != nil {
+			return err
+		}
+
+		if !bytes.Equal(block.ParentHash, payload.ParentHash) || block.BlockNumber+1 != payload.BlockNumber {
+			return errors.New("refer to incorrect parent block")
+		}
+
+		if payload.BlobGasUsed > 0 {
+			return errors.New("blob tx type is not activated")
+		}
+
+		beaconRoot, err := k.BeaconRoot.Get(sdkctx)
+		if err != nil {
+			return err
+		}
+
+		if !bytes.Equal(beaconRoot, payload.BeaconRoot) {
+			return errors.New("refer to incorrect beacon root")
+		}
+
+		if err := k.VerifyDequeue(sdkctx, payload.ExtraData, payload.Transactions); err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	eg.Go(func() error {
+		payload := ethBlock.Payload
+		res, err := k.ethclient.NewPayloadV3(egctx, types.PayloadToExecutableData(&payload),
+			[]common.Hash{}, common.BytesToHash(payload.BeaconRoot))
+		if err != nil {
+			return err
+		}
+
+		if res.Status != engine.VALID {
+			if res.ValidationError != nil {
+				return fmt.Errorf("NewPayloadV3 non-VALID status(%s): %s", res.Status, *res.ValidationError)
+			}
+			return fmt.Errorf("NewPayloadV3 non-VALID status: %s", res.Status)
+		}
+		return nil
+	})
+
+	return eg.Wait()
 }
