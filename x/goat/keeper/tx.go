@@ -55,11 +55,11 @@ func (k msgServer) NewEthBlock(ctx context.Context, req *types.MsgNewEthBlock) (
 		return nil, err
 	}
 	if !bytes.Equal(beaconRoot, payload.BeaconRoot) {
-		return nil, types.ErrInvalidRequest.Wrap("refer to incorrect beacon root")
+		return nil, types.ErrInvalidRequest.Wrap("refer to inconsistent beacon root")
 	}
 
 	if err := k.VerifyDequeue(ctx, req.Payload.ExtraData, req.Payload.Transactions); err != nil {
-		return nil, types.ErrInvalidRequest.Wrapf("dequeue mismatched: %s", err.Error())
+		return nil, types.ErrInvalidRequest.Wrap("dequeue mismatched")
 	}
 
 	// todo: handle request from execution node

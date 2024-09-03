@@ -5,6 +5,7 @@ import (
 	"encoding/binary"
 	"errors"
 
+	"github.com/ethereum/go-ethereum/common"
 	relayertypes "github.com/goatnetwork/goat/x/relayer/types"
 )
 
@@ -14,9 +15,21 @@ const (
 )
 
 const (
-	EVMAddressLen   = 20
-	DepositMagicLen = 4
-	DustTxoutAmount = 546
+	DepositMagicLen    = 4
+	DustTxoutAmount    = 546
+	RawBtcHeaderSize   = 80
+	DepositV0TxoutSize = 34
+	P2whScriptSize     = 22
+	DepositV1TxoutSize = 26
+	// 4 version
+	// 1 input length
+	// 32 prevTxid + 4 prevTxOut + 1 sigScriptLength + 0 sigScript(witness) + 4 sequence
+	// 1 output length
+	// 8 value + 1 pkScriptLength + 34 p2wsh/p2tr
+	// || 8 value + 1 pkScriptLength + 22 p2wph +  8 value + 1 pkScriptLength + 26 data OP_RETURN
+	// 4 lockTime
+	MinDepositTxSize = 4 + 1 + 32 + 4 + 1 + 0 + 4 + 1 + 8 + 1 + 34 + 4
+	MaxBtcTxSize     = 1024 * 1024 // the consensus hard limit
 )
 
 func (req *MsgNewPubkey) Validate() error {
@@ -83,8 +96,19 @@ func (req *MsgNewDeposits) Validate() error {
 		return errors.New("empty MsgNewDeposits")
 	}
 
-	if len(req.Deposits) > 16 {
+	depositLen := len(req.Deposits)
+	if depositLen == 0 || depositLen > 16 {
 		return errors.New("deposit list too large")
+	}
+
+	if h := len(req.BlockHeaders); h == 0 || h > depositLen {
+		return errors.New("invalid headers size")
+	}
+
+	for _, v := range req.BlockHeaders {
+		if len(v) != RawBtcHeaderSize {
+			return errors.New("invalid raw header bytes size")
+		}
 	}
 
 	for _, v := range req.Deposits {
@@ -93,14 +117,16 @@ func (req *MsgNewDeposits) Validate() error {
 		}
 	}
 
-	// todo: more...
-
 	return nil
 }
 
 func (req *Deposit) Validate() error {
-	if len(req.EvmAddress) != 20 {
+	if len(req.EvmAddress) != common.AddressLength {
 		return errors.New("invalid evm address")
+	}
+
+	if l := len(req.NoWitnessTx); l < MinDepositTxSize || l > MaxBtcTxSize {
+		return errors.New("invalid btc tx size")
 	}
 
 	if err := req.RelayerPubkey.Validate(); err != nil {

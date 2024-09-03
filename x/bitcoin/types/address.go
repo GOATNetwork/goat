@@ -18,7 +18,7 @@ import (
 )
 
 func DepositAddressV0(pubkey *relayer.PublicKey, evmAddress []byte, netwk *chaincfg.Params) (btcutil.Address, error) {
-	if len(evmAddress) != EVMAddressLen {
+	if len(evmAddress) != common.AddressLength {
 		return nil, fmt.Errorf("invalid evm address")
 	}
 
@@ -49,7 +49,7 @@ func DepositAddressV0(pubkey *relayer.PublicKey, evmAddress []byte, netwk *chain
 }
 
 func DepositAddressV1(pubkey *relayer.PublicKey, magicPrefix, evmAddress []byte, netwk *chaincfg.Params) (btcutil.Address, []byte, error) {
-	if len(evmAddress) != EVMAddressLen {
+	if len(evmAddress) != common.AddressLength {
 		return nil, nil, errors.New("invalid evm address")
 	}
 
@@ -100,11 +100,11 @@ func WithdrawalAddress(address string, netwk *chaincfg.Params) ([]byte, error) {
 }
 
 func VerifyDespositScriptV0(pubkey *relayer.PublicKey, evmAddress, txout []byte) error {
-	if len(txout) != 34 {
+	if len(txout) != DepositV0TxoutSize {
 		return errors.New("invalid output script")
 	}
 
-	if len(evmAddress) != EVMAddressLen {
+	if len(evmAddress) != common.AddressLength {
 		return errors.New("invalid evm address")
 	}
 
@@ -146,13 +146,13 @@ func VerifyDespositScriptV1(pubkey *relayer.PublicKey, magicPrefix, evmAddress, 
 		return errors.New("invalid deposit prefix")
 	}
 
-	if len(evmAddress) != EVMAddressLen {
+	if len(evmAddress) != common.AddressLength {
 		return errors.New("invalid evm address")
 	}
 
 	switch v := pubkey.GetKey().(type) {
 	case *relayer.PublicKey_Secp256K1:
-		if len(txout0) != 22 {
+		if len(txout0) != P2whScriptSize {
 			return errors.New("invalid output script")
 		}
 
@@ -164,7 +164,7 @@ func VerifyDespositScriptV1(pubkey *relayer.PublicKey, magicPrefix, evmAddress, 
 			return errors.New("p2wpkh script mismatched")
 		}
 
-		if len(txout1) != 26 {
+		if len(txout1) != DepositV1TxoutSize {
 			return errors.New("invalid OP_RETURN script length")
 		}
 

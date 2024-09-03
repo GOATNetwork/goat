@@ -98,12 +98,12 @@ func (k Keeper) VerifyDeposit(ctx context.Context, headers map[uint64][]byte, de
 	}
 
 	rawHeader := headers[deposit.BlockNumber]
-	if len(rawHeader) != 80 {
+	if len(rawHeader) != types.RawBtcHeaderSize {
 		return nil, types.ErrInvalidRequest.Wrapf("invalid block header for %d", deposit.BlockNumber)
 	}
 
 	if !bytes.Equal(blockHash, goatcrypto.DoubleSHA256Sum(rawHeader)) {
-		return nil, types.ErrInvalidRequest.Wrapf("incorrect block hash, expected %x", blockHash)
+		return nil, types.ErrInvalidRequest.Wrap("inconsistent block hash")
 	}
 
 	// check if the tx is valid
@@ -113,7 +113,7 @@ func (k Keeper) VerifyDeposit(ctx context.Context, headers map[uint64][]byte, de
 	}
 
 	if deposit.OutputIndex >= uint32(len(tx.TxOut)) {
-		return nil, types.ErrInvalidRequest.Wrap("out of range for outputs")
+		return nil, types.ErrInvalidRequest.Wrap("output index out of range")
 	}
 
 	// check if the deposit is duplicated
@@ -134,7 +134,7 @@ func (k Keeper) VerifyDeposit(ctx context.Context, headers map[uint64][]byte, de
 	// check if the deposit script is valid
 	txout := tx.TxOut[deposit.OutputIndex]
 	if txout.Value < int64(param.MinDepositAmount) {
-		return nil, types.ErrInvalidRequest.Wrapf("txout amount < MinDepositAmount")
+		return nil, types.ErrInvalidRequest.Wrap("amount too low")
 	}
 
 	switch deposit.Version {

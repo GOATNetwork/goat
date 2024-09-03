@@ -21,12 +21,12 @@ require (
 	github.com/btcsuite/btcd/btcutil v1.1.6
 	github.com/btcsuite/btcd/chaincfg/chainhash v1.1.0
 	github.com/bufbuild/buf v1.32.1
-	github.com/cometbft/cometbft v0.38.11
+	github.com/cometbft/cometbft v0.38.12
 	github.com/cosmos/cosmos-db v1.0.2
 	github.com/cosmos/cosmos-proto v1.0.0-beta.5
 	github.com/cosmos/cosmos-sdk v0.50.9
 	github.com/cosmos/go-bip39 v1.0.0
-	github.com/cosmos/gogoproto v1.5.0
+	github.com/cosmos/gogoproto v1.7.0
 	github.com/ethereum/go-ethereum v1.14.8
 	github.com/golang/protobuf v1.5.4
 	github.com/gorilla/mux v1.8.1
@@ -49,8 +49,6 @@ require (
 )
 
 replace (
-	// see https://github.com/cometbft/cometbft/pull/3728
-	github.com/cometbft/cometbft => github.com/cometbft/cometbft v0.38.12-0.20240822191256-12fa0fa13bad
 	// goat-geth implemention
 	github.com/ethereum/go-ethereum => github.com/goatnetwork/goat-geth v0.0.0-20240902063417-5326e8c751b0
 	// fix upstream GHSA-h395-qcrw-5vmq vulnerability.
@@ -222,7 +220,7 @@ require (
 	github.com/rcrowley/go-metrics v0.0.0-20201227073835-cf1acfcdf475 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/rogpeppe/go-internal v1.12.0 // indirect
-	github.com/rs/cors v1.11.0 // indirect
+	github.com/rs/cors v1.11.1 // indirect
 	github.com/rs/zerolog v1.32.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sagikazarmark/locafero v0.4.0 // indirect
@@ -259,7 +257,7 @@ require (
 	golang.org/x/crypto v0.26.0 // indirect
 	golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842 // indirect
 	golang.org/x/mod v0.17.0 // indirect
-	golang.org/x/net v0.27.0 // indirect
+	golang.org/x/net v0.28.0 // indirect
 	golang.org/x/sys v0.23.0 // indirect
 	golang.org/x/term v0.23.0 // indirect
 	golang.org/x/text v0.17.0 // indirect
