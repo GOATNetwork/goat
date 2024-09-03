@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"cosmossdk.io/collections"
+	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/goatnetwork/goat/x/bitcoin/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -76,9 +77,14 @@ func (q queryServer) DepositAddress(ctx context.Context, req *types.QueryDeposit
 		return nil, status.Errorf(codes.Internal, "internal error: undefined network %s", param.NetworkName)
 	}
 
+	evmAddress, err := types.DecodeEthAddress(req.EvmAddress)
+	if err != nil {
+		return nil, err
+	}
+
 	switch req.Version {
 	case 0:
-		address, err := types.DepositAddressV0(&pubkey, req.EvmAddress, chainConfig)
+		address, err := types.DepositAddressV0(&pubkey, evmAddress, chainConfig)
 		if err != nil {
 			return nil, status.Errorf(codes.InvalidArgument, "invalid request: %s", err.Error())
 		}
@@ -88,7 +94,7 @@ func (q queryServer) DepositAddress(ctx context.Context, req *types.QueryDeposit
 			NetworkName: param.NetworkName,
 		}, nil
 	case 1:
-		address, script, err := types.DepositAddressV1(&pubkey, param.DepositMagicPrefix, req.EvmAddress, chainConfig)
+		address, script, err := types.DepositAddressV1(&pubkey, param.DepositMagicPrefix, evmAddress, chainConfig)
 		if err != nil {
 			return nil, status.Errorf(codes.InvalidArgument, "invalid request: %s", err.Error())
 		}
@@ -100,6 +106,23 @@ func (q queryServer) DepositAddress(ctx context.Context, req *types.QueryDeposit
 		}, nil
 	}
 	return nil, status.Error(codes.InvalidArgument, "unknown deposit version")
+}
+
+func (q queryServer) HasDeposited(ctx context.Context, req *types.QueryHasDeposited) (*types.QueryHasDepositedResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	txid, err := chainhash.NewHashFromStr(req.Txid)
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "invalid txid: %s", err.Error())
+	}
+
+	exist, err := q.k.Deposited.Has(ctx, collections.Join(txid[:], req.Txout))
+	if err != nil {
+		return nil, status.Error(codes.Internal, "internal error")
+	}
+	return &types.QueryHasDepositedResponse{Yes: exist}, nil
 }
 
 func (q queryServer) WithdrawalAddress(ctx context.Context, req *types.QueryWithdrawalAddress) (*types.QueryWithdrawalAddressResponse, error) {

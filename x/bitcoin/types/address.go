@@ -2,6 +2,7 @@ package types
 
 import (
 	"bytes"
+	"crypto/sha256"
 	"errors"
 	"fmt"
 	"slices"
@@ -10,6 +11,8 @@ import (
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/txscript"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 	relayer "github.com/goatnetwork/goat/x/relayer/types"
 )
@@ -179,14 +182,14 @@ func VerifyDespositScriptV1(pubkey *relayer.PublicKey, magicPrefix, evmAddress, 
 }
 
 func VerifyMerkelProof(txid, root, proof []byte, index uint32) bool {
-	if len(txid) != 32 || len(root) != 32 || len(proof)%32 != 0 {
+	if len(txid) != sha256.Size || len(root) != sha256.Size || len(proof)%sha256.Size != 0 {
 		return false
 	}
 
 	current := txid
-	for i := 0; i < len(proof)/32; i++ {
-		start := i * 32
-		end := start + 32
+	for i := 0; i < len(proof)/sha256.Size; i++ {
+		start := i * sha256.Size
+		end := start + sha256.Size
 		next := proof[start:end]
 		if index&1 == 0 {
 			current = goatcrypto.DoubleSHA256Sum(slices.Concat(current, next))
@@ -197,4 +200,15 @@ func VerifyMerkelProof(txid, root, proof []byte, index uint32) bool {
 	}
 
 	return bytes.Equal(current, root)
+}
+
+func DecodeEthAddress(address string) ([]byte, error) {
+	data, err := hexutil.Decode(address)
+	if err != nil {
+		return nil, err
+	}
+	if len(data) != common.AddressLength {
+		return nil, errors.New("invalid address length")
+	}
+	return data, nil
 }

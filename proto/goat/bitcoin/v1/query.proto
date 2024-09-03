@@ -31,6 +31,11 @@ service Query {
   rpc WithdrawalAddress(QueryWithdrawalAddress) returns (QueryWithdrawalAddressResponse) {
     option (google.api.http).get = "/goatnetwork/goat/bitcoin/v1/withdrawalAddress";
   }
+
+  // HasDeposited
+  rpc HasDeposited(QueryHasDeposited) returns (QueryHasDepositedResponse) {
+    option (google.api.http).get = "/goatnetwork/goat/bitcoin/v1/hasDeposited";
+  }
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -59,7 +64,7 @@ message QueryPubkeyResponse {
 // QueryDepositAddress is request type for the Query/DepositAddress RPC method
 message QueryDepositAddress {
   uint32 version = 1;
-  bytes evm_address = 2;
+  string evm_address = 2;
 }
 
 // QueryDepositAddressResponse is response type for the Query/DepositAddress RPC method
@@ -78,4 +83,15 @@ message QueryWithdrawalAddress {
 // QueryWithdrawalAddressReponse is response type for the Query/WithdrawalAddress RPC method
 message QueryWithdrawalAddressResponse {
   bytes address = 1;
+}
+
+// QueryHasDeposited
+message QueryHasDeposited {
+  string txid = 1; // big endian encoded txid
+  uint32 txout = 2;
+}
+
+// QueryHasDepositedResponse
+message QueryHasDepositedResponse {
+  bool yes = 1;
 }
