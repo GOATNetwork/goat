@@ -183,6 +183,7 @@ func (k Keeper) VerifyDequeue(ctx context.Context, txRoot []byte, txs [][]byte) 
 
 // Finalized notifies goat-geth to update fork choice state
 // if there are any errors, the FinalizeBlock phase will be failed
+// we don't use timeout here, validators are responsible for a reliable node
 func (k Keeper) Finalized(ctx context.Context) error { // EndBlock phase only!
 	block, err := k.Block.Get(ctx)
 	if err != nil {
