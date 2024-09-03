@@ -175,7 +175,7 @@ func (k Keeper) Finalized(ctx context.Context) error { // EndBlock phase only!
 
 	k.Logger().Info("notify NewPayload", "number", block.BlockNumber)
 	plRes, err := k.ethclient.NewPayloadV3(ctx, types.PayloadToExecutableData(&block),
-		nil, common.BytesToHash(block.BeaconRoot))
+		[]common.Hash{}, common.BytesToHash(block.BeaconRoot))
 	if err != nil {
 		return err
 	}

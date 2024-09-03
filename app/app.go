@@ -93,7 +93,7 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	maxprocs.Set()
+	_, _ = maxprocs.Set()
 }
 
 // AppConfig returns the default app config.

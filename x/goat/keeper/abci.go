@@ -259,7 +259,7 @@ func (k Keeper) verifyEthBlockProposal(sdkctx sdk.Context, cometProposer []byte,
 	}
 
 	res, err := k.ethclient.NewPayloadV3(sdkctx,
-		types.PayloadToExecutableData(&payload), nil, common.BytesToHash(beaconRoot))
+		types.PayloadToExecutableData(&payload), []common.Hash{}, common.BytesToHash(beaconRoot))
 	if err != nil {
 		return err
 	}
