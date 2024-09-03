@@ -122,7 +122,18 @@ func (k Keeper) Dequeue(ctx context.Context) ([]hexutil.Bytes, error) {
 	return res, nil
 }
 
-func (k Keeper) VerifyDequeue(ctx context.Context, txs [][]byte) error {
+// VerifyDequeue verifies if the goat transactions of the new eth block are consistent with expected here
+func (k Keeper) VerifyDequeue(ctx context.Context, txRoot []byte, txs [][]byte) error {
+	// goat-geth will check the tx root hash
+	if len(txRoot) != 33 {
+		return errors.New("invalid goat tx root")
+	}
+
+	goatTxLen := int(txRoot[0])
+	if len(txs) < goatTxLen {
+		return errors.New("tx length is less than expected")
+	}
+
 	btcTxs, err := k.bitcoinKeeper.DequeueBitcoinModuleTx(ctx)
 	if err != nil {
 		return err
@@ -140,6 +151,7 @@ func (k Keeper) VerifyDequeue(ctx context.Context, txs [][]byte) error {
 		if !bytes.Equal(raw, txs[idx]) {
 			return errors.New("bridge tx bytes mismatched")
 		}
+		goatTxLen--
 	}
 
 	lockingTxs, err := k.lockingKeeper.DequeueLockingModuleTx(ctx)
@@ -160,8 +172,12 @@ func (k Keeper) VerifyDequeue(ctx context.Context, txs [][]byte) error {
 		if !bytes.Equal(raw, txs[idx]) {
 			return errors.New("locking tx bytes mismatched")
 		}
+		goatTxLen--
 	}
 
+	if goatTxLen != 0 {
+		return errors.New("goat txs length mismatched")
+	}
 	return nil
 }
 

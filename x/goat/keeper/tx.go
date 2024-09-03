@@ -58,7 +58,7 @@ func (k msgServer) NewEthBlock(ctx context.Context, req *types.MsgNewEthBlock) (
 		return nil, types.ErrInvalidRequest.Wrap("refer to incorrect beacon root")
 	}
 
-	if err := k.VerifyDequeue(ctx, req.Payload.Transactions); err != nil {
+	if err := k.VerifyDequeue(ctx, req.Payload.ExtraData, req.Payload.Transactions); err != nil {
 		return nil, types.ErrInvalidRequest.Wrapf("dequeue mismatched: %s", err.Error())
 	}
 

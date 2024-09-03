@@ -254,7 +254,7 @@ func (k Keeper) verifyEthBlockProposal(sdkctx sdk.Context, cometProposer []byte,
 		return errors.New("refer to incorrect beacon root")
 	}
 
-	if err := k.VerifyDequeue(sdkctx, payload.Transactions); err != nil {
+	if err := k.VerifyDequeue(sdkctx, payload.ExtraData, payload.Transactions); err != nil {
 		return err
 	}
 

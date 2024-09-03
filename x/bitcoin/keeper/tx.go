@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"context"
-	"encoding/hex"
 
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
 	"github.com/goatnetwork/goat/x/bitcoin/types"
@@ -131,6 +130,5 @@ func (k msgServer) NewPubkey(ctx context.Context, req *types.MsgNewPubkey) (*typ
 		sdktypes.Events{types.NewKeyEvent(req.Pubkey), relayertypes.ProposalDoneEvent(sequence)},
 	)
 
-	k.Logger().Debug("NewKey added", "type", rawKey[0], "key", hex.EncodeToString(rawKey[1:]))
 	return &types.MsgNewPubkeyResponse{}, nil
 }

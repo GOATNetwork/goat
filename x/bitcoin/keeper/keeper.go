@@ -96,7 +96,7 @@ func (k Keeper) VerifyDeposit(ctx context.Context, deposit *types.Deposit) (*typ
 	if err != nil {
 		return nil, err
 	}
-	if !bytes.Equal(blockHash, goatcrypto.DoubleSHA256Sum(deposit.BlockHeader)) {
+	if len(deposit.BlockHeader) != 80 || !bytes.Equal(blockHash, goatcrypto.DoubleSHA256Sum(deposit.BlockHeader)) {
 		return nil, types.ErrInvalidRequest.Wrapf("incorrect block hash, expected %x", blockHash)
 	}
 
@@ -110,7 +110,7 @@ func (k Keeper) VerifyDeposit(ctx context.Context, deposit *types.Deposit) (*typ
 		return nil, types.ErrInvalidRequest.Wrap("out of range for outputs")
 	}
 
-	// check if the deposit is done
+	// check if the deposit is duplicated
 	txid := goatcrypto.DoubleSHA256Sum(deposit.NoWitnessTx)
 	deposited, err := k.Deposited.Has(ctx, collections.Join(txid, deposit.OutputIndex))
 	if err != nil {
