@@ -103,10 +103,6 @@ func (req *Deposit) Validate() error {
 		return errors.New("invalid evm address")
 	}
 
-	if len(req.BlockHeader) != 80 {
-		return errors.New("invalid block header")
-	}
-
 	if err := req.RelayerPubkey.Validate(); err != nil {
 		return err
 	}

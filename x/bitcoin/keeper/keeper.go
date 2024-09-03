@@ -80,7 +80,7 @@ func (k Keeper) Logger() log.Logger {
 	return k.logger.With("module", fmt.Sprintf("x/%s", types.ModuleName))
 }
 
-func (k Keeper) VerifyDeposit(ctx context.Context, deposit *types.Deposit) (*types.DepositReceipt, error) {
+func (k Keeper) VerifyDeposit(ctx context.Context, headers map[uint64][]byte, deposit *types.Deposit) (*types.DepositReceipt, error) {
 	// check if the pubkey is existed
 	hasKey, err := k.relayerKeeper.HasPubkey(ctx, relayertypes.EncodePublicKey(deposit.RelayerPubkey))
 	if err != nil {
@@ -96,7 +96,13 @@ func (k Keeper) VerifyDeposit(ctx context.Context, deposit *types.Deposit) (*typ
 	if err != nil {
 		return nil, err
 	}
-	if len(deposit.BlockHeader) != 80 || !bytes.Equal(blockHash, goatcrypto.DoubleSHA256Sum(deposit.BlockHeader)) {
+
+	rawHeader := headers[deposit.BlockNumber]
+	if len(rawHeader) != 80 {
+		return nil, types.ErrInvalidRequest.Wrapf("invalid block header for %d", deposit.BlockNumber)
+	}
+
+	if !bytes.Equal(blockHash, goatcrypto.DoubleSHA256Sum(rawHeader)) {
 		return nil, types.ErrInvalidRequest.Wrapf("incorrect block hash, expected %x", blockHash)
 	}
 
@@ -151,8 +157,7 @@ func (k Keeper) VerifyDeposit(ctx context.Context, deposit *types.Deposit) (*typ
 	}
 
 	// check if the spv is valid
-	merkelRoot := deposit.BlockHeader[36:68]
-	if !types.VerifyMerkelProof(txid, merkelRoot, deposit.IntermediateProof, deposit.TxIndex) {
+	if !types.VerifyMerkelProof(txid, rawHeader[36:68], deposit.IntermediateProof, deposit.TxIndex) {
 		return nil, types.ErrInvalidRequest.Wrap("invalid spv")
 	}
 

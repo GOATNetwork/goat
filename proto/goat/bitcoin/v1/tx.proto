@@ -43,7 +43,11 @@ message MsgNewDeposits {
   option (amino.name) = "goat/x/bitcoin/MsgNewDeposits";
 
   string proposer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  repeated Deposit deposits = 2;
+  // block_header is a height and raw header pair
+  // a raw block header is always 80 bytes
+  // refer to https://github.com/btcsuite/btcd/blob/master/wire/blockheader.go#L65 for the details
+  map<uint64, bytes> block_headers = 2;
+  repeated Deposit deposits = 3;
 }
 
 // MsgNewDepositsResponse defines the Msg/NewDeposits response type.

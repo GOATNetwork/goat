@@ -29,7 +29,7 @@ func (k msgServer) NewDeposits(ctx context.Context, req *types.MsgNewDeposits) (
 	events := make(sdktypes.Events, 0, len(req.Deposits))
 	deposits := make([]*types.DepositReceipt, 0, len(req.Deposits))
 	for _, v := range req.Deposits {
-		deposit, err := k.VerifyDeposit(ctx, v)
+		deposit, err := k.VerifyDeposit(ctx, req.BlockHeaders, v)
 		if err != nil {
 			return nil, err
 		}
