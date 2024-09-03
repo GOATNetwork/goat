@@ -33,6 +33,7 @@ import (
 	_ "github.com/cosmos/cosmos-sdk/x/mint"    // import for side-effects
 	_ "github.com/cosmos/cosmos-sdk/x/staking" // import for side-effects
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
+	"go.uber.org/automaxprocs/maxprocs"
 
 	"github.com/goatnetwork/goat/docs"
 	"github.com/goatnetwork/goat/pkg/ethrpc"
@@ -92,6 +93,7 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
+	maxprocs.Set()
 }
 
 // AppConfig returns the default app config.
