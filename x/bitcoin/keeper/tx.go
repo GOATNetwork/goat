@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 
+	"cosmossdk.io/collections"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
 	"github.com/goatnetwork/goat/x/bitcoin/types"
 	relayertypes "github.com/goatnetwork/goat/x/relayer/types"
@@ -28,12 +29,16 @@ func (k msgServer) NewDeposits(ctx context.Context, req *types.MsgNewDeposits) (
 	events := make(sdktypes.Events, 0, len(req.Deposits))
 	deposits := make([]*types.DepositReceipt, 0, len(req.Deposits))
 	for _, v := range req.Deposits {
-		depoist, err := k.VerifyDeposit(ctx, v)
+		deposit, err := k.VerifyDeposit(ctx, v)
 		if err != nil {
 			return nil, err
 		}
-		events = append(events, types.NewDepositEvent(depoist))
-		deposits = append(deposits, depoist)
+		if err := k.Deposited.Set(ctx,
+			collections.Join(deposit.Txid, deposit.Txout), deposit.Amount); err != nil {
+			return nil, err
+		}
+		events = append(events, types.NewDepositEvent(deposit))
+		deposits = append(deposits, deposit)
 	}
 
 	queue, err := k.ExecuableQueue.Get(ctx)

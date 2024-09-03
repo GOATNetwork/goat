@@ -31,7 +31,7 @@ type (
 		Pubkey         collections.Item[relayertypes.PublicKey]
 		BlockTip       collections.Sequence
 		BlockHashes    collections.Map[uint64, []byte]
-		Deposited      collections.Map[collections.Pair[[]byte, uint32], int64]
+		Deposited      collections.Map[collections.Pair[[]byte, uint32], uint64]
 		EthNonce       collections.Sequence
 		ExecuableQueue collections.Item[types.ExecuableQueue]
 		// this line is used by starport scaffolding # collection/type
@@ -61,7 +61,7 @@ func NewKeeper(
 		Pubkey:         collections.NewItem(sb, types.LatestPubkeyKey, "latest_pubkey", codec.CollValue[relayertypes.PublicKey](cdc)),
 		BlockTip:       collections.NewSequence(sb, types.LatestHeightKey, "latest_height"),
 		BlockHashes:    collections.NewMap(sb, types.BlockHashsKey, "block_hashs", collections.Uint64Key, collections.BytesValue),
-		Deposited:      collections.NewMap(sb, types.DepositedKey, "deposited", collections.PairKeyCodec(collections.BytesKey, collections.Uint32Key), collections.Int64Value),
+		Deposited:      collections.NewMap(sb, types.DepositedKey, "deposited", collections.PairKeyCodec(collections.BytesKey, collections.Uint32Key), collections.Uint64Value),
 		ExecuableQueue: collections.NewItem(sb, types.ExecuableQueueKey, "queue", codec.CollValue[types.ExecuableQueue](cdc)),
 		// this line is used by starport scaffolding # collection/instantiate
 	}
