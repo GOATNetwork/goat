@@ -165,15 +165,15 @@ func VerifyDespositScriptV1(pubkey *relayer.PublicKey, magicPrefix, evmAddress, 
 		}
 
 		if len(txout1) != 26 {
-			return errors.New("invalid OP_RETURNS script length")
+			return errors.New("invalid OP_RETURN script length")
 		}
 
 		if txout1[0] != txscript.OP_RETURN || txout1[1] != txscript.OP_DATA_24 {
-			return errors.New("invalid OP_RETURNS output")
+			return errors.New("invalid OP_RETURN output")
 		}
 
 		if script := slices.Concat(magicPrefix, evmAddress); !bytes.Equal(txout1[2:], script) {
-			return fmt.Errorf("OP_RETRURNS mismatched: expected 6a18%x got %x", script, txout1)
+			return fmt.Errorf("OP_RETURN mismatched: expected 6a18%x got %x", script, txout1)
 		}
 
 		return nil
