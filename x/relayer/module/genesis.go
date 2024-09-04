@@ -37,6 +37,10 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 		LastElected: ctx.BlockTime(),
 	}
 
+	if len(genState.Voters) == 0 {
+		panic("No relayer voters")
+	}
+
 	keySet := make(map[string]bool)
 	for addr, v := range genState.Voters {
 		addrByte, err := k.AddrCodec.StringToBytes(addr)
