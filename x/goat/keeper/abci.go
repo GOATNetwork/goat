@@ -19,6 +19,7 @@ import (
 	xauthsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
 	"github.com/ethereum/go-ethereum/beacon/engine"
 	"github.com/ethereum/go-ethereum/common"
+	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/goatnetwork/goat/x/goat/types"
 	"golang.org/x/sync/errgroup"
 )
@@ -66,17 +67,30 @@ func (k Keeper) PrepareProposalHandler(txpool mempool.Mempool, txVerifier baseap
 }
 
 func (k Keeper) createEthBlockProposal(sdkctx sdk.Context, rpp *abci.RequestPrepareProposal) ([]byte, error) {
-	validator := k.accountKeeper.GetAccount(sdkctx, rpp.ProposerAddress)
-	if validator == nil {
-		return nil, errors.New("nil validator account")
+	if k.PrivKey == nil {
+		return nil, errors.New("no eth block signer provided")
 	}
 
-	block, err := k.Block.Get(sdkctx)
+	validatorAddr, err := k.addressCodec.BytesToString(rpp.ProposerAddress)
 	if err != nil {
 		return nil, err
 	}
 
-	blockHash, err := k.BeaconRoot.Get(sdkctx)
+	validatorAcc := k.accountKeeper.GetAccount(sdkctx, rpp.ProposerAddress)
+	if validatorAcc == nil {
+		return nil, fmt.Errorf("nil validator account: %s", validatorAddr)
+	}
+
+	if !bytes.Equal(validatorAcc.GetPubKey().Bytes(), k.PrivKey.PubKey().Bytes()) {
+		return nil, fmt.Errorf("validator pubkey mismatched: expected %x got %x", validatorAcc.GetPubKey().Bytes(), k.PrivKey.PubKey().Bytes())
+	}
+
+	parentBlock, err := k.Block.Get(sdkctx)
+	if err != nil {
+		return nil, err
+	}
+
+	beaconBlock, err := k.BeaconRoot.Get(sdkctx)
 	if err != nil {
 		return nil, err
 	}
@@ -93,9 +107,9 @@ func (k Keeper) createEthBlockProposal(sdkctx sdk.Context, rpp *abci.RequestPrep
 	var random common.Hash
 	_, _ = rand.Read(random[:])
 
-	beaconRoot := common.BytesToHash(blockHash)
+	beaconRoot := common.BytesToHash(beaconBlock)
 	forkChoiceResp, err := k.ethclient.ForkchoiceUpdatedV3(tmctx,
-		&engine.ForkchoiceStateV1{HeadBlockHash: common.BytesToHash(block.BlockHash)},
+		&engine.ForkchoiceStateV1{HeadBlockHash: common.BytesToHash(parentBlock.BlockHash)},
 		&engine.PayloadAttributes{
 			// Why we use system timestamp instead of CometBFT timestamp?
 			// CometBFT 0.38 uses last vote median time by all voters
@@ -104,6 +118,7 @@ func (k Keeper) createEthBlockProposal(sdkctx sdk.Context, rpp *abci.RequestPrep
 			Timestamp:             uint64(time.Now().UTC().Unix()),
 			Random:                random,
 			SuggestedFeeRecipient: common.BytesToAddress(rpp.ProposerAddress),
+			Withdrawals:           ethtypes.Withdrawals{},
 			BeaconRoot:            &beaconRoot,
 			GoatTxs:               goatTxs,
 		},
@@ -119,45 +134,45 @@ func (k Keeper) createEthBlockProposal(sdkctx sdk.Context, rpp *abci.RequestPrep
 		return nil, errors.New("failed to build goat-geth txs")
 	}
 
+	if forkChoiceResp.PayloadID == nil {
+		return nil, errors.New("got nil payloadId")
+	}
+
 	envelope, err := k.ethclient.GetPayloadV3(tmctx, *forkChoiceResp.PayloadID)
 	if err != nil {
 		return nil, err
 	}
 
-	proposer, err := k.addressCodec.BytesToString(rpp.ProposerAddress)
-	if err != nil {
-		return nil, err
-	}
-
 	txBuilder := k.txConfig.NewTxBuilder()
-	if err := txBuilder.SetMsgs(&types.MsgNewEthBlock{
-		Proposer: proposer,
-		Payload:  types.ExecutableDataToPayload(envelope.ExecutionPayload),
-	}); err != nil {
-		return nil, err
-	}
 	txBuilder.SetGasLimit(1e8)
 	txBuilder.SetTimeoutHeight(uint64(rpp.Height))
 
+	if err := txBuilder.SetMsgs(&types.MsgNewEthBlock{Proposer: validatorAddr,
+		Payload: types.ExecutableDataToPayload(envelope.ExecutionPayload, beaconBlock)}); err != nil {
+		return nil, err
+	}
+
 	sigMode := signing.SignMode(k.txConfig.SignModeHandler().DefaultMode())
 	if err := txBuilder.SetSignatures(signing.SignatureV2{
-		PubKey:   validator.GetPubKey(),
+		PubKey:   validatorAcc.GetPubKey(),
 		Data:     &signing.SingleSignatureData{SignMode: sigMode},
-		Sequence: validator.GetSequence(),
+		Sequence: validatorAcc.GetSequence(),
 	}); err != nil {
 		return nil, err
 	}
 
-	sigsV2, err := tx.SignWithPrivKey(sdkctx, sigMode, xauthsigning.SignerData{
-		ChainID:       sdkctx.BlockHeader().ChainID,
-		AccountNumber: validator.GetAccountNumber(),
-		Sequence:      validator.GetSequence(),
-	}, txBuilder, k.PrivKey, k.txConfig, validator.GetSequence())
+	sigs, err := tx.SignWithPrivKey(sdkctx, sigMode, xauthsigning.SignerData{
+		Address:       validatorAddr,
+		ChainID:       sdkctx.ChainID(),
+		AccountNumber: validatorAcc.GetAccountNumber(),
+		Sequence:      validatorAcc.GetSequence(),
+		PubKey:        validatorAcc.GetPubKey(),
+	}, txBuilder, k.PrivKey, k.txConfig, validatorAcc.GetSequence())
 	if err != nil {
 		return nil, err
 	}
 
-	if err := txBuilder.SetSignatures(sigsV2); err != nil {
+	if err := txBuilder.SetSignatures(sigs); err != nil {
 		return nil, err
 	}
 
@@ -171,13 +186,13 @@ func (k Keeper) createEthBlockProposal(sdkctx sdk.Context, rpp *abci.RequestPrep
 func (k Keeper) ProcessProposalHandler(txVerifier baseapp.ProposalTxVerifier) sdk.ProcessProposalHandler {
 	return func(sdkctx sdk.Context, rpp *abci.RequestProcessProposal) (*abci.ResponseProcessProposal, error) {
 		if len(rpp.Txs) == 0 {
-			return nil, errors.New("empty block")
+			return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "empty block")
 		}
 
 		for txIdx, rawTx := range rpp.Txs {
 			tx, err := txVerifier.ProcessProposalVerifyTx(rawTx)
 			if err != nil {
-				return nil, errors.New("invalid message")
+				return nil, fmt.Errorf("invalid transaction: index %d: %s", txIdx, err)
 			}
 
 			msgs := tx.GetMsgs()
@@ -215,6 +230,7 @@ func (k Keeper) verifyEthBlockProposal(sdkctx sdk.Context, msg *types.MsgNewEthB
 	eg, egctx := errgroup.WithContext(sdkctx)
 
 	eg.Go(func() error {
+		k.logger.Debug("verifyEthBlockProposal", "proposal", msg.Proposer, "payload", msg.Payload)
 		proposer, err := k.addressCodec.StringToBytes(msg.Proposer)
 		if err != nil {
 			return err
@@ -245,8 +261,12 @@ func (k Keeper) verifyEthBlockProposal(sdkctx sdk.Context, msg *types.MsgNewEthB
 			return err
 		}
 
-		if !bytes.Equal(block.ParentHash, payload.ParentHash) || block.BlockNumber+1 != payload.BlockNumber {
-			return errors.New("refer to incorrect parent block")
+		if !bytes.Equal(block.BlockHash, payload.ParentHash) {
+			return fmt.Errorf("refer to incorrect parent block: expected %x got %x", block.BlockHash, payload.ParentHash)
+		}
+
+		if block.BlockNumber+1 != payload.BlockNumber {
+			return fmt.Errorf("refer to incorrect parent block: expected %d got %d", block.BlockNumber+1, payload.BlockNumber)
 		}
 
 		if payload.BlobGasUsed > 0 {
@@ -259,7 +279,7 @@ func (k Keeper) verifyEthBlockProposal(sdkctx sdk.Context, msg *types.MsgNewEthB
 		}
 
 		if !bytes.Equal(beaconRoot, payload.BeaconRoot) {
-			return errors.New("refer to incorrect beacon root")
+			return fmt.Errorf("refer to incorrect beacon root: expected %x got %x", beaconRoot, payload.BeaconRoot)
 		}
 
 		if err := k.VerifyDequeue(sdkctx, payload.ExtraData, payload.Transactions); err != nil {

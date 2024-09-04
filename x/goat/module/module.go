@@ -201,6 +201,7 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.BitcoinKeeper,
 		in.LockingKeeper,
 		in.RelayerKeeper,
+		in.AccountKeeper,
 		in.EngineClient,
 		in.TxConfig,
 		in.PrivKey,

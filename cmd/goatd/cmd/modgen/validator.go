@@ -2,16 +2,13 @@ package modgen
 
 import (
 	"bytes"
-	"fmt"
 
-	cmt256k1 "github.com/cometbft/cometbft/crypto/secp256k1"
-	cmttypes "github.com/cometbft/cometbft/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	"github.com/cosmos/cosmos-sdk/server"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
+	"github.com/goatnetwork/goat/x/locking/types"
 	"github.com/spf13/cobra"
 )
 
@@ -22,9 +19,8 @@ func Validator() *cobra.Command {
 	)
 
 	cmd := &cobra.Command{
-		Use:   "validator name",
+		Use:   "validator",
 		Short: "append a validator",
-		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 			serverCtx := server.GetServerContextFromCmd(cmd)
@@ -32,7 +28,6 @@ func Validator() *cobra.Command {
 			config := serverCtx.Config.SetRoot(clientCtx.HomeDir)
 			genesisFile := config.GenesisFile()
 
-			validatorName := args[0]
 			votePower, err := cmd.Flags().GetInt64(FlagValidatorPower)
 			if err != nil {
 				return err
@@ -52,27 +47,17 @@ func Validator() *cobra.Command {
 				return err
 			}
 
-			serverCtx.Logger.Info("update genesis", "module", "cometbft", "geneis", genesisFile)
-			if err := UpdateGenesis(genesisFile, func(state *genutiltypes.AppGenesis) error {
-				pubkey := cmt256k1.PubKey(pubkeyRaw)
-				address := pubkey.Address()
-				for _, validator := range state.Consensus.Validators {
-					if validator.Name == validatorName {
-						return fmt.Errorf("validator %s has been added", validatorName)
-					}
-					if bytes.Equal(validator.Address.Bytes(), address.Bytes()) {
-						return fmt.Errorf("conflict pubkey with validator %s", validator.Name)
+			serverCtx.Logger.Info("update genesis", "module", types.ModuleName, "geneis", genesisFile)
+			if err := UpdateModuleGenesis(genesisFile, types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
+				for _, v := range genesis.GetValidators() {
+					if bytes.Equal(v.GetPubkey(), pubkeyRaw) {
+						return nil
 					}
 				}
-
-				state.Consensus.Validators = append(state.Consensus.Validators,
-					cmttypes.GenesisValidator{
-						Name:    validatorName,
-						PubKey:  pubkey,
-						Address: address,
-						Power:   votePower,
-					},
-				)
+				genesis.Validators = append(genesis.Validators, &types.Validator{
+					Pubkey: pubkeyRaw,
+					Power:  votePower,
+				})
 				return nil
 			}); err != nil {
 				return err

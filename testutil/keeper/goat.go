@@ -44,6 +44,7 @@ func GoatKeeper(t testing.TB) (keeper.Keeper, sdk.Context, address.Codec) {
 		nil,
 		nil,
 		nil,
+		nil,
 	)
 
 	ctx := sdk.NewContext(stateStore, cmtproto.Header{}, false, log.NewNopLogger())

@@ -20,6 +20,7 @@ var (
 	BlockHashsKey     = collections.NewPrefix(3)
 	DepositedKey      = collections.NewPrefix(4)
 	ExecuableQueueKey = collections.NewPrefix(5)
+	EthTxNonceKey     = collections.NewPrefix(6)
 )
 
 func KeyPrefix(p string) []byte {

@@ -32,7 +32,7 @@ type (
 		BlockTip       collections.Sequence
 		BlockHashes    collections.Map[uint64, []byte]
 		Deposited      collections.Map[collections.Pair[[]byte, uint32], uint64]
-		EthNonce       collections.Sequence
+		EthTxNonce     collections.Sequence
 		ExecuableQueue collections.Item[types.ExecuableQueue]
 		// this line is used by starport scaffolding # collection/type
 
@@ -62,6 +62,7 @@ func NewKeeper(
 		BlockTip:       collections.NewSequence(sb, types.LatestHeightKey, "latest_height"),
 		BlockHashes:    collections.NewMap(sb, types.BlockHashsKey, "block_hashs", collections.Uint64Key, collections.BytesValue),
 		Deposited:      collections.NewMap(sb, types.DepositedKey, "deposited", collections.PairKeyCodec(collections.BytesKey, collections.Uint32Key), collections.Uint64Value),
+		EthTxNonce:     collections.NewSequence(sb, types.EthTxNonceKey, "eth_tx_nonce"),
 		ExecuableQueue: collections.NewItem(sb, types.ExecuableQueueKey, "queue", codec.CollValue[types.ExecuableQueue](cdc)),
 		// this line is used by starport scaffolding # collection/instantiate
 	}
@@ -182,7 +183,7 @@ func (k Keeper) DequeueBitcoinModuleTx(ctx context.Context) (txs []*ethtypes.Tra
 		return nil, err
 	}
 
-	txNonce, err := k.EthNonce.Peek(ctx)
+	txNonce, err := k.EthTxNonce.Peek(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -223,7 +224,7 @@ func (k Keeper) DequeueBitcoinModuleTx(ctx context.Context) (txs []*ethtypes.Tra
 		if err := k.ExecuableQueue.Set(ctx, queue); err != nil {
 			return nil, err
 		}
-		if err := k.EthNonce.Set(ctx, txNonce); err != nil {
+		if err := k.EthTxNonce.Set(ctx, txNonce); err != nil {
 			return nil, err
 		}
 	}

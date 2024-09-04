@@ -13,6 +13,14 @@ import (
 )
 
 func NewAnteHandler(accKeeper ante.AccountKeeper, relayerKeeper goattypes.RelayerKeeper, signModeHandler *txsigning.HandlerMap) sdk.AnteHandler {
+	if accKeeper == nil {
+		panic("nil account keeper")
+	}
+
+	if relayerKeeper == nil {
+		panic("nil relayer keeper")
+	}
+
 	anteDecorators := []sdk.AnteDecorator{
 		ante.NewSetUpContextDecorator(), // outermost AnteDecorator. SetUpContext must be called first
 		GoatGuardHandler{relayerKeeper},
@@ -35,7 +43,7 @@ type StdTx interface {
 	authsigning.SigVerifiableTx
 }
 
-func (ante GoatGuardHandler) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {
+func (ante GoatGuardHandler) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (sdk.Context, error) {
 	stdTx, ok := tx.(StdTx)
 	if !ok {
 		return ctx, errorsmod.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
@@ -69,7 +77,7 @@ func (ante GoatGuardHandler) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate boo
 
 	relayerProposer, err := ante.relayerKeeper.GetCurrentProposer(ctx)
 	if err != nil {
-		return ctx, nil
+		return ctx, err
 	}
 
 	var relayerTxOnly = func(msgName string) error {
@@ -106,5 +114,5 @@ func (ante GoatGuardHandler) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate boo
 		}
 	}
 
-	return next(newCtx, tx, simulate)
+	return next(ctx, tx, simulate)
 }

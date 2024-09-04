@@ -10,6 +10,7 @@ import (
 	"cosmossdk.io/core/store"
 	"cosmossdk.io/depinject"
 	"cosmossdk.io/log"
+	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -29,7 +30,7 @@ import (
 var (
 	_ module.AppModuleBasic      = (*AppModule)(nil)
 	_ module.AppModuleSimulation = (*AppModule)(nil)
-	_ module.HasGenesis          = (*AppModule)(nil)
+	_ module.HasABCIGenesis      = (*AppModule)(nil)
 	_ module.HasInvariants       = (*AppModule)(nil)
 	_ module.HasConsensusVersion = (*AppModule)(nil)
 
@@ -124,12 +125,23 @@ func (am AppModule) RegisterServices(cfg module.Configurator) {
 func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
 
 // InitGenesis performs the module's genesis initialization. It returns no validator updates.
-func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, gs json.RawMessage) {
+func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, gs json.RawMessage) (vs []abci.ValidatorUpdate) {
 	var genState types.GenesisState
 	// Initialize global index to index in genesis state
 	cdc.MustUnmarshalJSON(gs, &genState)
 
 	InitGenesis(ctx, am.keeper, genState)
+	// for _, v := range genState.GetValidators() {
+	// 	pubkey := v.GetPubkey()
+	// 	if len(pubkey) != 33 {
+	// 		panic("invalid secp256k1 public key: " + hex.EncodeToString(pubkey))
+	// 	}
+	// 	vs = append(vs, abci.ValidatorUpdate{
+	// 		PubKey: crypto.PublicKey{Sum: &crypto.PublicKey_Secp256K1{Secp256K1: pubkey}},
+	// 		Power:  v.GetPower(),
+	// 	})
+	// }
+	return
 }
 
 // ExportGenesis returns the module's exported genesis state as raw JSON bytes.
