@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 )
@@ -14,7 +15,10 @@ func DecodeHexOrBase64String(str string) ([]byte, error) {
 	if err != nil {
 		pubkeyRaw, err = base64.StdEncoding.DecodeString(str)
 		if err != nil {
-			return nil, fmt.Errorf("pubkey %s doesn't use base64 or hex encoding", str)
+			pubkeyRaw, err = hex.DecodeString(strings.TrimPrefix(str, "0x"))
+			if err != nil {
+				return nil, fmt.Errorf("pubkey %s doesn't use base64 or hex encoding", str)
+			}
 		}
 	}
 	return pubkeyRaw, nil
