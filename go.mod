@@ -13,7 +13,6 @@ require (
 	cosmossdk.io/math v1.3.0
 	cosmossdk.io/store v1.1.0
 	cosmossdk.io/tools/confix v0.1.1
-	cosmossdk.io/x/feegrant v0.1.0
 	cosmossdk.io/x/tx v0.13.4
 	cosmossdk.io/x/upgrade v0.1.4
 	github.com/btcsuite/btcd v0.24.2
@@ -49,7 +48,7 @@ require (
 )
 
 replace (
-	github.com/cosmos/cosmos-sdk => ../goat-cosmos-sdk
+	// github.com/cosmos/cosmos-sdk => ../goat-cosmos-sdk
 	// goat-geth implemention
 	github.com/ethereum/go-ethereum => github.com/goatnetwork/goat-geth v0.0.0-20240902063417-5326e8c751b0
 	// fix upstream GHSA-h395-qcrw-5vmq vulnerability.
@@ -84,7 +83,6 @@ require (
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/cespare/xxhash v1.1.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
-	github.com/cockroachdb/apd/v2 v2.0.2 // indirect
 	github.com/cockroachdb/errors v1.11.3 // indirect
 	github.com/cockroachdb/fifo v0.0.0-20240606204812-0bbfbd93a7ce // indirect
 	github.com/cockroachdb/logtags v0.0.0-20230118201751-21c54148d20b // indirect

@@ -27,7 +27,7 @@ type (
 		Params collections.Item[types.Params]
 		// this line is used by starport scaffolding # collection/type
 
-		stakingKeeper types.StakingKeeper
+		// stakingKeeper types.StakingKeeper
 	}
 )
 
@@ -38,7 +38,7 @@ func NewKeeper(
 	logger log.Logger,
 	authority string,
 
-	stakingKeeper types.StakingKeeper,
+	// stakingKeeper types.StakingKeeper,
 ) Keeper {
 	if _, err := addressCodec.StringToBytes(authority); err != nil {
 		panic(fmt.Sprintf("invalid authority address %s: %s", authority, err))
@@ -53,7 +53,7 @@ func NewKeeper(
 		authority:    authority,
 		logger:       logger,
 
-		stakingKeeper: stakingKeeper,
+		// stakingKeeper: stakingKeeper,
 		Params:        collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 		// this line is used by starport scaffolding # collection/instantiate
 	}

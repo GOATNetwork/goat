@@ -204,7 +204,8 @@ func (k Keeper) Finalized(ctx context.Context) error { // EndBlock phase only!
 	}
 
 	// set current block hash to head state and set previous block hash to safe and finalized state
-	k.Logger().Info("notify ForkchoiceUpdated", "head", block.BlockHash, "finalized", block.ParentHash)
+	k.Logger().Info("notify ForkchoiceUpdated",
+		"head", hexutil.Encode(block.BlockHash), "finalized", hexutil.Encode(block.ParentHash))
 	forkRes, err := k.ethclient.ForkchoiceUpdatedV3(ctx, &engine.ForkchoiceStateV1{
 		HeadBlockHash:      common.BytesToHash(block.BlockHash),
 		SafeBlockHash:      common.BytesToHash(block.ParentHash),

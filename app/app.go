@@ -27,12 +27,8 @@ import (
 	_ "github.com/cosmos/cosmos-sdk/x/consensus" // import for side-effects
 	consensuskeeper "github.com/cosmos/cosmos-sdk/x/consensus/keeper"
 	_ "github.com/cosmos/cosmos-sdk/x/distribution" // import for side-effects
-	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
-	"github.com/cosmos/cosmos-sdk/x/genutil"
-	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
-	_ "github.com/cosmos/cosmos-sdk/x/mint"    // import for side-effects
-	_ "github.com/cosmos/cosmos-sdk/x/staking" // import for side-effects
-	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
+	_ "github.com/cosmos/cosmos-sdk/x/mint"         // import for side-effects
+	_ "github.com/cosmos/cosmos-sdk/x/staking"      // import for side-effects
 	"go.uber.org/automaxprocs/maxprocs"
 
 	"github.com/goatnetwork/goat/docs"
@@ -71,8 +67,6 @@ type App struct {
 	// keepers
 	AccountKeeper         authkeeper.AccountKeeper
 	BankKeeper            bankkeeper.Keeper
-	StakingKeeper         *stakingkeeper.Keeper
-	DistrKeeper           distrkeeper.Keeper
 	ConsensusParamsKeeper consensuskeeper.Keeper
 
 	EthClient     *ethrpc.Client
@@ -98,18 +92,7 @@ func init() {
 
 // AppConfig returns the default app config.
 func AppConfig() depinject.Config {
-	return depinject.Configs(
-		appConfig,
-		// Alternatively, load the app config from a YAML file.
-		// appconfig.LoadYAML(AppConfigYAML),
-		depinject.Supply(
-			// supply custom module basics
-			map[string]module.AppModuleBasic{
-				genutiltypes.ModuleName: genutil.NewAppModuleBasic(genutiltypes.DefaultMessageValidator),
-				// this line is used by starport scaffolding # stargate/appConfig/moduleBasic
-			},
-		),
-	)
+	return appConfig
 }
 
 // New returns a reference to an initialized App.
@@ -127,7 +110,7 @@ func New(
 
 		// merge the AppConfig and other configuration in one config
 		appConfig = depinject.Configs(
-			AppConfig(),
+			appConfig,
 			depinject.Provide(
 				ProvideEngineClient,
 				ProvideValidatorPrvKey,
@@ -153,8 +136,8 @@ func New(
 		&app.interfaceRegistry,
 		&app.AccountKeeper,
 		&app.BankKeeper,
-		&app.StakingKeeper,
-		&app.DistrKeeper,
+		// &app.StakingKeeper,
+		// &app.DistrKeeper,
 		&app.ConsensusParamsKeeper,
 		&app.RelayerKeeper,
 		&app.BitcoinKeeper,

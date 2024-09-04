@@ -18,7 +18,6 @@ import (
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	authcmd "github.com/cosmos/cosmos-sdk/x/auth/client/cli"
-	genutilcli "github.com/cosmos/cosmos-sdk/x/genutil/client/cli"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
@@ -50,21 +49,10 @@ func initRootCmd(
 	// add keybase, auxiliary RPC, query, genesis, and tx child commands
 	rootCmd.AddCommand(
 		server.StatusCommand(),
-		genesisCommand(txConfig, basicManager),
 		queryCommand(),
 		txCommand(),
 		keys.Commands(),
 	)
-}
-
-// genesisCommand builds genesis-related `goatd genesis` command. Users may provide application specific commands as a parameter
-func genesisCommand(txConfig client.TxConfig, basicManager module.BasicManager, cmds ...*cobra.Command) *cobra.Command {
-	cmd := genutilcli.Commands(txConfig, basicManager, app.DefaultNodeHome)
-
-	for _, subCmd := range cmds {
-		cmd.AddCommand(subCmd)
-	}
-	return cmd
 }
 
 func queryCommand() *cobra.Command {

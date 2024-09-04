@@ -2,6 +2,7 @@ package locking
 
 import (
 	"context"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 
@@ -11,6 +12,7 @@ import (
 	"cosmossdk.io/depinject"
 	"cosmossdk.io/log"
 	abci "github.com/cometbft/cometbft/abci/types"
+	"github.com/cometbft/cometbft/proto/tendermint/crypto"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -34,8 +36,7 @@ var (
 	_ module.HasInvariants       = (*AppModule)(nil)
 	_ module.HasConsensusVersion = (*AppModule)(nil)
 
-	_ appmodule.AppModule     = (*AppModule)(nil)
-	_ appmodule.HasEndBlocker = (*AppModule)(nil)
+	_ appmodule.AppModule = (*AppModule)(nil)
 )
 
 // ----------------------------------------------------------------------------
@@ -131,16 +132,16 @@ func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, gs json.Ra
 	cdc.MustUnmarshalJSON(gs, &genState)
 
 	InitGenesis(ctx, am.keeper, genState)
-	// for _, v := range genState.GetValidators() {
-	// 	pubkey := v.GetPubkey()
-	// 	if len(pubkey) != 33 {
-	// 		panic("invalid secp256k1 public key: " + hex.EncodeToString(pubkey))
-	// 	}
-	// 	vs = append(vs, abci.ValidatorUpdate{
-	// 		PubKey: crypto.PublicKey{Sum: &crypto.PublicKey_Secp256K1{Secp256K1: pubkey}},
-	// 		Power:  v.GetPower(),
-	// 	})
-	// }
+	for _, v := range genState.GetValidators() {
+		pubkey := v.GetPubkey()
+		if len(pubkey) != 33 {
+			panic("invalid secp256k1 public key: " + hex.EncodeToString(pubkey))
+		}
+		vs = append(vs, abci.ValidatorUpdate{
+			PubKey: crypto.PublicKey{Sum: &crypto.PublicKey_Secp256K1{Secp256K1: pubkey}},
+			Power:  v.GetPower(),
+		})
+	}
 	return
 }
 
@@ -163,9 +164,9 @@ func (AppModule) ConsensusVersion() uint64 { return 1 }
 
 // EndBlock contains the logic that is automatically triggered at the end of each block.
 // The end block implementation is optional.
-func (am AppModule) EndBlock(_ context.Context) error {
-	return nil
-}
+// func (am AppModule) EndBlock(_ context.Context) error {
+// 	return nil
+// }
 
 // IsOnePerModuleType implements the depinject.OnePerModuleType interface.
 func (am AppModule) IsOnePerModuleType() {}
@@ -195,7 +196,7 @@ type ModuleInputs struct {
 
 	AccountKeeper types.AccountKeeper
 	BankKeeper    types.BankKeeper
-	StakingKeeper types.StakingKeeper
+	// StakingKeeper types.StakingKeeper
 }
 
 type ModuleOutputs struct {
@@ -217,7 +218,7 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.StoreService,
 		in.Logger,
 		authority.String(),
-		in.StakingKeeper,
+		// in.StakingKeeper,
 	)
 	m := NewAppModule(
 		in.Cdc,
