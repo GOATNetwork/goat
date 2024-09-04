@@ -61,7 +61,7 @@ func NewKey() *cobra.Command {
 					return err
 				}
 
-				btcAddr, err := btcutil.NewAddressWitnessPubKeyHash(key.PubKey().Bytes(), network)
+				btcAddr, err := btcutil.NewAddressWitnessPubKeyHash(key.PubKey().Address(), network)
 				if err != nil {
 					return err
 				}
