@@ -188,6 +188,7 @@ func ModgenCommand() *cobra.Command {
 		modgen.Relayer(),
 		modgen.Goat(),
 		modgen.Validator(),
+		modgen.NewKey(),
 	)
 	return cmd
 }

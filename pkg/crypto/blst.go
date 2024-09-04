@@ -1,6 +1,7 @@
 package crypto
 
 import (
+	"crypto/rand"
 	"errors"
 
 	blst "github.com/supranational/blst/bindings/go"
@@ -23,6 +24,12 @@ const (
 var (
 	ErrorAggregation = errors.New("crypto: failed to aggregate bls signatures")
 )
+
+func GenPrivKey() *PrivateKey {
+	var raw [32]byte
+	_, _ = rand.Read(raw[:])
+	return blst.KeyGenV3(raw[:])
+}
 
 func AggregateVerify(pks [][]byte, msg, sig []byte) bool {
 	if len(pks) == 0 {
