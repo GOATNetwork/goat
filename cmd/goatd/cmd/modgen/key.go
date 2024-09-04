@@ -2,12 +2,14 @@ package modgen
 
 import (
 	"encoding/hex"
+	"fmt"
 
+	"github.com/btcsuite/btcd/btcutil"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
-	"github.com/cosmos/cosmos-sdk/server"
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
+	"github.com/goatnetwork/goat/x/bitcoin/types"
 	"github.com/spf13/cobra"
 )
 
@@ -15,13 +17,13 @@ func NewKey() *cobra.Command {
 	const (
 		FlagTxKey   = "tx"
 		FlagVoteKey = "vote"
+		FlagNetwork = "network"
 	)
 
 	cmd := &cobra.Command{
 		Use: "keygen",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
-			serverCtx := server.GetServerContextFromCmd(cmd)
 
 			isTxKey, err := cmd.Flags().GetBool(FlagTxKey)
 			if err != nil {
@@ -33,14 +35,23 @@ func NewKey() *cobra.Command {
 				return err
 			}
 
+			networkName, err := cmd.Flags().GetString(FlagNetwork)
+			if err != nil {
+				return err
+			}
+
+			network, ok := types.BitcoinNetworks[networkName]
+			if !ok {
+				return fmt.Errorf("unknown bitcoin network: %s", networkName)
+			}
+
 			if isTxKey {
 				key := secp256k1.GenPrivKey()
-				serverCtx.Logger.Info(
-					"secp256k1",
-					"prvkey", hex.EncodeToString(key.Bytes()),
-					"pubkey", hex.EncodeToString(key.PubKey().Bytes()),
-				)
-				address, err := clientCtx.TxConfig.SigningContext().AddressCodec().BytesToString(key.PubKey().Address())
+
+				fmt.Println("secp256k1 prvkey", hex.EncodeToString(key.Bytes()))
+				fmt.Println("secp256k1 pubkey", hex.EncodeToString(key.PubKey().Bytes()))
+
+				goatAddr, err := clientCtx.TxConfig.SigningContext().AddressCodec().BytesToString(key.PubKey().Address())
 				if err != nil {
 					return err
 				}
@@ -49,22 +60,23 @@ func NewKey() *cobra.Command {
 				if err != nil {
 					return err
 				}
-				serverCtx.Logger.Info(
-					"address",
-					"goat", address,
-					"eth", ethcrypto.PubkeyToAddress(*pubkey).String(),
-				)
+
+				btcAddr, err := btcutil.NewAddressWitnessPubKeyHash(key.PubKey().Bytes(), network)
+				if err != nil {
+					return err
+				}
+
+				fmt.Println("goat address", goatAddr)
+				fmt.Println("eth address", ethcrypto.PubkeyToAddress(*pubkey).String())
+				fmt.Println("btc address", btcAddr.EncodeAddress())
 			}
 
 			if isVoteKey {
 				secretKey := goatcrypto.GenPrivKey()
 				publicKey := new(goatcrypto.PublicKey).From(secretKey)
 
-				serverCtx.Logger.Info(
-					"bls12-381",
-					"prvkey", hex.EncodeToString(secretKey.Serialize()),
-					"pubkey", hex.EncodeToString(publicKey.Compress()),
-				)
+				fmt.Println("bls12-381 prvkey", hex.EncodeToString(secretKey.Serialize()))
+				fmt.Println("bls12-381 pubkey", hex.EncodeToString(publicKey.Compress()))
 			}
 			return nil
 		},
@@ -72,6 +84,7 @@ func NewKey() *cobra.Command {
 
 	cmd.Flags().Bool(FlagTxKey, false, "create secp256k1 key")
 	cmd.Flags().Bool(FlagVoteKey, false, "create bls12-381 key")
+	cmd.Flags().String(FlagNetwork, "regtest", "bitcoin network name")
 
 	return cmd
 }
