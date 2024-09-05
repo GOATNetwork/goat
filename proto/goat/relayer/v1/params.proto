@@ -17,4 +17,11 @@ message Params {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
+
+  // accept_proposer_timeout, set it to zero to skip the check
+  google.protobuf.Duration accept_proposer_timeout = 2 [
+    (gogoproto.stdduration) = true,
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
 }

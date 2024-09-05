@@ -6,7 +6,6 @@ import (
 	"encoding/hex"
 	"fmt"
 	"math/big"
-	"time"
 
 	"cosmossdk.io/collections"
 	"cosmossdk.io/core/address"
@@ -27,10 +26,6 @@ type (
 		storeService store.KVStoreService
 		logger       log.Logger
 
-		// the address capable of executing a MsgUpdateParams message.
-		// Typically, this should be the x/gov module account.
-		authority string
-
 		schema      collections.Schema
 		Params      collections.Item[types.Params]
 		Relayer     collections.Item[types.Relayer]
@@ -49,20 +44,13 @@ func NewKeeper(
 	addressCodec address.Codec,
 	storeService store.KVStoreService,
 	logger log.Logger,
-	authority string,
-
 ) Keeper {
-	if _, err := addressCodec.StringToBytes(authority); err != nil {
-		panic(fmt.Sprintf("invalid authority address %s: %s", authority, err))
-	}
-
 	sb := collections.NewSchemaBuilder(storeService)
 
 	k := Keeper{
 		cdc:          cdc,
 		AddrCodec:    addressCodec,
 		storeService: storeService,
-		authority:    authority,
 		logger:       logger,
 
 		Params:      collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
@@ -191,14 +179,22 @@ func (k Keeper) SetProposalSeq(ctx context.Context, seq uint64) error {
 }
 
 func (k Keeper) ElecteProposer(ctx context.Context) error {
+	sdkctx := sdktypes.UnwrapSDKContext(ctx)
+
 	relayer, err := k.Relayer.Get(ctx)
 	if err != nil {
 		return err
 	}
 
-	sdkctx := sdktypes.UnwrapSDKContext(ctx)
+	param, err := k.Params.Get(ctx)
+	if err != nil {
+		return err
+	}
 
-	if vlen := int64(len(relayer.Voters)); sdkctx.BlockTime().Sub(relayer.LastElected) > 10*time.Minute && vlen > 0 {
+	blockTime := sdkctx.BlockTime()
+	vlen, duration := int64(len(relayer.Voters)), blockTime.Sub(relayer.LastElected)
+	acceptTimeout := param.AcceptProposerTimeout > 0 && duration > param.AcceptProposerTimeout
+	if vlen > 0 && (duration > param.ElectingPeriod || acceptTimeout) {
 		epoch, err := k.Epoch.Peek(ctx)
 		if err != nil {
 			return err
@@ -220,7 +216,8 @@ func (k Keeper) ElecteProposer(ctx context.Context) error {
 		relayer.Proposer, relayer.Voters[proposerIndex] = relayer.Voters[proposerIndex], relayer.Proposer
 
 		relayer.Version++
-		relayer.LastElected = sdkctx.BlockTime()
+		relayer.LastElected = blockTime
+		relayer.ProposerAccepted = false
 
 		k.Logger().Debug("New proposer", "height", sdkctx.BlockHeight(), "proposer", relayer.Proposer)
 		if err := k.Relayer.Set(ctx, relayer); err != nil {

@@ -59,7 +59,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 
 		relayer.Voters = append(relayer.Voters, addr)
 		v.Status = types.Activated
-		v.Height = sdkctx.BlockHeight()
+		v.Height = uint64(sdkctx.BlockHeight())
 		if err := k.Voters.Set(ctx, addrByte, *v); err != nil {
 			panic(err)
 		}

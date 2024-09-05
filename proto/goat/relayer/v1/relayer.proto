@@ -18,6 +18,7 @@ message Relayer {
     (gogoproto.nullable) = false,
     (gogoproto.stdtime) = true
   ];
+  bool proposer_accepted = 6;
 }
 
 // VoterStatus is the status of a voter.
@@ -37,11 +38,12 @@ enum VoterStatus {
 // Voter the relayer voter
 message Voter {
   // vote key is the bls12-381 G2 compressed pubkey(96 bytes)
+  // the key is a sha256 hash if the voter is pending to join the relayer network
   bytes vote_key = 1;
   // status represents the current voter status
   VoterStatus status = 2;
-  // height represents the block number when voter joined on consensus layer
-  int64 height = 3;
+  // height represents the block number of conensus layer when voter is approved to join on execution layer
+  uint64 height = 3;
 }
 
 // PublicKey defines the keys available for use with relayer
@@ -60,8 +62,10 @@ message PublicKey {
 message Votes {
   // the proposal sequence
   uint64 sequence = 1;
+  // the current relayer group version
+  uint64 version = 2;
   // voters represents the voter bitmap
-  bytes voters = 2;
+  bytes voters = 3;
   // signature is the aggregate signature by voters
-  bytes signature = 3;
+  bytes signature = 4;
 }
