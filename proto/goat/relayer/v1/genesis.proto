@@ -15,6 +15,7 @@ message GenesisState {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
-  uint64 threshold = 2;
-  map<string, Voter> voters = 3;
+  uint64 epoch = 2;
+  uint64 sequence = 3;
+  map<string, Voter> voters = 4;
 }

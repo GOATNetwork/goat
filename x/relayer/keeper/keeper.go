@@ -2,10 +2,11 @@ package keeper
 
 import (
 	"context"
-	"encoding/binary"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"math/big"
+	"slices"
 
 	"cosmossdk.io/collections"
 	"cosmossdk.io/core/address"
@@ -22,20 +23,18 @@ import (
 type (
 	Keeper struct {
 		cdc          codec.BinaryCodec
-		AddrCodec    address.Codec
 		storeService store.KVStoreService
 		logger       log.Logger
+		schema       collections.Schema
 
-		schema      collections.Schema
-		Params      collections.Item[types.Params]
-		Relayer     collections.Item[types.Relayer]
-		Epoch       collections.Sequence
-		ProposalSeq collections.Sequence
-		Voters      collections.Map[sdktypes.AccAddress, types.Voter]
-		Pubkeys     collections.KeySet[[]byte]
-		Randao      collections.Item[[]byte]
-		// this line is used by starport scaffolding # collection/type
-
+		AddrCodec address.Codec
+		Params    collections.Item[types.Params]
+		Relayer   collections.Item[types.Relayer]
+		Sequence  collections.Sequence
+		Voters    collections.Map[sdktypes.AccAddress, types.Voter]
+		Queue     collections.Item[types.VoterQueue]
+		Pubkeys   collections.KeySet[[]byte]
+		Randao    collections.Item[[]byte]
 	}
 )
 
@@ -53,14 +52,13 @@ func NewKeeper(
 		storeService: storeService,
 		logger:       logger,
 
-		Params:      collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
-		Relayer:     collections.NewItem(sb, types.RelayerKey, "relayer", codec.CollValue[types.Relayer](cdc)),
-		Epoch:       collections.NewSequence(sb, types.EpochKey, "epoch"),
-		ProposalSeq: collections.NewSequence(sb, types.ProposalKey, "proposal"),
-		Voters:      collections.NewMap(sb, types.VotersKey, "voters", sdktypes.AccAddressKey, codec.CollValue[types.Voter](cdc)),
-		Pubkeys:     collections.NewKeySet(sb, types.PubkeysKey, "pubkeys", collections.BytesKey),
-		Randao:      collections.NewItem(sb, types.RandDAOKey, "randao", collections.BytesValue),
-		// this line is used by starport scaffolding # collection/instantiate
+		Params:   collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		Relayer:  collections.NewItem(sb, types.RelayerKey, "relayer", codec.CollValue[types.Relayer](cdc)),
+		Sequence: collections.NewSequence(sb, types.SequenceKey, "sequence"),
+		Voters:   collections.NewMap(sb, types.VotersKey, "voters", sdktypes.AccAddressKey, codec.CollValue[types.Voter](cdc)),
+		Pubkeys:  collections.NewKeySet(sb, types.PubkeysKey, "pubkeys", collections.BytesKey),
+		Queue:    collections.NewItem(sb, types.QueueKey, "queue", codec.CollValue[types.VoterQueue](cdc)),
+		Randao:   collections.NewItem(sb, types.RandDAOKey, "randao", collections.BytesValue),
 	}
 
 	schema, err := sb.Build()
@@ -87,29 +85,32 @@ func (k Keeper) VerifyProposal(ctx context.Context, req types.IVoteMsg, verifyFn
 		return 0, types.ErrNotProposer.Wrapf("not proposer")
 	}
 
-	requireVoters := relayer.GetVoters()
-	requestVoters := req.GetVote()
-	if requestVoters == nil {
-		return 0, types.ErrInvalidProposalSignature.Wrap("no vote info")
-	}
-
-	sequence, err := k.ProposalSeq.Peek(ctx)
+	voters := relayer.GetVoters()
+	sequence, err := k.Sequence.Peek(ctx)
 	if err != nil {
 		return 0, err
 	}
 
-	if requestVoters.GetSequence() != sequence {
+	if req.GetVote().GetSequence() != sequence {
 		return 0, types.ErrInvalidProposalSignature.Wrap("incorrect seqeuence")
 	}
 
-	voterBitmap := bitmap.FromBytes(requestVoters.GetVoters())
+	if req.GetVote().GetEpoch() != relayer.Epoch {
+		return 0, types.ErrInvalidProposalSignature.Wrap("incorrect epoch")
+	}
 
-	voterLen := voterBitmap.Count()
-	if voterLen+1 < int(relayer.Threshold) || voterLen > len(requireVoters) {
+	threshold := (1 + len(voters)) * 2 / 3
+	if threshold == 0 {
+		threshold = 1
+	}
+
+	bmp := bitmap.FromBytes(req.GetVote().GetVoters())
+	bmpLen := bmp.Count()
+	if bmpLen+1 < threshold || bmpLen > len(voters) {
 		return 0, types.ErrInvalidProposalSignature.Wrapf("malformed signature length")
 	}
 
-	pubkeys := make([][]byte, 0, voterLen+1)
+	pubkeys := make([][]byte, 0, bmpLen+1)
 	p, err := k.AddrCodec.StringToBytes(relayer.Proposer)
 	if err != nil {
 		return 0, err
@@ -121,8 +122,8 @@ func (k Keeper) VerifyProposal(ctx context.Context, req types.IVoteMsg, verifyFn
 	}
 	pubkeys = append(pubkeys, proposer.VoteKey)
 
-	for i := 0; i < len(requireVoters); i++ {
-		if !voterBitmap.Contains(uint32(i)) {
+	for i := 0; i < len(voters); i++ {
+		if !bmp.Contains(uint32(i)) {
 			continue
 		}
 
@@ -140,8 +141,8 @@ func (k Keeper) VerifyProposal(ctx context.Context, req types.IVoteMsg, verifyFn
 
 	chainId := sdktypes.UnwrapSDKContext(ctx).HeaderInfo().ChainID
 
-	sigdoc := types.VoteSignDoc(req.MethodName(), chainId, relayer.Proposer, sequence, req.VoteSigDoc())
-	if !goatcrypto.AggregateVerify(pubkeys, sigdoc, requestVoters.GetSignature()) {
+	sigdoc := types.VoteSignDoc(req.MethodName(), chainId, relayer.Proposer, sequence, relayer.Epoch, req.VoteSigDoc())
+	if !goatcrypto.AggregateVerify(pubkeys, sigdoc, req.GetVote().GetSignature()) {
 		return 0, types.ErrInvalidProposalSignature.Wrapf("invalid signature")
 	}
 
@@ -175,7 +176,7 @@ func (k Keeper) AddNewKey(ctx context.Context, raw []byte) error {
 }
 
 func (k Keeper) SetProposalSeq(ctx context.Context, seq uint64) error {
-	return k.ProposalSeq.Set(ctx, seq)
+	return k.Sequence.Set(ctx, seq)
 }
 
 func (k Keeper) ElecteProposer(ctx context.Context) error {
@@ -191,31 +192,76 @@ func (k Keeper) ElecteProposer(ctx context.Context) error {
 		return err
 	}
 
+	queue, err := k.Queue.Get(ctx)
+	if err != nil {
+		return err
+	}
+
+	onBoarding, offBoarding := len(queue.OnBoarding) > 0, len(queue.OffBoarding) > 0
+	if onBoarding {
+		for _, v := range queue.OnBoarding {
+			addr, err := k.AddrCodec.StringToBytes(v)
+			if err != nil {
+				return err
+			}
+			voter, err := k.Voters.Get(ctx, addr)
+			if err != nil {
+				return err
+			}
+			voter.Status = types.VOTER_STATUS_ACTIVATED
+		}
+		relayer.Voters = append(relayer.Voters, queue.OnBoarding...)
+	}
+
+	if offBoarding {
+		set := make(map[string]bool)
+		for _, v := range queue.OffBoarding {
+			addr, err := k.AddrCodec.StringToBytes(v)
+			if err != nil {
+				return err
+			}
+			if err := k.Voters.Remove(ctx, addr); err != nil {
+				return err
+			}
+			set[v] = true
+		}
+
+		voters := slices.DeleteFunc(append([]string{relayer.Proposer}, relayer.Voters...), func(e string) bool {
+			return set[e]
+		})
+
+		if len(voters) == 0 { // it should never happen
+			return errors.New("Too few voters avaliable")
+		}
+
+		relayer.Proposer = voters[0]
+		relayer.Voters = voters[1:]
+	}
+
+	if offBoarding || onBoarding {
+		queue.OnBoarding = queue.OnBoarding[:0]
+		queue.OffBoarding = queue.OffBoarding[:0]
+		if err := k.Queue.Set(ctx, queue); err != nil {
+			return err
+		}
+	}
+
 	blockTime := sdkctx.BlockTime()
 	vlen, duration := int64(len(relayer.Voters)), blockTime.Sub(relayer.LastElected)
 	acceptTimeout := param.AcceptProposerTimeout > 0 && duration > param.AcceptProposerTimeout
 	if vlen > 0 && (duration > param.ElectingPeriod || acceptTimeout) {
-		epoch, err := k.Epoch.Peek(ctx)
-		if err != nil {
-			return err
-		}
-
 		randao, err := k.Randao.Get(ctx)
 		if err != nil {
 			return err
 		}
 
-		epoch++
-		epochRaw := make([]byte, 8)
-		binary.LittleEndian.PutUint64(epochRaw, epoch)
+		relayer.Epoch++
 
 		// hash with the current epoch to ensure always have a new randao value
-		curRand := new(big.Int).SetBytes(goatcrypto.SHA256Sum(randao, epochRaw))
+		curRand := new(big.Int).SetBytes(goatcrypto.SHA256Sum(randao, goatcrypto.Uint64LE(relayer.Epoch)))
 		proposerIndex := curRand.Mod(curRand, big.NewInt(vlen)).Int64()
 
 		relayer.Proposer, relayer.Voters[proposerIndex] = relayer.Voters[proposerIndex], relayer.Proposer
-
-		relayer.Version++
 		relayer.LastElected = blockTime
 		relayer.ProposerAccepted = false
 
@@ -223,10 +269,7 @@ func (k Keeper) ElecteProposer(ctx context.Context) error {
 		if err := k.Relayer.Set(ctx, relayer); err != nil {
 			return err
 		}
-		if err := k.Epoch.Set(ctx, epoch); err != nil {
-			return err
-		}
-		sdkctx.EventManager().EmitEvent(types.NewProposer(relayer.Proposer))
+		sdkctx.EventManager().EmitEvent(types.ElectedProposerEvent(relayer.Proposer, relayer.Epoch))
 	}
 
 	return nil

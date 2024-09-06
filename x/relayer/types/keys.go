@@ -18,8 +18,8 @@ var (
 	RelayerKey  = collections.NewPrefix(1)
 	VotersKey   = collections.NewPrefix(2)
 	PubkeysKey  = collections.NewPrefix(3)
-	ProposalKey = collections.NewPrefix(4)
-	EpochKey    = collections.NewPrefix(5)
+	SequenceKey = collections.NewPrefix(4)
+	QueueKey    = collections.NewPrefix(5)
 	RandDAOKey  = collections.NewPrefix(6)
 )
 

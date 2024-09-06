@@ -17,7 +17,6 @@ import (
 func Relayer() *cobra.Command {
 	const (
 		FlagParamElectingPeriod = "param.electing_period"
-		FlagThreshold           = "threshold"
 		FlagPubkey              = "key.tx"
 		FlagVoteKey             = "key.vote"
 	)
@@ -86,11 +85,6 @@ func Relayer() *cobra.Command {
 				return err
 			}
 
-			threshold, err := cmd.Flags().GetUint64(FlagThreshold)
-			if err != nil {
-				return err
-			}
-
 			txKey := &secp256k1.PubKey{Key: txRawKey}
 			if txKeyAddr := txKey.Address().Bytes(); !bytes.Equal(txKeyAddr, addrByte) {
 				addr, _ := addrcodec.BytesToString(txKeyAddr)
@@ -99,14 +93,11 @@ func Relayer() *cobra.Command {
 
 			serverCtx.Logger.Info("update genesis", "module", types.ModuleName)
 			if err := UpdateModuleGenesis(genesisFile, types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
-				if threshold != 0 {
-					genesis.Threshold = threshold
-				}
 				if _, ok := genesis.Voters[addr]; ok {
 					serverCtx.Logger.Info("relayer already added", "addr", addr)
 					return nil
 				}
-				genesis.Voters[addr] = &types.Voter{VoteKey: voteKey}
+				genesis.Voters[addr] = &types.Voter{VoteKey: voteKey, Status: types.VOTER_STATUS_ACTIVATED}
 				return genesis.Validate()
 			}); err != nil {
 				return err
@@ -150,8 +141,6 @@ func Relayer() *cobra.Command {
 	}
 
 	cmd.Flags().Duration(FlagParamElectingPeriod, time.Minute*10, "")
-
-	appendVoter.Flags().Uint64(FlagThreshold, 0, "voter threshold")
 	appendVoter.Flags().String(FlagPubkey, "", "the voter tx public key(compressed secp256k1)")
 	appendVoter.Flags().String(FlagVoteKey, "", "the voter vote public key(compressed bls12381 G2)")
 	cmd.AddCommand(appendVoter)

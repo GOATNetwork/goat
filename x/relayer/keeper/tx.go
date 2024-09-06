@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 
-	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
@@ -40,14 +39,18 @@ func (k msgServer) NewVoter(ctx context.Context, req *types.MsgNewVoterRequest) 
 		return nil, types.ErrInvalid.Wrapf("not the current proposer")
 	}
 
-	address := sdktypes.AccAddress(
-		(&secp256k1.PubKey{Key: req.VoterTxKey}).Address().Bytes())
+	address := sdktypes.AccAddress(goatcrypto.Hash160Sum(req.VoterTxKey))
+	addressStr, err := k.AddrCodec.BytesToString(address)
+	if err != nil {
+		return nil, err
+	}
+
 	voter, err := k.Voters.Get(ctx, address)
 	if err != nil {
 		return nil, err
 	}
 
-	if voter.Status != types.Pending {
+	if voter.Status != types.VOTER_STATUS_PENDING {
 		return nil, types.ErrInvalid.Wrapf("not a pending voter")
 	}
 
@@ -55,22 +58,35 @@ func (k msgServer) NewVoter(ctx context.Context, req *types.MsgNewVoterRequest) 
 		return nil, types.ErrInvalid.Wrapf("vote key hash not match")
 	}
 
-	sigMsg := req.SignDoc(sdkctx.ChainID(), voter.Height, address, voter.VoteKey)
+	reqMsg := types.NewOnBoardingVoterRequest(voter.Height, address, voter.VoteKey)
+	sigMsg := types.VoteSignDoc(
+		reqMsg.MethodName(), sdkctx.ChainID(), req.Proposer, 0 /* sequence */, relayer.Epoch, reqMsg.SignDoc())
+
 	if !ethcrypto.VerifySignature(req.VoterTxKey, sigMsg, req.VoterTxKeyProof) {
 		return nil, types.ErrInvalid.Wrapf("false tx key proof")
 	}
 
-	blsPubKey := new(goatcrypto.PublicKey).Uncompress(req.VoterBlsKey)
-	if !goatcrypto.Verify(blsPubKey, sigMsg, req.VoterBlsKeyProof) {
+	if !goatcrypto.Verify(req.VoterBlsKey, sigMsg, req.VoterBlsKeyProof) {
 		return nil, types.ErrInvalid.Wrapf("false vote key proof")
 	}
 
+	queue, err := k.Queue.Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+	queue.OnBoarding = append(queue.OnBoarding, addressStr)
+
 	voter.VoteKey = req.VoterBlsKey
-	voter.Status = types.Activated
+	voter.Status = types.VOTER_STATUS_ON_BOARDING
 	if err := k.Voters.Set(ctx, address, voter); err != nil {
 		return nil, err
 	}
 
+	if err := k.Queue.Set(ctx, queue); err != nil {
+		return nil, err
+	}
+
+	sdkctx.EventManager().EmitEvent(types.VoterBoardedEvent(relayer.Proposer, addressStr))
 	return &types.MsgNewVoterResponse{}, nil
 }
 
@@ -97,8 +113,8 @@ func (k msgServer) AcceptProposer(ctx context.Context, req *types.MsgAcceptPropo
 		return nil, types.ErrInvalid.Wrapf("proposer has been accepted")
 	}
 
-	if relayer.Version != req.Version {
-		return nil, types.ErrInvalid.Wrapf("invalid version: expected: %d", relayer.Version)
+	if relayer.Epoch != req.Epoch {
+		return nil, types.ErrInvalid.Wrapf("invalid epoch: expected: %d", relayer.Epoch)
 	}
 
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
@@ -112,5 +128,6 @@ func (k msgServer) AcceptProposer(ctx context.Context, req *types.MsgAcceptPropo
 		return nil, err
 	}
 
+	sdkctx.EventManager().EmitEvent(types.AcceptedProposerEvent(relayer.Proposer, relayer.Epoch))
 	return &types.MsgAcceptProposerResponse{}, nil
 }

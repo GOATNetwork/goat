@@ -1,7 +1,6 @@
 package types
 
 import (
-	"errors"
 	"fmt"
 )
 
@@ -12,9 +11,8 @@ const DefaultIndex uint64 = 1
 func DefaultGenesis() *GenesisState {
 	return &GenesisState{
 		// this line is used by starport scaffolding # genesis/types/default
-		Params:    DefaultParams(),
-		Threshold: 0,
-		Voters:    make(map[string]*Voter),
+		Params: DefaultParams(),
+		Voters: make(map[string]*Voter),
 	}
 }
 
@@ -25,14 +23,6 @@ func (gs GenesisState) Validate() error {
 
 	if err := gs.Params.Validate(); err != nil {
 		return err
-	}
-
-	if gs.Threshold != 0 && gs.Threshold > uint64(len(gs.Voters)) {
-		return errors.New("invalid proposal threshold")
-	}
-
-	if gs.Threshold == 0 && len(gs.Voters) != 0 {
-		return errors.New("threshold shuould not be 0 if voter length is not 0")
 	}
 
 	for addr, vote := range gs.Voters {

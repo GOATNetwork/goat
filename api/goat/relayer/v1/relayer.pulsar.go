@@ -15,56 +15,55 @@ import (
 	sync "sync"
 )
 
-var _ protoreflect.List = (*_Relayer_4_list)(nil)
+var _ protoreflect.List = (*_Relayer_3_list)(nil)
 
-type _Relayer_4_list struct {
+type _Relayer_3_list struct {
 	list *[]string
 }
 
-func (x *_Relayer_4_list) Len() int {
+func (x *_Relayer_3_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_Relayer_4_list) Get(i int) protoreflect.Value {
+func (x *_Relayer_3_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfString((*x.list)[i])
 }
 
-func (x *_Relayer_4_list) Set(i int, value protoreflect.Value) {
+func (x *_Relayer_3_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.String()
 	concreteValue := valueUnwrapped
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_Relayer_4_list) Append(value protoreflect.Value) {
+func (x *_Relayer_3_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.String()
 	concreteValue := valueUnwrapped
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_Relayer_4_list) AppendMutable() protoreflect.Value {
+func (x *_Relayer_3_list) AppendMutable() protoreflect.Value {
 	panic(fmt.Errorf("AppendMutable can not be called on message Relayer at list field Voters as it is not of Message kind"))
 }
 
-func (x *_Relayer_4_list) Truncate(n int) {
+func (x *_Relayer_3_list) Truncate(n int) {
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_Relayer_4_list) NewElement() protoreflect.Value {
+func (x *_Relayer_3_list) NewElement() protoreflect.Value {
 	v := ""
 	return protoreflect.ValueOfString(v)
 }
 
-func (x *_Relayer_4_list) IsValid() bool {
+func (x *_Relayer_3_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
 	md_Relayer                   protoreflect.MessageDescriptor
-	fd_Relayer_version           protoreflect.FieldDescriptor
-	fd_Relayer_threshold         protoreflect.FieldDescriptor
+	fd_Relayer_epoch             protoreflect.FieldDescriptor
 	fd_Relayer_proposer          protoreflect.FieldDescriptor
 	fd_Relayer_voters            protoreflect.FieldDescriptor
 	fd_Relayer_last_elected      protoreflect.FieldDescriptor
@@ -74,8 +73,7 @@ var (
 func init() {
 	file_goat_relayer_v1_relayer_proto_init()
 	md_Relayer = File_goat_relayer_v1_relayer_proto.Messages().ByName("Relayer")
-	fd_Relayer_version = md_Relayer.Fields().ByName("version")
-	fd_Relayer_threshold = md_Relayer.Fields().ByName("threshold")
+	fd_Relayer_epoch = md_Relayer.Fields().ByName("epoch")
 	fd_Relayer_proposer = md_Relayer.Fields().ByName("proposer")
 	fd_Relayer_voters = md_Relayer.Fields().ByName("voters")
 	fd_Relayer_last_elected = md_Relayer.Fields().ByName("last_elected")
@@ -147,15 +145,9 @@ func (x *fastReflection_Relayer) Interface() protoreflect.ProtoMessage {
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_Relayer) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Version != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.Version)
-		if !f(fd_Relayer_version, value) {
-			return
-		}
-	}
-	if x.Threshold != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.Threshold)
-		if !f(fd_Relayer_threshold, value) {
+	if x.Epoch != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Epoch)
+		if !f(fd_Relayer_epoch, value) {
 			return
 		}
 	}
@@ -166,7 +158,7 @@ func (x *fastReflection_Relayer) Range(f func(protoreflect.FieldDescriptor, prot
 		}
 	}
 	if len(x.Voters) != 0 {
-		value := protoreflect.ValueOfList(&_Relayer_4_list{list: &x.Voters})
+		value := protoreflect.ValueOfList(&_Relayer_3_list{list: &x.Voters})
 		if !f(fd_Relayer_voters, value) {
 			return
 		}
@@ -198,10 +190,8 @@ func (x *fastReflection_Relayer) Range(f func(protoreflect.FieldDescriptor, prot
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_Relayer) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "goat.relayer.v1.Relayer.version":
-		return x.Version != uint64(0)
-	case "goat.relayer.v1.Relayer.threshold":
-		return x.Threshold != uint64(0)
+	case "goat.relayer.v1.Relayer.epoch":
+		return x.Epoch != uint64(0)
 	case "goat.relayer.v1.Relayer.proposer":
 		return x.Proposer != ""
 	case "goat.relayer.v1.Relayer.voters":
@@ -226,10 +216,8 @@ func (x *fastReflection_Relayer) Has(fd protoreflect.FieldDescriptor) bool {
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Relayer) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "goat.relayer.v1.Relayer.version":
-		x.Version = uint64(0)
-	case "goat.relayer.v1.Relayer.threshold":
-		x.Threshold = uint64(0)
+	case "goat.relayer.v1.Relayer.epoch":
+		x.Epoch = uint64(0)
 	case "goat.relayer.v1.Relayer.proposer":
 		x.Proposer = ""
 	case "goat.relayer.v1.Relayer.voters":
@@ -254,20 +242,17 @@ func (x *fastReflection_Relayer) Clear(fd protoreflect.FieldDescriptor) {
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_Relayer) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "goat.relayer.v1.Relayer.version":
-		value := x.Version
-		return protoreflect.ValueOfUint64(value)
-	case "goat.relayer.v1.Relayer.threshold":
-		value := x.Threshold
+	case "goat.relayer.v1.Relayer.epoch":
+		value := x.Epoch
 		return protoreflect.ValueOfUint64(value)
 	case "goat.relayer.v1.Relayer.proposer":
 		value := x.Proposer
 		return protoreflect.ValueOfString(value)
 	case "goat.relayer.v1.Relayer.voters":
 		if len(x.Voters) == 0 {
-			return protoreflect.ValueOfList(&_Relayer_4_list{})
+			return protoreflect.ValueOfList(&_Relayer_3_list{})
 		}
-		listValue := &_Relayer_4_list{list: &x.Voters}
+		listValue := &_Relayer_3_list{list: &x.Voters}
 		return protoreflect.ValueOfList(listValue)
 	case "goat.relayer.v1.Relayer.last_elected":
 		value := x.LastElected
@@ -295,15 +280,13 @@ func (x *fastReflection_Relayer) Get(descriptor protoreflect.FieldDescriptor) pr
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Relayer) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "goat.relayer.v1.Relayer.version":
-		x.Version = value.Uint()
-	case "goat.relayer.v1.Relayer.threshold":
-		x.Threshold = value.Uint()
+	case "goat.relayer.v1.Relayer.epoch":
+		x.Epoch = value.Uint()
 	case "goat.relayer.v1.Relayer.proposer":
 		x.Proposer = value.Interface().(string)
 	case "goat.relayer.v1.Relayer.voters":
 		lv := value.List()
-		clv := lv.(*_Relayer_4_list)
+		clv := lv.(*_Relayer_3_list)
 		x.Voters = *clv.list
 	case "goat.relayer.v1.Relayer.last_elected":
 		x.LastElected = value.Message().Interface().(*timestamppb.Timestamp)
@@ -333,17 +316,15 @@ func (x *fastReflection_Relayer) Mutable(fd protoreflect.FieldDescriptor) protor
 		if x.Voters == nil {
 			x.Voters = []string{}
 		}
-		value := &_Relayer_4_list{list: &x.Voters}
+		value := &_Relayer_3_list{list: &x.Voters}
 		return protoreflect.ValueOfList(value)
 	case "goat.relayer.v1.Relayer.last_elected":
 		if x.LastElected == nil {
 			x.LastElected = new(timestamppb.Timestamp)
 		}
 		return protoreflect.ValueOfMessage(x.LastElected.ProtoReflect())
-	case "goat.relayer.v1.Relayer.version":
-		panic(fmt.Errorf("field version of message goat.relayer.v1.Relayer is not mutable"))
-	case "goat.relayer.v1.Relayer.threshold":
-		panic(fmt.Errorf("field threshold of message goat.relayer.v1.Relayer is not mutable"))
+	case "goat.relayer.v1.Relayer.epoch":
+		panic(fmt.Errorf("field epoch of message goat.relayer.v1.Relayer is not mutable"))
 	case "goat.relayer.v1.Relayer.proposer":
 		panic(fmt.Errorf("field proposer of message goat.relayer.v1.Relayer is not mutable"))
 	case "goat.relayer.v1.Relayer.proposer_accepted":
@@ -361,15 +342,13 @@ func (x *fastReflection_Relayer) Mutable(fd protoreflect.FieldDescriptor) protor
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_Relayer) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "goat.relayer.v1.Relayer.version":
-		return protoreflect.ValueOfUint64(uint64(0))
-	case "goat.relayer.v1.Relayer.threshold":
+	case "goat.relayer.v1.Relayer.epoch":
 		return protoreflect.ValueOfUint64(uint64(0))
 	case "goat.relayer.v1.Relayer.proposer":
 		return protoreflect.ValueOfString("")
 	case "goat.relayer.v1.Relayer.voters":
 		list := []string{}
-		return protoreflect.ValueOfList(&_Relayer_4_list{list: &list})
+		return protoreflect.ValueOfList(&_Relayer_3_list{list: &list})
 	case "goat.relayer.v1.Relayer.last_elected":
 		m := new(timestamppb.Timestamp)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
@@ -444,11 +423,8 @@ func (x *fastReflection_Relayer) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
-		if x.Version != 0 {
-			n += 1 + runtime.Sov(uint64(x.Version))
-		}
-		if x.Threshold != 0 {
-			n += 1 + runtime.Sov(uint64(x.Threshold))
+		if x.Epoch != 0 {
+			n += 1 + runtime.Sov(uint64(x.Epoch))
 		}
 		l = len(x.Proposer)
 		if l > 0 {
@@ -504,7 +480,7 @@ func (x *fastReflection_Relayer) ProtoMethods() *protoiface.Methods {
 				dAtA[i] = 0
 			}
 			i--
-			dAtA[i] = 0x30
+			dAtA[i] = 0x28
 		}
 		if x.LastElected != nil {
 			encoded, err := options.Marshal(x.LastElected)
@@ -518,7 +494,7 @@ func (x *fastReflection_Relayer) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], encoded)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
-			dAtA[i] = 0x2a
+			dAtA[i] = 0x22
 		}
 		if len(x.Voters) > 0 {
 			for iNdEx := len(x.Voters) - 1; iNdEx >= 0; iNdEx-- {
@@ -526,7 +502,7 @@ func (x *fastReflection_Relayer) ProtoMethods() *protoiface.Methods {
 				copy(dAtA[i:], x.Voters[iNdEx])
 				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Voters[iNdEx])))
 				i--
-				dAtA[i] = 0x22
+				dAtA[i] = 0x1a
 			}
 		}
 		if len(x.Proposer) > 0 {
@@ -534,15 +510,10 @@ func (x *fastReflection_Relayer) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], x.Proposer)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Proposer)))
 			i--
-			dAtA[i] = 0x1a
+			dAtA[i] = 0x12
 		}
-		if x.Threshold != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.Threshold))
-			i--
-			dAtA[i] = 0x10
-		}
-		if x.Version != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.Version))
+		if x.Epoch != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Epoch))
 			i--
 			dAtA[i] = 0x8
 		}
@@ -597,9 +568,9 @@ func (x *fastReflection_Relayer) ProtoMethods() *protoiface.Methods {
 			switch fieldNum {
 			case 1:
 				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Version", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Epoch", wireType)
 				}
-				x.Version = 0
+				x.Epoch = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -609,31 +580,12 @@ func (x *fastReflection_Relayer) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.Version |= uint64(b&0x7F) << shift
+					x.Epoch |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
 			case 2:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Threshold", wireType)
-				}
-				x.Threshold = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.Threshold |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 3:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Proposer", wireType)
 				}
@@ -665,7 +617,7 @@ func (x *fastReflection_Relayer) ProtoMethods() *protoiface.Methods {
 				}
 				x.Proposer = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 4:
+			case 3:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Voters", wireType)
 				}
@@ -697,7 +649,7 @@ func (x *fastReflection_Relayer) ProtoMethods() *protoiface.Methods {
 				}
 				x.Voters = append(x.Voters, string(dAtA[iNdEx:postIndex]))
 				iNdEx = postIndex
-			case 5:
+			case 4:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LastElected", wireType)
 				}
@@ -733,7 +685,7 @@ func (x *fastReflection_Relayer) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
-			case 6:
+			case 5:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ProposerAccepted", wireType)
 				}
@@ -1839,7 +1791,7 @@ func (x *fastReflection_PublicKey) ProtoMethods() *protoiface.Methods {
 var (
 	md_Votes           protoreflect.MessageDescriptor
 	fd_Votes_sequence  protoreflect.FieldDescriptor
-	fd_Votes_version   protoreflect.FieldDescriptor
+	fd_Votes_epoch     protoreflect.FieldDescriptor
 	fd_Votes_voters    protoreflect.FieldDescriptor
 	fd_Votes_signature protoreflect.FieldDescriptor
 )
@@ -1848,7 +1800,7 @@ func init() {
 	file_goat_relayer_v1_relayer_proto_init()
 	md_Votes = File_goat_relayer_v1_relayer_proto.Messages().ByName("Votes")
 	fd_Votes_sequence = md_Votes.Fields().ByName("sequence")
-	fd_Votes_version = md_Votes.Fields().ByName("version")
+	fd_Votes_epoch = md_Votes.Fields().ByName("epoch")
 	fd_Votes_voters = md_Votes.Fields().ByName("voters")
 	fd_Votes_signature = md_Votes.Fields().ByName("signature")
 }
@@ -1924,9 +1876,9 @@ func (x *fastReflection_Votes) Range(f func(protoreflect.FieldDescriptor, protor
 			return
 		}
 	}
-	if x.Version != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.Version)
-		if !f(fd_Votes_version, value) {
+	if x.Epoch != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Epoch)
+		if !f(fd_Votes_epoch, value) {
 			return
 		}
 	}
@@ -1959,8 +1911,8 @@ func (x *fastReflection_Votes) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	case "goat.relayer.v1.Votes.sequence":
 		return x.Sequence != uint64(0)
-	case "goat.relayer.v1.Votes.version":
-		return x.Version != uint64(0)
+	case "goat.relayer.v1.Votes.epoch":
+		return x.Epoch != uint64(0)
 	case "goat.relayer.v1.Votes.voters":
 		return len(x.Voters) != 0
 	case "goat.relayer.v1.Votes.signature":
@@ -1983,8 +1935,8 @@ func (x *fastReflection_Votes) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "goat.relayer.v1.Votes.sequence":
 		x.Sequence = uint64(0)
-	case "goat.relayer.v1.Votes.version":
-		x.Version = uint64(0)
+	case "goat.relayer.v1.Votes.epoch":
+		x.Epoch = uint64(0)
 	case "goat.relayer.v1.Votes.voters":
 		x.Voters = nil
 	case "goat.relayer.v1.Votes.signature":
@@ -2008,8 +1960,8 @@ func (x *fastReflection_Votes) Get(descriptor protoreflect.FieldDescriptor) prot
 	case "goat.relayer.v1.Votes.sequence":
 		value := x.Sequence
 		return protoreflect.ValueOfUint64(value)
-	case "goat.relayer.v1.Votes.version":
-		value := x.Version
+	case "goat.relayer.v1.Votes.epoch":
+		value := x.Epoch
 		return protoreflect.ValueOfUint64(value)
 	case "goat.relayer.v1.Votes.voters":
 		value := x.Voters
@@ -2039,8 +1991,8 @@ func (x *fastReflection_Votes) Set(fd protoreflect.FieldDescriptor, value protor
 	switch fd.FullName() {
 	case "goat.relayer.v1.Votes.sequence":
 		x.Sequence = value.Uint()
-	case "goat.relayer.v1.Votes.version":
-		x.Version = value.Uint()
+	case "goat.relayer.v1.Votes.epoch":
+		x.Epoch = value.Uint()
 	case "goat.relayer.v1.Votes.voters":
 		x.Voters = value.Bytes()
 	case "goat.relayer.v1.Votes.signature":
@@ -2067,8 +2019,8 @@ func (x *fastReflection_Votes) Mutable(fd protoreflect.FieldDescriptor) protoref
 	switch fd.FullName() {
 	case "goat.relayer.v1.Votes.sequence":
 		panic(fmt.Errorf("field sequence of message goat.relayer.v1.Votes is not mutable"))
-	case "goat.relayer.v1.Votes.version":
-		panic(fmt.Errorf("field version of message goat.relayer.v1.Votes is not mutable"))
+	case "goat.relayer.v1.Votes.epoch":
+		panic(fmt.Errorf("field epoch of message goat.relayer.v1.Votes is not mutable"))
 	case "goat.relayer.v1.Votes.voters":
 		panic(fmt.Errorf("field voters of message goat.relayer.v1.Votes is not mutable"))
 	case "goat.relayer.v1.Votes.signature":
@@ -2088,7 +2040,7 @@ func (x *fastReflection_Votes) NewField(fd protoreflect.FieldDescriptor) protore
 	switch fd.FullName() {
 	case "goat.relayer.v1.Votes.sequence":
 		return protoreflect.ValueOfUint64(uint64(0))
-	case "goat.relayer.v1.Votes.version":
+	case "goat.relayer.v1.Votes.epoch":
 		return protoreflect.ValueOfUint64(uint64(0))
 	case "goat.relayer.v1.Votes.voters":
 		return protoreflect.ValueOfBytes(nil)
@@ -2166,8 +2118,8 @@ func (x *fastReflection_Votes) ProtoMethods() *protoiface.Methods {
 		if x.Sequence != 0 {
 			n += 1 + runtime.Sov(uint64(x.Sequence))
 		}
-		if x.Version != 0 {
-			n += 1 + runtime.Sov(uint64(x.Version))
+		if x.Epoch != 0 {
+			n += 1 + runtime.Sov(uint64(x.Epoch))
 		}
 		l = len(x.Voters)
 		if l > 0 {
@@ -2220,8 +2172,8 @@ func (x *fastReflection_Votes) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x1a
 		}
-		if x.Version != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.Version))
+		if x.Epoch != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Epoch))
 			i--
 			dAtA[i] = 0x10
 		}
@@ -2300,9 +2252,9 @@ func (x *fastReflection_Votes) ProtoMethods() *protoiface.Methods {
 				}
 			case 2:
 				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Version", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Epoch", wireType)
 				}
-				x.Version = 0
+				x.Epoch = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -2312,7 +2264,7 @@ func (x *fastReflection_Votes) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.Version |= uint64(b&0x7F) << shift
+					x.Epoch |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -2420,6 +2372,1146 @@ func (x *fastReflection_Votes) ProtoMethods() *protoiface.Methods {
 	}
 }
 
+var (
+	md_OnBoardingVoterRequest               protoreflect.MessageDescriptor
+	fd_OnBoardingVoterRequest_height        protoreflect.FieldDescriptor
+	fd_OnBoardingVoterRequest_tx_key_hash   protoreflect.FieldDescriptor
+	fd_OnBoardingVoterRequest_vote_key_hash protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_goat_relayer_v1_relayer_proto_init()
+	md_OnBoardingVoterRequest = File_goat_relayer_v1_relayer_proto.Messages().ByName("OnBoardingVoterRequest")
+	fd_OnBoardingVoterRequest_height = md_OnBoardingVoterRequest.Fields().ByName("height")
+	fd_OnBoardingVoterRequest_tx_key_hash = md_OnBoardingVoterRequest.Fields().ByName("tx_key_hash")
+	fd_OnBoardingVoterRequest_vote_key_hash = md_OnBoardingVoterRequest.Fields().ByName("vote_key_hash")
+}
+
+var _ protoreflect.Message = (*fastReflection_OnBoardingVoterRequest)(nil)
+
+type fastReflection_OnBoardingVoterRequest OnBoardingVoterRequest
+
+func (x *OnBoardingVoterRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_OnBoardingVoterRequest)(x)
+}
+
+func (x *OnBoardingVoterRequest) slowProtoReflect() protoreflect.Message {
+	mi := &file_goat_relayer_v1_relayer_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_OnBoardingVoterRequest_messageType fastReflection_OnBoardingVoterRequest_messageType
+var _ protoreflect.MessageType = fastReflection_OnBoardingVoterRequest_messageType{}
+
+type fastReflection_OnBoardingVoterRequest_messageType struct{}
+
+func (x fastReflection_OnBoardingVoterRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_OnBoardingVoterRequest)(nil)
+}
+func (x fastReflection_OnBoardingVoterRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_OnBoardingVoterRequest)
+}
+func (x fastReflection_OnBoardingVoterRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_OnBoardingVoterRequest
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_OnBoardingVoterRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_OnBoardingVoterRequest
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_OnBoardingVoterRequest) Type() protoreflect.MessageType {
+	return _fastReflection_OnBoardingVoterRequest_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_OnBoardingVoterRequest) New() protoreflect.Message {
+	return new(fastReflection_OnBoardingVoterRequest)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_OnBoardingVoterRequest) Interface() protoreflect.ProtoMessage {
+	return (*OnBoardingVoterRequest)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_OnBoardingVoterRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Height != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Height)
+		if !f(fd_OnBoardingVoterRequest_height, value) {
+			return
+		}
+	}
+	if len(x.TxKeyHash) != 0 {
+		value := protoreflect.ValueOfBytes(x.TxKeyHash)
+		if !f(fd_OnBoardingVoterRequest_tx_key_hash, value) {
+			return
+		}
+	}
+	if len(x.VoteKeyHash) != 0 {
+		value := protoreflect.ValueOfBytes(x.VoteKeyHash)
+		if !f(fd_OnBoardingVoterRequest_vote_key_hash, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_OnBoardingVoterRequest) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "goat.relayer.v1.OnBoardingVoterRequest.height":
+		return x.Height != uint64(0)
+	case "goat.relayer.v1.OnBoardingVoterRequest.tx_key_hash":
+		return len(x.TxKeyHash) != 0
+	case "goat.relayer.v1.OnBoardingVoterRequest.vote_key_hash":
+		return len(x.VoteKeyHash) != 0
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.relayer.v1.OnBoardingVoterRequest"))
+		}
+		panic(fmt.Errorf("message goat.relayer.v1.OnBoardingVoterRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_OnBoardingVoterRequest) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "goat.relayer.v1.OnBoardingVoterRequest.height":
+		x.Height = uint64(0)
+	case "goat.relayer.v1.OnBoardingVoterRequest.tx_key_hash":
+		x.TxKeyHash = nil
+	case "goat.relayer.v1.OnBoardingVoterRequest.vote_key_hash":
+		x.VoteKeyHash = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.relayer.v1.OnBoardingVoterRequest"))
+		}
+		panic(fmt.Errorf("message goat.relayer.v1.OnBoardingVoterRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_OnBoardingVoterRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "goat.relayer.v1.OnBoardingVoterRequest.height":
+		value := x.Height
+		return protoreflect.ValueOfUint64(value)
+	case "goat.relayer.v1.OnBoardingVoterRequest.tx_key_hash":
+		value := x.TxKeyHash
+		return protoreflect.ValueOfBytes(value)
+	case "goat.relayer.v1.OnBoardingVoterRequest.vote_key_hash":
+		value := x.VoteKeyHash
+		return protoreflect.ValueOfBytes(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.relayer.v1.OnBoardingVoterRequest"))
+		}
+		panic(fmt.Errorf("message goat.relayer.v1.OnBoardingVoterRequest does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_OnBoardingVoterRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "goat.relayer.v1.OnBoardingVoterRequest.height":
+		x.Height = value.Uint()
+	case "goat.relayer.v1.OnBoardingVoterRequest.tx_key_hash":
+		x.TxKeyHash = value.Bytes()
+	case "goat.relayer.v1.OnBoardingVoterRequest.vote_key_hash":
+		x.VoteKeyHash = value.Bytes()
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.relayer.v1.OnBoardingVoterRequest"))
+		}
+		panic(fmt.Errorf("message goat.relayer.v1.OnBoardingVoterRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_OnBoardingVoterRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "goat.relayer.v1.OnBoardingVoterRequest.height":
+		panic(fmt.Errorf("field height of message goat.relayer.v1.OnBoardingVoterRequest is not mutable"))
+	case "goat.relayer.v1.OnBoardingVoterRequest.tx_key_hash":
+		panic(fmt.Errorf("field tx_key_hash of message goat.relayer.v1.OnBoardingVoterRequest is not mutable"))
+	case "goat.relayer.v1.OnBoardingVoterRequest.vote_key_hash":
+		panic(fmt.Errorf("field vote_key_hash of message goat.relayer.v1.OnBoardingVoterRequest is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.relayer.v1.OnBoardingVoterRequest"))
+		}
+		panic(fmt.Errorf("message goat.relayer.v1.OnBoardingVoterRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_OnBoardingVoterRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "goat.relayer.v1.OnBoardingVoterRequest.height":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "goat.relayer.v1.OnBoardingVoterRequest.tx_key_hash":
+		return protoreflect.ValueOfBytes(nil)
+	case "goat.relayer.v1.OnBoardingVoterRequest.vote_key_hash":
+		return protoreflect.ValueOfBytes(nil)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.relayer.v1.OnBoardingVoterRequest"))
+		}
+		panic(fmt.Errorf("message goat.relayer.v1.OnBoardingVoterRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_OnBoardingVoterRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in goat.relayer.v1.OnBoardingVoterRequest", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_OnBoardingVoterRequest) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_OnBoardingVoterRequest) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_OnBoardingVoterRequest) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_OnBoardingVoterRequest) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*OnBoardingVoterRequest)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.Height != 0 {
+			n += 1 + runtime.Sov(uint64(x.Height))
+		}
+		l = len(x.TxKeyHash)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.VoteKeyHash)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*OnBoardingVoterRequest)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.VoteKeyHash) > 0 {
+			i -= len(x.VoteKeyHash)
+			copy(dAtA[i:], x.VoteKeyHash)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.VoteKeyHash)))
+			i--
+			dAtA[i] = 0x1a
+		}
+		if len(x.TxKeyHash) > 0 {
+			i -= len(x.TxKeyHash)
+			copy(dAtA[i:], x.TxKeyHash)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.TxKeyHash)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if x.Height != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Height))
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*OnBoardingVoterRequest)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OnBoardingVoterRequest: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OnBoardingVoterRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Height", wireType)
+				}
+				x.Height = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Height |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TxKeyHash", wireType)
+				}
+				var byteLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					byteLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if byteLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + byteLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.TxKeyHash = append(x.TxKeyHash[:0], dAtA[iNdEx:postIndex]...)
+				if x.TxKeyHash == nil {
+					x.TxKeyHash = []byte{}
+				}
+				iNdEx = postIndex
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field VoteKeyHash", wireType)
+				}
+				var byteLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					byteLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if byteLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + byteLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.VoteKeyHash = append(x.VoteKeyHash[:0], dAtA[iNdEx:postIndex]...)
+				if x.VoteKeyHash == nil {
+					x.VoteKeyHash = []byte{}
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var _ protoreflect.List = (*_VoterQueue_1_list)(nil)
+
+type _VoterQueue_1_list struct {
+	list *[]string
+}
+
+func (x *_VoterQueue_1_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_VoterQueue_1_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfString((*x.list)[i])
+}
+
+func (x *_VoterQueue_1_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.String()
+	concreteValue := valueUnwrapped
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_VoterQueue_1_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.String()
+	concreteValue := valueUnwrapped
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_VoterQueue_1_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message VoterQueue at list field OnBoarding as it is not of Message kind"))
+}
+
+func (x *_VoterQueue_1_list) Truncate(n int) {
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_VoterQueue_1_list) NewElement() protoreflect.Value {
+	v := ""
+	return protoreflect.ValueOfString(v)
+}
+
+func (x *_VoterQueue_1_list) IsValid() bool {
+	return x.list != nil
+}
+
+var _ protoreflect.List = (*_VoterQueue_2_list)(nil)
+
+type _VoterQueue_2_list struct {
+	list *[]string
+}
+
+func (x *_VoterQueue_2_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_VoterQueue_2_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfString((*x.list)[i])
+}
+
+func (x *_VoterQueue_2_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.String()
+	concreteValue := valueUnwrapped
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_VoterQueue_2_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.String()
+	concreteValue := valueUnwrapped
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_VoterQueue_2_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message VoterQueue at list field OffBoarding as it is not of Message kind"))
+}
+
+func (x *_VoterQueue_2_list) Truncate(n int) {
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_VoterQueue_2_list) NewElement() protoreflect.Value {
+	v := ""
+	return protoreflect.ValueOfString(v)
+}
+
+func (x *_VoterQueue_2_list) IsValid() bool {
+	return x.list != nil
+}
+
+var (
+	md_VoterQueue              protoreflect.MessageDescriptor
+	fd_VoterQueue_on_boarding  protoreflect.FieldDescriptor
+	fd_VoterQueue_off_boarding protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_goat_relayer_v1_relayer_proto_init()
+	md_VoterQueue = File_goat_relayer_v1_relayer_proto.Messages().ByName("VoterQueue")
+	fd_VoterQueue_on_boarding = md_VoterQueue.Fields().ByName("on_boarding")
+	fd_VoterQueue_off_boarding = md_VoterQueue.Fields().ByName("off_boarding")
+}
+
+var _ protoreflect.Message = (*fastReflection_VoterQueue)(nil)
+
+type fastReflection_VoterQueue VoterQueue
+
+func (x *VoterQueue) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_VoterQueue)(x)
+}
+
+func (x *VoterQueue) slowProtoReflect() protoreflect.Message {
+	mi := &file_goat_relayer_v1_relayer_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_VoterQueue_messageType fastReflection_VoterQueue_messageType
+var _ protoreflect.MessageType = fastReflection_VoterQueue_messageType{}
+
+type fastReflection_VoterQueue_messageType struct{}
+
+func (x fastReflection_VoterQueue_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_VoterQueue)(nil)
+}
+func (x fastReflection_VoterQueue_messageType) New() protoreflect.Message {
+	return new(fastReflection_VoterQueue)
+}
+func (x fastReflection_VoterQueue_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_VoterQueue
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_VoterQueue) Descriptor() protoreflect.MessageDescriptor {
+	return md_VoterQueue
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_VoterQueue) Type() protoreflect.MessageType {
+	return _fastReflection_VoterQueue_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_VoterQueue) New() protoreflect.Message {
+	return new(fastReflection_VoterQueue)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_VoterQueue) Interface() protoreflect.ProtoMessage {
+	return (*VoterQueue)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_VoterQueue) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if len(x.OnBoarding) != 0 {
+		value := protoreflect.ValueOfList(&_VoterQueue_1_list{list: &x.OnBoarding})
+		if !f(fd_VoterQueue_on_boarding, value) {
+			return
+		}
+	}
+	if len(x.OffBoarding) != 0 {
+		value := protoreflect.ValueOfList(&_VoterQueue_2_list{list: &x.OffBoarding})
+		if !f(fd_VoterQueue_off_boarding, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_VoterQueue) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "goat.relayer.v1.VoterQueue.on_boarding":
+		return len(x.OnBoarding) != 0
+	case "goat.relayer.v1.VoterQueue.off_boarding":
+		return len(x.OffBoarding) != 0
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.relayer.v1.VoterQueue"))
+		}
+		panic(fmt.Errorf("message goat.relayer.v1.VoterQueue does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_VoterQueue) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "goat.relayer.v1.VoterQueue.on_boarding":
+		x.OnBoarding = nil
+	case "goat.relayer.v1.VoterQueue.off_boarding":
+		x.OffBoarding = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.relayer.v1.VoterQueue"))
+		}
+		panic(fmt.Errorf("message goat.relayer.v1.VoterQueue does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_VoterQueue) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "goat.relayer.v1.VoterQueue.on_boarding":
+		if len(x.OnBoarding) == 0 {
+			return protoreflect.ValueOfList(&_VoterQueue_1_list{})
+		}
+		listValue := &_VoterQueue_1_list{list: &x.OnBoarding}
+		return protoreflect.ValueOfList(listValue)
+	case "goat.relayer.v1.VoterQueue.off_boarding":
+		if len(x.OffBoarding) == 0 {
+			return protoreflect.ValueOfList(&_VoterQueue_2_list{})
+		}
+		listValue := &_VoterQueue_2_list{list: &x.OffBoarding}
+		return protoreflect.ValueOfList(listValue)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.relayer.v1.VoterQueue"))
+		}
+		panic(fmt.Errorf("message goat.relayer.v1.VoterQueue does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_VoterQueue) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "goat.relayer.v1.VoterQueue.on_boarding":
+		lv := value.List()
+		clv := lv.(*_VoterQueue_1_list)
+		x.OnBoarding = *clv.list
+	case "goat.relayer.v1.VoterQueue.off_boarding":
+		lv := value.List()
+		clv := lv.(*_VoterQueue_2_list)
+		x.OffBoarding = *clv.list
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.relayer.v1.VoterQueue"))
+		}
+		panic(fmt.Errorf("message goat.relayer.v1.VoterQueue does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_VoterQueue) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "goat.relayer.v1.VoterQueue.on_boarding":
+		if x.OnBoarding == nil {
+			x.OnBoarding = []string{}
+		}
+		value := &_VoterQueue_1_list{list: &x.OnBoarding}
+		return protoreflect.ValueOfList(value)
+	case "goat.relayer.v1.VoterQueue.off_boarding":
+		if x.OffBoarding == nil {
+			x.OffBoarding = []string{}
+		}
+		value := &_VoterQueue_2_list{list: &x.OffBoarding}
+		return protoreflect.ValueOfList(value)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.relayer.v1.VoterQueue"))
+		}
+		panic(fmt.Errorf("message goat.relayer.v1.VoterQueue does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_VoterQueue) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "goat.relayer.v1.VoterQueue.on_boarding":
+		list := []string{}
+		return protoreflect.ValueOfList(&_VoterQueue_1_list{list: &list})
+	case "goat.relayer.v1.VoterQueue.off_boarding":
+		list := []string{}
+		return protoreflect.ValueOfList(&_VoterQueue_2_list{list: &list})
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.relayer.v1.VoterQueue"))
+		}
+		panic(fmt.Errorf("message goat.relayer.v1.VoterQueue does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_VoterQueue) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in goat.relayer.v1.VoterQueue", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_VoterQueue) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_VoterQueue) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_VoterQueue) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_VoterQueue) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*VoterQueue)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if len(x.OnBoarding) > 0 {
+			for _, s := range x.OnBoarding {
+				l = len(s)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if len(x.OffBoarding) > 0 {
+			for _, s := range x.OffBoarding {
+				l = len(s)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*VoterQueue)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.OffBoarding) > 0 {
+			for iNdEx := len(x.OffBoarding) - 1; iNdEx >= 0; iNdEx-- {
+				i -= len(x.OffBoarding[iNdEx])
+				copy(dAtA[i:], x.OffBoarding[iNdEx])
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.OffBoarding[iNdEx])))
+				i--
+				dAtA[i] = 0x12
+			}
+		}
+		if len(x.OnBoarding) > 0 {
+			for iNdEx := len(x.OnBoarding) - 1; iNdEx >= 0; iNdEx-- {
+				i -= len(x.OnBoarding[iNdEx])
+				copy(dAtA[i:], x.OnBoarding[iNdEx])
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.OnBoarding[iNdEx])))
+				i--
+				dAtA[i] = 0xa
+			}
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*VoterQueue)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: VoterQueue: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: VoterQueue: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field OnBoarding", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.OnBoarding = append(x.OnBoarding, string(dAtA[iNdEx:postIndex]))
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field OffBoarding", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.OffBoarding = append(x.OffBoarding, string(dAtA[iNdEx:postIndex]))
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
 // Code generated by protoc-gen-go. DO NOT EDIT.
 // versions:
 // 	protoc-gen-go v1.27.0
@@ -2437,29 +3529,36 @@ const (
 type VoterStatus int32
 
 const (
-	// UNSPECIFIED defines an invalid voter status.
+	// VOTER_STATUS_UNSPECIFIED defines an invalid status.
 	VoterStatus_VOTER_STATUS_UNSPECIFIED VoterStatus = 0
-	// UNACTIVATED defines a voter that is not able to vote and sign a new relayer tx
-	VoterStatus_VOTER_STATUS_UNACTIVATED VoterStatus = 1
-	// PENDING defines a voter that is pending to Activated status
-	VoterStatus_VOTER_STATUS_PENDING VoterStatus = 2
-	// ACTIVATED defines a voter that is actived.
-	VoterStatus_VOTER_STATUS_ACTIVATED VoterStatus = 3
+	// VOTER_STATUS_PENDING defines a pending voter which was added on the chain
+	// he still needs to send online proof to proposer to prove readiness and ownership of public keys
+	VoterStatus_VOTER_STATUS_PENDING VoterStatus = 1
+	// VOTER_STATUS_ON_BOARDING defines a voter that is approved from current proposer
+	// the voter will be added to voter list in the next election
+	VoterStatus_VOTER_STATUS_ON_BOARDING VoterStatus = 2
+	// VOTER_STATUS_OFF_BOARDING defines a voter that is removing from relayer group
+	// the voter will be removed from **chain state db** in the next election
+	VoterStatus_VOTER_STATUS_OFF_BOARDING VoterStatus = 3
+	// VOTER_STATUS_ACTIVATED defines a voter that is working.
+	VoterStatus_VOTER_STATUS_ACTIVATED VoterStatus = 4
 )
 
 // Enum value maps for VoterStatus.
 var (
 	VoterStatus_name = map[int32]string{
 		0: "VOTER_STATUS_UNSPECIFIED",
-		1: "VOTER_STATUS_UNACTIVATED",
-		2: "VOTER_STATUS_PENDING",
-		3: "VOTER_STATUS_ACTIVATED",
+		1: "VOTER_STATUS_PENDING",
+		2: "VOTER_STATUS_ON_BOARDING",
+		3: "VOTER_STATUS_OFF_BOARDING",
+		4: "VOTER_STATUS_ACTIVATED",
 	}
 	VoterStatus_value = map[string]int32{
-		"VOTER_STATUS_UNSPECIFIED": 0,
-		"VOTER_STATUS_UNACTIVATED": 1,
-		"VOTER_STATUS_PENDING":     2,
-		"VOTER_STATUS_ACTIVATED":   3,
+		"VOTER_STATUS_UNSPECIFIED":  0,
+		"VOTER_STATUS_PENDING":      1,
+		"VOTER_STATUS_ON_BOARDING":  2,
+		"VOTER_STATUS_OFF_BOARDING": 3,
+		"VOTER_STATUS_ACTIVATED":    4,
 	}
 )
 
@@ -2496,12 +3595,13 @@ type Relayer struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Version          uint64                 `protobuf:"varint,1,opt,name=version,proto3" json:"version,omitempty"`
-	Threshold        uint64                 `protobuf:"varint,2,opt,name=threshold,proto3" json:"threshold,omitempty"`
-	Proposer         string                 `protobuf:"bytes,3,opt,name=proposer,proto3" json:"proposer,omitempty"`
-	Voters           []string               `protobuf:"bytes,4,rep,name=voters,proto3" json:"voters,omitempty"`
-	LastElected      *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=last_elected,json=lastElected,proto3" json:"last_elected,omitempty"`
-	ProposerAccepted bool                   `protobuf:"varint,6,opt,name=proposer_accepted,json=proposerAccepted,proto3" json:"proposer_accepted,omitempty"`
+	// the epoch number, increasing every election
+	Epoch       uint64                 `protobuf:"varint,1,opt,name=epoch,proto3" json:"epoch,omitempty"`
+	Proposer    string                 `protobuf:"bytes,2,opt,name=proposer,proto3" json:"proposer,omitempty"`
+	Voters      []string               `protobuf:"bytes,3,rep,name=voters,proto3" json:"voters,omitempty"`
+	LastElected *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=last_elected,json=lastElected,proto3" json:"last_elected,omitempty"`
+	// proposer_accepted defined proposer has accepted the election result
+	ProposerAccepted bool `protobuf:"varint,5,opt,name=proposer_accepted,json=proposerAccepted,proto3" json:"proposer_accepted,omitempty"`
 }
 
 func (x *Relayer) Reset() {
@@ -2524,16 +3624,9 @@ func (*Relayer) Descriptor() ([]byte, []int) {
 	return file_goat_relayer_v1_relayer_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Relayer) GetVersion() uint64 {
+func (x *Relayer) GetEpoch() uint64 {
 	if x != nil {
-		return x.Version
-	}
-	return 0
-}
-
-func (x *Relayer) GetThreshold() uint64 {
-	if x != nil {
-		return x.Threshold
+		return x.Epoch
 	}
 	return 0
 }
@@ -2700,10 +3793,10 @@ type Votes struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// the proposal sequence
+	// the current proposal sequence
 	Sequence uint64 `protobuf:"varint,1,opt,name=sequence,proto3" json:"sequence,omitempty"`
-	// the current relayer group version
-	Version uint64 `protobuf:"varint,2,opt,name=version,proto3" json:"version,omitempty"`
+	// the current relayer epoch number
+	Epoch uint64 `protobuf:"varint,2,opt,name=epoch,proto3" json:"epoch,omitempty"`
 	// voters represents the voter bitmap
 	Voters []byte `protobuf:"bytes,3,opt,name=voters,proto3" json:"voters,omitempty"`
 	// signature is the aggregate signature by voters
@@ -2737,9 +3830,9 @@ func (x *Votes) GetSequence() uint64 {
 	return 0
 }
 
-func (x *Votes) GetVersion() uint64 {
+func (x *Votes) GetEpoch() uint64 {
 	if x != nil {
-		return x.Version
+		return x.Epoch
 	}
 	return 0
 }
@@ -2758,6 +3851,102 @@ func (x *Votes) GetSignature() []byte {
 	return nil
 }
 
+// OnBoardingVoterRequest
+type OnBoardingVoterRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Height      uint64 `protobuf:"varint,1,opt,name=height,proto3" json:"height,omitempty"`
+	TxKeyHash   []byte `protobuf:"bytes,2,opt,name=tx_key_hash,json=txKeyHash,proto3" json:"tx_key_hash,omitempty"` // aka. voter address
+	VoteKeyHash []byte `protobuf:"bytes,3,opt,name=vote_key_hash,json=voteKeyHash,proto3" json:"vote_key_hash,omitempty"`
+}
+
+func (x *OnBoardingVoterRequest) Reset() {
+	*x = OnBoardingVoterRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_goat_relayer_v1_relayer_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *OnBoardingVoterRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OnBoardingVoterRequest) ProtoMessage() {}
+
+// Deprecated: Use OnBoardingVoterRequest.ProtoReflect.Descriptor instead.
+func (*OnBoardingVoterRequest) Descriptor() ([]byte, []int) {
+	return file_goat_relayer_v1_relayer_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *OnBoardingVoterRequest) GetHeight() uint64 {
+	if x != nil {
+		return x.Height
+	}
+	return 0
+}
+
+func (x *OnBoardingVoterRequest) GetTxKeyHash() []byte {
+	if x != nil {
+		return x.TxKeyHash
+	}
+	return nil
+}
+
+func (x *OnBoardingVoterRequest) GetVoteKeyHash() []byte {
+	if x != nil {
+		return x.VoteKeyHash
+	}
+	return nil
+}
+
+// VoterQueue
+type VoterQueue struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	OnBoarding  []string `protobuf:"bytes,1,rep,name=on_boarding,json=onBoarding,proto3" json:"on_boarding,omitempty"`
+	OffBoarding []string `protobuf:"bytes,2,rep,name=off_boarding,json=offBoarding,proto3" json:"off_boarding,omitempty"`
+}
+
+func (x *VoterQueue) Reset() {
+	*x = VoterQueue{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_goat_relayer_v1_relayer_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *VoterQueue) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VoterQueue) ProtoMessage() {}
+
+// Deprecated: Use VoterQueue.ProtoReflect.Descriptor instead.
+func (*VoterQueue) Descriptor() ([]byte, []int) {
+	return file_goat_relayer_v1_relayer_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *VoterQueue) GetOnBoarding() []string {
+	if x != nil {
+		return x.OnBoarding
+	}
+	return nil
+}
+
+func (x *VoterQueue) GetOffBoarding() []string {
+	if x != nil {
+		return x.OffBoarding
+	}
+	return nil
+}
+
 var File_goat_relayer_v1_relayer_proto protoreflect.FileDescriptor
 
 var file_goat_relayer_v1_relayer_proto_rawDesc = []byte{
@@ -2769,70 +3958,78 @@ var file_goat_relayer_v1_relayer_proto_rawDesc = []byte{
 	0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74,
 	0x6f, 0x1a, 0x1f, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
 	0x75, 0x66, 0x2f, 0x74, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x2e, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x22, 0x9f, 0x02, 0x0a, 0x07, 0x52, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x12, 0x18,
-	0x0a, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52,
-	0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x1c, 0x0a, 0x09, 0x74, 0x68, 0x72, 0x65,
-	0x73, 0x68, 0x6f, 0x6c, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x09, 0x74, 0x68, 0x72,
-	0x65, 0x73, 0x68, 0x6f, 0x6c, 0x64, 0x12, 0x34, 0x0a, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73,
-	0x65, 0x72, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f,
-	0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69,
-	0x6e, 0x67, 0x52, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x12, 0x30, 0x0a, 0x06,
-	0x76, 0x6f, 0x74, 0x65, 0x72, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4,
-	0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73,
-	0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x06, 0x76, 0x6f, 0x74, 0x65, 0x72, 0x73, 0x12, 0x47,
-	0x0a, 0x0c, 0x6c, 0x61, 0x73, 0x74, 0x5f, 0x65, 0x6c, 0x65, 0x63, 0x74, 0x65, 0x64, 0x18, 0x05,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70,
-	0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x0b, 0x6c, 0x61, 0x73, 0x74,
-	0x45, 0x6c, 0x65, 0x63, 0x74, 0x65, 0x64, 0x12, 0x2b, 0x0a, 0x11, 0x70, 0x72, 0x6f, 0x70, 0x6f,
-	0x73, 0x65, 0x72, 0x5f, 0x61, 0x63, 0x63, 0x65, 0x70, 0x74, 0x65, 0x64, 0x18, 0x06, 0x20, 0x01,
-	0x28, 0x08, 0x52, 0x10, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x41, 0x63, 0x63, 0x65,
-	0x70, 0x74, 0x65, 0x64, 0x22, 0x70, 0x0a, 0x05, 0x56, 0x6f, 0x74, 0x65, 0x72, 0x12, 0x19, 0x0a,
-	0x08, 0x76, 0x6f, 0x74, 0x65, 0x5f, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x52,
-	0x07, 0x76, 0x6f, 0x74, 0x65, 0x4b, 0x65, 0x79, 0x12, 0x34, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74,
-	0x75, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x1c, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e,
-	0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x2e, 0x76, 0x31, 0x2e, 0x56, 0x6f, 0x74, 0x65, 0x72,
-	0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x16,
-	0x0a, 0x06, 0x68, 0x65, 0x69, 0x67, 0x68, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06,
-	0x68, 0x65, 0x69, 0x67, 0x68, 0x74, 0x22, 0x58, 0x0a, 0x09, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x63,
-	0x4b, 0x65, 0x79, 0x12, 0x1e, 0x0a, 0x09, 0x73, 0x65, 0x63, 0x70, 0x32, 0x35, 0x36, 0x6b, 0x31,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x48, 0x00, 0x52, 0x09, 0x73, 0x65, 0x63, 0x70, 0x32, 0x35,
-	0x36, 0x6b, 0x31, 0x12, 0x1a, 0x0a, 0x07, 0x73, 0x63, 0x68, 0x6e, 0x6f, 0x72, 0x72, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x0c, 0x48, 0x00, 0x52, 0x07, 0x73, 0x63, 0x68, 0x6e, 0x6f, 0x72, 0x72, 0x3a,
-	0x08, 0xe8, 0xa0, 0x1f, 0x01, 0xe8, 0xa1, 0x1f, 0x01, 0x42, 0x05, 0x0a, 0x03, 0x6b, 0x65, 0x79,
-	0x22, 0x73, 0x0a, 0x05, 0x56, 0x6f, 0x74, 0x65, 0x73, 0x12, 0x1a, 0x0a, 0x08, 0x73, 0x65, 0x71,
-	0x75, 0x65, 0x6e, 0x63, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x08, 0x73, 0x65, 0x71,
-	0x75, 0x65, 0x6e, 0x63, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e,
-	0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x12,
-	0x16, 0x0a, 0x06, 0x76, 0x6f, 0x74, 0x65, 0x72, 0x73, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0c, 0x52,
-	0x06, 0x76, 0x6f, 0x74, 0x65, 0x72, 0x73, 0x12, 0x1c, 0x0a, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61,
-	0x74, 0x75, 0x72, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x09, 0x73, 0x69, 0x67, 0x6e,
-	0x61, 0x74, 0x75, 0x72, 0x65, 0x2a, 0xc3, 0x01, 0x0a, 0x0b, 0x56, 0x6f, 0x74, 0x65, 0x72, 0x53,
-	0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x2d, 0x0a, 0x18, 0x56, 0x4f, 0x54, 0x45, 0x52, 0x5f, 0x53,
-	0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45,
-	0x44, 0x10, 0x00, 0x1a, 0x0f, 0x8a, 0x9d, 0x20, 0x0b, 0x55, 0x6e, 0x73, 0x70, 0x65, 0x63, 0x69,
-	0x66, 0x69, 0x65, 0x64, 0x12, 0x2d, 0x0a, 0x18, 0x56, 0x4f, 0x54, 0x45, 0x52, 0x5f, 0x53, 0x54,
-	0x41, 0x54, 0x55, 0x53, 0x5f, 0x55, 0x4e, 0x41, 0x43, 0x54, 0x49, 0x56, 0x41, 0x54, 0x45, 0x44,
-	0x10, 0x01, 0x1a, 0x0f, 0x8a, 0x9d, 0x20, 0x0b, 0x55, 0x6e, 0x61, 0x63, 0x74, 0x69, 0x76, 0x61,
-	0x74, 0x65, 0x64, 0x12, 0x25, 0x0a, 0x14, 0x56, 0x4f, 0x54, 0x45, 0x52, 0x5f, 0x53, 0x54, 0x41,
-	0x54, 0x55, 0x53, 0x5f, 0x50, 0x45, 0x4e, 0x44, 0x49, 0x4e, 0x47, 0x10, 0x02, 0x1a, 0x0b, 0x8a,
-	0x9d, 0x20, 0x07, 0x50, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x12, 0x29, 0x0a, 0x16, 0x56, 0x4f,
-	0x54, 0x45, 0x52, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x41, 0x43, 0x54, 0x49, 0x56,
-	0x41, 0x54, 0x45, 0x44, 0x10, 0x03, 0x1a, 0x0d, 0x8a, 0x9d, 0x20, 0x09, 0x41, 0x63, 0x74, 0x69,
-	0x76, 0x61, 0x74, 0x65, 0x64, 0x1a, 0x04, 0x88, 0xa3, 0x1e, 0x00, 0x42, 0xbc, 0x01, 0x0a, 0x13,
-	0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72,
-	0x2e, 0x76, 0x31, 0x42, 0x0c, 0x52, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x50, 0x72, 0x6f, 0x74,
-	0x6f, 0x50, 0x01, 0x5a, 0x39, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f,
-	0x67, 0x6f, 0x61, 0x74, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x67, 0x6f, 0x61, 0x74,
-	0x2f, 0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65,
-	0x72, 0x2f, 0x76, 0x31, 0x3b, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x76, 0x31, 0xa2, 0x02,
-	0x03, 0x47, 0x52, 0x58, 0xaa, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x2e, 0x52, 0x65, 0x6c, 0x61,
-	0x79, 0x65, 0x72, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x52, 0x65,
-	0x6c, 0x61, 0x79, 0x65, 0x72, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x1b, 0x47, 0x6f, 0x61, 0x74, 0x5c,
-	0x52, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65,
-	0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x11, 0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x52,
-	0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x33,
+	0x74, 0x6f, 0x22, 0xfd, 0x01, 0x0a, 0x07, 0x52, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x12, 0x14,
+	0x0a, 0x05, 0x65, 0x70, 0x6f, 0x63, 0x68, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x05, 0x65,
+	0x70, 0x6f, 0x63, 0x68, 0x12, 0x34, 0x0a, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d,
+	0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67,
+	0x52, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x12, 0x30, 0x0a, 0x06, 0x76, 0x6f,
+	0x74, 0x65, 0x72, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14,
+	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74,
+	0x72, 0x69, 0x6e, 0x67, 0x52, 0x06, 0x76, 0x6f, 0x74, 0x65, 0x72, 0x73, 0x12, 0x47, 0x0a, 0x0c,
+	0x6c, 0x61, 0x73, 0x74, 0x5f, 0x65, 0x6c, 0x65, 0x63, 0x74, 0x65, 0x64, 0x18, 0x04, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x42, 0x08,
+	0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x0b, 0x6c, 0x61, 0x73, 0x74, 0x45, 0x6c,
+	0x65, 0x63, 0x74, 0x65, 0x64, 0x12, 0x2b, 0x0a, 0x11, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65,
+	0x72, 0x5f, 0x61, 0x63, 0x63, 0x65, 0x70, 0x74, 0x65, 0x64, 0x18, 0x05, 0x20, 0x01, 0x28, 0x08,
+	0x52, 0x10, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x41, 0x63, 0x63, 0x65, 0x70, 0x74,
+	0x65, 0x64, 0x22, 0x70, 0x0a, 0x05, 0x56, 0x6f, 0x74, 0x65, 0x72, 0x12, 0x19, 0x0a, 0x08, 0x76,
+	0x6f, 0x74, 0x65, 0x5f, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x07, 0x76,
+	0x6f, 0x74, 0x65, 0x4b, 0x65, 0x79, 0x12, 0x34, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x1c, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x72, 0x65,
+	0x6c, 0x61, 0x79, 0x65, 0x72, 0x2e, 0x76, 0x31, 0x2e, 0x56, 0x6f, 0x74, 0x65, 0x72, 0x53, 0x74,
+	0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x16, 0x0a, 0x06,
+	0x68, 0x65, 0x69, 0x67, 0x68, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x68, 0x65,
+	0x69, 0x67, 0x68, 0x74, 0x22, 0x58, 0x0a, 0x09, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x63, 0x4b, 0x65,
+	0x79, 0x12, 0x1e, 0x0a, 0x09, 0x73, 0x65, 0x63, 0x70, 0x32, 0x35, 0x36, 0x6b, 0x31, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x0c, 0x48, 0x00, 0x52, 0x09, 0x73, 0x65, 0x63, 0x70, 0x32, 0x35, 0x36, 0x6b,
+	0x31, 0x12, 0x1a, 0x0a, 0x07, 0x73, 0x63, 0x68, 0x6e, 0x6f, 0x72, 0x72, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x0c, 0x48, 0x00, 0x52, 0x07, 0x73, 0x63, 0x68, 0x6e, 0x6f, 0x72, 0x72, 0x3a, 0x08, 0xe8,
+	0xa0, 0x1f, 0x01, 0xe8, 0xa1, 0x1f, 0x01, 0x42, 0x05, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x22, 0x6f,
+	0x0a, 0x05, 0x56, 0x6f, 0x74, 0x65, 0x73, 0x12, 0x1a, 0x0a, 0x08, 0x73, 0x65, 0x71, 0x75, 0x65,
+	0x6e, 0x63, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x08, 0x73, 0x65, 0x71, 0x75, 0x65,
+	0x6e, 0x63, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x65, 0x70, 0x6f, 0x63, 0x68, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x04, 0x52, 0x05, 0x65, 0x70, 0x6f, 0x63, 0x68, 0x12, 0x16, 0x0a, 0x06, 0x76, 0x6f, 0x74,
+	0x65, 0x72, 0x73, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x06, 0x76, 0x6f, 0x74, 0x65, 0x72,
+	0x73, 0x12, 0x1c, 0x0a, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x18, 0x04,
+	0x20, 0x01, 0x28, 0x0c, 0x52, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x22,
+	0x74, 0x0a, 0x16, 0x4f, 0x6e, 0x42, 0x6f, 0x61, 0x72, 0x64, 0x69, 0x6e, 0x67, 0x56, 0x6f, 0x74,
+	0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x68, 0x65, 0x69,
+	0x67, 0x68, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x68, 0x65, 0x69, 0x67, 0x68,
+	0x74, 0x12, 0x1e, 0x0a, 0x0b, 0x74, 0x78, 0x5f, 0x6b, 0x65, 0x79, 0x5f, 0x68, 0x61, 0x73, 0x68,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x09, 0x74, 0x78, 0x4b, 0x65, 0x79, 0x48, 0x61, 0x73,
+	0x68, 0x12, 0x22, 0x0a, 0x0d, 0x76, 0x6f, 0x74, 0x65, 0x5f, 0x6b, 0x65, 0x79, 0x5f, 0x68, 0x61,
+	0x73, 0x68, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0b, 0x76, 0x6f, 0x74, 0x65, 0x4b, 0x65,
+	0x79, 0x48, 0x61, 0x73, 0x68, 0x22, 0x50, 0x0a, 0x0a, 0x56, 0x6f, 0x74, 0x65, 0x72, 0x51, 0x75,
+	0x65, 0x75, 0x65, 0x12, 0x1f, 0x0a, 0x0b, 0x6f, 0x6e, 0x5f, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x69,
+	0x6e, 0x67, 0x18, 0x01, 0x20, 0x03, 0x28, 0x09, 0x52, 0x0a, 0x6f, 0x6e, 0x42, 0x6f, 0x61, 0x72,
+	0x64, 0x69, 0x6e, 0x67, 0x12, 0x21, 0x0a, 0x0c, 0x6f, 0x66, 0x66, 0x5f, 0x62, 0x6f, 0x61, 0x72,
+	0x64, 0x69, 0x6e, 0x67, 0x18, 0x02, 0x20, 0x03, 0x28, 0x09, 0x52, 0x0b, 0x6f, 0x66, 0x66, 0x42,
+	0x6f, 0x61, 0x72, 0x64, 0x69, 0x6e, 0x67, 0x2a, 0xa4, 0x01, 0x0a, 0x0b, 0x56, 0x6f, 0x74, 0x65,
+	0x72, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x1c, 0x0a, 0x18, 0x56, 0x4f, 0x54, 0x45, 0x52,
+	0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46,
+	0x49, 0x45, 0x44, 0x10, 0x00, 0x12, 0x18, 0x0a, 0x14, 0x56, 0x4f, 0x54, 0x45, 0x52, 0x5f, 0x53,
+	0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x50, 0x45, 0x4e, 0x44, 0x49, 0x4e, 0x47, 0x10, 0x01, 0x12,
+	0x1c, 0x0a, 0x18, 0x56, 0x4f, 0x54, 0x45, 0x52, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f,
+	0x4f, 0x4e, 0x5f, 0x42, 0x4f, 0x41, 0x52, 0x44, 0x49, 0x4e, 0x47, 0x10, 0x02, 0x12, 0x1d, 0x0a,
+	0x19, 0x56, 0x4f, 0x54, 0x45, 0x52, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x4f, 0x46,
+	0x46, 0x5f, 0x42, 0x4f, 0x41, 0x52, 0x44, 0x49, 0x4e, 0x47, 0x10, 0x03, 0x12, 0x1a, 0x0a, 0x16,
+	0x56, 0x4f, 0x54, 0x45, 0x52, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x41, 0x43, 0x54,
+	0x49, 0x56, 0x41, 0x54, 0x45, 0x44, 0x10, 0x04, 0x1a, 0x04, 0x88, 0xa3, 0x1e, 0x00, 0x42, 0xbc,
+	0x01, 0x0a, 0x13, 0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x72, 0x65, 0x6c, 0x61,
+	0x79, 0x65, 0x72, 0x2e, 0x76, 0x31, 0x42, 0x0c, 0x52, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x50,
+	0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x39, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63,
+	0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x67,
+	0x6f, 0x61, 0x74, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x72, 0x65, 0x6c,
+	0x61, 0x79, 0x65, 0x72, 0x2f, 0x76, 0x31, 0x3b, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x76,
+	0x31, 0xa2, 0x02, 0x03, 0x47, 0x52, 0x58, 0xaa, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x2e, 0x52,
+	0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74,
+	0x5c, 0x52, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x1b, 0x47, 0x6f,
+	0x61, 0x74, 0x5c, 0x52, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50,
+	0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x11, 0x47, 0x6f, 0x61, 0x74,
+	0x3a, 0x3a, 0x52, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -2848,17 +4045,19 @@ func file_goat_relayer_v1_relayer_proto_rawDescGZIP() []byte {
 }
 
 var file_goat_relayer_v1_relayer_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_goat_relayer_v1_relayer_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_goat_relayer_v1_relayer_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_goat_relayer_v1_relayer_proto_goTypes = []interface{}{
-	(VoterStatus)(0),              // 0: goat.relayer.v1.VoterStatus
-	(*Relayer)(nil),               // 1: goat.relayer.v1.Relayer
-	(*Voter)(nil),                 // 2: goat.relayer.v1.Voter
-	(*PublicKey)(nil),             // 3: goat.relayer.v1.PublicKey
-	(*Votes)(nil),                 // 4: goat.relayer.v1.Votes
-	(*timestamppb.Timestamp)(nil), // 5: google.protobuf.Timestamp
+	(VoterStatus)(0),               // 0: goat.relayer.v1.VoterStatus
+	(*Relayer)(nil),                // 1: goat.relayer.v1.Relayer
+	(*Voter)(nil),                  // 2: goat.relayer.v1.Voter
+	(*PublicKey)(nil),              // 3: goat.relayer.v1.PublicKey
+	(*Votes)(nil),                  // 4: goat.relayer.v1.Votes
+	(*OnBoardingVoterRequest)(nil), // 5: goat.relayer.v1.OnBoardingVoterRequest
+	(*VoterQueue)(nil),             // 6: goat.relayer.v1.VoterQueue
+	(*timestamppb.Timestamp)(nil),  // 7: google.protobuf.Timestamp
 }
 var file_goat_relayer_v1_relayer_proto_depIdxs = []int32{
-	5, // 0: goat.relayer.v1.Relayer.last_elected:type_name -> google.protobuf.Timestamp
+	7, // 0: goat.relayer.v1.Relayer.last_elected:type_name -> google.protobuf.Timestamp
 	0, // 1: goat.relayer.v1.Voter.status:type_name -> goat.relayer.v1.VoterStatus
 	2, // [2:2] is the sub-list for method output_type
 	2, // [2:2] is the sub-list for method input_type
@@ -2921,6 +4120,30 @@ func file_goat_relayer_v1_relayer_proto_init() {
 				return nil
 			}
 		}
+		file_goat_relayer_v1_relayer_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*OnBoardingVoterRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_goat_relayer_v1_relayer_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*VoterQueue); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	file_goat_relayer_v1_relayer_proto_msgTypes[2].OneofWrappers = []interface{}{
 		(*PublicKey_Secp256K1)(nil),
@@ -2932,7 +4155,7 @@ func file_goat_relayer_v1_relayer_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_goat_relayer_v1_relayer_proto_rawDesc,
 			NumEnums:      1,
-			NumMessages:   4,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

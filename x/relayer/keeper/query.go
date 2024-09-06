@@ -44,11 +44,6 @@ func (q queryServer) Relayer(ctx context.Context, req *types.QueryRelayerRequest
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	epoch, err := q.k.Epoch.Peek(ctx)
-	if err != nil {
-		return nil, status.Error(codes.Internal, "internal error")
-	}
-
 	relayer, err := q.k.Relayer.Get(ctx)
 	if err != nil {
 		if errors.Is(err, collections.ErrNotFound) {
@@ -57,7 +52,7 @@ func (q queryServer) Relayer(ctx context.Context, req *types.QueryRelayerRequest
 		return nil, status.Error(codes.Internal, "internal error")
 	}
 
-	return &types.QueryRelayerResponse{Relayer: relayer, Epoch: epoch}, nil
+	return &types.QueryRelayerResponse{Relayer: &relayer}, nil
 }
 
 func (q queryServer) Voters(ctx context.Context, req *types.QueryVotersRequest) (*types.QueryVotersResponse, error) {

@@ -60,11 +60,7 @@ message QueryRelayerRequest {}
 
 // QueryRelayerResponse is response type for the Query/Voters RPC method
 message QueryRelayerResponse {
-  uint64 epoch = 1;
-  Relayer relayer = 2 [
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
-  ];
+  Relayer relayer = 1;
 }
 
 // QueryPubkeysRequest is request type for the Query/Pubkeys RPC method

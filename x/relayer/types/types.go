@@ -1,8 +1,8 @@
 package types
 
 import (
-	"encoding/binary"
 	"errors"
+	"slices"
 
 	"github.com/btcsuite/btcd/btcec/v2"
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
@@ -29,13 +29,10 @@ func (v *Voter) Validate() error {
 	return nil
 }
 
-func VoteSignDoc(method, chainId, proposer string, sequence uint64, data []byte) []byte {
-	var seqRaw [8]byte
-	binary.LittleEndian.PutUint64(seqRaw[:], sequence)
-
+func VoteSignDoc(method, chainId, proposer string, sequence, epoch uint64, data []byte) []byte {
 	sigdoc := goatcrypto.SHA256Sum(
 		[]byte(chainId),
-		seqRaw[:],
+		goatcrypto.Uint64LE(sequence, epoch),
 		[]byte(method),
 		[]byte(proposer),
 		data,
@@ -62,14 +59,18 @@ func (msg *MsgNewVoterRequest) Validate() error {
 	return nil
 }
 
-func (msg *MsgNewVoterRequest) SignDoc(chainId string, height uint64, address, blsPKHash []byte) []byte {
-	h := make([]byte, 8)
-	binary.LittleEndian.PutUint64(h, height)
-	return goatcrypto.SHA256Sum(
-		[]byte(chainId),
-		[]byte("NewVoter/Proof"),
-		h,
-		address,
-		blsPKHash,
-	)
+func NewOnBoardingVoterRequest(height uint64, txKeyHash, voteKeyHash []byte) *OnBoardingVoterRequest {
+	return &OnBoardingVoterRequest{
+		Height:      height,
+		TxKeyHash:   txKeyHash,
+		VoteKeyHash: voteKeyHash,
+	}
+}
+
+func (msg *OnBoardingVoterRequest) SignDoc() []byte {
+	return slices.Concat(goatcrypto.Uint64LE(msg.Height), msg.TxKeyHash, msg.VoteKeyHash)
+}
+
+func (msg *OnBoardingVoterRequest) MethodName() string {
+	return "Relayer/NewVoter"
 }

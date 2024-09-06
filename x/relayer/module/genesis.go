@@ -17,25 +17,21 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 		panic(err)
 	}
 
-	// this line is used by starport scaffolding # genesis/module/init
 	if err := k.Params.Set(ctx, genState.Params); err != nil {
 		panic(err)
 	}
 
-	if err := k.ProposalSeq.Set(ctx, 0); err != nil {
+	if err := k.Sequence.Set(ctx, 0); err != nil {
 		panic(err)
 	}
-
-	if err := k.Epoch.Set(ctx, 0); err != nil {
-		panic(err)
-	}
-
-	sdkctx := sdk.UnwrapSDKContext(ctx)
 
 	relayer := types.Relayer{
-		Threshold:   genState.Threshold,
-		LastElected: ctx.BlockTime(),
+		Epoch:            genState.Epoch,
+		ProposerAccepted: true,
+		LastElected:      ctx.BlockTime(),
 	}
+
+	queue := types.VoterQueue{}
 
 	if len(genState.Voters) == 0 {
 		panic("No relayer voters")
@@ -58,10 +54,15 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 		keySet[string(v.VoteKey)] = true
 
 		relayer.Voters = append(relayer.Voters, addr)
-		v.Status = types.Activated
-		v.Height = uint64(sdkctx.BlockHeight())
 		if err := k.Voters.Set(ctx, addrByte, *v); err != nil {
 			panic(err)
+		}
+
+		switch v.Status {
+		case types.VOTER_STATUS_ON_BOARDING:
+			queue.OnBoarding = append(queue.OnBoarding, addr)
+		case types.VOTER_STATUS_OFF_BOARDING:
+			queue.OffBoarding = append(queue.OnBoarding, addr)
 		}
 	}
 
@@ -72,7 +73,15 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 		panic(err)
 	}
 
+	if err := k.Sequence.Set(ctx, genState.Sequence); err != nil {
+		panic(err)
+	}
+
 	if err := k.Randao.Set(ctx, bytes.Repeat([]byte{0}, 32)); err != nil {
+		panic(err)
+	}
+
+	if err := k.Queue.Set(ctx, queue); err != nil {
 		panic(err)
 	}
 }
@@ -92,7 +101,7 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 		panic(err)
 	}
 
-	genesis.Threshold = relayer.Threshold
+	genesis.Epoch = relayer.Epoch
 
 	iter, err := k.Voters.Iterate(ctx, nil)
 	if err != nil {
@@ -105,10 +114,12 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 		if err != nil {
 			panic(err)
 		}
+		genesis.Voters[kv.Key.String()] = &kv.Value
+	}
 
-		if kv.Value.Status == types.Activated {
-			genesis.Voters[kv.Key.String()] = &kv.Value
-		}
+	genesis.Sequence, err = k.Sequence.Peek(ctx)
+	if err != nil {
+		panic(err)
 	}
 
 	// this line is used by starport scaffolding # genesis/module/export

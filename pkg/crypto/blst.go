@@ -60,12 +60,17 @@ func AggregateSignatures(sigs [][]byte) ([]byte, error) {
 	return signature.ToAffine().Compress(), nil
 }
 
-func Verify(pk *PublicKey, msg, sig []byte) bool {
+func Verify(pk, msg, sig []byte) bool {
+	pubkey := new(PublicKey).Uncompress(pk)
+	if pubkey == nil {
+		return false
+	}
+
 	signature := new(Signature).Uncompress(sig)
 	if signature == nil {
 		return false
 	}
-	return signature.Verify(true, pk, false, msg, blsMode)
+	return signature.Verify(true, pubkey, false, msg, blsMode)
 }
 
 func Sign(sk *PrivateKey, msg []byte) []byte {

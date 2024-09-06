@@ -15,20 +15,20 @@ import (
 	sync "sync"
 )
 
-var _ protoreflect.Map = (*_GenesisState_3_map)(nil)
+var _ protoreflect.Map = (*_GenesisState_4_map)(nil)
 
-type _GenesisState_3_map struct {
+type _GenesisState_4_map struct {
 	m *map[string]*Voter
 }
 
-func (x *_GenesisState_3_map) Len() int {
+func (x *_GenesisState_4_map) Len() int {
 	if x.m == nil {
 		return 0
 	}
 	return len(*x.m)
 }
 
-func (x *_GenesisState_3_map) Range(f func(protoreflect.MapKey, protoreflect.Value) bool) {
+func (x *_GenesisState_4_map) Range(f func(protoreflect.MapKey, protoreflect.Value) bool) {
 	if x.m == nil {
 		return
 	}
@@ -41,7 +41,7 @@ func (x *_GenesisState_3_map) Range(f func(protoreflect.MapKey, protoreflect.Val
 	}
 }
 
-func (x *_GenesisState_3_map) Has(key protoreflect.MapKey) bool {
+func (x *_GenesisState_4_map) Has(key protoreflect.MapKey) bool {
 	if x.m == nil {
 		return false
 	}
@@ -51,7 +51,7 @@ func (x *_GenesisState_3_map) Has(key protoreflect.MapKey) bool {
 	return ok
 }
 
-func (x *_GenesisState_3_map) Clear(key protoreflect.MapKey) {
+func (x *_GenesisState_4_map) Clear(key protoreflect.MapKey) {
 	if x.m == nil {
 		return
 	}
@@ -60,7 +60,7 @@ func (x *_GenesisState_3_map) Clear(key protoreflect.MapKey) {
 	delete(*x.m, concreteKey)
 }
 
-func (x *_GenesisState_3_map) Get(key protoreflect.MapKey) protoreflect.Value {
+func (x *_GenesisState_4_map) Get(key protoreflect.MapKey) protoreflect.Value {
 	if x.m == nil {
 		return protoreflect.Value{}
 	}
@@ -73,7 +73,7 @@ func (x *_GenesisState_3_map) Get(key protoreflect.MapKey) protoreflect.Value {
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_GenesisState_3_map) Set(key protoreflect.MapKey, value protoreflect.Value) {
+func (x *_GenesisState_4_map) Set(key protoreflect.MapKey, value protoreflect.Value) {
 	if !key.IsValid() || !value.IsValid() {
 		panic("invalid key or value provided")
 	}
@@ -84,7 +84,7 @@ func (x *_GenesisState_3_map) Set(key protoreflect.MapKey, value protoreflect.Va
 	(*x.m)[concreteKey] = concreteValue
 }
 
-func (x *_GenesisState_3_map) Mutable(key protoreflect.MapKey) protoreflect.Value {
+func (x *_GenesisState_4_map) Mutable(key protoreflect.MapKey) protoreflect.Value {
 	keyUnwrapped := key.String()
 	concreteKey := keyUnwrapped
 	v, ok := (*x.m)[concreteKey]
@@ -96,27 +96,29 @@ func (x *_GenesisState_3_map) Mutable(key protoreflect.MapKey) protoreflect.Valu
 	return protoreflect.ValueOfMessage(newValue.ProtoReflect())
 }
 
-func (x *_GenesisState_3_map) NewValue() protoreflect.Value {
+func (x *_GenesisState_4_map) NewValue() protoreflect.Value {
 	v := new(Voter)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_GenesisState_3_map) IsValid() bool {
+func (x *_GenesisState_4_map) IsValid() bool {
 	return x.m != nil
 }
 
 var (
-	md_GenesisState           protoreflect.MessageDescriptor
-	fd_GenesisState_params    protoreflect.FieldDescriptor
-	fd_GenesisState_threshold protoreflect.FieldDescriptor
-	fd_GenesisState_voters    protoreflect.FieldDescriptor
+	md_GenesisState          protoreflect.MessageDescriptor
+	fd_GenesisState_params   protoreflect.FieldDescriptor
+	fd_GenesisState_epoch    protoreflect.FieldDescriptor
+	fd_GenesisState_sequence protoreflect.FieldDescriptor
+	fd_GenesisState_voters   protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_goat_relayer_v1_genesis_proto_init()
 	md_GenesisState = File_goat_relayer_v1_genesis_proto.Messages().ByName("GenesisState")
 	fd_GenesisState_params = md_GenesisState.Fields().ByName("params")
-	fd_GenesisState_threshold = md_GenesisState.Fields().ByName("threshold")
+	fd_GenesisState_epoch = md_GenesisState.Fields().ByName("epoch")
+	fd_GenesisState_sequence = md_GenesisState.Fields().ByName("sequence")
 	fd_GenesisState_voters = md_GenesisState.Fields().ByName("voters")
 }
 
@@ -191,14 +193,20 @@ func (x *fastReflection_GenesisState) Range(f func(protoreflect.FieldDescriptor,
 			return
 		}
 	}
-	if x.Threshold != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.Threshold)
-		if !f(fd_GenesisState_threshold, value) {
+	if x.Epoch != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Epoch)
+		if !f(fd_GenesisState_epoch, value) {
+			return
+		}
+	}
+	if x.Sequence != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Sequence)
+		if !f(fd_GenesisState_sequence, value) {
 			return
 		}
 	}
 	if len(x.Voters) != 0 {
-		value := protoreflect.ValueOfMap(&_GenesisState_3_map{m: &x.Voters})
+		value := protoreflect.ValueOfMap(&_GenesisState_4_map{m: &x.Voters})
 		if !f(fd_GenesisState_voters, value) {
 			return
 		}
@@ -220,8 +228,10 @@ func (x *fastReflection_GenesisState) Has(fd protoreflect.FieldDescriptor) bool 
 	switch fd.FullName() {
 	case "goat.relayer.v1.GenesisState.params":
 		return x.Params != nil
-	case "goat.relayer.v1.GenesisState.threshold":
-		return x.Threshold != uint64(0)
+	case "goat.relayer.v1.GenesisState.epoch":
+		return x.Epoch != uint64(0)
+	case "goat.relayer.v1.GenesisState.sequence":
+		return x.Sequence != uint64(0)
 	case "goat.relayer.v1.GenesisState.voters":
 		return len(x.Voters) != 0
 	default:
@@ -242,8 +252,10 @@ func (x *fastReflection_GenesisState) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "goat.relayer.v1.GenesisState.params":
 		x.Params = nil
-	case "goat.relayer.v1.GenesisState.threshold":
-		x.Threshold = uint64(0)
+	case "goat.relayer.v1.GenesisState.epoch":
+		x.Epoch = uint64(0)
+	case "goat.relayer.v1.GenesisState.sequence":
+		x.Sequence = uint64(0)
 	case "goat.relayer.v1.GenesisState.voters":
 		x.Voters = nil
 	default:
@@ -265,14 +277,17 @@ func (x *fastReflection_GenesisState) Get(descriptor protoreflect.FieldDescripto
 	case "goat.relayer.v1.GenesisState.params":
 		value := x.Params
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "goat.relayer.v1.GenesisState.threshold":
-		value := x.Threshold
+	case "goat.relayer.v1.GenesisState.epoch":
+		value := x.Epoch
+		return protoreflect.ValueOfUint64(value)
+	case "goat.relayer.v1.GenesisState.sequence":
+		value := x.Sequence
 		return protoreflect.ValueOfUint64(value)
 	case "goat.relayer.v1.GenesisState.voters":
 		if len(x.Voters) == 0 {
-			return protoreflect.ValueOfMap(&_GenesisState_3_map{})
+			return protoreflect.ValueOfMap(&_GenesisState_4_map{})
 		}
-		mapValue := &_GenesisState_3_map{m: &x.Voters}
+		mapValue := &_GenesisState_4_map{m: &x.Voters}
 		return protoreflect.ValueOfMap(mapValue)
 	default:
 		if descriptor.IsExtension() {
@@ -296,11 +311,13 @@ func (x *fastReflection_GenesisState) Set(fd protoreflect.FieldDescriptor, value
 	switch fd.FullName() {
 	case "goat.relayer.v1.GenesisState.params":
 		x.Params = value.Message().Interface().(*Params)
-	case "goat.relayer.v1.GenesisState.threshold":
-		x.Threshold = value.Uint()
+	case "goat.relayer.v1.GenesisState.epoch":
+		x.Epoch = value.Uint()
+	case "goat.relayer.v1.GenesisState.sequence":
+		x.Sequence = value.Uint()
 	case "goat.relayer.v1.GenesisState.voters":
 		mv := value.Map()
-		cmv := mv.(*_GenesisState_3_map)
+		cmv := mv.(*_GenesisState_4_map)
 		x.Voters = *cmv.m
 	default:
 		if fd.IsExtension() {
@@ -331,10 +348,12 @@ func (x *fastReflection_GenesisState) Mutable(fd protoreflect.FieldDescriptor) p
 		if x.Voters == nil {
 			x.Voters = make(map[string]*Voter)
 		}
-		value := &_GenesisState_3_map{m: &x.Voters}
+		value := &_GenesisState_4_map{m: &x.Voters}
 		return protoreflect.ValueOfMap(value)
-	case "goat.relayer.v1.GenesisState.threshold":
-		panic(fmt.Errorf("field threshold of message goat.relayer.v1.GenesisState is not mutable"))
+	case "goat.relayer.v1.GenesisState.epoch":
+		panic(fmt.Errorf("field epoch of message goat.relayer.v1.GenesisState is not mutable"))
+	case "goat.relayer.v1.GenesisState.sequence":
+		panic(fmt.Errorf("field sequence of message goat.relayer.v1.GenesisState is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.relayer.v1.GenesisState"))
@@ -351,11 +370,13 @@ func (x *fastReflection_GenesisState) NewField(fd protoreflect.FieldDescriptor) 
 	case "goat.relayer.v1.GenesisState.params":
 		m := new(Params)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "goat.relayer.v1.GenesisState.threshold":
+	case "goat.relayer.v1.GenesisState.epoch":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "goat.relayer.v1.GenesisState.sequence":
 		return protoreflect.ValueOfUint64(uint64(0))
 	case "goat.relayer.v1.GenesisState.voters":
 		m := make(map[string]*Voter)
-		return protoreflect.ValueOfMap(&_GenesisState_3_map{m: &m})
+		return protoreflect.ValueOfMap(&_GenesisState_4_map{m: &m})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.relayer.v1.GenesisState"))
@@ -429,8 +450,11 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 			l = options.Size(x.Params)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.Threshold != 0 {
-			n += 1 + runtime.Sov(uint64(x.Threshold))
+		if x.Epoch != 0 {
+			n += 1 + runtime.Sov(uint64(x.Epoch))
+		}
+		if x.Sequence != 0 {
+			n += 1 + runtime.Sov(uint64(x.Sequence))
 		}
 		if len(x.Voters) > 0 {
 			SiZeMaP := func(k string, v *Voter) {
@@ -509,7 +533,7 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				dAtA[i] = 0xa
 				i = runtime.EncodeVarint(dAtA, i, uint64(baseI-i))
 				i--
-				dAtA[i] = 0x1a
+				dAtA[i] = 0x22
 				return protoiface.MarshalOutput{}, nil
 			}
 			if options.Deterministic {
@@ -537,8 +561,13 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				}
 			}
 		}
-		if x.Threshold != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.Threshold))
+		if x.Sequence != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Sequence))
+			i--
+			dAtA[i] = 0x18
+		}
+		if x.Epoch != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Epoch))
 			i--
 			dAtA[i] = 0x10
 		}
@@ -643,9 +672,9 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 2:
 				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Threshold", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Epoch", wireType)
 				}
-				x.Threshold = 0
+				x.Epoch = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -655,12 +684,31 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.Threshold |= uint64(b&0x7F) << shift
+					x.Epoch |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
 			case 3:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Sequence", wireType)
+				}
+				x.Sequence = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Sequence |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 4:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Voters", wireType)
 				}
@@ -844,9 +892,10 @@ type GenesisState struct {
 	unknownFields protoimpl.UnknownFields
 
 	// params defines all the parameters of the module.
-	Params    *Params           `protobuf:"bytes,1,opt,name=params,proto3" json:"params,omitempty"`
-	Threshold uint64            `protobuf:"varint,2,opt,name=threshold,proto3" json:"threshold,omitempty"`
-	Voters    map[string]*Voter `protobuf:"bytes,3,rep,name=voters,proto3" json:"voters,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Params   *Params           `protobuf:"bytes,1,opt,name=params,proto3" json:"params,omitempty"`
+	Epoch    uint64            `protobuf:"varint,2,opt,name=epoch,proto3" json:"epoch,omitempty"`
+	Sequence uint64            `protobuf:"varint,3,opt,name=sequence,proto3" json:"sequence,omitempty"`
+	Voters   map[string]*Voter `protobuf:"bytes,4,rep,name=voters,proto3" json:"voters,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
 func (x *GenesisState) Reset() {
@@ -876,9 +925,16 @@ func (x *GenesisState) GetParams() *Params {
 	return nil
 }
 
-func (x *GenesisState) GetThreshold() uint64 {
+func (x *GenesisState) GetEpoch() uint64 {
 	if x != nil {
-		return x.Threshold
+		return x.Epoch
+	}
+	return 0
+}
+
+func (x *GenesisState) GetSequence() uint64 {
+	if x != nil {
+		return x.Sequence
 	}
 	return 0
 }
@@ -902,35 +958,37 @@ var file_goat_relayer_v1_genesis_proto_rawDesc = []byte{
 	0x6f, 0x1a, 0x1d, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x2f,
 	0x76, 0x31, 0x2f, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
 	0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f,
-	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xfe, 0x01, 0x0a, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73,
+	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x92, 0x02, 0x0a, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73,
 	0x69, 0x73, 0x53, 0x74, 0x61, 0x74, 0x65, 0x12, 0x3a, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d,
 	0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x17, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x72,
 	0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73,
 	0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06, 0x70, 0x61, 0x72,
-	0x61, 0x6d, 0x73, 0x12, 0x1c, 0x0a, 0x09, 0x74, 0x68, 0x72, 0x65, 0x73, 0x68, 0x6f, 0x6c, 0x64,
-	0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x09, 0x74, 0x68, 0x72, 0x65, 0x73, 0x68, 0x6f, 0x6c,
-	0x64, 0x12, 0x41, 0x0a, 0x06, 0x76, 0x6f, 0x74, 0x65, 0x72, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28,
-	0x0b, 0x32, 0x29, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72,
-	0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x53, 0x74, 0x61, 0x74, 0x65,
-	0x2e, 0x56, 0x6f, 0x74, 0x65, 0x72, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x52, 0x06, 0x76, 0x6f,
-	0x74, 0x65, 0x72, 0x73, 0x1a, 0x51, 0x0a, 0x0b, 0x56, 0x6f, 0x74, 0x65, 0x72, 0x73, 0x45, 0x6e,
-	0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x2c, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x16, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x72, 0x65, 0x6c, 0x61,
-	0x79, 0x65, 0x72, 0x2e, 0x76, 0x31, 0x2e, 0x56, 0x6f, 0x74, 0x65, 0x72, 0x52, 0x05, 0x76, 0x61,
-	0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x42, 0xbc, 0x01, 0x0a, 0x13, 0x63, 0x6f, 0x6d, 0x2e,
-	0x67, 0x6f, 0x61, 0x74, 0x2e, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x2e, 0x76, 0x31, 0x42,
-	0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a,
-	0x39, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x61, 0x74,
-	0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x61, 0x70, 0x69,
-	0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x2f, 0x76, 0x31,
-	0x3b, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x47, 0x52, 0x58,
-	0xaa, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x2e, 0x52, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x2e,
-	0x56, 0x31, 0xca, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x52, 0x65, 0x6c, 0x61, 0x79, 0x65,
-	0x72, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x1b, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x52, 0x65, 0x6c, 0x61,
-	0x79, 0x65, 0x72, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61,
-	0x74, 0x61, 0xea, 0x02, 0x11, 0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x52, 0x65, 0x6c, 0x61, 0x79,
-	0x65, 0x72, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x61, 0x6d, 0x73, 0x12, 0x14, 0x0a, 0x05, 0x65, 0x70, 0x6f, 0x63, 0x68, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x04, 0x52, 0x05, 0x65, 0x70, 0x6f, 0x63, 0x68, 0x12, 0x1a, 0x0a, 0x08, 0x73, 0x65, 0x71,
+	0x75, 0x65, 0x6e, 0x63, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x08, 0x73, 0x65, 0x71,
+	0x75, 0x65, 0x6e, 0x63, 0x65, 0x12, 0x41, 0x0a, 0x06, 0x76, 0x6f, 0x74, 0x65, 0x72, 0x73, 0x18,
+	0x04, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x29, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x72, 0x65, 0x6c,
+	0x61, 0x79, 0x65, 0x72, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x53,
+	0x74, 0x61, 0x74, 0x65, 0x2e, 0x56, 0x6f, 0x74, 0x65, 0x72, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79,
+	0x52, 0x06, 0x76, 0x6f, 0x74, 0x65, 0x72, 0x73, 0x1a, 0x51, 0x0a, 0x0b, 0x56, 0x6f, 0x74, 0x65,
+	0x72, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x2c, 0x0a, 0x05, 0x76, 0x61, 0x6c,
+	0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x16, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e,
+	0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x2e, 0x76, 0x31, 0x2e, 0x56, 0x6f, 0x74, 0x65, 0x72,
+	0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x42, 0xbc, 0x01, 0x0a, 0x13,
+	0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72,
+	0x2e, 0x76, 0x31, 0x42, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x50, 0x72, 0x6f, 0x74,
+	0x6f, 0x50, 0x01, 0x5a, 0x39, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f,
+	0x67, 0x6f, 0x61, 0x74, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x67, 0x6f, 0x61, 0x74,
+	0x2f, 0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65,
+	0x72, 0x2f, 0x76, 0x31, 0x3b, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x76, 0x31, 0xa2, 0x02,
+	0x03, 0x47, 0x52, 0x58, 0xaa, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x2e, 0x52, 0x65, 0x6c, 0x61,
+	0x79, 0x65, 0x72, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x52, 0x65,
+	0x6c, 0x61, 0x79, 0x65, 0x72, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x1b, 0x47, 0x6f, 0x61, 0x74, 0x5c,
+	0x52, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65,
+	0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x11, 0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x52,
+	0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x33,
 }
 
 var (

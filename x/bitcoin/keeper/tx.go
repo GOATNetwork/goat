@@ -132,7 +132,7 @@ func (k msgServer) NewPubkey(ctx context.Context, req *types.MsgNewPubkey) (*typ
 	}
 
 	sdktypes.UnwrapSDKContext(ctx).EventManager().EmitEvents(
-		sdktypes.Events{types.NewKeyEvent(req.Pubkey), relayertypes.ProposalDoneEvent(sequence)},
+		sdktypes.Events{types.NewKeyEvent(req.Pubkey), relayertypes.FinalizedProposalEvent(sequence)},
 	)
 
 	return &types.MsgNewPubkeyResponse{}, nil
