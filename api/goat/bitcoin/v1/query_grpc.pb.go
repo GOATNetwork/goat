@@ -19,11 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Query_Params_FullMethodName            = "/goat.bitcoin.v1.Query/Params"
-	Query_Pubkey_FullMethodName            = "/goat.bitcoin.v1.Query/Pubkey"
-	Query_DepositAddress_FullMethodName    = "/goat.bitcoin.v1.Query/DepositAddress"
-	Query_WithdrawalAddress_FullMethodName = "/goat.bitcoin.v1.Query/WithdrawalAddress"
-	Query_HasDeposited_FullMethodName      = "/goat.bitcoin.v1.Query/HasDeposited"
+	Query_Params_FullMethodName         = "/goat.bitcoin.v1.Query/Params"
+	Query_Pubkey_FullMethodName         = "/goat.bitcoin.v1.Query/Pubkey"
+	Query_DepositAddress_FullMethodName = "/goat.bitcoin.v1.Query/DepositAddress"
+	Query_HasDeposited_FullMethodName   = "/goat.bitcoin.v1.Query/HasDeposited"
+	Query_Withdrawal_FullMethodName     = "/goat.bitcoin.v1.Query/Withdrawal"
 )
 
 // QueryClient is the client API for Query service.
@@ -36,10 +36,10 @@ type QueryClient interface {
 	Pubkey(ctx context.Context, in *QueryPubkeyRequest, opts ...grpc.CallOption) (*QueryPubkeyResponse, error)
 	// DepositAddress
 	DepositAddress(ctx context.Context, in *QueryDepositAddress, opts ...grpc.CallOption) (*QueryDepositAddressResponse, error)
-	// WithdrawalAddress
-	WithdrawalAddress(ctx context.Context, in *QueryWithdrawalAddress, opts ...grpc.CallOption) (*QueryWithdrawalAddressResponse, error)
 	// HasDeposited
 	HasDeposited(ctx context.Context, in *QueryHasDeposited, opts ...grpc.CallOption) (*QueryHasDepositedResponse, error)
+	// Withdrawal queries all current public keys
+	Withdrawal(ctx context.Context, in *QueryWithdrawalRequest, opts ...grpc.CallOption) (*QueryWithdrawalResponse, error)
 }
 
 type queryClient struct {
@@ -77,18 +77,18 @@ func (c *queryClient) DepositAddress(ctx context.Context, in *QueryDepositAddres
 	return out, nil
 }
 
-func (c *queryClient) WithdrawalAddress(ctx context.Context, in *QueryWithdrawalAddress, opts ...grpc.CallOption) (*QueryWithdrawalAddressResponse, error) {
-	out := new(QueryWithdrawalAddressResponse)
-	err := c.cc.Invoke(ctx, Query_WithdrawalAddress_FullMethodName, in, out, opts...)
+func (c *queryClient) HasDeposited(ctx context.Context, in *QueryHasDeposited, opts ...grpc.CallOption) (*QueryHasDepositedResponse, error) {
+	out := new(QueryHasDepositedResponse)
+	err := c.cc.Invoke(ctx, Query_HasDeposited_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *queryClient) HasDeposited(ctx context.Context, in *QueryHasDeposited, opts ...grpc.CallOption) (*QueryHasDepositedResponse, error) {
-	out := new(QueryHasDepositedResponse)
-	err := c.cc.Invoke(ctx, Query_HasDeposited_FullMethodName, in, out, opts...)
+func (c *queryClient) Withdrawal(ctx context.Context, in *QueryWithdrawalRequest, opts ...grpc.CallOption) (*QueryWithdrawalResponse, error) {
+	out := new(QueryWithdrawalResponse)
+	err := c.cc.Invoke(ctx, Query_Withdrawal_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -105,10 +105,10 @@ type QueryServer interface {
 	Pubkey(context.Context, *QueryPubkeyRequest) (*QueryPubkeyResponse, error)
 	// DepositAddress
 	DepositAddress(context.Context, *QueryDepositAddress) (*QueryDepositAddressResponse, error)
-	// WithdrawalAddress
-	WithdrawalAddress(context.Context, *QueryWithdrawalAddress) (*QueryWithdrawalAddressResponse, error)
 	// HasDeposited
 	HasDeposited(context.Context, *QueryHasDeposited) (*QueryHasDepositedResponse, error)
+	// Withdrawal queries all current public keys
+	Withdrawal(context.Context, *QueryWithdrawalRequest) (*QueryWithdrawalResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -125,11 +125,11 @@ func (UnimplementedQueryServer) Pubkey(context.Context, *QueryPubkeyRequest) (*Q
 func (UnimplementedQueryServer) DepositAddress(context.Context, *QueryDepositAddress) (*QueryDepositAddressResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DepositAddress not implemented")
 }
-func (UnimplementedQueryServer) WithdrawalAddress(context.Context, *QueryWithdrawalAddress) (*QueryWithdrawalAddressResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method WithdrawalAddress not implemented")
-}
 func (UnimplementedQueryServer) HasDeposited(context.Context, *QueryHasDeposited) (*QueryHasDepositedResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HasDeposited not implemented")
+}
+func (UnimplementedQueryServer) Withdrawal(context.Context, *QueryWithdrawalRequest) (*QueryWithdrawalResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Withdrawal not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -198,24 +198,6 @@ func _Query_DepositAddress_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_WithdrawalAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryWithdrawalAddress)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).WithdrawalAddress(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Query_WithdrawalAddress_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).WithdrawalAddress(ctx, req.(*QueryWithdrawalAddress))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Query_HasDeposited_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QueryHasDeposited)
 	if err := dec(in); err != nil {
@@ -230,6 +212,24 @@ func _Query_HasDeposited_Handler(srv interface{}, ctx context.Context, dec func(
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QueryServer).HasDeposited(ctx, req.(*QueryHasDeposited))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_Withdrawal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryWithdrawalRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Withdrawal(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_Withdrawal_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Withdrawal(ctx, req.(*QueryWithdrawalRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -254,12 +254,12 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Query_DepositAddress_Handler,
 		},
 		{
-			MethodName: "WithdrawalAddress",
-			Handler:    _Query_WithdrawalAddress_Handler,
-		},
-		{
 			MethodName: "HasDeposited",
 			Handler:    _Query_HasDeposited_Handler,
+		},
+		{
+			MethodName: "Withdrawal",
+			Handler:    _Query_Withdrawal_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

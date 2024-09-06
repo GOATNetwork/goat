@@ -61,6 +61,7 @@ message QueryRelayerRequest {}
 // QueryRelayerResponse is response type for the Query/Voters RPC method
 message QueryRelayerResponse {
   Relayer relayer = 1;
+  uint64 sequence = 2;
 }
 
 // QueryPubkeysRequest is request type for the Query/Pubkeys RPC method

@@ -19,9 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Msg_NewBlockHashes_FullMethodName = "/goat.bitcoin.v1.Msg/NewBlockHashes"
-	Msg_NewDeposits_FullMethodName    = "/goat.bitcoin.v1.Msg/NewDeposits"
-	Msg_NewPubkey_FullMethodName      = "/goat.bitcoin.v1.Msg/NewPubkey"
+	Msg_NewBlockHashes_FullMethodName      = "/goat.bitcoin.v1.Msg/NewBlockHashes"
+	Msg_NewDeposits_FullMethodName         = "/goat.bitcoin.v1.Msg/NewDeposits"
+	Msg_NewPubkey_FullMethodName           = "/goat.bitcoin.v1.Msg/NewPubkey"
+	Msg_NewWithdrawal_FullMethodName       = "/goat.bitcoin.v1.Msg/NewWithdrawal"
+	Msg_FinalizeWithdrawal_FullMethodName  = "/goat.bitcoin.v1.Msg/FinalizeWithdrawal"
+	Msg_ApproveCancellation_FullMethodName = "/goat.bitcoin.v1.Msg/ApproveCancellation"
 )
 
 // MsgClient is the client API for Msg service.
@@ -34,6 +37,14 @@ type MsgClient interface {
 	NewDeposits(ctx context.Context, in *MsgNewDeposits, opts ...grpc.CallOption) (*MsgNewDepositsResponse, error)
 	// NewPubkey adds new deposit public key
 	NewPubkey(ctx context.Context, in *MsgNewPubkey, opts ...grpc.CallOption) (*MsgNewPubkeyResponse, error)
+	// NewWithdrawal submits a passed proposal for withdrawal requests
+	// This is the first step to process withdrawals to
+	// inform every voter that the proposal has been approved and they can process signing then
+	NewWithdrawal(ctx context.Context, in *MsgNewWithdrawal, opts ...grpc.CallOption) (*MsgNewWithdrawalResponse, error)
+	// FinalizeWithdrawal
+	FinalizeWithdrawal(ctx context.Context, in *MsgFinalizeWithdrawal, opts ...grpc.CallOption) (*MsgFinalizeWithdrawalResponse, error)
+	// ApproveCancellation approves cancelation requests
+	ApproveCancellation(ctx context.Context, in *MsgApproveCancellation, opts ...grpc.CallOption) (*MsgApproveCancellationResponse, error)
 }
 
 type msgClient struct {
@@ -71,6 +82,33 @@ func (c *msgClient) NewPubkey(ctx context.Context, in *MsgNewPubkey, opts ...grp
 	return out, nil
 }
 
+func (c *msgClient) NewWithdrawal(ctx context.Context, in *MsgNewWithdrawal, opts ...grpc.CallOption) (*MsgNewWithdrawalResponse, error) {
+	out := new(MsgNewWithdrawalResponse)
+	err := c.cc.Invoke(ctx, Msg_NewWithdrawal_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) FinalizeWithdrawal(ctx context.Context, in *MsgFinalizeWithdrawal, opts ...grpc.CallOption) (*MsgFinalizeWithdrawalResponse, error) {
+	out := new(MsgFinalizeWithdrawalResponse)
+	err := c.cc.Invoke(ctx, Msg_FinalizeWithdrawal_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) ApproveCancellation(ctx context.Context, in *MsgApproveCancellation, opts ...grpc.CallOption) (*MsgApproveCancellationResponse, error) {
+	out := new(MsgApproveCancellationResponse)
+	err := c.cc.Invoke(ctx, Msg_ApproveCancellation_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -81,6 +119,14 @@ type MsgServer interface {
 	NewDeposits(context.Context, *MsgNewDeposits) (*MsgNewDepositsResponse, error)
 	// NewPubkey adds new deposit public key
 	NewPubkey(context.Context, *MsgNewPubkey) (*MsgNewPubkeyResponse, error)
+	// NewWithdrawal submits a passed proposal for withdrawal requests
+	// This is the first step to process withdrawals to
+	// inform every voter that the proposal has been approved and they can process signing then
+	NewWithdrawal(context.Context, *MsgNewWithdrawal) (*MsgNewWithdrawalResponse, error)
+	// FinalizeWithdrawal
+	FinalizeWithdrawal(context.Context, *MsgFinalizeWithdrawal) (*MsgFinalizeWithdrawalResponse, error)
+	// ApproveCancellation approves cancelation requests
+	ApproveCancellation(context.Context, *MsgApproveCancellation) (*MsgApproveCancellationResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -96,6 +142,15 @@ func (UnimplementedMsgServer) NewDeposits(context.Context, *MsgNewDeposits) (*Ms
 }
 func (UnimplementedMsgServer) NewPubkey(context.Context, *MsgNewPubkey) (*MsgNewPubkeyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method NewPubkey not implemented")
+}
+func (UnimplementedMsgServer) NewWithdrawal(context.Context, *MsgNewWithdrawal) (*MsgNewWithdrawalResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method NewWithdrawal not implemented")
+}
+func (UnimplementedMsgServer) FinalizeWithdrawal(context.Context, *MsgFinalizeWithdrawal) (*MsgFinalizeWithdrawalResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FinalizeWithdrawal not implemented")
+}
+func (UnimplementedMsgServer) ApproveCancellation(context.Context, *MsgApproveCancellation) (*MsgApproveCancellationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ApproveCancellation not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -164,6 +219,60 @@ func _Msg_NewPubkey_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_NewWithdrawal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgNewWithdrawal)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).NewWithdrawal(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_NewWithdrawal_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).NewWithdrawal(ctx, req.(*MsgNewWithdrawal))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_FinalizeWithdrawal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgFinalizeWithdrawal)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).FinalizeWithdrawal(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_FinalizeWithdrawal_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).FinalizeWithdrawal(ctx, req.(*MsgFinalizeWithdrawal))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_ApproveCancellation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgApproveCancellation)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).ApproveCancellation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_ApproveCancellation_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).ApproveCancellation(ctx, req.(*MsgApproveCancellation))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -182,6 +291,18 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "NewPubkey",
 			Handler:    _Msg_NewPubkey_Handler,
+		},
+		{
+			MethodName: "NewWithdrawal",
+			Handler:    _Msg_NewWithdrawal_Handler,
+		},
+		{
+			MethodName: "FinalizeWithdrawal",
+			Handler:    _Msg_FinalizeWithdrawal_Handler,
+		},
+		{
+			MethodName: "ApproveCancellation",
+			Handler:    _Msg_ApproveCancellation_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

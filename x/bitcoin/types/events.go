@@ -11,9 +11,12 @@ import (
 )
 
 const (
-	EventTypeNewKey       = "new_key"
-	EventTypeNewDeposit   = "new_deposit"
-	EventTypeNewBlockHash = "new_block_hash"
+	EventTypeNewKey              = "new_key"
+	EventTypeNewDeposit          = "new_deposit"
+	EventTypeNewBlockHash        = "new_block_hash"
+	EventTypeNewWithdrawal       = "new_withdrawal"
+	EventTypeApproveCancellation = "approve_cancellation_withdrawal"
+	EventTypeFinalizeWithdrawal  = "finalize_withdrawal"
 )
 
 func NewKeyEvent(key *relayertypes.PublicKey) sdktypes.Event {
@@ -36,7 +39,7 @@ func NewKeyEvent(key *relayertypes.PublicKey) sdktypes.Event {
 	)
 }
 
-func NewDepositEvent(deposit *DepositReceipt) sdktypes.Event {
+func NewDepositEvent(deposit *DepositExecReceipt) sdktypes.Event {
 	return sdktypes.NewEvent(
 		EventTypeNewDeposit,
 		sdktypes.NewAttribute("txid", chainhash.Hash(deposit.Txid).String()), // we must use big endian
@@ -51,5 +54,26 @@ func NewBlockHashEvent(height uint64, hash []byte) sdktypes.Event {
 		EventTypeNewBlockHash,
 		sdktypes.NewAttribute("height", strconv.FormatUint(height, 10)),
 		sdktypes.NewAttribute("hash", chainhash.Hash(hash).String()), // we must use big endian
+	)
+}
+
+func NewWithdrawalEvent(hash []byte) sdktypes.Event {
+	return sdktypes.NewEvent(
+		EventTypeNewWithdrawal,
+		sdktypes.NewAttribute("txid", chainhash.Hash(hash).String()), // we must use big endian
+	)
+}
+
+func FinalizeWithdrawalEvent(hash []byte) sdktypes.Event {
+	return sdktypes.NewEvent(
+		EventTypeFinalizeWithdrawal,
+		sdktypes.NewAttribute("txid", chainhash.Hash(hash).String()), // we must use big endian
+	)
+}
+
+func ApproveCancellationEvent(id uint64) sdktypes.Event {
+	return sdktypes.NewEvent(
+		EventTypeApproveCancellation,
+		sdktypes.NewAttribute("id", strconv.FormatUint(id, 10)),
 	)
 }

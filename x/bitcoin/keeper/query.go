@@ -125,25 +125,18 @@ func (q queryServer) HasDeposited(ctx context.Context, req *types.QueryHasDeposi
 	return &types.QueryHasDepositedResponse{Yes: exist}, nil
 }
 
-func (q queryServer) WithdrawalAddress(ctx context.Context, req *types.QueryWithdrawalAddress) (*types.QueryWithdrawalAddressResponse, error) {
+func (q queryServer) Withdrawal(ctx context.Context, req *types.QueryWithdrawalRequest) (*types.QueryWithdrawalResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	param, err := q.k.Params.Get(ctx)
+	withdrawal, err := q.k.Withdrawals.Get(ctx, req.Id)
 	if err != nil {
+		if errors.Is(err, collections.ErrNotFound) {
+			return nil, status.Error(codes.NotFound, "not found")
+		}
 		return nil, status.Error(codes.Internal, "internal error")
 	}
 
-	chainConfig, ok := types.BitcoinNetworks[param.NetworkName]
-	if !ok {
-		return nil, status.Errorf(codes.Internal, "internal error: undefined network %s", param.NetworkName)
-	}
-
-	address, err := types.WithdrawalAddress(req.Address, chainConfig)
-	if err != nil {
-		return nil, status.Errorf(codes.InvalidArgument, "invalid request: %s", err.Error())
-	}
-
-	return &types.QueryWithdrawalAddressResponse{Address: address}, nil
+	return &types.QueryWithdrawalResponse{Withdrawal: &withdrawal}, nil
 }

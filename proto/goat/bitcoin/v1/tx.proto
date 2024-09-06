@@ -21,6 +21,17 @@ service Msg {
 
   // NewPubkey adds new deposit public key
   rpc NewPubkey(MsgNewPubkey) returns (MsgNewPubkeyResponse);
+
+  // NewWithdrawal submits a passed proposal for withdrawal requests
+  // This is the first step to process withdrawals to
+  // inform every voter that the proposal has been approved and they can process signing then
+  rpc NewWithdrawal(MsgNewWithdrawal) returns (MsgNewWithdrawalResponse);
+
+  // FinalizeWithdrawal
+  rpc FinalizeWithdrawal(MsgFinalizeWithdrawal) returns (MsgFinalizeWithdrawalResponse);
+
+  // ApproveCancellation approves cancelation requests
+  rpc ApproveCancellation(MsgApproveCancellation) returns (MsgApproveCancellationResponse);
 }
 
 // MsgNewBlockHashes represents a solid block header is confirmed by relayer group
@@ -65,3 +76,49 @@ message MsgNewPubkey {
 
 // MsgNewPubkeyResponse is the Msg/NewPubkey response type.
 message MsgNewPubkeyResponse {}
+
+// MsgNewWithdrawal
+message MsgNewWithdrawal {
+  option (cosmos.msg.v1.signer) = "proposer";
+  option (amino.name) = "goat/x/bitcoin/MsgNewWithdrawal";
+
+  string proposer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  goat.relayer.v1.Votes vote = 2;
+  WithdrawalProposal proposal = 3;
+}
+
+// MsgNewWithdrawalResponse
+message MsgNewWithdrawalResponse {}
+
+// MsgFinalizeWithdrawal
+message MsgFinalizeWithdrawal {
+  option (cosmos.msg.v1.signer) = "proposer";
+  option (amino.name) = "goat/x/bitcoin/MsgFinalizeWithdrawal";
+
+  string proposer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  // the txid for the withdrawal proposal
+  bytes txid = 2;
+  // block_number the block number that transaction located at
+  uint64 block_number = 3;
+  // tx_index is the index of transaction in the block
+  uint32 tx_index = 4;
+  // intermediate proof is the proof without the txid and merkel root
+  bytes intermediate_proof = 5;
+  // block_header is the raw bitcoin block header bytes
+  bytes block_header = 6;
+}
+
+// MsgFinalizeWithdrawalResponse
+message MsgFinalizeWithdrawalResponse {}
+
+// MsgApproveCancellation
+message MsgApproveCancellation {
+  option (cosmos.msg.v1.signer) = "proposer";
+  option (amino.name) = "goat/x/bitcoin/MsgApproveCancellation";
+
+  string proposer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  repeated uint64 id = 2;
+}
+
+// MsgApproveCancellationResponse
+message MsgApproveCancellationResponse {}

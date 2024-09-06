@@ -4,7 +4,7 @@ package goat.bitcoin.v1;
 // import "amino/amino.proto";
 // import "cosmos_proto/cosmos.proto";
 import "goat/relayer/v1/relayer.proto";
-// import "gogoproto/gogo.proto";
+import "gogoproto/gogo.proto";
 
 option go_package = "github.com/goatnetwork/goat/x/bitcoin/types";
 
@@ -26,8 +26,51 @@ message Deposit {
   goat.relayer.v1.PublicKey relayer_pubkey = 8;
 }
 
+// WithdrawalProposal
+message WithdrawalProposal {
+  repeated uint64 id = 1;
+  bytes no_witness_tx = 2;
+  uint64 tx_price = 3;
+}
+
+// WithdrawalStatus is the status of a withdrawal.
+enum WithdrawalStatus {
+  option (gogoproto.goproto_enum_prefix) = false;
+
+  // WITHDRAWAL_STATUS_UNSPECIFIED defines an invalid status.
+  WITHDRAWAL_STATUS_UNSPECIFIED = 0;
+  // WITHDRAWAL_STATUS_PENDING
+  WITHDRAWAL_STATUS_PENDING = 1;
+  // WITHDRAWAL_STATUS_PROCESSING
+  WITHDRAWAL_STATUS_PROCESSING = 2;
+  // WITHDRAWAL_STATUS_CANCELING
+  WITHDRAWAL_STATUS_CANCELING = 3;
+  // WITHDRAWAL_STATUS_CANCELED
+  WITHDRAWAL_STATUS_CANCELED = 4;
+  // WITHDRAWAL_STATUS_PAID
+  WITHDRAWAL_STATUS_PAID = 5;
+}
+
+// Withdrawal
+message Withdrawal {
+  string address = 1;
+  uint64 request_amount = 2;
+  uint64 max_tx_price = 3;
+  WithdrawalStatus status = 4;
+  WithdrawalReceipt receipt = 5;
+}
+
+// WithdrawalReceipt
+message WithdrawalReceipt {
+  bytes txid = 1;
+  uint32 txout = 2;
+  uint64 amount = 3;
+}
+
+// ...ConsolidationProposal
+
 // DepositReceipt
-message DepositReceipt {
+message DepositExecReceipt {
   bytes txid = 1;
   uint32 txout = 2;
   bytes address = 3;
@@ -40,18 +83,16 @@ message DepositReceipt {
   // ];
 }
 
-// WithdrawalReceipt
-message WithdrawalReceipt {
+// WithdrawalExecReceipt
+message WithdrawalExecReceipt {
   uint64 id = 1;
-  bytes txid = 2;
-  uint32 txout = 3;
-  uint64 amount = 4;
+  WithdrawalReceipt receipt = 2;
 }
 
 // ExecuableQueue
 message ExecuableQueue {
   uint64 block_number = 1;
-  repeated DepositReceipt deposits = 2;
-  repeated WithdrawalReceipt paid_withdrawals = 3;
+  repeated DepositExecReceipt deposits = 2;
+  repeated WithdrawalExecReceipt paid_withdrawals = 3;
   repeated uint64 rejected_withdrawals = 4;
 }

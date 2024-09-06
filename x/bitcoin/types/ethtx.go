@@ -10,7 +10,7 @@ import (
 
 var satoshi = big.NewInt(1e10)
 
-func (d *DepositReceipt) EthTx(seq uint64) *ethtypes.Transaction {
+func (d *DepositExecReceipt) EthTx(seq uint64) *ethtypes.Transaction {
 	amount := new(big.Int).SetUint64(d.Amount)
 	amount.Mul(amount, satoshi)
 
@@ -29,8 +29,8 @@ func (d *DepositReceipt) EthTx(seq uint64) *ethtypes.Transaction {
 	)
 }
 
-func (d *WithdrawalReceipt) EthTx(seq uint64) *ethtypes.Transaction {
-	amount := new(big.Int).SetUint64(d.Amount)
+func (d *WithdrawalExecReceipt) EthTx(seq uint64) *ethtypes.Transaction {
+	amount := new(big.Int).SetUint64(d.Receipt.Amount)
 	amount.Mul(amount, satoshi)
 
 	return ethtypes.NewTx(
@@ -40,9 +40,22 @@ func (d *WithdrawalReceipt) EthTx(seq uint64) *ethtypes.Transaction {
 			seq,
 			&goattypes.PaidTx{
 				Id:     new(big.Int).SetUint64(d.Id),
-				Txid:   common.BytesToHash(d.Txid),
-				TxOut:  d.Txout,
+				Txid:   common.BytesToHash(d.Receipt.Txid),
+				TxOut:  d.Receipt.Txout,
 				Amount: amount,
+			},
+		),
+	)
+}
+
+func NewRejectEthTx(wid, seq uint64) *ethtypes.Transaction {
+	return ethtypes.NewTx(
+		ethtypes.NewGoatTx(
+			goattypes.BirdgeModule,
+			goattypes.BridgeCancel2Action,
+			seq,
+			&goattypes.Cancel2Tx{
+				Id: new(big.Int).SetUint64(wid),
 			},
 		),
 	)

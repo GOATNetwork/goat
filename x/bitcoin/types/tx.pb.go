@@ -336,6 +336,321 @@ func (m *MsgNewPubkeyResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgNewPubkeyResponse proto.InternalMessageInfo
 
+// MsgNewWithdrawal
+type MsgNewWithdrawal struct {
+	Proposer string              `protobuf:"bytes,1,opt,name=proposer,proto3" json:"proposer,omitempty"`
+	Vote     *types.Votes        `protobuf:"bytes,2,opt,name=vote,proto3" json:"vote,omitempty"`
+	Proposal *WithdrawalProposal `protobuf:"bytes,3,opt,name=proposal,proto3" json:"proposal,omitempty"`
+}
+
+func (m *MsgNewWithdrawal) Reset()         { *m = MsgNewWithdrawal{} }
+func (m *MsgNewWithdrawal) String() string { return proto.CompactTextString(m) }
+func (*MsgNewWithdrawal) ProtoMessage()    {}
+func (*MsgNewWithdrawal) Descriptor() ([]byte, []int) {
+	return fileDescriptor_061207c379e1a1b2, []int{6}
+}
+func (m *MsgNewWithdrawal) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgNewWithdrawal) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgNewWithdrawal.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgNewWithdrawal) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgNewWithdrawal.Merge(m, src)
+}
+func (m *MsgNewWithdrawal) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgNewWithdrawal) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgNewWithdrawal.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgNewWithdrawal proto.InternalMessageInfo
+
+func (m *MsgNewWithdrawal) GetProposer() string {
+	if m != nil {
+		return m.Proposer
+	}
+	return ""
+}
+
+func (m *MsgNewWithdrawal) GetVote() *types.Votes {
+	if m != nil {
+		return m.Vote
+	}
+	return nil
+}
+
+func (m *MsgNewWithdrawal) GetProposal() *WithdrawalProposal {
+	if m != nil {
+		return m.Proposal
+	}
+	return nil
+}
+
+// MsgNewWithdrawalResponse
+type MsgNewWithdrawalResponse struct {
+}
+
+func (m *MsgNewWithdrawalResponse) Reset()         { *m = MsgNewWithdrawalResponse{} }
+func (m *MsgNewWithdrawalResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgNewWithdrawalResponse) ProtoMessage()    {}
+func (*MsgNewWithdrawalResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_061207c379e1a1b2, []int{7}
+}
+func (m *MsgNewWithdrawalResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgNewWithdrawalResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgNewWithdrawalResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgNewWithdrawalResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgNewWithdrawalResponse.Merge(m, src)
+}
+func (m *MsgNewWithdrawalResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgNewWithdrawalResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgNewWithdrawalResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgNewWithdrawalResponse proto.InternalMessageInfo
+
+// MsgFinalizeWithdrawal
+type MsgFinalizeWithdrawal struct {
+	Proposer string `protobuf:"bytes,1,opt,name=proposer,proto3" json:"proposer,omitempty"`
+	// the txid for the withdrawal proposal
+	Txid []byte `protobuf:"bytes,2,opt,name=txid,proto3" json:"txid,omitempty"`
+	// block_number the block number that transaction located at
+	BlockNumber uint64 `protobuf:"varint,3,opt,name=block_number,json=blockNumber,proto3" json:"block_number,omitempty"`
+	// tx_index is the index of transaction in the block
+	TxIndex uint32 `protobuf:"varint,4,opt,name=tx_index,json=txIndex,proto3" json:"tx_index,omitempty"`
+	// intermediate proof is the proof without the txid and merkel root
+	IntermediateProof []byte `protobuf:"bytes,5,opt,name=intermediate_proof,json=intermediateProof,proto3" json:"intermediate_proof,omitempty"`
+	// block_header is the raw bitcoin block header bytes
+	BlockHeader []byte `protobuf:"bytes,6,opt,name=block_header,json=blockHeader,proto3" json:"block_header,omitempty"`
+}
+
+func (m *MsgFinalizeWithdrawal) Reset()         { *m = MsgFinalizeWithdrawal{} }
+func (m *MsgFinalizeWithdrawal) String() string { return proto.CompactTextString(m) }
+func (*MsgFinalizeWithdrawal) ProtoMessage()    {}
+func (*MsgFinalizeWithdrawal) Descriptor() ([]byte, []int) {
+	return fileDescriptor_061207c379e1a1b2, []int{8}
+}
+func (m *MsgFinalizeWithdrawal) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgFinalizeWithdrawal) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgFinalizeWithdrawal.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgFinalizeWithdrawal) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgFinalizeWithdrawal.Merge(m, src)
+}
+func (m *MsgFinalizeWithdrawal) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgFinalizeWithdrawal) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgFinalizeWithdrawal.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgFinalizeWithdrawal proto.InternalMessageInfo
+
+func (m *MsgFinalizeWithdrawal) GetProposer() string {
+	if m != nil {
+		return m.Proposer
+	}
+	return ""
+}
+
+func (m *MsgFinalizeWithdrawal) GetTxid() []byte {
+	if m != nil {
+		return m.Txid
+	}
+	return nil
+}
+
+func (m *MsgFinalizeWithdrawal) GetBlockNumber() uint64 {
+	if m != nil {
+		return m.BlockNumber
+	}
+	return 0
+}
+
+func (m *MsgFinalizeWithdrawal) GetTxIndex() uint32 {
+	if m != nil {
+		return m.TxIndex
+	}
+	return 0
+}
+
+func (m *MsgFinalizeWithdrawal) GetIntermediateProof() []byte {
+	if m != nil {
+		return m.IntermediateProof
+	}
+	return nil
+}
+
+func (m *MsgFinalizeWithdrawal) GetBlockHeader() []byte {
+	if m != nil {
+		return m.BlockHeader
+	}
+	return nil
+}
+
+// MsgFinalizeWithdrawalResponse
+type MsgFinalizeWithdrawalResponse struct {
+}
+
+func (m *MsgFinalizeWithdrawalResponse) Reset()         { *m = MsgFinalizeWithdrawalResponse{} }
+func (m *MsgFinalizeWithdrawalResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgFinalizeWithdrawalResponse) ProtoMessage()    {}
+func (*MsgFinalizeWithdrawalResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_061207c379e1a1b2, []int{9}
+}
+func (m *MsgFinalizeWithdrawalResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgFinalizeWithdrawalResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgFinalizeWithdrawalResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgFinalizeWithdrawalResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgFinalizeWithdrawalResponse.Merge(m, src)
+}
+func (m *MsgFinalizeWithdrawalResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgFinalizeWithdrawalResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgFinalizeWithdrawalResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgFinalizeWithdrawalResponse proto.InternalMessageInfo
+
+// MsgApproveCancellation
+type MsgApproveCancellation struct {
+	Proposer string   `protobuf:"bytes,1,opt,name=proposer,proto3" json:"proposer,omitempty"`
+	Id       []uint64 `protobuf:"varint,2,rep,packed,name=id,proto3" json:"id,omitempty"`
+}
+
+func (m *MsgApproveCancellation) Reset()         { *m = MsgApproveCancellation{} }
+func (m *MsgApproveCancellation) String() string { return proto.CompactTextString(m) }
+func (*MsgApproveCancellation) ProtoMessage()    {}
+func (*MsgApproveCancellation) Descriptor() ([]byte, []int) {
+	return fileDescriptor_061207c379e1a1b2, []int{10}
+}
+func (m *MsgApproveCancellation) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgApproveCancellation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgApproveCancellation.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgApproveCancellation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgApproveCancellation.Merge(m, src)
+}
+func (m *MsgApproveCancellation) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgApproveCancellation) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgApproveCancellation.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgApproveCancellation proto.InternalMessageInfo
+
+func (m *MsgApproveCancellation) GetProposer() string {
+	if m != nil {
+		return m.Proposer
+	}
+	return ""
+}
+
+func (m *MsgApproveCancellation) GetId() []uint64 {
+	if m != nil {
+		return m.Id
+	}
+	return nil
+}
+
+// MsgApproveCancellationResponse
+type MsgApproveCancellationResponse struct {
+}
+
+func (m *MsgApproveCancellationResponse) Reset()         { *m = MsgApproveCancellationResponse{} }
+func (m *MsgApproveCancellationResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgApproveCancellationResponse) ProtoMessage()    {}
+func (*MsgApproveCancellationResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_061207c379e1a1b2, []int{11}
+}
+func (m *MsgApproveCancellationResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgApproveCancellationResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgApproveCancellationResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgApproveCancellationResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgApproveCancellationResponse.Merge(m, src)
+}
+func (m *MsgApproveCancellationResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgApproveCancellationResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgApproveCancellationResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgApproveCancellationResponse proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterType((*MsgNewBlockHashes)(nil), "goat.bitcoin.v1.MsgNewBlockHashes")
 	proto.RegisterType((*MsgNewBlockHashesResponse)(nil), "goat.bitcoin.v1.MsgNewBlockHashesResponse")
@@ -344,51 +659,73 @@ func init() {
 	proto.RegisterType((*MsgNewDepositsResponse)(nil), "goat.bitcoin.v1.MsgNewDepositsResponse")
 	proto.RegisterType((*MsgNewPubkey)(nil), "goat.bitcoin.v1.MsgNewPubkey")
 	proto.RegisterType((*MsgNewPubkeyResponse)(nil), "goat.bitcoin.v1.MsgNewPubkeyResponse")
+	proto.RegisterType((*MsgNewWithdrawal)(nil), "goat.bitcoin.v1.MsgNewWithdrawal")
+	proto.RegisterType((*MsgNewWithdrawalResponse)(nil), "goat.bitcoin.v1.MsgNewWithdrawalResponse")
+	proto.RegisterType((*MsgFinalizeWithdrawal)(nil), "goat.bitcoin.v1.MsgFinalizeWithdrawal")
+	proto.RegisterType((*MsgFinalizeWithdrawalResponse)(nil), "goat.bitcoin.v1.MsgFinalizeWithdrawalResponse")
+	proto.RegisterType((*MsgApproveCancellation)(nil), "goat.bitcoin.v1.MsgApproveCancellation")
+	proto.RegisterType((*MsgApproveCancellationResponse)(nil), "goat.bitcoin.v1.MsgApproveCancellationResponse")
 }
 
 func init() { proto.RegisterFile("goat/bitcoin/v1/tx.proto", fileDescriptor_061207c379e1a1b2) }
 
 var fileDescriptor_061207c379e1a1b2 = []byte{
-	// 610 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x54, 0x41, 0x8b, 0xd3, 0x40,
-	0x14, 0xde, 0x34, 0xdd, 0xc5, 0x9d, 0xd6, 0x75, 0x37, 0x2c, 0x35, 0x9b, 0xa5, 0x31, 0x04, 0xc4,
-	0x52, 0xdd, 0x84, 0x46, 0x0f, 0xd2, 0x8b, 0x58, 0x5c, 0x10, 0x64, 0x97, 0x35, 0xc2, 0x0a, 0x5e,
-	0x6a, 0xd2, 0x0e, 0x69, 0x68, 0x93, 0x09, 0x33, 0xd3, 0xee, 0xf6, 0x26, 0x1e, 0x3d, 0x79, 0xf6,
-	0x57, 0xf4, 0xe0, 0x6f, 0x10, 0x8f, 0x8b, 0x5e, 0x3c, 0x4a, 0x7b, 0xe8, 0x3f, 0xf0, 0x2c, 0x99,
-	0x49, 0x62, 0xb7, 0xd9, 0xb5, 0x20, 0x78, 0x29, 0xf3, 0xde, 0xf7, 0xcd, 0xfb, 0xde, 0xf7, 0xe6,
-	0x35, 0x40, 0xf6, 0x90, 0x43, 0x4d, 0xd7, 0xa7, 0x1d, 0xe4, 0x87, 0xe6, 0xa8, 0x61, 0xd2, 0x73,
-	0x23, 0xc2, 0x88, 0x22, 0xe9, 0x56, 0x8c, 0x18, 0x09, 0x62, 0x8c, 0x1a, 0xca, 0x8e, 0x13, 0xf8,
-	0x21, 0x32, 0xd9, 0x2f, 0xe7, 0x28, 0xb7, 0x3b, 0x88, 0x04, 0x88, 0x98, 0x01, 0xf1, 0xe2, 0xbb,
-	0x01, 0xf1, 0x12, 0x60, 0x8f, 0x03, 0x6d, 0x16, 0x99, 0x3c, 0x48, 0xa0, 0xea, 0xb2, 0x62, 0x2a,
-	0xb1, 0x08, 0x63, 0x38, 0x70, 0xc6, 0x10, 0xc7, 0x70, 0x72, 0xe4, 0xb0, 0xfe, 0x4b, 0x00, 0x3b,
-	0x47, 0xc4, 0x3b, 0x86, 0x67, 0xad, 0x01, 0xea, 0xf4, 0x9f, 0x3b, 0xa4, 0x07, 0x89, 0xf4, 0x08,
-	0xdc, 0x88, 0x30, 0x8a, 0x10, 0x81, 0x58, 0x16, 0x34, 0xa1, 0xb6, 0xd9, 0x92, 0xbf, 0x7d, 0x3e,
-	0xd8, 0x4d, 0x74, 0x9f, 0x76, 0xbb, 0x18, 0x12, 0xf2, 0x8a, 0x62, 0x3f, 0xf4, 0xec, 0x8c, 0x29,
-	0xd5, 0x41, 0x71, 0x84, 0x28, 0x94, 0x0b, 0x9a, 0x50, 0x2b, 0x59, 0x15, 0x83, 0x19, 0x4e, 0xe5,
-	0x46, 0x0d, 0xe3, 0x14, 0x51, 0x48, 0x6c, 0xc6, 0x91, 0x1e, 0x00, 0x89, 0x50, 0x07, 0xd3, 0xb6,
-	0x1b, 0xcb, 0xb6, 0xc3, 0x61, 0xe0, 0x42, 0x2c, 0x8b, 0x9a, 0x50, 0x2b, 0xda, 0xdb, 0x0c, 0x61,
-	0xfd, 0x1c, 0xb3, 0xbc, 0x54, 0x05, 0x80, 0xf3, 0x7a, 0x0e, 0xe9, 0xc9, 0x45, 0x4d, 0xac, 0x95,
-	0xed, 0x4d, 0x37, 0x6d, 0xb8, 0x69, 0xbd, 0x9f, 0x4f, 0xea, 0x59, 0x1f, 0x1f, 0xe6, 0x93, 0xba,
-	0xc6, 0x5c, 0x9f, 0x67, 0x63, 0xc9, 0x59, 0xd4, 0xf7, 0xc1, 0x5e, 0x2e, 0x69, 0x43, 0x12, 0xa1,
-	0x90, 0x40, 0xfd, 0x4b, 0x01, 0x6c, 0x71, 0xf4, 0x19, 0x8c, 0x10, 0xf1, 0xe9, 0xbf, 0x8e, 0xe4,
-	0x14, 0xdc, 0x4c, 0x1a, 0x87, 0x4e, 0x17, 0x62, 0x22, 0x17, 0x34, 0xb1, 0x56, 0xb2, 0x1a, 0xc6,
-	0xd2, 0x32, 0x18, 0x97, 0xd5, 0x0c, 0xde, 0x14, 0xbf, 0x73, 0x18, 0x52, 0x3c, 0xb6, 0xcb, 0xee,
-	0x42, 0x2a, 0xee, 0xa6, 0x9b, 0x70, 0x65, 0x91, 0x95, 0x94, 0x73, 0x25, 0x93, 0x62, 0x76, 0xc6,
-	0x54, 0x9e, 0x80, 0x9d, 0x5c, 0x61, 0x69, 0x1b, 0x88, 0x7d, 0x38, 0x66, 0x9e, 0x8a, 0x76, 0x7c,
-	0x94, 0x76, 0xc1, 0xfa, 0xc8, 0x19, 0x0c, 0xf9, 0x43, 0x96, 0x6d, 0x1e, 0x34, 0x0b, 0x8f, 0x85,
-	0xa6, 0x99, 0x1b, 0x74, 0xf5, 0xca, 0x41, 0xa7, 0x3e, 0x74, 0x19, 0x54, 0x2e, 0x67, 0xb2, 0x11,
-	0x7f, 0x17, 0x40, 0x99, 0x43, 0x27, 0x43, 0x37, 0x56, 0xfd, 0xff, 0x3b, 0x67, 0x81, 0x8d, 0x88,
-	0x69, 0xb1, 0x3d, 0x2b, 0x59, 0x4a, 0x8e, 0x7d, 0x32, 0x74, 0x07, 0x7e, 0xe7, 0x05, 0x1c, 0xdb,
-	0x09, 0xb3, 0x79, 0x90, 0x73, 0xbc, 0x7f, 0xa5, 0x63, 0x6e, 0x42, 0xaf, 0x80, 0xdd, 0xc5, 0x38,
-	0x75, 0x6b, 0x7d, 0x2a, 0x00, 0xf1, 0x88, 0x78, 0xd2, 0x5b, 0xb0, 0xb5, 0xf4, 0x57, 0xd3, 0xaf,
-	0x59, 0x85, 0x05, 0x8e, 0x52, 0x5f, 0xcd, 0x49, 0x95, 0xa4, 0xd7, 0xa0, 0xb4, 0xb8, 0xb6, 0x77,
-	0x56, 0x6c, 0x9a, 0x72, 0x6f, 0x05, 0x21, 0x2b, 0xfc, 0x12, 0x6c, 0xfe, 0x79, 0xac, 0xea, 0x35,
-	0xb7, 0x38, 0xac, 0xdc, 0xfd, 0x2b, 0x9c, 0x96, 0x54, 0xd6, 0xdf, 0xcd, 0x27, 0x75, 0xa1, 0x75,
-	0xf8, 0x75, 0xaa, 0x0a, 0x17, 0x53, 0x55, 0xf8, 0x39, 0x55, 0x85, 0x8f, 0x33, 0x75, 0xed, 0x62,
-	0xa6, 0xae, 0xfd, 0x98, 0xa9, 0x6b, 0x6f, 0xee, 0x7b, 0x3e, 0xed, 0x0d, 0x5d, 0xa3, 0x83, 0x02,
-	0x33, 0xae, 0x18, 0x42, 0x7a, 0x86, 0x70, 0xdf, 0x5c, 0x7a, 0x02, 0x3a, 0x8e, 0x20, 0x71, 0x37,
-	0xd8, 0x17, 0xed, 0xe1, 0xef, 0x00, 0x00, 0x00, 0xff, 0xff, 0x30, 0xf9, 0x23, 0x31, 0x83, 0x05,
-	0x00, 0x00,
+	// 875 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x56, 0xcf, 0x6f, 0xe3, 0x44,
+	0x14, 0xae, 0x13, 0xb7, 0x6c, 0x5f, 0xd2, 0xd2, 0x9a, 0x52, 0x5c, 0xaf, 0x92, 0x7a, 0x0d, 0x0b,
+	0x21, 0x50, 0x5b, 0x09, 0x08, 0x50, 0x2e, 0xab, 0x2d, 0x2c, 0x02, 0xa1, 0xae, 0x8a, 0x91, 0x76,
+	0x25, 0x24, 0x14, 0xec, 0x78, 0x70, 0x46, 0x75, 0x3c, 0x96, 0x67, 0x92, 0x26, 0x9c, 0x10, 0x47,
+	0x4e, 0xdc, 0xf8, 0x1b, 0xb8, 0xf5, 0xc0, 0xdf, 0x80, 0x38, 0xae, 0xe0, 0xb2, 0x47, 0xd4, 0x1e,
+	0xca, 0x5f, 0xc0, 0x19, 0x79, 0xfc, 0x23, 0x6e, 0xec, 0x92, 0x55, 0x11, 0x7b, 0x89, 0x66, 0xe6,
+	0xfb, 0xe6, 0x7d, 0xef, 0x7d, 0x79, 0xf3, 0x12, 0x90, 0x5d, 0x62, 0x31, 0xc3, 0xc6, 0x6c, 0x40,
+	0xb0, 0x6f, 0x4c, 0x3a, 0x06, 0x9b, 0xea, 0x41, 0x48, 0x18, 0x91, 0x5e, 0x8c, 0x10, 0x3d, 0x41,
+	0xf4, 0x49, 0x47, 0xd9, 0xb6, 0x46, 0xd8, 0x27, 0x06, 0xff, 0x8c, 0x39, 0xca, 0x2b, 0x03, 0x42,
+	0x47, 0x84, 0x1a, 0x23, 0xea, 0x46, 0x77, 0x47, 0xd4, 0x4d, 0x80, 0xbd, 0x18, 0xe8, 0xf3, 0x9d,
+	0x11, 0x6f, 0x12, 0xa8, 0xb1, 0xa8, 0x98, 0x4a, 0xe4, 0xe1, 0x10, 0x79, 0xd6, 0x0c, 0x85, 0x11,
+	0x9c, 0x2c, 0x63, 0x58, 0xfb, 0x5b, 0x80, 0xed, 0x23, 0xea, 0x3e, 0x44, 0xa7, 0x87, 0x1e, 0x19,
+	0x9c, 0x7c, 0x62, 0xd1, 0x21, 0xa2, 0xd2, 0xbb, 0x70, 0x2b, 0x08, 0x49, 0x40, 0x28, 0x0a, 0x65,
+	0x41, 0x15, 0x5a, 0xeb, 0x87, 0xf2, 0xef, 0xbf, 0x1c, 0xec, 0x24, 0xba, 0xf7, 0x1d, 0x27, 0x44,
+	0x94, 0x7e, 0xc1, 0x42, 0xec, 0xbb, 0x66, 0xc6, 0x94, 0xda, 0x20, 0x4e, 0x08, 0x43, 0x72, 0x45,
+	0x15, 0x5a, 0xb5, 0xee, 0xae, 0xce, 0x0b, 0x4e, 0xe5, 0x26, 0x1d, 0xfd, 0x11, 0x61, 0x88, 0x9a,
+	0x9c, 0x23, 0xbd, 0x0d, 0x12, 0x65, 0x56, 0xc8, 0xfa, 0x76, 0x24, 0xdb, 0xf7, 0xc7, 0x23, 0x1b,
+	0x85, 0x72, 0x55, 0x15, 0x5a, 0xa2, 0xb9, 0xc5, 0x11, 0x9e, 0xcf, 0x43, 0x7e, 0x2e, 0x35, 0x00,
+	0x62, 0xde, 0xd0, 0xa2, 0x43, 0x59, 0x54, 0xab, 0xad, 0xba, 0xb9, 0x6e, 0xa7, 0x09, 0xf7, 0xba,
+	0xdf, 0x5f, 0x9e, 0xb5, 0xb3, 0x3c, 0x7e, 0xb8, 0x3c, 0x6b, 0xab, 0xbc, 0xea, 0x69, 0x66, 0x4b,
+	0xa1, 0x44, 0xed, 0x36, 0xec, 0x15, 0x0e, 0x4d, 0x44, 0x03, 0xe2, 0x53, 0xa4, 0xfd, 0x5a, 0x81,
+	0xcd, 0x18, 0xfd, 0x08, 0x05, 0x84, 0x62, 0x76, 0x53, 0x4b, 0x1e, 0xc1, 0x46, 0x92, 0x38, 0xb2,
+	0x1c, 0x14, 0x52, 0xb9, 0xa2, 0x56, 0x5b, 0xb5, 0x6e, 0x47, 0x5f, 0x68, 0x06, 0xfd, 0xaa, 0x9a,
+	0x1e, 0x27, 0x15, 0xdf, 0x79, 0xe0, 0xb3, 0x70, 0x66, 0xd6, 0xed, 0xdc, 0x51, 0x94, 0x8d, 0x93,
+	0x70, 0xe5, 0x2a, 0x0f, 0x29, 0x17, 0x42, 0x26, 0xc1, 0xcc, 0x8c, 0xa9, 0xdc, 0x83, 0xed, 0x42,
+	0x60, 0x69, 0x0b, 0xaa, 0x27, 0x68, 0xc6, 0x6b, 0x12, 0xcd, 0x68, 0x29, 0xed, 0xc0, 0xea, 0xc4,
+	0xf2, 0xc6, 0xf1, 0x17, 0x59, 0x37, 0xe3, 0x4d, 0xaf, 0xf2, 0x81, 0xd0, 0x33, 0x0a, 0x46, 0x37,
+	0x4a, 0x8d, 0x4e, 0xeb, 0xd0, 0x64, 0xd8, 0xbd, 0x7a, 0x92, 0x59, 0xfc, 0x87, 0x00, 0xf5, 0x18,
+	0x3a, 0x1e, 0xdb, 0x91, 0xea, 0xff, 0xdf, 0x73, 0x5d, 0x58, 0x0b, 0xb8, 0x16, 0xef, 0xb3, 0x5a,
+	0x57, 0x29, 0xb0, 0x8f, 0xc7, 0xb6, 0x87, 0x07, 0x9f, 0xa1, 0x99, 0x99, 0x30, 0x7b, 0x07, 0x85,
+	0x8a, 0x6f, 0x97, 0x56, 0x1c, 0x17, 0xa1, 0xed, 0xc2, 0x4e, 0x7e, 0x9f, 0x55, 0xfb, 0x97, 0x00,
+	0x5b, 0x31, 0xf0, 0x18, 0xb3, 0xa1, 0x13, 0x5a, 0xa7, 0x96, 0xf7, 0x1c, 0x2a, 0xbe, 0x97, 0x2a,
+	0x58, 0x5e, 0x52, 0xf3, 0xab, 0x85, 0x36, 0x99, 0x27, 0x74, 0x9c, 0x50, 0xcd, 0xec, 0x52, 0xaf,
+	0x53, 0x28, 0x7f, 0xbf, 0xb4, 0xfc, 0x79, 0x10, 0x4d, 0x01, 0x79, 0xf1, 0x2c, 0xb3, 0xe1, 0xe7,
+	0x0a, 0xbc, 0x7c, 0x44, 0xdd, 0x8f, 0xb1, 0x6f, 0x79, 0xf8, 0x5b, 0xf4, 0x9f, 0xbd, 0x90, 0x40,
+	0x64, 0x53, 0xec, 0x24, 0x8d, 0xca, 0xd7, 0xd2, 0x1d, 0xa8, 0x97, 0xcc, 0x94, 0x9a, 0x9d, 0x1b,
+	0x27, 0x7b, 0x70, 0x8b, 0x4d, 0xfb, 0xd8, 0x77, 0xd0, 0x54, 0x16, 0x55, 0xa1, 0xb5, 0x61, 0xbe,
+	0xc0, 0xa6, 0x9f, 0x46, 0x5b, 0xe9, 0x00, 0x24, 0xec, 0x33, 0x14, 0x8e, 0x90, 0x83, 0x2d, 0x86,
+	0xa2, 0x81, 0x4b, 0xbe, 0x91, 0x57, 0x79, 0xfc, 0xed, 0x3c, 0x72, 0x1c, 0x01, 0x73, 0xb1, 0xf8,
+	0x7d, 0xcb, 0x6b, 0x9c, 0x58, 0xcb, 0xbd, 0xd5, 0xde, 0x7b, 0x05, 0x0b, 0x5f, 0x2b, 0x5a, 0x58,
+	0x74, 0x44, 0xdb, 0x87, 0x46, 0x29, 0x90, 0x99, 0xf9, 0x93, 0xc0, 0x1f, 0xd7, 0xfd, 0x20, 0x08,
+	0xc9, 0x04, 0x7d, 0x68, 0xf9, 0x03, 0xe4, 0x79, 0x16, 0xc3, 0xc4, 0xbf, 0xa1, 0x9b, 0x9b, 0x50,
+	0xe1, 0x5e, 0x56, 0x5b, 0xa2, 0x59, 0xc1, 0x4e, 0xef, 0xfd, 0x42, 0xe6, 0x77, 0x8b, 0x99, 0x97,
+	0xc8, 0x6b, 0x2a, 0x34, 0xcb, 0x91, 0x34, 0xf7, 0xee, 0x53, 0x11, 0xaa, 0x47, 0xd4, 0x95, 0xbe,
+	0x86, 0xcd, 0x85, 0x9f, 0x1e, 0xed, 0x9a, 0xd1, 0x98, 0xe3, 0x28, 0xed, 0xe5, 0x9c, 0x54, 0x49,
+	0x7a, 0x0c, 0xb5, 0xfc, 0x18, 0xdf, 0x5f, 0x32, 0x79, 0x95, 0x37, 0x96, 0x10, 0xb2, 0xc0, 0x9f,
+	0xc3, 0xfa, 0x7c, 0x78, 0x35, 0xae, 0xb9, 0x15, 0xc3, 0xca, 0xdd, 0x7f, 0x85, 0xb3, 0x90, 0x5f,
+	0xc1, 0xc6, 0xd5, 0x09, 0x71, 0xe7, 0x9a, 0x7b, 0x73, 0x8a, 0xf2, 0xe6, 0x52, 0x4a, 0x16, 0xde,
+	0x03, 0xa9, 0xe4, 0xe5, 0xbd, 0x5e, 0x16, 0xa0, 0xc8, 0x53, 0xf4, 0x67, 0xe3, 0x65, 0x6a, 0x04,
+	0x5e, 0x2a, 0x6b, 0xcd, 0x52, 0x7f, 0x4b, 0x88, 0x8a, 0xf1, 0x8c, 0xc4, 0x54, 0x50, 0x59, 0xfd,
+	0xee, 0xf2, 0xac, 0x2d, 0x1c, 0x3e, 0xf8, 0xed, 0xbc, 0x29, 0x3c, 0x39, 0x6f, 0x0a, 0x7f, 0x9e,
+	0x37, 0x85, 0x1f, 0x2f, 0x9a, 0x2b, 0x4f, 0x2e, 0x9a, 0x2b, 0x4f, 0x2f, 0x9a, 0x2b, 0x5f, 0xbe,
+	0xe5, 0x62, 0x36, 0x1c, 0xdb, 0xfa, 0x80, 0x8c, 0x8c, 0x28, 0xb6, 0x8f, 0xd8, 0x29, 0x09, 0x4f,
+	0x8c, 0x85, 0xa6, 0x66, 0xb3, 0x00, 0x51, 0x7b, 0x8d, 0xff, 0x3f, 0x7a, 0xe7, 0x9f, 0x00, 0x00,
+	0x00, 0xff, 0xff, 0xa7, 0x72, 0xd3, 0xc9, 0xd1, 0x09, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -409,6 +746,14 @@ type MsgClient interface {
 	NewDeposits(ctx context.Context, in *MsgNewDeposits, opts ...grpc.CallOption) (*MsgNewDepositsResponse, error)
 	// NewPubkey adds new deposit public key
 	NewPubkey(ctx context.Context, in *MsgNewPubkey, opts ...grpc.CallOption) (*MsgNewPubkeyResponse, error)
+	// NewWithdrawal submits a passed proposal for withdrawal requests
+	// This is the first step to process withdrawals to
+	// inform every voter that the proposal has been approved and they can process signing then
+	NewWithdrawal(ctx context.Context, in *MsgNewWithdrawal, opts ...grpc.CallOption) (*MsgNewWithdrawalResponse, error)
+	// FinalizeWithdrawal
+	FinalizeWithdrawal(ctx context.Context, in *MsgFinalizeWithdrawal, opts ...grpc.CallOption) (*MsgFinalizeWithdrawalResponse, error)
+	// ApproveCancellation approves cancelation requests
+	ApproveCancellation(ctx context.Context, in *MsgApproveCancellation, opts ...grpc.CallOption) (*MsgApproveCancellationResponse, error)
 }
 
 type msgClient struct {
@@ -446,6 +791,33 @@ func (c *msgClient) NewPubkey(ctx context.Context, in *MsgNewPubkey, opts ...grp
 	return out, nil
 }
 
+func (c *msgClient) NewWithdrawal(ctx context.Context, in *MsgNewWithdrawal, opts ...grpc.CallOption) (*MsgNewWithdrawalResponse, error) {
+	out := new(MsgNewWithdrawalResponse)
+	err := c.cc.Invoke(ctx, "/goat.bitcoin.v1.Msg/NewWithdrawal", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) FinalizeWithdrawal(ctx context.Context, in *MsgFinalizeWithdrawal, opts ...grpc.CallOption) (*MsgFinalizeWithdrawalResponse, error) {
+	out := new(MsgFinalizeWithdrawalResponse)
+	err := c.cc.Invoke(ctx, "/goat.bitcoin.v1.Msg/FinalizeWithdrawal", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) ApproveCancellation(ctx context.Context, in *MsgApproveCancellation, opts ...grpc.CallOption) (*MsgApproveCancellationResponse, error) {
+	out := new(MsgApproveCancellationResponse)
+	err := c.cc.Invoke(ctx, "/goat.bitcoin.v1.Msg/ApproveCancellation", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	// NewBlockHashs adds new bitcoin block hashes
@@ -454,6 +826,14 @@ type MsgServer interface {
 	NewDeposits(context.Context, *MsgNewDeposits) (*MsgNewDepositsResponse, error)
 	// NewPubkey adds new deposit public key
 	NewPubkey(context.Context, *MsgNewPubkey) (*MsgNewPubkeyResponse, error)
+	// NewWithdrawal submits a passed proposal for withdrawal requests
+	// This is the first step to process withdrawals to
+	// inform every voter that the proposal has been approved and they can process signing then
+	NewWithdrawal(context.Context, *MsgNewWithdrawal) (*MsgNewWithdrawalResponse, error)
+	// FinalizeWithdrawal
+	FinalizeWithdrawal(context.Context, *MsgFinalizeWithdrawal) (*MsgFinalizeWithdrawalResponse, error)
+	// ApproveCancellation approves cancelation requests
+	ApproveCancellation(context.Context, *MsgApproveCancellation) (*MsgApproveCancellationResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -468,6 +848,15 @@ func (*UnimplementedMsgServer) NewDeposits(ctx context.Context, req *MsgNewDepos
 }
 func (*UnimplementedMsgServer) NewPubkey(ctx context.Context, req *MsgNewPubkey) (*MsgNewPubkeyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method NewPubkey not implemented")
+}
+func (*UnimplementedMsgServer) NewWithdrawal(ctx context.Context, req *MsgNewWithdrawal) (*MsgNewWithdrawalResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method NewWithdrawal not implemented")
+}
+func (*UnimplementedMsgServer) FinalizeWithdrawal(ctx context.Context, req *MsgFinalizeWithdrawal) (*MsgFinalizeWithdrawalResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FinalizeWithdrawal not implemented")
+}
+func (*UnimplementedMsgServer) ApproveCancellation(ctx context.Context, req *MsgApproveCancellation) (*MsgApproveCancellationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ApproveCancellation not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -528,6 +917,60 @@ func _Msg_NewPubkey_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_NewWithdrawal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgNewWithdrawal)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).NewWithdrawal(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/goat.bitcoin.v1.Msg/NewWithdrawal",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).NewWithdrawal(ctx, req.(*MsgNewWithdrawal))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_FinalizeWithdrawal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgFinalizeWithdrawal)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).FinalizeWithdrawal(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/goat.bitcoin.v1.Msg/FinalizeWithdrawal",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).FinalizeWithdrawal(ctx, req.(*MsgFinalizeWithdrawal))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_ApproveCancellation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgApproveCancellation)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).ApproveCancellation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/goat.bitcoin.v1.Msg/ApproveCancellation",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).ApproveCancellation(ctx, req.(*MsgApproveCancellation))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var Msg_serviceDesc = _Msg_serviceDesc
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "goat.bitcoin.v1.Msg",
@@ -544,6 +987,18 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "NewPubkey",
 			Handler:    _Msg_NewPubkey_Handler,
+		},
+		{
+			MethodName: "NewWithdrawal",
+			Handler:    _Msg_NewWithdrawal_Handler,
+		},
+		{
+			MethodName: "FinalizeWithdrawal",
+			Handler:    _Msg_FinalizeWithdrawal_Handler,
+		},
+		{
+			MethodName: "ApproveCancellation",
+			Handler:    _Msg_ApproveCancellation_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -792,6 +1247,238 @@ func (m *MsgNewPubkeyResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgNewWithdrawal) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgNewWithdrawal) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgNewWithdrawal) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Proposal != nil {
+		{
+			size, err := m.Proposal.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTx(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Vote != nil {
+		{
+			size, err := m.Vote.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTx(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Proposer) > 0 {
+		i -= len(m.Proposer)
+		copy(dAtA[i:], m.Proposer)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Proposer)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgNewWithdrawalResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgNewWithdrawalResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgNewWithdrawalResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgFinalizeWithdrawal) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgFinalizeWithdrawal) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgFinalizeWithdrawal) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.BlockHeader) > 0 {
+		i -= len(m.BlockHeader)
+		copy(dAtA[i:], m.BlockHeader)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.BlockHeader)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.IntermediateProof) > 0 {
+		i -= len(m.IntermediateProof)
+		copy(dAtA[i:], m.IntermediateProof)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.IntermediateProof)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.TxIndex != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.TxIndex))
+		i--
+		dAtA[i] = 0x20
+	}
+	if m.BlockNumber != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.BlockNumber))
+		i--
+		dAtA[i] = 0x18
+	}
+	if len(m.Txid) > 0 {
+		i -= len(m.Txid)
+		copy(dAtA[i:], m.Txid)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Txid)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Proposer) > 0 {
+		i -= len(m.Proposer)
+		copy(dAtA[i:], m.Proposer)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Proposer)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgFinalizeWithdrawalResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgFinalizeWithdrawalResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgFinalizeWithdrawalResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgApproveCancellation) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgApproveCancellation) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgApproveCancellation) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Id) > 0 {
+		dAtA7 := make([]byte, len(m.Id)*10)
+		var j6 int
+		for _, num := range m.Id {
+			for num >= 1<<7 {
+				dAtA7[j6] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j6++
+			}
+			dAtA7[j6] = uint8(num)
+			j6++
+		}
+		i -= j6
+		copy(dAtA[i:], dAtA7[:j6])
+		i = encodeVarintTx(dAtA, i, uint64(j6))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Proposer) > 0 {
+		i -= len(m.Proposer)
+		copy(dAtA[i:], m.Proposer)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Proposer)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgApproveCancellationResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgApproveCancellationResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgApproveCancellationResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTx(v)
 	base := offset
@@ -900,6 +1587,105 @@ func (m *MsgNewPubkey) Size() (n int) {
 }
 
 func (m *MsgNewPubkeyResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgNewWithdrawal) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Proposer)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.Vote != nil {
+		l = m.Vote.Size()
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.Proposal != nil {
+		l = m.Proposal.Size()
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgNewWithdrawalResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgFinalizeWithdrawal) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Proposer)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Txid)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.BlockNumber != 0 {
+		n += 1 + sovTx(uint64(m.BlockNumber))
+	}
+	if m.TxIndex != 0 {
+		n += 1 + sovTx(uint64(m.TxIndex))
+	}
+	l = len(m.IntermediateProof)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.BlockHeader)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgFinalizeWithdrawalResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgApproveCancellation) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Proposer)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if len(m.Id) > 0 {
+		l = 0
+		for _, e := range m.Id {
+			l += sovTx(uint64(e))
+		}
+		n += 1 + sovTx(uint64(l)) + l
+	}
+	return n
+}
+
+func (m *MsgApproveCancellationResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1594,6 +2380,690 @@ func (m *MsgNewPubkeyResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: MsgNewPubkeyResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgNewWithdrawal) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgNewWithdrawal: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgNewWithdrawal: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Proposer", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Proposer = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Vote", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Vote == nil {
+				m.Vote = &types.Votes{}
+			}
+			if err := m.Vote.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Proposal", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Proposal == nil {
+				m.Proposal = &WithdrawalProposal{}
+			}
+			if err := m.Proposal.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgNewWithdrawalResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgNewWithdrawalResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgNewWithdrawalResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgFinalizeWithdrawal) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgFinalizeWithdrawal: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgFinalizeWithdrawal: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Proposer", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Proposer = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Txid", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Txid = append(m.Txid[:0], dAtA[iNdEx:postIndex]...)
+			if m.Txid == nil {
+				m.Txid = []byte{}
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BlockNumber", wireType)
+			}
+			m.BlockNumber = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.BlockNumber |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TxIndex", wireType)
+			}
+			m.TxIndex = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.TxIndex |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IntermediateProof", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.IntermediateProof = append(m.IntermediateProof[:0], dAtA[iNdEx:postIndex]...)
+			if m.IntermediateProof == nil {
+				m.IntermediateProof = []byte{}
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BlockHeader", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.BlockHeader = append(m.BlockHeader[:0], dAtA[iNdEx:postIndex]...)
+			if m.BlockHeader == nil {
+				m.BlockHeader = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgFinalizeWithdrawalResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgFinalizeWithdrawalResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgFinalizeWithdrawalResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgApproveCancellation) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgApproveCancellation: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgApproveCancellation: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Proposer", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Proposer = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType == 0 {
+				var v uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTx
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.Id = append(m.Id, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTx
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthTx
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthTx
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				var count int
+				for _, integer := range dAtA[iNdEx:postIndex] {
+					if integer < 128 {
+						count++
+					}
+				}
+				elementCount = count
+				if elementCount != 0 && len(m.Id) == 0 {
+					m.Id = make([]uint64, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTx
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.Id = append(m.Id, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgApproveCancellationResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgApproveCancellationResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgApproveCancellationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:

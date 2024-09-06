@@ -1,6 +1,7 @@
 package types
 
 import (
+	"crypto/sha256"
 	"errors"
 	"slices"
 
@@ -16,6 +17,10 @@ type IVoteMsg interface {
 }
 
 func (v *Votes) Validate() error {
+	if len(v.Voters) > sha256.Size { // we have max 256 voters
+		return errors.New("voter bitmap too large")
+	}
+
 	if len(v.Signature) != goatcrypto.SignatureLength {
 		return errors.New("invalid bls signature length")
 	}

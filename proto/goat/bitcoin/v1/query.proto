@@ -2,7 +2,7 @@ syntax = "proto3";
 package goat.bitcoin.v1;
 
 import "amino/amino.proto";
-// import "cosmos/base/query/v1beta1/pagination.proto";
+import "goat/bitcoin/v1/bitcoin.proto";
 import "goat/bitcoin/v1/params.proto";
 import "goat/relayer/v1/relayer.proto";
 import "gogoproto/gogo.proto";
@@ -27,14 +27,14 @@ service Query {
     option (google.api.http).get = "/goatnetwork/goat/bitcoin/v1/depositAddress";
   }
 
-  // WithdrawalAddress
-  rpc WithdrawalAddress(QueryWithdrawalAddress) returns (QueryWithdrawalAddressResponse) {
-    option (google.api.http).get = "/goatnetwork/goat/bitcoin/v1/withdrawalAddress";
-  }
-
   // HasDeposited
   rpc HasDeposited(QueryHasDeposited) returns (QueryHasDepositedResponse) {
     option (google.api.http).get = "/goatnetwork/goat/bitcoin/v1/hasDeposited";
+  }
+
+  // Withdrawal queries all current public keys
+  rpc Withdrawal(QueryWithdrawalRequest) returns (QueryWithdrawalResponse) {
+    option (google.api.http).get = "/goatnetwork/goat/bitcoin/v1/withdrawal";
   }
 }
 
@@ -94,4 +94,14 @@ message QueryHasDeposited {
 // QueryHasDepositedResponse
 message QueryHasDepositedResponse {
   bool yes = 1;
+}
+
+// QueryWithdrawalRequest
+message QueryWithdrawalRequest {
+  uint64 id = 1;
+}
+
+// QueryWithdrawalResponse
+message QueryWithdrawalResponse {
+  Withdrawal withdrawal = 1;
 }

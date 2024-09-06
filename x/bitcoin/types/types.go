@@ -2,16 +2,18 @@ package types
 
 import (
 	"crypto/sha256"
-	"encoding/binary"
 	"errors"
+	"slices"
 
 	"github.com/ethereum/go-ethereum/common"
+	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 	relayertypes "github.com/goatnetwork/goat/x/relayer/types"
 )
 
 const (
-	NewPubkeyMethodSigName = "Bitcoin/NewPubkey"
-	NewBlocksMethodSigName = "Bitcoin/NewBlocks"
+	NewPubkeyMethodSigName     = "Bitcoin/NewPubkey"
+	NewBlocksMethodSigName     = "Bitcoin/NewBlocks"
+	NewWithdrawalMethodSigName = "Bitcoin/NewWithdrawal"
 )
 
 const (
@@ -20,16 +22,17 @@ const (
 	RawBtcHeaderSize   = 80
 	DepositV0TxoutSize = 34
 	P2whScriptSize     = 22
+	MinBtcTxSize       = 4 + 1 + 32 + 4 + 1 + 0 + 4 + 1 + 8 + 1 + 22 + 4
 	DepositV1TxoutSize = 26
 	// 4 version
 	// 1 input length
-	// 32 prevTxid + 4 prevTxOut + 1 sigScriptLength + 0 sigScript(witness) + 4 sequence
+	// 41 = 32 prevTxid + 4 prevTxOut + 1 sigScriptLength + 0 sigScript(witness) + 4 sequence
 	// 1 output length
 	// 8 value + 1 pkScriptLength + 34 p2wsh/p2tr
 	// || 8 value + 1 pkScriptLength + 22 p2wph +  8 value + 1 pkScriptLength + 26 data OP_RETURN
 	// 4 lockTime
-	MinDepositTxSize = 4 + 1 + 32 + 4 + 1 + 0 + 4 + 1 + 8 + 1 + 34 + 4
-	MaxBtcTxSize     = 1024 * 1024 // the consensus hard limit
+	MinDepositTxSize    = 4 + 1 + 32 + 4 + 1 + 0 + 4 + 1 + 8 + 1 + 34 + 4
+	MaxAllowedBtcTxSize = 32 * 1024
 )
 
 func (req *MsgNewPubkey) Validate() error {
@@ -84,7 +87,7 @@ func (req *MsgNewBlockHashes) MethodName() string {
 
 func (req *MsgNewBlockHashes) VoteSigDoc() []byte {
 	data := make([]byte, 8, 8+len(req.BlockHash)*32)
-	binary.LittleEndian.AppendUint64(data[:8], req.StartBlockNumber)
+	data = append(data, goatcrypto.Uint64LE(req.StartBlockNumber)...)
 	for _, v := range req.BlockHash {
 		data = append(data, v...)
 	}
@@ -120,12 +123,63 @@ func (req *MsgNewDeposits) Validate() error {
 	return nil
 }
 
+func (req *MsgNewWithdrawal) MethodName() string {
+	return NewWithdrawalMethodSigName
+}
+
+func (req *MsgNewWithdrawal) VoteSigDoc() []byte {
+	ids := goatcrypto.Uint64LE(req.Proposal.Id...)
+	price := goatcrypto.Uint64LE(req.Proposal.TxPrice)
+	tx := goatcrypto.SHA256Sum(req.Proposal.NoWitnessTx)
+	return slices.Concat(ids, tx, price)
+}
+
+func (req *MsgNewWithdrawal) Validate() error {
+	if req == nil {
+		return errors.New("empty MsgNewWithdrawal")
+	}
+
+	if req.Proposal == nil {
+		return errors.New("empty proposal")
+	}
+
+	if txSize := len(req.Proposal.NoWitnessTx); txSize < MinBtcTxSize || txSize > MaxAllowedBtcTxSize {
+		return errors.New("invalid non-witness tx size")
+	}
+
+	if len(req.Proposal.Id) == 0 {
+		return errors.New("no withdrawal ids to process")
+	}
+
+	if len(req.Proposal.Id) > 32 {
+		return errors.New("associate with too many withdrawal")
+	}
+
+	return nil
+}
+
+func (req *MsgApproveCancellation) Validate() error {
+	if req == nil {
+		return errors.New("empty MsgNewWithdrawal")
+	}
+
+	if len(req.Id) == 0 {
+		return errors.New("no withdrawal ids to process")
+	}
+
+	if len(req.Id) > 32 {
+		return errors.New("associate with too many withdrawal")
+	}
+
+	return nil
+}
+
 func (req *Deposit) Validate() error {
 	if len(req.EvmAddress) != common.AddressLength {
 		return errors.New("invalid evm address")
 	}
 
-	if l := len(req.NoWitnessTx); l < MinDepositTxSize || l > MaxBtcTxSize {
+	if l := len(req.NoWitnessTx); l < MinDepositTxSize || l > MaxAllowedBtcTxSize {
 		return errors.New("invalid btc tx size")
 	}
 
@@ -133,5 +187,18 @@ func (req *Deposit) Validate() error {
 		return err
 	}
 
+	return nil
+}
+
+func (req *MsgFinalizeWithdrawal) Validate() error {
+	if len(req.Txid) != sha256.Size {
+		return errors.New("invalid txid")
+	}
+	if req.TxIndex == 0 || len(req.IntermediateProof) == 0 {
+		return errors.New("withdrawal can't be a coinbase tx")
+	}
+	if len(req.BlockHeader) != RawBtcHeaderSize {
+		return errors.New("invalid block header size")
+	}
 	return nil
 }

@@ -1,10 +1,15 @@
 package keeper
 
 import (
+	"bytes"
 	"context"
 
 	"cosmossdk.io/collections"
+	"github.com/btcsuite/btcd/btcutil"
+	"github.com/btcsuite/btcd/txscript"
+	"github.com/btcsuite/btcd/wire"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
+	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 	"github.com/goatnetwork/goat/x/bitcoin/types"
 	relayertypes "github.com/goatnetwork/goat/x/relayer/types"
 )
@@ -27,7 +32,7 @@ func (k msgServer) NewDeposits(ctx context.Context, req *types.MsgNewDeposits) (
 	}
 
 	events := make(sdktypes.Events, 0, len(req.Deposits))
-	deposits := make([]*types.DepositReceipt, 0, len(req.Deposits))
+	deposits := make([]*types.DepositExecReceipt, 0, len(req.Deposits))
 	for _, v := range req.Deposits {
 		deposit, err := k.VerifyDeposit(ctx, req.BlockHeaders, v)
 		if err != nil {
@@ -136,4 +141,178 @@ func (k msgServer) NewPubkey(ctx context.Context, req *types.MsgNewPubkey) (*typ
 	)
 
 	return &types.MsgNewPubkeyResponse{}, nil
+}
+
+func (k msgServer) NewWithdrawal(ctx context.Context, req *types.MsgNewWithdrawal) (*types.MsgNewWithdrawalResponse, error) {
+	if err := req.Validate(); err != nil {
+		return nil, types.ErrInvalidRequest.Wrap(err.Error())
+	}
+
+	tx, txrd := new(wire.MsgTx), bytes.NewReader(req.Proposal.NoWitnessTx)
+	if err := tx.DeserializeNoWitness(txrd); err != nil || txrd.Len() > 0 {
+		return nil, types.ErrInvalidRequest.Wrapf("invalid non-witness tx")
+	}
+
+	if len(tx.TxOut) < len(req.Proposal.Id) {
+		return nil, types.ErrInvalidRequest.Wrapf("invalid tx output size for withdrawals")
+	}
+
+	sequence, err := k.relayerKeeper.VerifyProposal(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	param, err := k.Params.Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	network := types.BitcoinNetworks[param.NetworkName]
+	txid := goatcrypto.DoubleSHA256Sum(req.Proposal.NoWitnessTx)
+	for idx, wid := range req.Proposal.Id {
+		withdrawal, err := k.Withdrawals.Get(ctx, wid)
+		if err != nil {
+			return nil, err
+		}
+
+		if withdrawal.Status != types.WITHDRAWAL_STATUS_PENDING && withdrawal.Status != types.WITHDRAWAL_STATUS_CANCELING {
+			return nil, types.ErrInvalidRequest.Wrapf("witdhrawal %d is not pending or canceling", wid)
+		}
+
+		addr, err := btcutil.DecodeAddress(withdrawal.Address, network)
+		if err != nil {
+			return nil, types.ErrInternalError.Wrapf("processing withdrawal %d with invalid address", wid)
+		}
+		script, err := txscript.PayToAddrScript(addr)
+		if err != nil {
+			return nil, types.ErrInternalError.Wrapf("processing withdrawal %d with invalid address", wid)
+		}
+
+		txout := tx.TxOut[idx]
+		if !bytes.Equal(script, txout.PkScript) {
+			return nil, types.ErrInvalidRequest.Wrapf("witdhrawal %d script not matched", wid)
+		}
+
+		if withdrawal.RequestAmount < uint64(txout.Value) {
+			return nil, types.ErrInvalidRequest.Wrapf("witdhrawal %d amount too large", wid)
+		}
+
+		// the withdrawal id can't be duplicated since we update the status here
+		withdrawal.Status = types.WITHDRAWAL_STATUS_PROCESSING
+		withdrawal.Receipt = &types.WithdrawalReceipt{Txid: txid, Txout: uint32(idx), Amount: uint64(txout.Value)}
+		if err := k.Withdrawals.Set(ctx, wid, withdrawal); err != nil {
+			return nil, err
+		}
+	}
+
+	if err := k.WithdrawalProposals.Set(ctx, txid, *req.Proposal); err != nil {
+		return nil, err
+	}
+
+	if err := k.relayerKeeper.SetProposalSeq(ctx, sequence+1); err != nil {
+		return nil, err
+	}
+
+	if err := k.relayerKeeper.UpdateRandao(ctx, req); err != nil {
+		return nil, err
+	}
+
+	sdktypes.UnwrapSDKContext(ctx).EventManager().EmitEvent(types.NewWithdrawalEvent(txid))
+
+	return &types.MsgNewWithdrawalResponse{}, nil
+}
+
+func (k msgServer) FinalizeWithdrawal(ctx context.Context, req *types.MsgFinalizeWithdrawal) (*types.MsgFinalizeWithdrawalResponse, error) {
+	if err := req.Validate(); err != nil {
+		return nil, err
+	}
+
+	// check if the block is voted
+	blockHash, err := k.BlockHashes.Get(ctx, req.BlockNumber)
+	if err != nil {
+		return nil, err
+	}
+
+	proposal, err := k.WithdrawalProposals.Get(ctx, req.Txid)
+	if err != nil {
+		return nil, err
+	}
+
+	if !bytes.Equal(blockHash, goatcrypto.DoubleSHA256Sum(req.BlockHeader)) {
+		return nil, types.ErrInvalidRequest.Wrap("inconsistent block hash")
+	}
+
+	// check if the spv is valid
+	if !types.VerifyMerkelProof(req.Txid, req.BlockHeader[36:68], req.IntermediateProof, req.TxIndex) {
+		return nil, types.ErrInvalidRequest.Wrap("invalid spv")
+	}
+
+	queue, err := k.ExecuableQueue.Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, wid := range proposal.Id {
+		withdrawal, err := k.Withdrawals.Get(ctx, wid)
+		if err != nil {
+			return nil, err
+		}
+		if withdrawal.Status != types.WITHDRAWAL_STATUS_PROCESSING {
+			return nil, types.ErrInvalidRequest.Wrapf("witdhrawal %d is not processing", wid)
+		}
+
+		if withdrawal.Receipt == nil {
+			return nil, types.ErrInvalidRequest.Wrapf("witdhrawal %d receipt is nil", wid)
+		}
+
+		withdrawal.Status = types.WITHDRAWAL_STATUS_PAID
+		if err := k.Withdrawals.Set(ctx, wid, withdrawal); err != nil {
+			return nil, err
+		}
+		queue.PaidWithdrawals = append(queue.PaidWithdrawals, &types.WithdrawalExecReceipt{
+			Id:      wid,
+			Receipt: withdrawal.Receipt,
+		})
+	}
+
+	sdktypes.UnwrapSDKContext(ctx).EventManager().EmitEvent(types.NewWithdrawalEvent(req.Txid))
+	if err := k.ExecuableQueue.Set(ctx, queue); err != nil {
+		return nil, err
+	}
+	return &types.MsgFinalizeWithdrawalResponse{}, nil
+}
+
+func (k msgServer) ApproveCancellation(ctx context.Context, req *types.MsgApproveCancellation) (*types.MsgApproveCancellationResponse, error) {
+	if err := req.Validate(); err != nil {
+		return nil, types.ErrInvalidRequest.Wrap(err.Error())
+	}
+
+	queue, err := k.ExecuableQueue.Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var events sdktypes.Events
+	for _, wid := range req.Id {
+		withdrawal, err := k.Withdrawals.Get(ctx, wid)
+		if err != nil {
+			return nil, err
+		}
+		if withdrawal.Status != types.WITHDRAWAL_STATUS_CANCELING {
+			return nil, types.ErrInvalidRequest.Wrapf("witdhrawal %d is not canceling", wid)
+		}
+		withdrawal.Status = types.WITHDRAWAL_STATUS_CANCELED
+		if err := k.Withdrawals.Set(ctx, wid, withdrawal); err != nil {
+			return nil, err
+		}
+		events = append(events, types.ApproveCancellationEvent(wid))
+	}
+
+	queue.RejectedWithdrawals = append(queue.RejectedWithdrawals, req.Id...)
+	if err := k.ExecuableQueue.Set(ctx, queue); err != nil {
+		return nil, err
+	}
+
+	sdktypes.UnwrapSDKContext(ctx).EventManager().EmitEvents(events)
+	return &types.MsgApproveCancellationResponse{}, nil
 }

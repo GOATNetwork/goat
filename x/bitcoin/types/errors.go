@@ -10,4 +10,5 @@ import (
 var (
 	ErrInvalidSigner  = sdkerrors.Register(ModuleName, 1100, "expected gov account as only signer for proposal message")
 	ErrInvalidRequest = sdkerrors.Register(ModuleName, 1101, "invalid request")
+	ErrInternalError  = sdkerrors.Register(ModuleName, 1102, "internal error")
 )

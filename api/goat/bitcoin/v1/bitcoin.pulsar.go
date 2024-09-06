@@ -4,6 +4,7 @@ package bitcoinv1
 import (
 	fmt "fmt"
 	runtime "github.com/cosmos/cosmos-proto/runtime"
+	_ "github.com/cosmos/gogoproto/gogoproto"
 	v1 "github.com/goatnetwork/goat/api/goat/relayer/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
@@ -838,32 +839,76 @@ func (x *fastReflection_Deposit) ProtoMethods() *protoiface.Methods {
 	}
 }
 
+var _ protoreflect.List = (*_WithdrawalProposal_1_list)(nil)
+
+type _WithdrawalProposal_1_list struct {
+	list *[]uint64
+}
+
+func (x *_WithdrawalProposal_1_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_WithdrawalProposal_1_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfUint64((*x.list)[i])
+}
+
+func (x *_WithdrawalProposal_1_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Uint()
+	concreteValue := valueUnwrapped
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_WithdrawalProposal_1_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Uint()
+	concreteValue := valueUnwrapped
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_WithdrawalProposal_1_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message WithdrawalProposal at list field Id as it is not of Message kind"))
+}
+
+func (x *_WithdrawalProposal_1_list) Truncate(n int) {
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_WithdrawalProposal_1_list) NewElement() protoreflect.Value {
+	v := uint64(0)
+	return protoreflect.ValueOfUint64(v)
+}
+
+func (x *_WithdrawalProposal_1_list) IsValid() bool {
+	return x.list != nil
+}
+
 var (
-	md_DepositReceipt         protoreflect.MessageDescriptor
-	fd_DepositReceipt_txid    protoreflect.FieldDescriptor
-	fd_DepositReceipt_txout   protoreflect.FieldDescriptor
-	fd_DepositReceipt_address protoreflect.FieldDescriptor
-	fd_DepositReceipt_amount  protoreflect.FieldDescriptor
+	md_WithdrawalProposal               protoreflect.MessageDescriptor
+	fd_WithdrawalProposal_id            protoreflect.FieldDescriptor
+	fd_WithdrawalProposal_no_witness_tx protoreflect.FieldDescriptor
+	fd_WithdrawalProposal_tx_price      protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_goat_bitcoin_v1_bitcoin_proto_init()
-	md_DepositReceipt = File_goat_bitcoin_v1_bitcoin_proto.Messages().ByName("DepositReceipt")
-	fd_DepositReceipt_txid = md_DepositReceipt.Fields().ByName("txid")
-	fd_DepositReceipt_txout = md_DepositReceipt.Fields().ByName("txout")
-	fd_DepositReceipt_address = md_DepositReceipt.Fields().ByName("address")
-	fd_DepositReceipt_amount = md_DepositReceipt.Fields().ByName("amount")
+	md_WithdrawalProposal = File_goat_bitcoin_v1_bitcoin_proto.Messages().ByName("WithdrawalProposal")
+	fd_WithdrawalProposal_id = md_WithdrawalProposal.Fields().ByName("id")
+	fd_WithdrawalProposal_no_witness_tx = md_WithdrawalProposal.Fields().ByName("no_witness_tx")
+	fd_WithdrawalProposal_tx_price = md_WithdrawalProposal.Fields().ByName("tx_price")
 }
 
-var _ protoreflect.Message = (*fastReflection_DepositReceipt)(nil)
+var _ protoreflect.Message = (*fastReflection_WithdrawalProposal)(nil)
 
-type fastReflection_DepositReceipt DepositReceipt
+type fastReflection_WithdrawalProposal WithdrawalProposal
 
-func (x *DepositReceipt) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_DepositReceipt)(x)
+func (x *WithdrawalProposal) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_WithdrawalProposal)(x)
 }
 
-func (x *DepositReceipt) slowProtoReflect() protoreflect.Message {
+func (x *WithdrawalProposal) slowProtoReflect() protoreflect.Message {
 	mi := &file_goat_bitcoin_v1_bitcoin_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -875,43 +920,43 @@ func (x *DepositReceipt) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_DepositReceipt_messageType fastReflection_DepositReceipt_messageType
-var _ protoreflect.MessageType = fastReflection_DepositReceipt_messageType{}
+var _fastReflection_WithdrawalProposal_messageType fastReflection_WithdrawalProposal_messageType
+var _ protoreflect.MessageType = fastReflection_WithdrawalProposal_messageType{}
 
-type fastReflection_DepositReceipt_messageType struct{}
+type fastReflection_WithdrawalProposal_messageType struct{}
 
-func (x fastReflection_DepositReceipt_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_DepositReceipt)(nil)
+func (x fastReflection_WithdrawalProposal_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_WithdrawalProposal)(nil)
 }
-func (x fastReflection_DepositReceipt_messageType) New() protoreflect.Message {
-	return new(fastReflection_DepositReceipt)
+func (x fastReflection_WithdrawalProposal_messageType) New() protoreflect.Message {
+	return new(fastReflection_WithdrawalProposal)
 }
-func (x fastReflection_DepositReceipt_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_DepositReceipt
+func (x fastReflection_WithdrawalProposal_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_WithdrawalProposal
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_DepositReceipt) Descriptor() protoreflect.MessageDescriptor {
-	return md_DepositReceipt
+func (x *fastReflection_WithdrawalProposal) Descriptor() protoreflect.MessageDescriptor {
+	return md_WithdrawalProposal
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_DepositReceipt) Type() protoreflect.MessageType {
-	return _fastReflection_DepositReceipt_messageType
+func (x *fastReflection_WithdrawalProposal) Type() protoreflect.MessageType {
+	return _fastReflection_WithdrawalProposal_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_DepositReceipt) New() protoreflect.Message {
-	return new(fastReflection_DepositReceipt)
+func (x *fastReflection_WithdrawalProposal) New() protoreflect.Message {
+	return new(fastReflection_WithdrawalProposal)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_DepositReceipt) Interface() protoreflect.ProtoMessage {
-	return (*DepositReceipt)(x)
+func (x *fastReflection_WithdrawalProposal) Interface() protoreflect.ProtoMessage {
+	return (*WithdrawalProposal)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -919,28 +964,22 @@ func (x *fastReflection_DepositReceipt) Interface() protoreflect.ProtoMessage {
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_DepositReceipt) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if len(x.Txid) != 0 {
-		value := protoreflect.ValueOfBytes(x.Txid)
-		if !f(fd_DepositReceipt_txid, value) {
+func (x *fastReflection_WithdrawalProposal) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if len(x.Id) != 0 {
+		value := protoreflect.ValueOfList(&_WithdrawalProposal_1_list{list: &x.Id})
+		if !f(fd_WithdrawalProposal_id, value) {
 			return
 		}
 	}
-	if x.Txout != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.Txout)
-		if !f(fd_DepositReceipt_txout, value) {
+	if len(x.NoWitnessTx) != 0 {
+		value := protoreflect.ValueOfBytes(x.NoWitnessTx)
+		if !f(fd_WithdrawalProposal_no_witness_tx, value) {
 			return
 		}
 	}
-	if len(x.Address) != 0 {
-		value := protoreflect.ValueOfBytes(x.Address)
-		if !f(fd_DepositReceipt_address, value) {
-			return
-		}
-	}
-	if x.Amount != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.Amount)
-		if !f(fd_DepositReceipt_amount, value) {
+	if x.TxPrice != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.TxPrice)
+		if !f(fd_WithdrawalProposal_tx_price, value) {
 			return
 		}
 	}
@@ -957,21 +996,19 @@ func (x *fastReflection_DepositReceipt) Range(f func(protoreflect.FieldDescripto
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_DepositReceipt) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_WithdrawalProposal) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "goat.bitcoin.v1.DepositReceipt.txid":
-		return len(x.Txid) != 0
-	case "goat.bitcoin.v1.DepositReceipt.txout":
-		return x.Txout != uint32(0)
-	case "goat.bitcoin.v1.DepositReceipt.address":
-		return len(x.Address) != 0
-	case "goat.bitcoin.v1.DepositReceipt.amount":
-		return x.Amount != uint64(0)
+	case "goat.bitcoin.v1.WithdrawalProposal.id":
+		return len(x.Id) != 0
+	case "goat.bitcoin.v1.WithdrawalProposal.no_witness_tx":
+		return len(x.NoWitnessTx) != 0
+	case "goat.bitcoin.v1.WithdrawalProposal.tx_price":
+		return x.TxPrice != uint64(0)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.DepositReceipt"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.WithdrawalProposal"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.DepositReceipt does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.WithdrawalProposal does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -981,21 +1018,19 @@ func (x *fastReflection_DepositReceipt) Has(fd protoreflect.FieldDescriptor) boo
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_DepositReceipt) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_WithdrawalProposal) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "goat.bitcoin.v1.DepositReceipt.txid":
-		x.Txid = nil
-	case "goat.bitcoin.v1.DepositReceipt.txout":
-		x.Txout = uint32(0)
-	case "goat.bitcoin.v1.DepositReceipt.address":
-		x.Address = nil
-	case "goat.bitcoin.v1.DepositReceipt.amount":
-		x.Amount = uint64(0)
+	case "goat.bitcoin.v1.WithdrawalProposal.id":
+		x.Id = nil
+	case "goat.bitcoin.v1.WithdrawalProposal.no_witness_tx":
+		x.NoWitnessTx = nil
+	case "goat.bitcoin.v1.WithdrawalProposal.tx_price":
+		x.TxPrice = uint64(0)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.DepositReceipt"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.WithdrawalProposal"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.DepositReceipt does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.WithdrawalProposal does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1005,25 +1040,25 @@ func (x *fastReflection_DepositReceipt) Clear(fd protoreflect.FieldDescriptor) {
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_DepositReceipt) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_WithdrawalProposal) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "goat.bitcoin.v1.DepositReceipt.txid":
-		value := x.Txid
+	case "goat.bitcoin.v1.WithdrawalProposal.id":
+		if len(x.Id) == 0 {
+			return protoreflect.ValueOfList(&_WithdrawalProposal_1_list{})
+		}
+		listValue := &_WithdrawalProposal_1_list{list: &x.Id}
+		return protoreflect.ValueOfList(listValue)
+	case "goat.bitcoin.v1.WithdrawalProposal.no_witness_tx":
+		value := x.NoWitnessTx
 		return protoreflect.ValueOfBytes(value)
-	case "goat.bitcoin.v1.DepositReceipt.txout":
-		value := x.Txout
-		return protoreflect.ValueOfUint32(value)
-	case "goat.bitcoin.v1.DepositReceipt.address":
-		value := x.Address
-		return protoreflect.ValueOfBytes(value)
-	case "goat.bitcoin.v1.DepositReceipt.amount":
-		value := x.Amount
+	case "goat.bitcoin.v1.WithdrawalProposal.tx_price":
+		value := x.TxPrice
 		return protoreflect.ValueOfUint64(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.DepositReceipt"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.WithdrawalProposal"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.DepositReceipt does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.WithdrawalProposal does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -1037,21 +1072,21 @@ func (x *fastReflection_DepositReceipt) Get(descriptor protoreflect.FieldDescrip
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_DepositReceipt) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_WithdrawalProposal) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "goat.bitcoin.v1.DepositReceipt.txid":
-		x.Txid = value.Bytes()
-	case "goat.bitcoin.v1.DepositReceipt.txout":
-		x.Txout = uint32(value.Uint())
-	case "goat.bitcoin.v1.DepositReceipt.address":
-		x.Address = value.Bytes()
-	case "goat.bitcoin.v1.DepositReceipt.amount":
-		x.Amount = value.Uint()
+	case "goat.bitcoin.v1.WithdrawalProposal.id":
+		lv := value.List()
+		clv := lv.(*_WithdrawalProposal_1_list)
+		x.Id = *clv.list
+	case "goat.bitcoin.v1.WithdrawalProposal.no_witness_tx":
+		x.NoWitnessTx = value.Bytes()
+	case "goat.bitcoin.v1.WithdrawalProposal.tx_price":
+		x.TxPrice = value.Uint()
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.DepositReceipt"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.WithdrawalProposal"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.DepositReceipt does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.WithdrawalProposal does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1065,52 +1100,53 @@ func (x *fastReflection_DepositReceipt) Set(fd protoreflect.FieldDescriptor, val
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_DepositReceipt) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_WithdrawalProposal) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "goat.bitcoin.v1.DepositReceipt.txid":
-		panic(fmt.Errorf("field txid of message goat.bitcoin.v1.DepositReceipt is not mutable"))
-	case "goat.bitcoin.v1.DepositReceipt.txout":
-		panic(fmt.Errorf("field txout of message goat.bitcoin.v1.DepositReceipt is not mutable"))
-	case "goat.bitcoin.v1.DepositReceipt.address":
-		panic(fmt.Errorf("field address of message goat.bitcoin.v1.DepositReceipt is not mutable"))
-	case "goat.bitcoin.v1.DepositReceipt.amount":
-		panic(fmt.Errorf("field amount of message goat.bitcoin.v1.DepositReceipt is not mutable"))
+	case "goat.bitcoin.v1.WithdrawalProposal.id":
+		if x.Id == nil {
+			x.Id = []uint64{}
+		}
+		value := &_WithdrawalProposal_1_list{list: &x.Id}
+		return protoreflect.ValueOfList(value)
+	case "goat.bitcoin.v1.WithdrawalProposal.no_witness_tx":
+		panic(fmt.Errorf("field no_witness_tx of message goat.bitcoin.v1.WithdrawalProposal is not mutable"))
+	case "goat.bitcoin.v1.WithdrawalProposal.tx_price":
+		panic(fmt.Errorf("field tx_price of message goat.bitcoin.v1.WithdrawalProposal is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.DepositReceipt"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.WithdrawalProposal"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.DepositReceipt does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.WithdrawalProposal does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_DepositReceipt) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_WithdrawalProposal) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "goat.bitcoin.v1.DepositReceipt.txid":
+	case "goat.bitcoin.v1.WithdrawalProposal.id":
+		list := []uint64{}
+		return protoreflect.ValueOfList(&_WithdrawalProposal_1_list{list: &list})
+	case "goat.bitcoin.v1.WithdrawalProposal.no_witness_tx":
 		return protoreflect.ValueOfBytes(nil)
-	case "goat.bitcoin.v1.DepositReceipt.txout":
-		return protoreflect.ValueOfUint32(uint32(0))
-	case "goat.bitcoin.v1.DepositReceipt.address":
-		return protoreflect.ValueOfBytes(nil)
-	case "goat.bitcoin.v1.DepositReceipt.amount":
+	case "goat.bitcoin.v1.WithdrawalProposal.tx_price":
 		return protoreflect.ValueOfUint64(uint64(0))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.DepositReceipt"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.WithdrawalProposal"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.DepositReceipt does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.WithdrawalProposal does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_DepositReceipt) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_WithdrawalProposal) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in goat.bitcoin.v1.DepositReceipt", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in goat.bitcoin.v1.WithdrawalProposal", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -1118,7 +1154,7 @@ func (x *fastReflection_DepositReceipt) WhichOneof(d protoreflect.OneofDescripto
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_DepositReceipt) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_WithdrawalProposal) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -1129,7 +1165,7 @@ func (x *fastReflection_DepositReceipt) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_DepositReceipt) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_WithdrawalProposal) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -1141,7 +1177,7 @@ func (x *fastReflection_DepositReceipt) SetUnknown(fields protoreflect.RawFields
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_DepositReceipt) IsValid() bool {
+func (x *fastReflection_WithdrawalProposal) IsValid() bool {
 	return x != nil
 }
 
@@ -1151,9 +1187,1785 @@ func (x *fastReflection_DepositReceipt) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_DepositReceipt) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_WithdrawalProposal) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*DepositReceipt)
+		x := input.Message.Interface().(*WithdrawalProposal)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if len(x.Id) > 0 {
+			l = 0
+			for _, e := range x.Id {
+				l += runtime.Sov(uint64(e))
+			}
+			n += 1 + runtime.Sov(uint64(l)) + l
+		}
+		l = len(x.NoWitnessTx)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.TxPrice != 0 {
+			n += 1 + runtime.Sov(uint64(x.TxPrice))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*WithdrawalProposal)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.TxPrice != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.TxPrice))
+			i--
+			dAtA[i] = 0x18
+		}
+		if len(x.NoWitnessTx) > 0 {
+			i -= len(x.NoWitnessTx)
+			copy(dAtA[i:], x.NoWitnessTx)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.NoWitnessTx)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.Id) > 0 {
+			var pksize2 int
+			for _, num := range x.Id {
+				pksize2 += runtime.Sov(uint64(num))
+			}
+			i -= pksize2
+			j1 := i
+			for _, num := range x.Id {
+				for num >= 1<<7 {
+					dAtA[j1] = uint8(uint64(num)&0x7f | 0x80)
+					num >>= 7
+					j1++
+				}
+				dAtA[j1] = uint8(num)
+				j1++
+			}
+			i = runtime.EncodeVarint(dAtA, i, uint64(pksize2))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*WithdrawalProposal)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: WithdrawalProposal: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: WithdrawalProposal: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType == 0 {
+					var v uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+						}
+						if iNdEx >= l {
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					x.Id = append(x.Id, v)
+				} else if wireType == 2 {
+					var packedLen int
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+						}
+						if iNdEx >= l {
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						packedLen |= int(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					if packedLen < 0 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+					}
+					postIndex := iNdEx + packedLen
+					if postIndex < 0 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+					}
+					if postIndex > l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					var elementCount int
+					var count int
+					for _, integer := range dAtA[iNdEx:postIndex] {
+						if integer < 128 {
+							count++
+						}
+					}
+					elementCount = count
+					if elementCount != 0 && len(x.Id) == 0 {
+						x.Id = make([]uint64, 0, elementCount)
+					}
+					for iNdEx < postIndex {
+						var v uint64
+						for shift := uint(0); ; shift += 7 {
+							if shift >= 64 {
+								return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+							}
+							if iNdEx >= l {
+								return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+							}
+							b := dAtA[iNdEx]
+							iNdEx++
+							v |= uint64(b&0x7F) << shift
+							if b < 0x80 {
+								break
+							}
+						}
+						x.Id = append(x.Id, v)
+					}
+				} else {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+				}
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field NoWitnessTx", wireType)
+				}
+				var byteLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					byteLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if byteLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + byteLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.NoWitnessTx = append(x.NoWitnessTx[:0], dAtA[iNdEx:postIndex]...)
+				if x.NoWitnessTx == nil {
+					x.NoWitnessTx = []byte{}
+				}
+				iNdEx = postIndex
+			case 3:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TxPrice", wireType)
+				}
+				x.TxPrice = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.TxPrice |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_Withdrawal                protoreflect.MessageDescriptor
+	fd_Withdrawal_address        protoreflect.FieldDescriptor
+	fd_Withdrawal_request_amount protoreflect.FieldDescriptor
+	fd_Withdrawal_max_tx_price   protoreflect.FieldDescriptor
+	fd_Withdrawal_status         protoreflect.FieldDescriptor
+	fd_Withdrawal_receipt        protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_goat_bitcoin_v1_bitcoin_proto_init()
+	md_Withdrawal = File_goat_bitcoin_v1_bitcoin_proto.Messages().ByName("Withdrawal")
+	fd_Withdrawal_address = md_Withdrawal.Fields().ByName("address")
+	fd_Withdrawal_request_amount = md_Withdrawal.Fields().ByName("request_amount")
+	fd_Withdrawal_max_tx_price = md_Withdrawal.Fields().ByName("max_tx_price")
+	fd_Withdrawal_status = md_Withdrawal.Fields().ByName("status")
+	fd_Withdrawal_receipt = md_Withdrawal.Fields().ByName("receipt")
+}
+
+var _ protoreflect.Message = (*fastReflection_Withdrawal)(nil)
+
+type fastReflection_Withdrawal Withdrawal
+
+func (x *Withdrawal) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_Withdrawal)(x)
+}
+
+func (x *Withdrawal) slowProtoReflect() protoreflect.Message {
+	mi := &file_goat_bitcoin_v1_bitcoin_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_Withdrawal_messageType fastReflection_Withdrawal_messageType
+var _ protoreflect.MessageType = fastReflection_Withdrawal_messageType{}
+
+type fastReflection_Withdrawal_messageType struct{}
+
+func (x fastReflection_Withdrawal_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_Withdrawal)(nil)
+}
+func (x fastReflection_Withdrawal_messageType) New() protoreflect.Message {
+	return new(fastReflection_Withdrawal)
+}
+func (x fastReflection_Withdrawal_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_Withdrawal
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_Withdrawal) Descriptor() protoreflect.MessageDescriptor {
+	return md_Withdrawal
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_Withdrawal) Type() protoreflect.MessageType {
+	return _fastReflection_Withdrawal_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_Withdrawal) New() protoreflect.Message {
+	return new(fastReflection_Withdrawal)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_Withdrawal) Interface() protoreflect.ProtoMessage {
+	return (*Withdrawal)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_Withdrawal) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Address != "" {
+		value := protoreflect.ValueOfString(x.Address)
+		if !f(fd_Withdrawal_address, value) {
+			return
+		}
+	}
+	if x.RequestAmount != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.RequestAmount)
+		if !f(fd_Withdrawal_request_amount, value) {
+			return
+		}
+	}
+	if x.MaxTxPrice != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.MaxTxPrice)
+		if !f(fd_Withdrawal_max_tx_price, value) {
+			return
+		}
+	}
+	if x.Status != 0 {
+		value := protoreflect.ValueOfEnum((protoreflect.EnumNumber)(x.Status))
+		if !f(fd_Withdrawal_status, value) {
+			return
+		}
+	}
+	if x.Receipt != nil {
+		value := protoreflect.ValueOfMessage(x.Receipt.ProtoReflect())
+		if !f(fd_Withdrawal_receipt, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_Withdrawal) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "goat.bitcoin.v1.Withdrawal.address":
+		return x.Address != ""
+	case "goat.bitcoin.v1.Withdrawal.request_amount":
+		return x.RequestAmount != uint64(0)
+	case "goat.bitcoin.v1.Withdrawal.max_tx_price":
+		return x.MaxTxPrice != uint64(0)
+	case "goat.bitcoin.v1.Withdrawal.status":
+		return x.Status != 0
+	case "goat.bitcoin.v1.Withdrawal.receipt":
+		return x.Receipt != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.Withdrawal"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.Withdrawal does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_Withdrawal) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "goat.bitcoin.v1.Withdrawal.address":
+		x.Address = ""
+	case "goat.bitcoin.v1.Withdrawal.request_amount":
+		x.RequestAmount = uint64(0)
+	case "goat.bitcoin.v1.Withdrawal.max_tx_price":
+		x.MaxTxPrice = uint64(0)
+	case "goat.bitcoin.v1.Withdrawal.status":
+		x.Status = 0
+	case "goat.bitcoin.v1.Withdrawal.receipt":
+		x.Receipt = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.Withdrawal"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.Withdrawal does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_Withdrawal) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "goat.bitcoin.v1.Withdrawal.address":
+		value := x.Address
+		return protoreflect.ValueOfString(value)
+	case "goat.bitcoin.v1.Withdrawal.request_amount":
+		value := x.RequestAmount
+		return protoreflect.ValueOfUint64(value)
+	case "goat.bitcoin.v1.Withdrawal.max_tx_price":
+		value := x.MaxTxPrice
+		return protoreflect.ValueOfUint64(value)
+	case "goat.bitcoin.v1.Withdrawal.status":
+		value := x.Status
+		return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(value))
+	case "goat.bitcoin.v1.Withdrawal.receipt":
+		value := x.Receipt
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.Withdrawal"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.Withdrawal does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_Withdrawal) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "goat.bitcoin.v1.Withdrawal.address":
+		x.Address = value.Interface().(string)
+	case "goat.bitcoin.v1.Withdrawal.request_amount":
+		x.RequestAmount = value.Uint()
+	case "goat.bitcoin.v1.Withdrawal.max_tx_price":
+		x.MaxTxPrice = value.Uint()
+	case "goat.bitcoin.v1.Withdrawal.status":
+		x.Status = (WithdrawalStatus)(value.Enum())
+	case "goat.bitcoin.v1.Withdrawal.receipt":
+		x.Receipt = value.Message().Interface().(*WithdrawalReceipt)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.Withdrawal"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.Withdrawal does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_Withdrawal) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "goat.bitcoin.v1.Withdrawal.receipt":
+		if x.Receipt == nil {
+			x.Receipt = new(WithdrawalReceipt)
+		}
+		return protoreflect.ValueOfMessage(x.Receipt.ProtoReflect())
+	case "goat.bitcoin.v1.Withdrawal.address":
+		panic(fmt.Errorf("field address of message goat.bitcoin.v1.Withdrawal is not mutable"))
+	case "goat.bitcoin.v1.Withdrawal.request_amount":
+		panic(fmt.Errorf("field request_amount of message goat.bitcoin.v1.Withdrawal is not mutable"))
+	case "goat.bitcoin.v1.Withdrawal.max_tx_price":
+		panic(fmt.Errorf("field max_tx_price of message goat.bitcoin.v1.Withdrawal is not mutable"))
+	case "goat.bitcoin.v1.Withdrawal.status":
+		panic(fmt.Errorf("field status of message goat.bitcoin.v1.Withdrawal is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.Withdrawal"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.Withdrawal does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_Withdrawal) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "goat.bitcoin.v1.Withdrawal.address":
+		return protoreflect.ValueOfString("")
+	case "goat.bitcoin.v1.Withdrawal.request_amount":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "goat.bitcoin.v1.Withdrawal.max_tx_price":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "goat.bitcoin.v1.Withdrawal.status":
+		return protoreflect.ValueOfEnum(0)
+	case "goat.bitcoin.v1.Withdrawal.receipt":
+		m := new(WithdrawalReceipt)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.Withdrawal"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.Withdrawal does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_Withdrawal) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in goat.bitcoin.v1.Withdrawal", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_Withdrawal) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_Withdrawal) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_Withdrawal) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_Withdrawal) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*Withdrawal)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		l = len(x.Address)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.RequestAmount != 0 {
+			n += 1 + runtime.Sov(uint64(x.RequestAmount))
+		}
+		if x.MaxTxPrice != 0 {
+			n += 1 + runtime.Sov(uint64(x.MaxTxPrice))
+		}
+		if x.Status != 0 {
+			n += 1 + runtime.Sov(uint64(x.Status))
+		}
+		if x.Receipt != nil {
+			l = options.Size(x.Receipt)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*Withdrawal)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Receipt != nil {
+			encoded, err := options.Marshal(x.Receipt)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x2a
+		}
+		if x.Status != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Status))
+			i--
+			dAtA[i] = 0x20
+		}
+		if x.MaxTxPrice != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.MaxTxPrice))
+			i--
+			dAtA[i] = 0x18
+		}
+		if x.RequestAmount != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.RequestAmount))
+			i--
+			dAtA[i] = 0x10
+		}
+		if len(x.Address) > 0 {
+			i -= len(x.Address)
+			copy(dAtA[i:], x.Address)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Address)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*Withdrawal)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: Withdrawal: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: Withdrawal: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Address = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RequestAmount", wireType)
+				}
+				x.RequestAmount = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.RequestAmount |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 3:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field MaxTxPrice", wireType)
+				}
+				x.MaxTxPrice = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.MaxTxPrice |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 4:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+				}
+				x.Status = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Status |= WithdrawalStatus(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 5:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Receipt", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Receipt == nil {
+					x.Receipt = &WithdrawalReceipt{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Receipt); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_WithdrawalReceipt        protoreflect.MessageDescriptor
+	fd_WithdrawalReceipt_txid   protoreflect.FieldDescriptor
+	fd_WithdrawalReceipt_txout  protoreflect.FieldDescriptor
+	fd_WithdrawalReceipt_amount protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_goat_bitcoin_v1_bitcoin_proto_init()
+	md_WithdrawalReceipt = File_goat_bitcoin_v1_bitcoin_proto.Messages().ByName("WithdrawalReceipt")
+	fd_WithdrawalReceipt_txid = md_WithdrawalReceipt.Fields().ByName("txid")
+	fd_WithdrawalReceipt_txout = md_WithdrawalReceipt.Fields().ByName("txout")
+	fd_WithdrawalReceipt_amount = md_WithdrawalReceipt.Fields().ByName("amount")
+}
+
+var _ protoreflect.Message = (*fastReflection_WithdrawalReceipt)(nil)
+
+type fastReflection_WithdrawalReceipt WithdrawalReceipt
+
+func (x *WithdrawalReceipt) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_WithdrawalReceipt)(x)
+}
+
+func (x *WithdrawalReceipt) slowProtoReflect() protoreflect.Message {
+	mi := &file_goat_bitcoin_v1_bitcoin_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_WithdrawalReceipt_messageType fastReflection_WithdrawalReceipt_messageType
+var _ protoreflect.MessageType = fastReflection_WithdrawalReceipt_messageType{}
+
+type fastReflection_WithdrawalReceipt_messageType struct{}
+
+func (x fastReflection_WithdrawalReceipt_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_WithdrawalReceipt)(nil)
+}
+func (x fastReflection_WithdrawalReceipt_messageType) New() protoreflect.Message {
+	return new(fastReflection_WithdrawalReceipt)
+}
+func (x fastReflection_WithdrawalReceipt_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_WithdrawalReceipt
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_WithdrawalReceipt) Descriptor() protoreflect.MessageDescriptor {
+	return md_WithdrawalReceipt
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_WithdrawalReceipt) Type() protoreflect.MessageType {
+	return _fastReflection_WithdrawalReceipt_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_WithdrawalReceipt) New() protoreflect.Message {
+	return new(fastReflection_WithdrawalReceipt)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_WithdrawalReceipt) Interface() protoreflect.ProtoMessage {
+	return (*WithdrawalReceipt)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_WithdrawalReceipt) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if len(x.Txid) != 0 {
+		value := protoreflect.ValueOfBytes(x.Txid)
+		if !f(fd_WithdrawalReceipt_txid, value) {
+			return
+		}
+	}
+	if x.Txout != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.Txout)
+		if !f(fd_WithdrawalReceipt_txout, value) {
+			return
+		}
+	}
+	if x.Amount != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Amount)
+		if !f(fd_WithdrawalReceipt_amount, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_WithdrawalReceipt) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "goat.bitcoin.v1.WithdrawalReceipt.txid":
+		return len(x.Txid) != 0
+	case "goat.bitcoin.v1.WithdrawalReceipt.txout":
+		return x.Txout != uint32(0)
+	case "goat.bitcoin.v1.WithdrawalReceipt.amount":
+		return x.Amount != uint64(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.WithdrawalReceipt"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.WithdrawalReceipt does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_WithdrawalReceipt) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "goat.bitcoin.v1.WithdrawalReceipt.txid":
+		x.Txid = nil
+	case "goat.bitcoin.v1.WithdrawalReceipt.txout":
+		x.Txout = uint32(0)
+	case "goat.bitcoin.v1.WithdrawalReceipt.amount":
+		x.Amount = uint64(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.WithdrawalReceipt"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.WithdrawalReceipt does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_WithdrawalReceipt) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "goat.bitcoin.v1.WithdrawalReceipt.txid":
+		value := x.Txid
+		return protoreflect.ValueOfBytes(value)
+	case "goat.bitcoin.v1.WithdrawalReceipt.txout":
+		value := x.Txout
+		return protoreflect.ValueOfUint32(value)
+	case "goat.bitcoin.v1.WithdrawalReceipt.amount":
+		value := x.Amount
+		return protoreflect.ValueOfUint64(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.WithdrawalReceipt"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.WithdrawalReceipt does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_WithdrawalReceipt) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "goat.bitcoin.v1.WithdrawalReceipt.txid":
+		x.Txid = value.Bytes()
+	case "goat.bitcoin.v1.WithdrawalReceipt.txout":
+		x.Txout = uint32(value.Uint())
+	case "goat.bitcoin.v1.WithdrawalReceipt.amount":
+		x.Amount = value.Uint()
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.WithdrawalReceipt"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.WithdrawalReceipt does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_WithdrawalReceipt) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "goat.bitcoin.v1.WithdrawalReceipt.txid":
+		panic(fmt.Errorf("field txid of message goat.bitcoin.v1.WithdrawalReceipt is not mutable"))
+	case "goat.bitcoin.v1.WithdrawalReceipt.txout":
+		panic(fmt.Errorf("field txout of message goat.bitcoin.v1.WithdrawalReceipt is not mutable"))
+	case "goat.bitcoin.v1.WithdrawalReceipt.amount":
+		panic(fmt.Errorf("field amount of message goat.bitcoin.v1.WithdrawalReceipt is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.WithdrawalReceipt"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.WithdrawalReceipt does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_WithdrawalReceipt) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "goat.bitcoin.v1.WithdrawalReceipt.txid":
+		return protoreflect.ValueOfBytes(nil)
+	case "goat.bitcoin.v1.WithdrawalReceipt.txout":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "goat.bitcoin.v1.WithdrawalReceipt.amount":
+		return protoreflect.ValueOfUint64(uint64(0))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.WithdrawalReceipt"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.WithdrawalReceipt does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_WithdrawalReceipt) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in goat.bitcoin.v1.WithdrawalReceipt", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_WithdrawalReceipt) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_WithdrawalReceipt) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_WithdrawalReceipt) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_WithdrawalReceipt) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*WithdrawalReceipt)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		l = len(x.Txid)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.Txout != 0 {
+			n += 1 + runtime.Sov(uint64(x.Txout))
+		}
+		if x.Amount != 0 {
+			n += 1 + runtime.Sov(uint64(x.Amount))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*WithdrawalReceipt)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Amount != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Amount))
+			i--
+			dAtA[i] = 0x18
+		}
+		if x.Txout != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Txout))
+			i--
+			dAtA[i] = 0x10
+		}
+		if len(x.Txid) > 0 {
+			i -= len(x.Txid)
+			copy(dAtA[i:], x.Txid)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Txid)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*WithdrawalReceipt)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: WithdrawalReceipt: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: WithdrawalReceipt: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Txid", wireType)
+				}
+				var byteLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					byteLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if byteLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + byteLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Txid = append(x.Txid[:0], dAtA[iNdEx:postIndex]...)
+				if x.Txid == nil {
+					x.Txid = []byte{}
+				}
+				iNdEx = postIndex
+			case 2:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Txout", wireType)
+				}
+				x.Txout = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Txout |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 3:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
+				}
+				x.Amount = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Amount |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_DepositExecReceipt         protoreflect.MessageDescriptor
+	fd_DepositExecReceipt_txid    protoreflect.FieldDescriptor
+	fd_DepositExecReceipt_txout   protoreflect.FieldDescriptor
+	fd_DepositExecReceipt_address protoreflect.FieldDescriptor
+	fd_DepositExecReceipt_amount  protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_goat_bitcoin_v1_bitcoin_proto_init()
+	md_DepositExecReceipt = File_goat_bitcoin_v1_bitcoin_proto.Messages().ByName("DepositExecReceipt")
+	fd_DepositExecReceipt_txid = md_DepositExecReceipt.Fields().ByName("txid")
+	fd_DepositExecReceipt_txout = md_DepositExecReceipt.Fields().ByName("txout")
+	fd_DepositExecReceipt_address = md_DepositExecReceipt.Fields().ByName("address")
+	fd_DepositExecReceipt_amount = md_DepositExecReceipt.Fields().ByName("amount")
+}
+
+var _ protoreflect.Message = (*fastReflection_DepositExecReceipt)(nil)
+
+type fastReflection_DepositExecReceipt DepositExecReceipt
+
+func (x *DepositExecReceipt) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_DepositExecReceipt)(x)
+}
+
+func (x *DepositExecReceipt) slowProtoReflect() protoreflect.Message {
+	mi := &file_goat_bitcoin_v1_bitcoin_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_DepositExecReceipt_messageType fastReflection_DepositExecReceipt_messageType
+var _ protoreflect.MessageType = fastReflection_DepositExecReceipt_messageType{}
+
+type fastReflection_DepositExecReceipt_messageType struct{}
+
+func (x fastReflection_DepositExecReceipt_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_DepositExecReceipt)(nil)
+}
+func (x fastReflection_DepositExecReceipt_messageType) New() protoreflect.Message {
+	return new(fastReflection_DepositExecReceipt)
+}
+func (x fastReflection_DepositExecReceipt_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_DepositExecReceipt
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_DepositExecReceipt) Descriptor() protoreflect.MessageDescriptor {
+	return md_DepositExecReceipt
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_DepositExecReceipt) Type() protoreflect.MessageType {
+	return _fastReflection_DepositExecReceipt_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_DepositExecReceipt) New() protoreflect.Message {
+	return new(fastReflection_DepositExecReceipt)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_DepositExecReceipt) Interface() protoreflect.ProtoMessage {
+	return (*DepositExecReceipt)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_DepositExecReceipt) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if len(x.Txid) != 0 {
+		value := protoreflect.ValueOfBytes(x.Txid)
+		if !f(fd_DepositExecReceipt_txid, value) {
+			return
+		}
+	}
+	if x.Txout != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.Txout)
+		if !f(fd_DepositExecReceipt_txout, value) {
+			return
+		}
+	}
+	if len(x.Address) != 0 {
+		value := protoreflect.ValueOfBytes(x.Address)
+		if !f(fd_DepositExecReceipt_address, value) {
+			return
+		}
+	}
+	if x.Amount != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Amount)
+		if !f(fd_DepositExecReceipt_amount, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_DepositExecReceipt) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "goat.bitcoin.v1.DepositExecReceipt.txid":
+		return len(x.Txid) != 0
+	case "goat.bitcoin.v1.DepositExecReceipt.txout":
+		return x.Txout != uint32(0)
+	case "goat.bitcoin.v1.DepositExecReceipt.address":
+		return len(x.Address) != 0
+	case "goat.bitcoin.v1.DepositExecReceipt.amount":
+		return x.Amount != uint64(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.DepositExecReceipt"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.DepositExecReceipt does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_DepositExecReceipt) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "goat.bitcoin.v1.DepositExecReceipt.txid":
+		x.Txid = nil
+	case "goat.bitcoin.v1.DepositExecReceipt.txout":
+		x.Txout = uint32(0)
+	case "goat.bitcoin.v1.DepositExecReceipt.address":
+		x.Address = nil
+	case "goat.bitcoin.v1.DepositExecReceipt.amount":
+		x.Amount = uint64(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.DepositExecReceipt"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.DepositExecReceipt does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_DepositExecReceipt) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "goat.bitcoin.v1.DepositExecReceipt.txid":
+		value := x.Txid
+		return protoreflect.ValueOfBytes(value)
+	case "goat.bitcoin.v1.DepositExecReceipt.txout":
+		value := x.Txout
+		return protoreflect.ValueOfUint32(value)
+	case "goat.bitcoin.v1.DepositExecReceipt.address":
+		value := x.Address
+		return protoreflect.ValueOfBytes(value)
+	case "goat.bitcoin.v1.DepositExecReceipt.amount":
+		value := x.Amount
+		return protoreflect.ValueOfUint64(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.DepositExecReceipt"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.DepositExecReceipt does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_DepositExecReceipt) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "goat.bitcoin.v1.DepositExecReceipt.txid":
+		x.Txid = value.Bytes()
+	case "goat.bitcoin.v1.DepositExecReceipt.txout":
+		x.Txout = uint32(value.Uint())
+	case "goat.bitcoin.v1.DepositExecReceipt.address":
+		x.Address = value.Bytes()
+	case "goat.bitcoin.v1.DepositExecReceipt.amount":
+		x.Amount = value.Uint()
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.DepositExecReceipt"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.DepositExecReceipt does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_DepositExecReceipt) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "goat.bitcoin.v1.DepositExecReceipt.txid":
+		panic(fmt.Errorf("field txid of message goat.bitcoin.v1.DepositExecReceipt is not mutable"))
+	case "goat.bitcoin.v1.DepositExecReceipt.txout":
+		panic(fmt.Errorf("field txout of message goat.bitcoin.v1.DepositExecReceipt is not mutable"))
+	case "goat.bitcoin.v1.DepositExecReceipt.address":
+		panic(fmt.Errorf("field address of message goat.bitcoin.v1.DepositExecReceipt is not mutable"))
+	case "goat.bitcoin.v1.DepositExecReceipt.amount":
+		panic(fmt.Errorf("field amount of message goat.bitcoin.v1.DepositExecReceipt is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.DepositExecReceipt"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.DepositExecReceipt does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_DepositExecReceipt) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "goat.bitcoin.v1.DepositExecReceipt.txid":
+		return protoreflect.ValueOfBytes(nil)
+	case "goat.bitcoin.v1.DepositExecReceipt.txout":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "goat.bitcoin.v1.DepositExecReceipt.address":
+		return protoreflect.ValueOfBytes(nil)
+	case "goat.bitcoin.v1.DepositExecReceipt.amount":
+		return protoreflect.ValueOfUint64(uint64(0))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.DepositExecReceipt"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.DepositExecReceipt does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_DepositExecReceipt) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in goat.bitcoin.v1.DepositExecReceipt", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_DepositExecReceipt) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_DepositExecReceipt) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_DepositExecReceipt) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_DepositExecReceipt) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*DepositExecReceipt)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1189,7 +3001,7 @@ func (x *fastReflection_DepositReceipt) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*DepositReceipt)
+		x := input.Message.Interface().(*DepositExecReceipt)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1243,7 +3055,7 @@ func (x *fastReflection_DepositReceipt) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*DepositReceipt)
+		x := input.Message.Interface().(*DepositExecReceipt)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1275,10 +3087,10 @@ func (x *fastReflection_DepositReceipt) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: DepositReceipt: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: DepositExecReceipt: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: DepositReceipt: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: DepositExecReceipt: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -1423,32 +3235,28 @@ func (x *fastReflection_DepositReceipt) ProtoMethods() *protoiface.Methods {
 }
 
 var (
-	md_WithdrawalReceipt        protoreflect.MessageDescriptor
-	fd_WithdrawalReceipt_id     protoreflect.FieldDescriptor
-	fd_WithdrawalReceipt_txid   protoreflect.FieldDescriptor
-	fd_WithdrawalReceipt_txout  protoreflect.FieldDescriptor
-	fd_WithdrawalReceipt_amount protoreflect.FieldDescriptor
+	md_WithdrawalExecReceipt         protoreflect.MessageDescriptor
+	fd_WithdrawalExecReceipt_id      protoreflect.FieldDescriptor
+	fd_WithdrawalExecReceipt_receipt protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_goat_bitcoin_v1_bitcoin_proto_init()
-	md_WithdrawalReceipt = File_goat_bitcoin_v1_bitcoin_proto.Messages().ByName("WithdrawalReceipt")
-	fd_WithdrawalReceipt_id = md_WithdrawalReceipt.Fields().ByName("id")
-	fd_WithdrawalReceipt_txid = md_WithdrawalReceipt.Fields().ByName("txid")
-	fd_WithdrawalReceipt_txout = md_WithdrawalReceipt.Fields().ByName("txout")
-	fd_WithdrawalReceipt_amount = md_WithdrawalReceipt.Fields().ByName("amount")
+	md_WithdrawalExecReceipt = File_goat_bitcoin_v1_bitcoin_proto.Messages().ByName("WithdrawalExecReceipt")
+	fd_WithdrawalExecReceipt_id = md_WithdrawalExecReceipt.Fields().ByName("id")
+	fd_WithdrawalExecReceipt_receipt = md_WithdrawalExecReceipt.Fields().ByName("receipt")
 }
 
-var _ protoreflect.Message = (*fastReflection_WithdrawalReceipt)(nil)
+var _ protoreflect.Message = (*fastReflection_WithdrawalExecReceipt)(nil)
 
-type fastReflection_WithdrawalReceipt WithdrawalReceipt
+type fastReflection_WithdrawalExecReceipt WithdrawalExecReceipt
 
-func (x *WithdrawalReceipt) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_WithdrawalReceipt)(x)
+func (x *WithdrawalExecReceipt) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_WithdrawalExecReceipt)(x)
 }
 
-func (x *WithdrawalReceipt) slowProtoReflect() protoreflect.Message {
-	mi := &file_goat_bitcoin_v1_bitcoin_proto_msgTypes[2]
+func (x *WithdrawalExecReceipt) slowProtoReflect() protoreflect.Message {
+	mi := &file_goat_bitcoin_v1_bitcoin_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1459,43 +3267,43 @@ func (x *WithdrawalReceipt) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_WithdrawalReceipt_messageType fastReflection_WithdrawalReceipt_messageType
-var _ protoreflect.MessageType = fastReflection_WithdrawalReceipt_messageType{}
+var _fastReflection_WithdrawalExecReceipt_messageType fastReflection_WithdrawalExecReceipt_messageType
+var _ protoreflect.MessageType = fastReflection_WithdrawalExecReceipt_messageType{}
 
-type fastReflection_WithdrawalReceipt_messageType struct{}
+type fastReflection_WithdrawalExecReceipt_messageType struct{}
 
-func (x fastReflection_WithdrawalReceipt_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_WithdrawalReceipt)(nil)
+func (x fastReflection_WithdrawalExecReceipt_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_WithdrawalExecReceipt)(nil)
 }
-func (x fastReflection_WithdrawalReceipt_messageType) New() protoreflect.Message {
-	return new(fastReflection_WithdrawalReceipt)
+func (x fastReflection_WithdrawalExecReceipt_messageType) New() protoreflect.Message {
+	return new(fastReflection_WithdrawalExecReceipt)
 }
-func (x fastReflection_WithdrawalReceipt_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_WithdrawalReceipt
+func (x fastReflection_WithdrawalExecReceipt_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_WithdrawalExecReceipt
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_WithdrawalReceipt) Descriptor() protoreflect.MessageDescriptor {
-	return md_WithdrawalReceipt
+func (x *fastReflection_WithdrawalExecReceipt) Descriptor() protoreflect.MessageDescriptor {
+	return md_WithdrawalExecReceipt
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_WithdrawalReceipt) Type() protoreflect.MessageType {
-	return _fastReflection_WithdrawalReceipt_messageType
+func (x *fastReflection_WithdrawalExecReceipt) Type() protoreflect.MessageType {
+	return _fastReflection_WithdrawalExecReceipt_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_WithdrawalReceipt) New() protoreflect.Message {
-	return new(fastReflection_WithdrawalReceipt)
+func (x *fastReflection_WithdrawalExecReceipt) New() protoreflect.Message {
+	return new(fastReflection_WithdrawalExecReceipt)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_WithdrawalReceipt) Interface() protoreflect.ProtoMessage {
-	return (*WithdrawalReceipt)(x)
+func (x *fastReflection_WithdrawalExecReceipt) Interface() protoreflect.ProtoMessage {
+	return (*WithdrawalExecReceipt)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -1503,28 +3311,16 @@ func (x *fastReflection_WithdrawalReceipt) Interface() protoreflect.ProtoMessage
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_WithdrawalReceipt) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_WithdrawalExecReceipt) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Id != uint64(0) {
 		value := protoreflect.ValueOfUint64(x.Id)
-		if !f(fd_WithdrawalReceipt_id, value) {
+		if !f(fd_WithdrawalExecReceipt_id, value) {
 			return
 		}
 	}
-	if len(x.Txid) != 0 {
-		value := protoreflect.ValueOfBytes(x.Txid)
-		if !f(fd_WithdrawalReceipt_txid, value) {
-			return
-		}
-	}
-	if x.Txout != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.Txout)
-		if !f(fd_WithdrawalReceipt_txout, value) {
-			return
-		}
-	}
-	if x.Amount != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.Amount)
-		if !f(fd_WithdrawalReceipt_amount, value) {
+	if x.Receipt != nil {
+		value := protoreflect.ValueOfMessage(x.Receipt.ProtoReflect())
+		if !f(fd_WithdrawalExecReceipt_receipt, value) {
 			return
 		}
 	}
@@ -1541,21 +3337,17 @@ func (x *fastReflection_WithdrawalReceipt) Range(f func(protoreflect.FieldDescri
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_WithdrawalReceipt) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_WithdrawalExecReceipt) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "goat.bitcoin.v1.WithdrawalReceipt.id":
+	case "goat.bitcoin.v1.WithdrawalExecReceipt.id":
 		return x.Id != uint64(0)
-	case "goat.bitcoin.v1.WithdrawalReceipt.txid":
-		return len(x.Txid) != 0
-	case "goat.bitcoin.v1.WithdrawalReceipt.txout":
-		return x.Txout != uint32(0)
-	case "goat.bitcoin.v1.WithdrawalReceipt.amount":
-		return x.Amount != uint64(0)
+	case "goat.bitcoin.v1.WithdrawalExecReceipt.receipt":
+		return x.Receipt != nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.WithdrawalReceipt"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.WithdrawalExecReceipt"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.WithdrawalReceipt does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.WithdrawalExecReceipt does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1565,21 +3357,17 @@ func (x *fastReflection_WithdrawalReceipt) Has(fd protoreflect.FieldDescriptor) 
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_WithdrawalReceipt) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_WithdrawalExecReceipt) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "goat.bitcoin.v1.WithdrawalReceipt.id":
+	case "goat.bitcoin.v1.WithdrawalExecReceipt.id":
 		x.Id = uint64(0)
-	case "goat.bitcoin.v1.WithdrawalReceipt.txid":
-		x.Txid = nil
-	case "goat.bitcoin.v1.WithdrawalReceipt.txout":
-		x.Txout = uint32(0)
-	case "goat.bitcoin.v1.WithdrawalReceipt.amount":
-		x.Amount = uint64(0)
+	case "goat.bitcoin.v1.WithdrawalExecReceipt.receipt":
+		x.Receipt = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.WithdrawalReceipt"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.WithdrawalExecReceipt"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.WithdrawalReceipt does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.WithdrawalExecReceipt does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1589,25 +3377,19 @@ func (x *fastReflection_WithdrawalReceipt) Clear(fd protoreflect.FieldDescriptor
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_WithdrawalReceipt) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_WithdrawalExecReceipt) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "goat.bitcoin.v1.WithdrawalReceipt.id":
+	case "goat.bitcoin.v1.WithdrawalExecReceipt.id":
 		value := x.Id
 		return protoreflect.ValueOfUint64(value)
-	case "goat.bitcoin.v1.WithdrawalReceipt.txid":
-		value := x.Txid
-		return protoreflect.ValueOfBytes(value)
-	case "goat.bitcoin.v1.WithdrawalReceipt.txout":
-		value := x.Txout
-		return protoreflect.ValueOfUint32(value)
-	case "goat.bitcoin.v1.WithdrawalReceipt.amount":
-		value := x.Amount
-		return protoreflect.ValueOfUint64(value)
+	case "goat.bitcoin.v1.WithdrawalExecReceipt.receipt":
+		value := x.Receipt
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.WithdrawalReceipt"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.WithdrawalExecReceipt"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.WithdrawalReceipt does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.WithdrawalExecReceipt does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -1621,21 +3403,17 @@ func (x *fastReflection_WithdrawalReceipt) Get(descriptor protoreflect.FieldDesc
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_WithdrawalReceipt) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_WithdrawalExecReceipt) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "goat.bitcoin.v1.WithdrawalReceipt.id":
+	case "goat.bitcoin.v1.WithdrawalExecReceipt.id":
 		x.Id = value.Uint()
-	case "goat.bitcoin.v1.WithdrawalReceipt.txid":
-		x.Txid = value.Bytes()
-	case "goat.bitcoin.v1.WithdrawalReceipt.txout":
-		x.Txout = uint32(value.Uint())
-	case "goat.bitcoin.v1.WithdrawalReceipt.amount":
-		x.Amount = value.Uint()
+	case "goat.bitcoin.v1.WithdrawalExecReceipt.receipt":
+		x.Receipt = value.Message().Interface().(*WithdrawalReceipt)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.WithdrawalReceipt"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.WithdrawalExecReceipt"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.WithdrawalReceipt does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.WithdrawalExecReceipt does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1649,52 +3427,48 @@ func (x *fastReflection_WithdrawalReceipt) Set(fd protoreflect.FieldDescriptor, 
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_WithdrawalReceipt) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_WithdrawalExecReceipt) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "goat.bitcoin.v1.WithdrawalReceipt.id":
-		panic(fmt.Errorf("field id of message goat.bitcoin.v1.WithdrawalReceipt is not mutable"))
-	case "goat.bitcoin.v1.WithdrawalReceipt.txid":
-		panic(fmt.Errorf("field txid of message goat.bitcoin.v1.WithdrawalReceipt is not mutable"))
-	case "goat.bitcoin.v1.WithdrawalReceipt.txout":
-		panic(fmt.Errorf("field txout of message goat.bitcoin.v1.WithdrawalReceipt is not mutable"))
-	case "goat.bitcoin.v1.WithdrawalReceipt.amount":
-		panic(fmt.Errorf("field amount of message goat.bitcoin.v1.WithdrawalReceipt is not mutable"))
+	case "goat.bitcoin.v1.WithdrawalExecReceipt.receipt":
+		if x.Receipt == nil {
+			x.Receipt = new(WithdrawalReceipt)
+		}
+		return protoreflect.ValueOfMessage(x.Receipt.ProtoReflect())
+	case "goat.bitcoin.v1.WithdrawalExecReceipt.id":
+		panic(fmt.Errorf("field id of message goat.bitcoin.v1.WithdrawalExecReceipt is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.WithdrawalReceipt"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.WithdrawalExecReceipt"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.WithdrawalReceipt does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.WithdrawalExecReceipt does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_WithdrawalReceipt) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_WithdrawalExecReceipt) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "goat.bitcoin.v1.WithdrawalReceipt.id":
+	case "goat.bitcoin.v1.WithdrawalExecReceipt.id":
 		return protoreflect.ValueOfUint64(uint64(0))
-	case "goat.bitcoin.v1.WithdrawalReceipt.txid":
-		return protoreflect.ValueOfBytes(nil)
-	case "goat.bitcoin.v1.WithdrawalReceipt.txout":
-		return protoreflect.ValueOfUint32(uint32(0))
-	case "goat.bitcoin.v1.WithdrawalReceipt.amount":
-		return protoreflect.ValueOfUint64(uint64(0))
+	case "goat.bitcoin.v1.WithdrawalExecReceipt.receipt":
+		m := new(WithdrawalReceipt)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.WithdrawalReceipt"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.WithdrawalExecReceipt"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.WithdrawalReceipt does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.WithdrawalExecReceipt does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_WithdrawalReceipt) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_WithdrawalExecReceipt) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in goat.bitcoin.v1.WithdrawalReceipt", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in goat.bitcoin.v1.WithdrawalExecReceipt", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -1702,7 +3476,7 @@ func (x *fastReflection_WithdrawalReceipt) WhichOneof(d protoreflect.OneofDescri
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_WithdrawalReceipt) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_WithdrawalExecReceipt) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -1713,7 +3487,7 @@ func (x *fastReflection_WithdrawalReceipt) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_WithdrawalReceipt) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_WithdrawalExecReceipt) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -1725,7 +3499,7 @@ func (x *fastReflection_WithdrawalReceipt) SetUnknown(fields protoreflect.RawFie
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_WithdrawalReceipt) IsValid() bool {
+func (x *fastReflection_WithdrawalExecReceipt) IsValid() bool {
 	return x != nil
 }
 
@@ -1735,9 +3509,9 @@ func (x *fastReflection_WithdrawalReceipt) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_WithdrawalReceipt) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_WithdrawalExecReceipt) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*WithdrawalReceipt)
+		x := input.Message.Interface().(*WithdrawalExecReceipt)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1752,15 +3526,9 @@ func (x *fastReflection_WithdrawalReceipt) ProtoMethods() *protoiface.Methods {
 		if x.Id != 0 {
 			n += 1 + runtime.Sov(uint64(x.Id))
 		}
-		l = len(x.Txid)
-		if l > 0 {
+		if x.Receipt != nil {
+			l = options.Size(x.Receipt)
 			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.Txout != 0 {
-			n += 1 + runtime.Sov(uint64(x.Txout))
-		}
-		if x.Amount != 0 {
-			n += 1 + runtime.Sov(uint64(x.Amount))
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -1772,7 +3540,7 @@ func (x *fastReflection_WithdrawalReceipt) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*WithdrawalReceipt)
+		x := input.Message.Interface().(*WithdrawalExecReceipt)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1791,20 +3559,17 @@ func (x *fastReflection_WithdrawalReceipt) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if x.Amount != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.Amount))
-			i--
-			dAtA[i] = 0x20
-		}
-		if x.Txout != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.Txout))
-			i--
-			dAtA[i] = 0x18
-		}
-		if len(x.Txid) > 0 {
-			i -= len(x.Txid)
-			copy(dAtA[i:], x.Txid)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Txid)))
+		if x.Receipt != nil {
+			encoded, err := options.Marshal(x.Receipt)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
 			dAtA[i] = 0x12
 		}
@@ -1824,7 +3589,7 @@ func (x *fastReflection_WithdrawalReceipt) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*WithdrawalReceipt)
+		x := input.Message.Interface().(*WithdrawalExecReceipt)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1856,10 +3621,10 @@ func (x *fastReflection_WithdrawalReceipt) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: WithdrawalReceipt: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: WithdrawalExecReceipt: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: WithdrawalReceipt: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: WithdrawalExecReceipt: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -1883,9 +3648,9 @@ func (x *fastReflection_WithdrawalReceipt) ProtoMethods() *protoiface.Methods {
 				}
 			case 2:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Txid", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Receipt", wireType)
 				}
-				var byteLen int
+				var msglen int
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -1895,64 +3660,28 @@ func (x *fastReflection_WithdrawalReceipt) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					byteLen |= int(b&0x7F) << shift
+					msglen |= int(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
-				if byteLen < 0 {
+				if msglen < 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
-				postIndex := iNdEx + byteLen
+				postIndex := iNdEx + msglen
 				if postIndex < 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.Txid = append(x.Txid[:0], dAtA[iNdEx:postIndex]...)
-				if x.Txid == nil {
-					x.Txid = []byte{}
+				if x.Receipt == nil {
+					x.Receipt = &WithdrawalReceipt{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Receipt); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
-			case 3:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Txout", wireType)
-				}
-				x.Txout = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.Txout |= uint32(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 4:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
-				}
-				x.Amount = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.Amount |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -1991,7 +3720,7 @@ func (x *fastReflection_WithdrawalReceipt) ProtoMethods() *protoiface.Methods {
 var _ protoreflect.List = (*_ExecuableQueue_2_list)(nil)
 
 type _ExecuableQueue_2_list struct {
-	list *[]*DepositReceipt
+	list *[]*DepositExecReceipt
 }
 
 func (x *_ExecuableQueue_2_list) Len() int {
@@ -2007,18 +3736,18 @@ func (x *_ExecuableQueue_2_list) Get(i int) protoreflect.Value {
 
 func (x *_ExecuableQueue_2_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*DepositReceipt)
+	concreteValue := valueUnwrapped.Interface().(*DepositExecReceipt)
 	(*x.list)[i] = concreteValue
 }
 
 func (x *_ExecuableQueue_2_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*DepositReceipt)
+	concreteValue := valueUnwrapped.Interface().(*DepositExecReceipt)
 	*x.list = append(*x.list, concreteValue)
 }
 
 func (x *_ExecuableQueue_2_list) AppendMutable() protoreflect.Value {
-	v := new(DepositReceipt)
+	v := new(DepositExecReceipt)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
@@ -2031,7 +3760,7 @@ func (x *_ExecuableQueue_2_list) Truncate(n int) {
 }
 
 func (x *_ExecuableQueue_2_list) NewElement() protoreflect.Value {
-	v := new(DepositReceipt)
+	v := new(DepositExecReceipt)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
@@ -2042,7 +3771,7 @@ func (x *_ExecuableQueue_2_list) IsValid() bool {
 var _ protoreflect.List = (*_ExecuableQueue_3_list)(nil)
 
 type _ExecuableQueue_3_list struct {
-	list *[]*WithdrawalReceipt
+	list *[]*WithdrawalExecReceipt
 }
 
 func (x *_ExecuableQueue_3_list) Len() int {
@@ -2058,18 +3787,18 @@ func (x *_ExecuableQueue_3_list) Get(i int) protoreflect.Value {
 
 func (x *_ExecuableQueue_3_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*WithdrawalReceipt)
+	concreteValue := valueUnwrapped.Interface().(*WithdrawalExecReceipt)
 	(*x.list)[i] = concreteValue
 }
 
 func (x *_ExecuableQueue_3_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*WithdrawalReceipt)
+	concreteValue := valueUnwrapped.Interface().(*WithdrawalExecReceipt)
 	*x.list = append(*x.list, concreteValue)
 }
 
 func (x *_ExecuableQueue_3_list) AppendMutable() protoreflect.Value {
-	v := new(WithdrawalReceipt)
+	v := new(WithdrawalExecReceipt)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
@@ -2082,7 +3811,7 @@ func (x *_ExecuableQueue_3_list) Truncate(n int) {
 }
 
 func (x *_ExecuableQueue_3_list) NewElement() protoreflect.Value {
-	v := new(WithdrawalReceipt)
+	v := new(WithdrawalExecReceipt)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
@@ -2162,7 +3891,7 @@ func (x *ExecuableQueue) ProtoReflect() protoreflect.Message {
 }
 
 func (x *ExecuableQueue) slowProtoReflect() protoreflect.Message {
-	mi := &file_goat_bitcoin_v1_bitcoin_proto_msgTypes[3]
+	mi := &file_goat_bitcoin_v1_bitcoin_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2382,13 +4111,13 @@ func (x *fastReflection_ExecuableQueue) Mutable(fd protoreflect.FieldDescriptor)
 	switch fd.FullName() {
 	case "goat.bitcoin.v1.ExecuableQueue.deposits":
 		if x.Deposits == nil {
-			x.Deposits = []*DepositReceipt{}
+			x.Deposits = []*DepositExecReceipt{}
 		}
 		value := &_ExecuableQueue_2_list{list: &x.Deposits}
 		return protoreflect.ValueOfList(value)
 	case "goat.bitcoin.v1.ExecuableQueue.paid_withdrawals":
 		if x.PaidWithdrawals == nil {
-			x.PaidWithdrawals = []*WithdrawalReceipt{}
+			x.PaidWithdrawals = []*WithdrawalExecReceipt{}
 		}
 		value := &_ExecuableQueue_3_list{list: &x.PaidWithdrawals}
 		return protoreflect.ValueOfList(value)
@@ -2416,10 +4145,10 @@ func (x *fastReflection_ExecuableQueue) NewField(fd protoreflect.FieldDescriptor
 	case "goat.bitcoin.v1.ExecuableQueue.block_number":
 		return protoreflect.ValueOfUint64(uint64(0))
 	case "goat.bitcoin.v1.ExecuableQueue.deposits":
-		list := []*DepositReceipt{}
+		list := []*DepositExecReceipt{}
 		return protoreflect.ValueOfList(&_ExecuableQueue_2_list{list: &list})
 	case "goat.bitcoin.v1.ExecuableQueue.paid_withdrawals":
-		list := []*WithdrawalReceipt{}
+		list := []*WithdrawalExecReceipt{}
 		return protoreflect.ValueOfList(&_ExecuableQueue_3_list{list: &list})
 	case "goat.bitcoin.v1.ExecuableQueue.rejected_withdrawals":
 		list := []uint64{}
@@ -2698,7 +4427,7 @@ func (x *fastReflection_ExecuableQueue) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.Deposits = append(x.Deposits, &DepositReceipt{})
+				x.Deposits = append(x.Deposits, &DepositExecReceipt{})
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Deposits[len(x.Deposits)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
@@ -2732,7 +4461,7 @@ func (x *fastReflection_ExecuableQueue) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.PaidWithdrawals = append(x.PaidWithdrawals, &WithdrawalReceipt{})
+				x.PaidWithdrawals = append(x.PaidWithdrawals, &WithdrawalExecReceipt{})
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.PaidWithdrawals[len(x.PaidWithdrawals)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
@@ -2861,6 +4590,71 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// WithdrawalStatus is the status of a withdrawal.
+type WithdrawalStatus int32
+
+const (
+	// WITHDRAWAL_STATUS_UNSPECIFIED defines an invalid status.
+	WithdrawalStatus_WITHDRAWAL_STATUS_UNSPECIFIED WithdrawalStatus = 0
+	// WITHDRAWAL_STATUS_PENDING
+	WithdrawalStatus_WITHDRAWAL_STATUS_PENDING WithdrawalStatus = 1
+	// WITHDRAWAL_STATUS_PROCESSING
+	WithdrawalStatus_WITHDRAWAL_STATUS_PROCESSING WithdrawalStatus = 2
+	// WITHDRAWAL_STATUS_CANCELING
+	WithdrawalStatus_WITHDRAWAL_STATUS_CANCELING WithdrawalStatus = 3
+	// WITHDRAWAL_STATUS_CANCELED
+	WithdrawalStatus_WITHDRAWAL_STATUS_CANCELED WithdrawalStatus = 4
+	// WITHDRAWAL_STATUS_PAID
+	WithdrawalStatus_WITHDRAWAL_STATUS_PAID WithdrawalStatus = 5
+)
+
+// Enum value maps for WithdrawalStatus.
+var (
+	WithdrawalStatus_name = map[int32]string{
+		0: "WITHDRAWAL_STATUS_UNSPECIFIED",
+		1: "WITHDRAWAL_STATUS_PENDING",
+		2: "WITHDRAWAL_STATUS_PROCESSING",
+		3: "WITHDRAWAL_STATUS_CANCELING",
+		4: "WITHDRAWAL_STATUS_CANCELED",
+		5: "WITHDRAWAL_STATUS_PAID",
+	}
+	WithdrawalStatus_value = map[string]int32{
+		"WITHDRAWAL_STATUS_UNSPECIFIED": 0,
+		"WITHDRAWAL_STATUS_PENDING":     1,
+		"WITHDRAWAL_STATUS_PROCESSING":  2,
+		"WITHDRAWAL_STATUS_CANCELING":   3,
+		"WITHDRAWAL_STATUS_CANCELED":    4,
+		"WITHDRAWAL_STATUS_PAID":        5,
+	}
+)
+
+func (x WithdrawalStatus) Enum() *WithdrawalStatus {
+	p := new(WithdrawalStatus)
+	*p = x
+	return p
+}
+
+func (x WithdrawalStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (WithdrawalStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_goat_bitcoin_v1_bitcoin_proto_enumTypes[0].Descriptor()
+}
+
+func (WithdrawalStatus) Type() protoreflect.EnumType {
+	return &file_goat_bitcoin_v1_bitcoin_proto_enumTypes[0]
+}
+
+func (x WithdrawalStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use WithdrawalStatus.Descriptor instead.
+func (WithdrawalStatus) EnumDescriptor() ([]byte, []int) {
+	return file_goat_bitcoin_v1_bitcoin_proto_rawDescGZIP(), []int{0}
+}
+
 // Deposit defines the deposit transaction and its proof
 type Deposit struct {
 	state         protoimpl.MessageState
@@ -2959,20 +4753,19 @@ func (x *Deposit) GetRelayerPubkey() *v1.PublicKey {
 	return nil
 }
 
-// DepositReceipt
-type DepositReceipt struct {
+// WithdrawalProposal
+type WithdrawalProposal struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Txid    []byte `protobuf:"bytes,1,opt,name=txid,proto3" json:"txid,omitempty"`
-	Txout   uint32 `protobuf:"varint,2,opt,name=txout,proto3" json:"txout,omitempty"`
-	Address []byte `protobuf:"bytes,3,opt,name=address,proto3" json:"address,omitempty"`
-	Amount  uint64 `protobuf:"varint,4,opt,name=amount,proto3" json:"amount,omitempty"`
+	Id          []uint64 `protobuf:"varint,1,rep,packed,name=id,proto3" json:"id,omitempty"`
+	NoWitnessTx []byte   `protobuf:"bytes,2,opt,name=no_witness_tx,json=noWitnessTx,proto3" json:"no_witness_tx,omitempty"`
+	TxPrice     uint64   `protobuf:"varint,3,opt,name=tx_price,json=txPrice,proto3" json:"tx_price,omitempty"`
 }
 
-func (x *DepositReceipt) Reset() {
-	*x = DepositReceipt{}
+func (x *WithdrawalProposal) Reset() {
+	*x = WithdrawalProposal{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_goat_bitcoin_v1_bitcoin_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2980,43 +4773,104 @@ func (x *DepositReceipt) Reset() {
 	}
 }
 
-func (x *DepositReceipt) String() string {
+func (x *WithdrawalProposal) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*DepositReceipt) ProtoMessage() {}
+func (*WithdrawalProposal) ProtoMessage() {}
 
-// Deprecated: Use DepositReceipt.ProtoReflect.Descriptor instead.
-func (*DepositReceipt) Descriptor() ([]byte, []int) {
+// Deprecated: Use WithdrawalProposal.ProtoReflect.Descriptor instead.
+func (*WithdrawalProposal) Descriptor() ([]byte, []int) {
 	return file_goat_bitcoin_v1_bitcoin_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *DepositReceipt) GetTxid() []byte {
+func (x *WithdrawalProposal) GetId() []uint64 {
 	if x != nil {
-		return x.Txid
+		return x.Id
 	}
 	return nil
 }
 
-func (x *DepositReceipt) GetTxout() uint32 {
+func (x *WithdrawalProposal) GetNoWitnessTx() []byte {
 	if x != nil {
-		return x.Txout
+		return x.NoWitnessTx
+	}
+	return nil
+}
+
+func (x *WithdrawalProposal) GetTxPrice() uint64 {
+	if x != nil {
+		return x.TxPrice
 	}
 	return 0
 }
 
-func (x *DepositReceipt) GetAddress() []byte {
+// Withdrawal
+type Withdrawal struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Address       string             `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
+	RequestAmount uint64             `protobuf:"varint,2,opt,name=request_amount,json=requestAmount,proto3" json:"request_amount,omitempty"`
+	MaxTxPrice    uint64             `protobuf:"varint,3,opt,name=max_tx_price,json=maxTxPrice,proto3" json:"max_tx_price,omitempty"`
+	Status        WithdrawalStatus   `protobuf:"varint,4,opt,name=status,proto3,enum=goat.bitcoin.v1.WithdrawalStatus" json:"status,omitempty"`
+	Receipt       *WithdrawalReceipt `protobuf:"bytes,5,opt,name=receipt,proto3" json:"receipt,omitempty"`
+}
+
+func (x *Withdrawal) Reset() {
+	*x = Withdrawal{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_goat_bitcoin_v1_bitcoin_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Withdrawal) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Withdrawal) ProtoMessage() {}
+
+// Deprecated: Use Withdrawal.ProtoReflect.Descriptor instead.
+func (*Withdrawal) Descriptor() ([]byte, []int) {
+	return file_goat_bitcoin_v1_bitcoin_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *Withdrawal) GetAddress() string {
 	if x != nil {
 		return x.Address
 	}
-	return nil
+	return ""
 }
 
-func (x *DepositReceipt) GetAmount() uint64 {
+func (x *Withdrawal) GetRequestAmount() uint64 {
 	if x != nil {
-		return x.Amount
+		return x.RequestAmount
 	}
 	return 0
+}
+
+func (x *Withdrawal) GetMaxTxPrice() uint64 {
+	if x != nil {
+		return x.MaxTxPrice
+	}
+	return 0
+}
+
+func (x *Withdrawal) GetStatus() WithdrawalStatus {
+	if x != nil {
+		return x.Status
+	}
+	return WithdrawalStatus_WITHDRAWAL_STATUS_UNSPECIFIED
+}
+
+func (x *Withdrawal) GetReceipt() *WithdrawalReceipt {
+	if x != nil {
+		return x.Receipt
+	}
+	return nil
 }
 
 // WithdrawalReceipt
@@ -3025,16 +4879,15 @@ type WithdrawalReceipt struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id     uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Txid   []byte `protobuf:"bytes,2,opt,name=txid,proto3" json:"txid,omitempty"`
-	Txout  uint32 `protobuf:"varint,3,opt,name=txout,proto3" json:"txout,omitempty"`
-	Amount uint64 `protobuf:"varint,4,opt,name=amount,proto3" json:"amount,omitempty"`
+	Txid   []byte `protobuf:"bytes,1,opt,name=txid,proto3" json:"txid,omitempty"`
+	Txout  uint32 `protobuf:"varint,2,opt,name=txout,proto3" json:"txout,omitempty"`
+	Amount uint64 `protobuf:"varint,3,opt,name=amount,proto3" json:"amount,omitempty"`
 }
 
 func (x *WithdrawalReceipt) Reset() {
 	*x = WithdrawalReceipt{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_goat_bitcoin_v1_bitcoin_proto_msgTypes[2]
+		mi := &file_goat_bitcoin_v1_bitcoin_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3048,14 +4901,7 @@ func (*WithdrawalReceipt) ProtoMessage() {}
 
 // Deprecated: Use WithdrawalReceipt.ProtoReflect.Descriptor instead.
 func (*WithdrawalReceipt) Descriptor() ([]byte, []int) {
-	return file_goat_bitcoin_v1_bitcoin_proto_rawDescGZIP(), []int{2}
-}
-
-func (x *WithdrawalReceipt) GetId() uint64 {
-	if x != nil {
-		return x.Id
-	}
-	return 0
+	return file_goat_bitcoin_v1_bitcoin_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *WithdrawalReceipt) GetTxid() []byte {
@@ -3079,22 +4925,126 @@ func (x *WithdrawalReceipt) GetAmount() uint64 {
 	return 0
 }
 
+// DepositReceipt
+type DepositExecReceipt struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Txid    []byte `protobuf:"bytes,1,opt,name=txid,proto3" json:"txid,omitempty"`
+	Txout   uint32 `protobuf:"varint,2,opt,name=txout,proto3" json:"txout,omitempty"`
+	Address []byte `protobuf:"bytes,3,opt,name=address,proto3" json:"address,omitempty"`
+	Amount  uint64 `protobuf:"varint,4,opt,name=amount,proto3" json:"amount,omitempty"`
+}
+
+func (x *DepositExecReceipt) Reset() {
+	*x = DepositExecReceipt{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_goat_bitcoin_v1_bitcoin_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DepositExecReceipt) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DepositExecReceipt) ProtoMessage() {}
+
+// Deprecated: Use DepositExecReceipt.ProtoReflect.Descriptor instead.
+func (*DepositExecReceipt) Descriptor() ([]byte, []int) {
+	return file_goat_bitcoin_v1_bitcoin_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *DepositExecReceipt) GetTxid() []byte {
+	if x != nil {
+		return x.Txid
+	}
+	return nil
+}
+
+func (x *DepositExecReceipt) GetTxout() uint32 {
+	if x != nil {
+		return x.Txout
+	}
+	return 0
+}
+
+func (x *DepositExecReceipt) GetAddress() []byte {
+	if x != nil {
+		return x.Address
+	}
+	return nil
+}
+
+func (x *DepositExecReceipt) GetAmount() uint64 {
+	if x != nil {
+		return x.Amount
+	}
+	return 0
+}
+
+// WithdrawalExecReceipt
+type WithdrawalExecReceipt struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id      uint64             `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Receipt *WithdrawalReceipt `protobuf:"bytes,2,opt,name=receipt,proto3" json:"receipt,omitempty"`
+}
+
+func (x *WithdrawalExecReceipt) Reset() {
+	*x = WithdrawalExecReceipt{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_goat_bitcoin_v1_bitcoin_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *WithdrawalExecReceipt) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WithdrawalExecReceipt) ProtoMessage() {}
+
+// Deprecated: Use WithdrawalExecReceipt.ProtoReflect.Descriptor instead.
+func (*WithdrawalExecReceipt) Descriptor() ([]byte, []int) {
+	return file_goat_bitcoin_v1_bitcoin_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *WithdrawalExecReceipt) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *WithdrawalExecReceipt) GetReceipt() *WithdrawalReceipt {
+	if x != nil {
+		return x.Receipt
+	}
+	return nil
+}
+
 // ExecuableQueue
 type ExecuableQueue struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	BlockNumber         uint64               `protobuf:"varint,1,opt,name=block_number,json=blockNumber,proto3" json:"block_number,omitempty"`
-	Deposits            []*DepositReceipt    `protobuf:"bytes,2,rep,name=deposits,proto3" json:"deposits,omitempty"`
-	PaidWithdrawals     []*WithdrawalReceipt `protobuf:"bytes,3,rep,name=paid_withdrawals,json=paidWithdrawals,proto3" json:"paid_withdrawals,omitempty"`
-	RejectedWithdrawals []uint64             `protobuf:"varint,4,rep,packed,name=rejected_withdrawals,json=rejectedWithdrawals,proto3" json:"rejected_withdrawals,omitempty"`
+	BlockNumber         uint64                   `protobuf:"varint,1,opt,name=block_number,json=blockNumber,proto3" json:"block_number,omitempty"`
+	Deposits            []*DepositExecReceipt    `protobuf:"bytes,2,rep,name=deposits,proto3" json:"deposits,omitempty"`
+	PaidWithdrawals     []*WithdrawalExecReceipt `protobuf:"bytes,3,rep,name=paid_withdrawals,json=paidWithdrawals,proto3" json:"paid_withdrawals,omitempty"`
+	RejectedWithdrawals []uint64                 `protobuf:"varint,4,rep,packed,name=rejected_withdrawals,json=rejectedWithdrawals,proto3" json:"rejected_withdrawals,omitempty"`
 }
 
 func (x *ExecuableQueue) Reset() {
 	*x = ExecuableQueue{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_goat_bitcoin_v1_bitcoin_proto_msgTypes[3]
+		mi := &file_goat_bitcoin_v1_bitcoin_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3108,7 +5058,7 @@ func (*ExecuableQueue) ProtoMessage() {}
 
 // Deprecated: Use ExecuableQueue.ProtoReflect.Descriptor instead.
 func (*ExecuableQueue) Descriptor() ([]byte, []int) {
-	return file_goat_bitcoin_v1_bitcoin_proto_rawDescGZIP(), []int{3}
+	return file_goat_bitcoin_v1_bitcoin_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *ExecuableQueue) GetBlockNumber() uint64 {
@@ -3118,14 +5068,14 @@ func (x *ExecuableQueue) GetBlockNumber() uint64 {
 	return 0
 }
 
-func (x *ExecuableQueue) GetDeposits() []*DepositReceipt {
+func (x *ExecuableQueue) GetDeposits() []*DepositExecReceipt {
 	if x != nil {
 		return x.Deposits
 	}
 	return nil
 }
 
-func (x *ExecuableQueue) GetPaidWithdrawals() []*WithdrawalReceipt {
+func (x *ExecuableQueue) GetPaidWithdrawals() []*WithdrawalExecReceipt {
 	if x != nil {
 		return x.PaidWithdrawals
 	}
@@ -3146,68 +5096,111 @@ var file_goat_bitcoin_v1_bitcoin_proto_rawDesc = []byte{
 	0x31, 0x2f, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12,
 	0x0f, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31,
 	0x1a, 0x1d, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x2f, 0x76,
-	0x31, 0x2f, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22,
-	0xbb, 0x02, 0x0a, 0x07, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x76,
-	0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x07, 0x76, 0x65,
-	0x72, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x21, 0x0a, 0x0c, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x6e,
-	0x75, 0x6d, 0x62, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0b, 0x62, 0x6c, 0x6f,
-	0x63, 0x6b, 0x4e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x12, 0x19, 0x0a, 0x08, 0x74, 0x78, 0x5f, 0x69,
-	0x6e, 0x64, 0x65, 0x78, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x07, 0x74, 0x78, 0x49, 0x6e,
-	0x64, 0x65, 0x78, 0x12, 0x22, 0x0a, 0x0d, 0x6e, 0x6f, 0x5f, 0x77, 0x69, 0x74, 0x6e, 0x65, 0x73,
-	0x73, 0x5f, 0x74, 0x78, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0b, 0x6e, 0x6f, 0x57, 0x69,
-	0x74, 0x6e, 0x65, 0x73, 0x73, 0x54, 0x78, 0x12, 0x21, 0x0a, 0x0c, 0x6f, 0x75, 0x74, 0x70, 0x75,
-	0x74, 0x5f, 0x69, 0x6e, 0x64, 0x65, 0x78, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x0b, 0x6f,
-	0x75, 0x74, 0x70, 0x75, 0x74, 0x49, 0x6e, 0x64, 0x65, 0x78, 0x12, 0x2d, 0x0a, 0x12, 0x69, 0x6e,
-	0x74, 0x65, 0x72, 0x6d, 0x65, 0x64, 0x69, 0x61, 0x74, 0x65, 0x5f, 0x70, 0x72, 0x6f, 0x6f, 0x66,
-	0x18, 0x06, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x11, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x6d, 0x65, 0x64,
-	0x69, 0x61, 0x74, 0x65, 0x50, 0x72, 0x6f, 0x6f, 0x66, 0x12, 0x1f, 0x0a, 0x0b, 0x65, 0x76, 0x6d,
-	0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x07, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0a,
-	0x65, 0x76, 0x6d, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x41, 0x0a, 0x0e, 0x72, 0x65,
-	0x6c, 0x61, 0x79, 0x65, 0x72, 0x5f, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x18, 0x08, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65,
-	0x72, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x63, 0x4b, 0x65, 0x79, 0x52, 0x0d,
-	0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x50, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x22, 0x6c, 0x0a,
-	0x0e, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x52, 0x65, 0x63, 0x65, 0x69, 0x70, 0x74, 0x12,
-	0x12, 0x0a, 0x04, 0x74, 0x78, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x74,
-	0x78, 0x69, 0x64, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x78, 0x6f, 0x75, 0x74, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x0d, 0x52, 0x05, 0x74, 0x78, 0x6f, 0x75, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64, 0x64,
-	0x72, 0x65, 0x73, 0x73, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72,
-	0x65, 0x73, 0x73, 0x12, 0x16, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x04, 0x20,
-	0x01, 0x28, 0x04, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0x65, 0x0a, 0x11, 0x57,
-	0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x52, 0x65, 0x63, 0x65, 0x69, 0x70, 0x74,
-	0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64,
-	0x12, 0x12, 0x0a, 0x04, 0x74, 0x78, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04,
-	0x74, 0x78, 0x69, 0x64, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x78, 0x6f, 0x75, 0x74, 0x18, 0x03, 0x20,
-	0x01, 0x28, 0x0d, 0x52, 0x05, 0x74, 0x78, 0x6f, 0x75, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x61, 0x6d,
-	0x6f, 0x75, 0x6e, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75,
-	0x6e, 0x74, 0x22, 0xf2, 0x01, 0x0a, 0x0e, 0x45, 0x78, 0x65, 0x63, 0x75, 0x61, 0x62, 0x6c, 0x65,
-	0x51, 0x75, 0x65, 0x75, 0x65, 0x12, 0x21, 0x0a, 0x0c, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x6e,
-	0x75, 0x6d, 0x62, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0b, 0x62, 0x6c, 0x6f,
-	0x63, 0x6b, 0x4e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x12, 0x3b, 0x0a, 0x08, 0x64, 0x65, 0x70, 0x6f,
-	0x73, 0x69, 0x74, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1f, 0x2e, 0x67, 0x6f, 0x61,
-	0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x70,
-	0x6f, 0x73, 0x69, 0x74, 0x52, 0x65, 0x63, 0x65, 0x69, 0x70, 0x74, 0x52, 0x08, 0x64, 0x65, 0x70,
-	0x6f, 0x73, 0x69, 0x74, 0x73, 0x12, 0x4d, 0x0a, 0x10, 0x70, 0x61, 0x69, 0x64, 0x5f, 0x77, 0x69,
-	0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32,
-	0x22, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76,
-	0x31, 0x2e, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x52, 0x65, 0x63, 0x65,
-	0x69, 0x70, 0x74, 0x52, 0x0f, 0x70, 0x61, 0x69, 0x64, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61,
-	0x77, 0x61, 0x6c, 0x73, 0x12, 0x31, 0x0a, 0x14, 0x72, 0x65, 0x6a, 0x65, 0x63, 0x74, 0x65, 0x64,
-	0x5f, 0x77, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x73, 0x18, 0x04, 0x20, 0x03,
-	0x28, 0x04, 0x52, 0x13, 0x72, 0x65, 0x6a, 0x65, 0x63, 0x74, 0x65, 0x64, 0x57, 0x69, 0x74, 0x68,
-	0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x73, 0x42, 0xbc, 0x01, 0x0a, 0x13, 0x63, 0x6f, 0x6d, 0x2e,
-	0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x42,
-	0x0c, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a,
-	0x39, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x61, 0x74,
-	0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x61, 0x70, 0x69,
-	0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2f, 0x76, 0x31,
-	0x3b, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x47, 0x42, 0x58,
-	0xaa, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x2e, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e,
-	0x56, 0x31, 0xca, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69,
-	0x6e, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x1b, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x42, 0x69, 0x74, 0x63,
-	0x6f, 0x69, 0x6e, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61,
-	0x74, 0x61, 0xea, 0x02, 0x11, 0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x42, 0x69, 0x74, 0x63, 0x6f,
-	0x69, 0x6e, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x31, 0x2f, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a,
+	0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xbb, 0x02, 0x0a, 0x07, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69,
+	0x74, 0x12, 0x18, 0x0a, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x0d, 0x52, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x21, 0x0a, 0x0c, 0x62,
+	0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x6e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x04, 0x52, 0x0b, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x4e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x12, 0x19,
+	0x0a, 0x08, 0x74, 0x78, 0x5f, 0x69, 0x6e, 0x64, 0x65, 0x78, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0d,
+	0x52, 0x07, 0x74, 0x78, 0x49, 0x6e, 0x64, 0x65, 0x78, 0x12, 0x22, 0x0a, 0x0d, 0x6e, 0x6f, 0x5f,
+	0x77, 0x69, 0x74, 0x6e, 0x65, 0x73, 0x73, 0x5f, 0x74, 0x78, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0c,
+	0x52, 0x0b, 0x6e, 0x6f, 0x57, 0x69, 0x74, 0x6e, 0x65, 0x73, 0x73, 0x54, 0x78, 0x12, 0x21, 0x0a,
+	0x0c, 0x6f, 0x75, 0x74, 0x70, 0x75, 0x74, 0x5f, 0x69, 0x6e, 0x64, 0x65, 0x78, 0x18, 0x05, 0x20,
+	0x01, 0x28, 0x0d, 0x52, 0x0b, 0x6f, 0x75, 0x74, 0x70, 0x75, 0x74, 0x49, 0x6e, 0x64, 0x65, 0x78,
+	0x12, 0x2d, 0x0a, 0x12, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x6d, 0x65, 0x64, 0x69, 0x61, 0x74, 0x65,
+	0x5f, 0x70, 0x72, 0x6f, 0x6f, 0x66, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x11, 0x69, 0x6e,
+	0x74, 0x65, 0x72, 0x6d, 0x65, 0x64, 0x69, 0x61, 0x74, 0x65, 0x50, 0x72, 0x6f, 0x6f, 0x66, 0x12,
+	0x1f, 0x0a, 0x0b, 0x65, 0x76, 0x6d, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x07,
+	0x20, 0x01, 0x28, 0x0c, 0x52, 0x0a, 0x65, 0x76, 0x6d, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73,
+	0x12, 0x41, 0x0a, 0x0e, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x5f, 0x70, 0x75, 0x62, 0x6b,
+	0x65, 0x79, 0x18, 0x08, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e,
+	0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x75, 0x62, 0x6c, 0x69,
+	0x63, 0x4b, 0x65, 0x79, 0x52, 0x0d, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x50, 0x75, 0x62,
+	0x6b, 0x65, 0x79, 0x22, 0x63, 0x0a, 0x12, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61,
+	0x6c, 0x50, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x61, 0x6c, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18,
+	0x01, 0x20, 0x03, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x12, 0x22, 0x0a, 0x0d, 0x6e, 0x6f, 0x5f,
+	0x77, 0x69, 0x74, 0x6e, 0x65, 0x73, 0x73, 0x5f, 0x74, 0x78, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0c,
+	0x52, 0x0b, 0x6e, 0x6f, 0x57, 0x69, 0x74, 0x6e, 0x65, 0x73, 0x73, 0x54, 0x78, 0x12, 0x19, 0x0a,
+	0x08, 0x74, 0x78, 0x5f, 0x70, 0x72, 0x69, 0x63, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52,
+	0x07, 0x74, 0x78, 0x50, 0x72, 0x69, 0x63, 0x65, 0x22, 0xe8, 0x01, 0x0a, 0x0a, 0x57, 0x69, 0x74,
+	0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65,
+	0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73,
+	0x73, 0x12, 0x25, 0x0a, 0x0e, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x5f, 0x61, 0x6d, 0x6f,
+	0x75, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0d, 0x72, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x20, 0x0a, 0x0c, 0x6d, 0x61, 0x78, 0x5f,
+	0x74, 0x78, 0x5f, 0x70, 0x72, 0x69, 0x63, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0a,
+	0x6d, 0x61, 0x78, 0x54, 0x78, 0x50, 0x72, 0x69, 0x63, 0x65, 0x12, 0x39, 0x0a, 0x06, 0x73, 0x74,
+	0x61, 0x74, 0x75, 0x73, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x21, 0x2e, 0x67, 0x6f, 0x61,
+	0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x57, 0x69, 0x74,
+	0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73,
+	0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x3c, 0x0a, 0x07, 0x72, 0x65, 0x63, 0x65, 0x69, 0x70, 0x74,
+	0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69,
+	0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61,
+	0x77, 0x61, 0x6c, 0x52, 0x65, 0x63, 0x65, 0x69, 0x70, 0x74, 0x52, 0x07, 0x72, 0x65, 0x63, 0x65,
+	0x69, 0x70, 0x74, 0x22, 0x55, 0x0a, 0x11, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61,
+	0x6c, 0x52, 0x65, 0x63, 0x65, 0x69, 0x70, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x78, 0x69, 0x64,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x74, 0x78, 0x69, 0x64, 0x12, 0x14, 0x0a, 0x05,
+	0x74, 0x78, 0x6f, 0x75, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x05, 0x74, 0x78, 0x6f,
+	0x75, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x04, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0x70, 0x0a, 0x12, 0x44, 0x65,
+	0x70, 0x6f, 0x73, 0x69, 0x74, 0x45, 0x78, 0x65, 0x63, 0x52, 0x65, 0x63, 0x65, 0x69, 0x70, 0x74,
+	0x12, 0x12, 0x0a, 0x04, 0x74, 0x78, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04,
+	0x74, 0x78, 0x69, 0x64, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x78, 0x6f, 0x75, 0x74, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x0d, 0x52, 0x05, 0x74, 0x78, 0x6f, 0x75, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64,
+	0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x07, 0x61, 0x64, 0x64,
+	0x72, 0x65, 0x73, 0x73, 0x12, 0x16, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x04,
+	0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0x65, 0x0a, 0x15,
+	0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x45, 0x78, 0x65, 0x63, 0x52, 0x65,
+	0x63, 0x65, 0x69, 0x70, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x04, 0x52, 0x02, 0x69, 0x64, 0x12, 0x3c, 0x0a, 0x07, 0x72, 0x65, 0x63, 0x65, 0x69, 0x70, 0x74,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69,
+	0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61,
+	0x77, 0x61, 0x6c, 0x52, 0x65, 0x63, 0x65, 0x69, 0x70, 0x74, 0x52, 0x07, 0x72, 0x65, 0x63, 0x65,
+	0x69, 0x70, 0x74, 0x22, 0xfa, 0x01, 0x0a, 0x0e, 0x45, 0x78, 0x65, 0x63, 0x75, 0x61, 0x62, 0x6c,
+	0x65, 0x51, 0x75, 0x65, 0x75, 0x65, 0x12, 0x21, 0x0a, 0x0c, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f,
+	0x6e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0b, 0x62, 0x6c,
+	0x6f, 0x63, 0x6b, 0x4e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x12, 0x3f, 0x0a, 0x08, 0x64, 0x65, 0x70,
+	0x6f, 0x73, 0x69, 0x74, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x67, 0x6f,
+	0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65,
+	0x70, 0x6f, 0x73, 0x69, 0x74, 0x45, 0x78, 0x65, 0x63, 0x52, 0x65, 0x63, 0x65, 0x69, 0x70, 0x74,
+	0x52, 0x08, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x12, 0x51, 0x0a, 0x10, 0x70, 0x61,
+	0x69, 0x64, 0x5f, 0x77, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x73, 0x18, 0x03,
+	0x20, 0x03, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63,
+	0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61,
+	0x6c, 0x45, 0x78, 0x65, 0x63, 0x52, 0x65, 0x63, 0x65, 0x69, 0x70, 0x74, 0x52, 0x0f, 0x70, 0x61,
+	0x69, 0x64, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x73, 0x12, 0x31, 0x0a,
+	0x14, 0x72, 0x65, 0x6a, 0x65, 0x63, 0x74, 0x65, 0x64, 0x5f, 0x77, 0x69, 0x74, 0x68, 0x64, 0x72,
+	0x61, 0x77, 0x61, 0x6c, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x04, 0x52, 0x13, 0x72, 0x65, 0x6a,
+	0x65, 0x63, 0x74, 0x65, 0x64, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x73,
+	0x2a, 0xd9, 0x01, 0x0a, 0x10, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x53,
+	0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x21, 0x0a, 0x1d, 0x57, 0x49, 0x54, 0x48, 0x44, 0x52, 0x41,
+	0x57, 0x41, 0x4c, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45,
+	0x43, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00, 0x12, 0x1d, 0x0a, 0x19, 0x57, 0x49, 0x54, 0x48,
+	0x44, 0x52, 0x41, 0x57, 0x41, 0x4c, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x50, 0x45,
+	0x4e, 0x44, 0x49, 0x4e, 0x47, 0x10, 0x01, 0x12, 0x20, 0x0a, 0x1c, 0x57, 0x49, 0x54, 0x48, 0x44,
+	0x52, 0x41, 0x57, 0x41, 0x4c, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x50, 0x52, 0x4f,
+	0x43, 0x45, 0x53, 0x53, 0x49, 0x4e, 0x47, 0x10, 0x02, 0x12, 0x1f, 0x0a, 0x1b, 0x57, 0x49, 0x54,
+	0x48, 0x44, 0x52, 0x41, 0x57, 0x41, 0x4c, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x43,
+	0x41, 0x4e, 0x43, 0x45, 0x4c, 0x49, 0x4e, 0x47, 0x10, 0x03, 0x12, 0x1e, 0x0a, 0x1a, 0x57, 0x49,
+	0x54, 0x48, 0x44, 0x52, 0x41, 0x57, 0x41, 0x4c, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f,
+	0x43, 0x41, 0x4e, 0x43, 0x45, 0x4c, 0x45, 0x44, 0x10, 0x04, 0x12, 0x1a, 0x0a, 0x16, 0x57, 0x49,
+	0x54, 0x48, 0x44, 0x52, 0x41, 0x57, 0x41, 0x4c, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f,
+	0x50, 0x41, 0x49, 0x44, 0x10, 0x05, 0x1a, 0x04, 0x88, 0xa3, 0x1e, 0x00, 0x42, 0xbc, 0x01, 0x0a,
+	0x13, 0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69,
+	0x6e, 0x2e, 0x76, 0x31, 0x42, 0x0c, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x50, 0x72, 0x6f,
+	0x74, 0x6f, 0x50, 0x01, 0x5a, 0x39, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d,
+	0x2f, 0x67, 0x6f, 0x61, 0x74, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x67, 0x6f, 0x61,
+	0x74, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x62, 0x69, 0x74, 0x63, 0x6f,
+	0x69, 0x6e, 0x2f, 0x76, 0x31, 0x3b, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x76, 0x31, 0xa2,
+	0x02, 0x03, 0x47, 0x42, 0x58, 0xaa, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x2e, 0x42, 0x69, 0x74,
+	0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x42,
+	0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x1b, 0x47, 0x6f, 0x61, 0x74,
+	0x5c, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d,
+	0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x11, 0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a,
+	0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x33,
 }
 
 var (
@@ -3222,23 +5215,31 @@ func file_goat_bitcoin_v1_bitcoin_proto_rawDescGZIP() []byte {
 	return file_goat_bitcoin_v1_bitcoin_proto_rawDescData
 }
 
-var file_goat_bitcoin_v1_bitcoin_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_goat_bitcoin_v1_bitcoin_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_goat_bitcoin_v1_bitcoin_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_goat_bitcoin_v1_bitcoin_proto_goTypes = []interface{}{
-	(*Deposit)(nil),           // 0: goat.bitcoin.v1.Deposit
-	(*DepositReceipt)(nil),    // 1: goat.bitcoin.v1.DepositReceipt
-	(*WithdrawalReceipt)(nil), // 2: goat.bitcoin.v1.WithdrawalReceipt
-	(*ExecuableQueue)(nil),    // 3: goat.bitcoin.v1.ExecuableQueue
-	(*v1.PublicKey)(nil),      // 4: goat.relayer.v1.PublicKey
+	(WithdrawalStatus)(0),         // 0: goat.bitcoin.v1.WithdrawalStatus
+	(*Deposit)(nil),               // 1: goat.bitcoin.v1.Deposit
+	(*WithdrawalProposal)(nil),    // 2: goat.bitcoin.v1.WithdrawalProposal
+	(*Withdrawal)(nil),            // 3: goat.bitcoin.v1.Withdrawal
+	(*WithdrawalReceipt)(nil),     // 4: goat.bitcoin.v1.WithdrawalReceipt
+	(*DepositExecReceipt)(nil),    // 5: goat.bitcoin.v1.DepositExecReceipt
+	(*WithdrawalExecReceipt)(nil), // 6: goat.bitcoin.v1.WithdrawalExecReceipt
+	(*ExecuableQueue)(nil),        // 7: goat.bitcoin.v1.ExecuableQueue
+	(*v1.PublicKey)(nil),          // 8: goat.relayer.v1.PublicKey
 }
 var file_goat_bitcoin_v1_bitcoin_proto_depIdxs = []int32{
-	4, // 0: goat.bitcoin.v1.Deposit.relayer_pubkey:type_name -> goat.relayer.v1.PublicKey
-	1, // 1: goat.bitcoin.v1.ExecuableQueue.deposits:type_name -> goat.bitcoin.v1.DepositReceipt
-	2, // 2: goat.bitcoin.v1.ExecuableQueue.paid_withdrawals:type_name -> goat.bitcoin.v1.WithdrawalReceipt
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	8, // 0: goat.bitcoin.v1.Deposit.relayer_pubkey:type_name -> goat.relayer.v1.PublicKey
+	0, // 1: goat.bitcoin.v1.Withdrawal.status:type_name -> goat.bitcoin.v1.WithdrawalStatus
+	4, // 2: goat.bitcoin.v1.Withdrawal.receipt:type_name -> goat.bitcoin.v1.WithdrawalReceipt
+	4, // 3: goat.bitcoin.v1.WithdrawalExecReceipt.receipt:type_name -> goat.bitcoin.v1.WithdrawalReceipt
+	5, // 4: goat.bitcoin.v1.ExecuableQueue.deposits:type_name -> goat.bitcoin.v1.DepositExecReceipt
+	6, // 5: goat.bitcoin.v1.ExecuableQueue.paid_withdrawals:type_name -> goat.bitcoin.v1.WithdrawalExecReceipt
+	6, // [6:6] is the sub-list for method output_type
+	6, // [6:6] is the sub-list for method input_type
+	6, // [6:6] is the sub-list for extension type_name
+	6, // [6:6] is the sub-list for extension extendee
+	0, // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_goat_bitcoin_v1_bitcoin_proto_init() }
@@ -3260,7 +5261,7 @@ func file_goat_bitcoin_v1_bitcoin_proto_init() {
 			}
 		}
 		file_goat_bitcoin_v1_bitcoin_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DepositReceipt); i {
+			switch v := v.(*WithdrawalProposal); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3272,7 +5273,7 @@ func file_goat_bitcoin_v1_bitcoin_proto_init() {
 			}
 		}
 		file_goat_bitcoin_v1_bitcoin_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*WithdrawalReceipt); i {
+			switch v := v.(*Withdrawal); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3284,6 +5285,42 @@ func file_goat_bitcoin_v1_bitcoin_proto_init() {
 			}
 		}
 		file_goat_bitcoin_v1_bitcoin_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*WithdrawalReceipt); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_goat_bitcoin_v1_bitcoin_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DepositExecReceipt); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_goat_bitcoin_v1_bitcoin_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*WithdrawalExecReceipt); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_goat_bitcoin_v1_bitcoin_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ExecuableQueue); i {
 			case 0:
 				return &v.state
@@ -3301,13 +5338,14 @@ func file_goat_bitcoin_v1_bitcoin_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_goat_bitcoin_v1_bitcoin_proto_rawDesc,
-			NumEnums:      0,
-			NumMessages:   4,
+			NumEnums:      1,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_goat_bitcoin_v1_bitcoin_proto_goTypes,
 		DependencyIndexes: file_goat_bitcoin_v1_bitcoin_proto_depIdxs,
+		EnumInfos:         file_goat_bitcoin_v1_bitcoin_proto_enumTypes,
 		MessageInfos:      file_goat_bitcoin_v1_bitcoin_proto_msgTypes,
 	}.Build()
 	File_goat_bitcoin_v1_bitcoin_proto = out.File
