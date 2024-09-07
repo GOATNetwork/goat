@@ -209,7 +209,7 @@ func (k Keeper) SetProposalSeq(ctx context.Context, seq uint64) error {
 	return k.Sequence.Set(ctx, seq)
 }
 
-func (k Keeper) ElecteProposer(ctx context.Context) error {
+func (k Keeper) ElectProposer(ctx context.Context) error {
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
 
 	relayer, err := k.Relayer.Get(ctx)
