@@ -3,7 +3,6 @@ package keeper
 import (
 	"context"
 	"encoding/hex"
-	"errors"
 	"fmt"
 	"math/big"
 	"slices"
@@ -223,6 +222,11 @@ func (k Keeper) ElecteProposer(ctx context.Context) error {
 		return err
 	}
 
+	if duration := sdkctx.BlockTime().Sub(relayer.LastElected); duration < param.ElectingPeriod &&
+		(relayer.ProposerAccepted || param.AcceptProposerTimeout == 0 || duration < param.AcceptProposerTimeout) {
+		return nil
+	}
+
 	queue, err := k.Queue.Get(ctx)
 	if err != nil {
 		return err
@@ -247,8 +251,9 @@ func (k Keeper) ElecteProposer(ctx context.Context) error {
 		relayer.Voters = append(relayer.Voters, queue.OnBoarding...)
 	}
 
+	var isProposerRemvoed bool
 	if offBoarding {
-		set := make(map[string]bool)
+		delSet := make(map[string]bool, len(queue.OffBoarding))
 		for _, v := range queue.OffBoarding {
 			addr, err := k.AddrCodec.StringToBytes(v)
 			if err != nil {
@@ -257,55 +262,87 @@ func (k Keeper) ElecteProposer(ctx context.Context) error {
 			if err := k.Voters.Remove(ctx, addr); err != nil {
 				return err
 			}
-			set[v] = true
+			delSet[v] = true
 		}
 
+		isProposerRemvoed = delSet[relayer.Proposer]
 		voters := slices.DeleteFunc(append([]string{relayer.Proposer}, relayer.Voters...), func(e string) bool {
-			return set[e]
+			return delSet[e]
 		})
 
 		if len(voters) == 0 { // it should never happen
-			return errors.New("Too few voters avaliable")
+			k.Logger().Error("too few voters avaliable to remove")
+			return nil
 		}
 
 		relayer.Proposer = voters[0]
 		relayer.Voters = voters[1:]
 	}
 
+	relayer.Epoch++
+
+	var events = sdktypes.Events{types.NewEpochEvent(relayer.Epoch)}
 	if offBoarding || onBoarding {
+		events = append(events, types.VoterChangedEvent(relayer.Epoch, queue.OnBoarding, queue.OffBoarding)...)
+
 		queue.OnBoarding = queue.OnBoarding[:0]
 		queue.OffBoarding = queue.OffBoarding[:0]
 		if err := k.Queue.Set(ctx, queue); err != nil {
 			return err
 		}
+
+		// if the proposer is removed, we don't make a election, just use the next voter as the new proposer
+		if isProposerRemvoed {
+			relayer.LastElected = sdkctx.BlockTime()
+			relayer.ProposerAccepted = false
+
+			k.Logger().Debug("New proposer", "height", sdkctx.BlockHeight(), "proposer", relayer.Proposer)
+			if err := k.Relayer.Set(ctx, relayer); err != nil {
+				return err
+			}
+
+			sdkctx.EventManager().EmitEvents(
+				append(events, types.ElectedProposerEvent(relayer.Proposer, relayer.Epoch)),
+			)
+			return nil
+		}
 	}
 
-	blockTime := sdkctx.BlockTime()
-	vlen, duration := int64(len(relayer.Voters)), blockTime.Sub(relayer.LastElected)
-	acceptTimeout := param.AcceptProposerTimeout > 0 && duration > param.AcceptProposerTimeout
-	if vlen > 0 && (duration > param.ElectingPeriod || acceptTimeout) {
+	voterLen := len(relayer.Voters)
+	// no voter no election
+	if voterLen == 0 {
+		sdkctx.EventManager().EmitEvents(events)
+		if err := k.Relayer.Set(ctx, relayer); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	// only get hash when we have 2 voters at least
+	if voterLen > 1 {
 		randao, err := k.Randao.Get(ctx)
 		if err != nil {
 			return err
 		}
-
-		relayer.Epoch++
-
 		// hash with the current epoch to ensure always have a new randao value
-		curRand := new(big.Int).SetBytes(goatcrypto.SHA256Sum(randao, goatcrypto.Uint64LE(relayer.Epoch)))
-		proposerIndex := curRand.Mod(curRand, big.NewInt(vlen)).Int64()
-
+		rand := new(big.Int).SetBytes(goatcrypto.SHA256Sum(randao, goatcrypto.Uint64LE(relayer.Epoch)))
+		proposerIndex := rand.Mod(rand, big.NewInt(int64(voterLen))).Int64()
 		relayer.Proposer, relayer.Voters[proposerIndex] = relayer.Voters[proposerIndex], relayer.Proposer
-		relayer.LastElected = blockTime
-		relayer.ProposerAccepted = false
-
-		k.Logger().Debug("New proposer", "height", sdkctx.BlockHeight(), "proposer", relayer.Proposer)
-		if err := k.Relayer.Set(ctx, relayer); err != nil {
-			return err
-		}
-		sdkctx.EventManager().EmitEvent(types.ElectedProposerEvent(relayer.Proposer, relayer.Epoch))
+	} else {
+		relayer.Proposer, relayer.Voters[0] = relayer.Voters[0], relayer.Proposer
 	}
 
+	relayer.LastElected = sdkctx.BlockTime()
+	relayer.ProposerAccepted = false
+
+	k.Logger().Debug("New proposer", "height", sdkctx.BlockHeight(), "proposer", relayer.Proposer)
+	if err := k.Relayer.Set(ctx, relayer); err != nil {
+		return err
+	}
+
+	sdkctx.EventManager().EmitEvents(
+		append(events, types.ElectedProposerEvent(relayer.Proposer, relayer.Epoch)),
+	)
 	return nil
 }
 

@@ -15,8 +15,16 @@ const (
 	EventVoterOnBoarding   = "voter_on_boarding"
 	EventVoterBoarded      = "voter_boarded"
 	EventVoterOffBoarding  = "voter_off_boarding"
+	EventVoterActivated    = "voter_activated"
 	EventVoterDischarged   = "voter_discharged"
 )
+
+func NewEpochEvent(epoch uint64) sdktypes.Event {
+	return sdktypes.NewEvent(
+		EventTypeNewEpoch,
+		sdktypes.NewAttribute("epoch", strconv.FormatUint(epoch, 10)),
+	)
+}
 
 func FinalizedProposalEvent(sequence uint64) sdktypes.Event {
 	return sdktypes.NewEvent(
@@ -39,6 +47,26 @@ func ElectedProposerEvent(proposer string, epoch uint64) sdktypes.Event {
 		sdktypes.NewAttribute("epoch", strconv.FormatUint(epoch, 10)),
 		sdktypes.NewAttribute("proposer", proposer),
 	)
+}
+
+func VoterChangedEvent(epoch uint64, added, removed []string) sdktypes.Events {
+	events := make(sdktypes.Events, 0, len(added)+len(removed)+1) // +1 for EventElectedProposer
+
+	for _, v := range added {
+		events = append(events, sdktypes.NewEvent(
+			EventVoterActivated,
+			sdktypes.NewAttribute("voter", v),
+		))
+	}
+
+	for _, v := range added {
+		events = append(events, sdktypes.NewEvent(
+			EventVoterDischarged,
+			sdktypes.NewAttribute("voter", v),
+		))
+	}
+
+	return events
 }
 
 func AcceptedProposerEvent(proposer string, epoch uint64) sdktypes.Event {
