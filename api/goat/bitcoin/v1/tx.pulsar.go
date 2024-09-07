@@ -3185,29 +3185,29 @@ func (x *fastReflection_MsgNewPubkeyResponse) ProtoMethods() *protoiface.Methods
 }
 
 var (
-	md_MsgNewWithdrawal          protoreflect.MessageDescriptor
-	fd_MsgNewWithdrawal_proposer protoreflect.FieldDescriptor
-	fd_MsgNewWithdrawal_vote     protoreflect.FieldDescriptor
-	fd_MsgNewWithdrawal_proposal protoreflect.FieldDescriptor
+	md_MsgInitializeWithdrawal          protoreflect.MessageDescriptor
+	fd_MsgInitializeWithdrawal_proposer protoreflect.FieldDescriptor
+	fd_MsgInitializeWithdrawal_vote     protoreflect.FieldDescriptor
+	fd_MsgInitializeWithdrawal_proposal protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_goat_bitcoin_v1_tx_proto_init()
-	md_MsgNewWithdrawal = File_goat_bitcoin_v1_tx_proto.Messages().ByName("MsgNewWithdrawal")
-	fd_MsgNewWithdrawal_proposer = md_MsgNewWithdrawal.Fields().ByName("proposer")
-	fd_MsgNewWithdrawal_vote = md_MsgNewWithdrawal.Fields().ByName("vote")
-	fd_MsgNewWithdrawal_proposal = md_MsgNewWithdrawal.Fields().ByName("proposal")
+	md_MsgInitializeWithdrawal = File_goat_bitcoin_v1_tx_proto.Messages().ByName("MsgInitializeWithdrawal")
+	fd_MsgInitializeWithdrawal_proposer = md_MsgInitializeWithdrawal.Fields().ByName("proposer")
+	fd_MsgInitializeWithdrawal_vote = md_MsgInitializeWithdrawal.Fields().ByName("vote")
+	fd_MsgInitializeWithdrawal_proposal = md_MsgInitializeWithdrawal.Fields().ByName("proposal")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgNewWithdrawal)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgInitializeWithdrawal)(nil)
 
-type fastReflection_MsgNewWithdrawal MsgNewWithdrawal
+type fastReflection_MsgInitializeWithdrawal MsgInitializeWithdrawal
 
-func (x *MsgNewWithdrawal) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgNewWithdrawal)(x)
+func (x *MsgInitializeWithdrawal) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgInitializeWithdrawal)(x)
 }
 
-func (x *MsgNewWithdrawal) slowProtoReflect() protoreflect.Message {
+func (x *MsgInitializeWithdrawal) slowProtoReflect() protoreflect.Message {
 	mi := &file_goat_bitcoin_v1_tx_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3219,43 +3219,43 @@ func (x *MsgNewWithdrawal) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgNewWithdrawal_messageType fastReflection_MsgNewWithdrawal_messageType
-var _ protoreflect.MessageType = fastReflection_MsgNewWithdrawal_messageType{}
+var _fastReflection_MsgInitializeWithdrawal_messageType fastReflection_MsgInitializeWithdrawal_messageType
+var _ protoreflect.MessageType = fastReflection_MsgInitializeWithdrawal_messageType{}
 
-type fastReflection_MsgNewWithdrawal_messageType struct{}
+type fastReflection_MsgInitializeWithdrawal_messageType struct{}
 
-func (x fastReflection_MsgNewWithdrawal_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgNewWithdrawal)(nil)
+func (x fastReflection_MsgInitializeWithdrawal_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgInitializeWithdrawal)(nil)
 }
-func (x fastReflection_MsgNewWithdrawal_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgNewWithdrawal)
+func (x fastReflection_MsgInitializeWithdrawal_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgInitializeWithdrawal)
 }
-func (x fastReflection_MsgNewWithdrawal_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgNewWithdrawal
+func (x fastReflection_MsgInitializeWithdrawal_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgInitializeWithdrawal
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgNewWithdrawal) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgNewWithdrawal
+func (x *fastReflection_MsgInitializeWithdrawal) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgInitializeWithdrawal
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgNewWithdrawal) Type() protoreflect.MessageType {
-	return _fastReflection_MsgNewWithdrawal_messageType
+func (x *fastReflection_MsgInitializeWithdrawal) Type() protoreflect.MessageType {
+	return _fastReflection_MsgInitializeWithdrawal_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgNewWithdrawal) New() protoreflect.Message {
-	return new(fastReflection_MsgNewWithdrawal)
+func (x *fastReflection_MsgInitializeWithdrawal) New() protoreflect.Message {
+	return new(fastReflection_MsgInitializeWithdrawal)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgNewWithdrawal) Interface() protoreflect.ProtoMessage {
-	return (*MsgNewWithdrawal)(x)
+func (x *fastReflection_MsgInitializeWithdrawal) Interface() protoreflect.ProtoMessage {
+	return (*MsgInitializeWithdrawal)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -3263,22 +3263,22 @@ func (x *fastReflection_MsgNewWithdrawal) Interface() protoreflect.ProtoMessage 
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgNewWithdrawal) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgInitializeWithdrawal) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Proposer != "" {
 		value := protoreflect.ValueOfString(x.Proposer)
-		if !f(fd_MsgNewWithdrawal_proposer, value) {
+		if !f(fd_MsgInitializeWithdrawal_proposer, value) {
 			return
 		}
 	}
 	if x.Vote != nil {
 		value := protoreflect.ValueOfMessage(x.Vote.ProtoReflect())
-		if !f(fd_MsgNewWithdrawal_vote, value) {
+		if !f(fd_MsgInitializeWithdrawal_vote, value) {
 			return
 		}
 	}
 	if x.Proposal != nil {
 		value := protoreflect.ValueOfMessage(x.Proposal.ProtoReflect())
-		if !f(fd_MsgNewWithdrawal_proposal, value) {
+		if !f(fd_MsgInitializeWithdrawal_proposal, value) {
 			return
 		}
 	}
@@ -3295,19 +3295,19 @@ func (x *fastReflection_MsgNewWithdrawal) Range(f func(protoreflect.FieldDescrip
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgNewWithdrawal) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgInitializeWithdrawal) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "goat.bitcoin.v1.MsgNewWithdrawal.proposer":
+	case "goat.bitcoin.v1.MsgInitializeWithdrawal.proposer":
 		return x.Proposer != ""
-	case "goat.bitcoin.v1.MsgNewWithdrawal.vote":
+	case "goat.bitcoin.v1.MsgInitializeWithdrawal.vote":
 		return x.Vote != nil
-	case "goat.bitcoin.v1.MsgNewWithdrawal.proposal":
+	case "goat.bitcoin.v1.MsgInitializeWithdrawal.proposal":
 		return x.Proposal != nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewWithdrawal"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgInitializeWithdrawal"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewWithdrawal does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgInitializeWithdrawal does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -3317,19 +3317,19 @@ func (x *fastReflection_MsgNewWithdrawal) Has(fd protoreflect.FieldDescriptor) b
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgNewWithdrawal) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgInitializeWithdrawal) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "goat.bitcoin.v1.MsgNewWithdrawal.proposer":
+	case "goat.bitcoin.v1.MsgInitializeWithdrawal.proposer":
 		x.Proposer = ""
-	case "goat.bitcoin.v1.MsgNewWithdrawal.vote":
+	case "goat.bitcoin.v1.MsgInitializeWithdrawal.vote":
 		x.Vote = nil
-	case "goat.bitcoin.v1.MsgNewWithdrawal.proposal":
+	case "goat.bitcoin.v1.MsgInitializeWithdrawal.proposal":
 		x.Proposal = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewWithdrawal"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgInitializeWithdrawal"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewWithdrawal does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgInitializeWithdrawal does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -3339,22 +3339,22 @@ func (x *fastReflection_MsgNewWithdrawal) Clear(fd protoreflect.FieldDescriptor)
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgNewWithdrawal) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgInitializeWithdrawal) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "goat.bitcoin.v1.MsgNewWithdrawal.proposer":
+	case "goat.bitcoin.v1.MsgInitializeWithdrawal.proposer":
 		value := x.Proposer
 		return protoreflect.ValueOfString(value)
-	case "goat.bitcoin.v1.MsgNewWithdrawal.vote":
+	case "goat.bitcoin.v1.MsgInitializeWithdrawal.vote":
 		value := x.Vote
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "goat.bitcoin.v1.MsgNewWithdrawal.proposal":
+	case "goat.bitcoin.v1.MsgInitializeWithdrawal.proposal":
 		value := x.Proposal
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewWithdrawal"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgInitializeWithdrawal"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewWithdrawal does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgInitializeWithdrawal does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -3368,19 +3368,19 @@ func (x *fastReflection_MsgNewWithdrawal) Get(descriptor protoreflect.FieldDescr
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgNewWithdrawal) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgInitializeWithdrawal) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "goat.bitcoin.v1.MsgNewWithdrawal.proposer":
+	case "goat.bitcoin.v1.MsgInitializeWithdrawal.proposer":
 		x.Proposer = value.Interface().(string)
-	case "goat.bitcoin.v1.MsgNewWithdrawal.vote":
+	case "goat.bitcoin.v1.MsgInitializeWithdrawal.vote":
 		x.Vote = value.Message().Interface().(*v1.Votes)
-	case "goat.bitcoin.v1.MsgNewWithdrawal.proposal":
+	case "goat.bitcoin.v1.MsgInitializeWithdrawal.proposal":
 		x.Proposal = value.Message().Interface().(*WithdrawalProposal)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewWithdrawal"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgInitializeWithdrawal"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewWithdrawal does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgInitializeWithdrawal does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -3394,56 +3394,56 @@ func (x *fastReflection_MsgNewWithdrawal) Set(fd protoreflect.FieldDescriptor, v
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgNewWithdrawal) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgInitializeWithdrawal) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "goat.bitcoin.v1.MsgNewWithdrawal.vote":
+	case "goat.bitcoin.v1.MsgInitializeWithdrawal.vote":
 		if x.Vote == nil {
 			x.Vote = new(v1.Votes)
 		}
 		return protoreflect.ValueOfMessage(x.Vote.ProtoReflect())
-	case "goat.bitcoin.v1.MsgNewWithdrawal.proposal":
+	case "goat.bitcoin.v1.MsgInitializeWithdrawal.proposal":
 		if x.Proposal == nil {
 			x.Proposal = new(WithdrawalProposal)
 		}
 		return protoreflect.ValueOfMessage(x.Proposal.ProtoReflect())
-	case "goat.bitcoin.v1.MsgNewWithdrawal.proposer":
-		panic(fmt.Errorf("field proposer of message goat.bitcoin.v1.MsgNewWithdrawal is not mutable"))
+	case "goat.bitcoin.v1.MsgInitializeWithdrawal.proposer":
+		panic(fmt.Errorf("field proposer of message goat.bitcoin.v1.MsgInitializeWithdrawal is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewWithdrawal"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgInitializeWithdrawal"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewWithdrawal does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgInitializeWithdrawal does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgNewWithdrawal) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgInitializeWithdrawal) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "goat.bitcoin.v1.MsgNewWithdrawal.proposer":
+	case "goat.bitcoin.v1.MsgInitializeWithdrawal.proposer":
 		return protoreflect.ValueOfString("")
-	case "goat.bitcoin.v1.MsgNewWithdrawal.vote":
+	case "goat.bitcoin.v1.MsgInitializeWithdrawal.vote":
 		m := new(v1.Votes)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "goat.bitcoin.v1.MsgNewWithdrawal.proposal":
+	case "goat.bitcoin.v1.MsgInitializeWithdrawal.proposal":
 		m := new(WithdrawalProposal)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewWithdrawal"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgInitializeWithdrawal"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewWithdrawal does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgInitializeWithdrawal does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgNewWithdrawal) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgInitializeWithdrawal) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in goat.bitcoin.v1.MsgNewWithdrawal", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in goat.bitcoin.v1.MsgInitializeWithdrawal", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -3451,7 +3451,7 @@ func (x *fastReflection_MsgNewWithdrawal) WhichOneof(d protoreflect.OneofDescrip
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgNewWithdrawal) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgInitializeWithdrawal) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -3462,7 +3462,7 @@ func (x *fastReflection_MsgNewWithdrawal) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgNewWithdrawal) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgInitializeWithdrawal) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -3474,7 +3474,7 @@ func (x *fastReflection_MsgNewWithdrawal) SetUnknown(fields protoreflect.RawFiel
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgNewWithdrawal) IsValid() bool {
+func (x *fastReflection_MsgInitializeWithdrawal) IsValid() bool {
 	return x != nil
 }
 
@@ -3484,9 +3484,9 @@ func (x *fastReflection_MsgNewWithdrawal) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgNewWithdrawal) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgInitializeWithdrawal) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgNewWithdrawal)
+		x := input.Message.Interface().(*MsgInitializeWithdrawal)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -3520,7 +3520,7 @@ func (x *fastReflection_MsgNewWithdrawal) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgNewWithdrawal)
+		x := input.Message.Interface().(*MsgInitializeWithdrawal)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -3585,7 +3585,7 @@ func (x *fastReflection_MsgNewWithdrawal) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgNewWithdrawal)
+		x := input.Message.Interface().(*MsgInitializeWithdrawal)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -3617,10 +3617,10 @@ func (x *fastReflection_MsgNewWithdrawal) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgNewWithdrawal: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgInitializeWithdrawal: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgNewWithdrawal: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgInitializeWithdrawal: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -3763,23 +3763,23 @@ func (x *fastReflection_MsgNewWithdrawal) ProtoMethods() *protoiface.Methods {
 }
 
 var (
-	md_MsgNewWithdrawalResponse protoreflect.MessageDescriptor
+	md_MsgInitializeWithdrawalResponse protoreflect.MessageDescriptor
 )
 
 func init() {
 	file_goat_bitcoin_v1_tx_proto_init()
-	md_MsgNewWithdrawalResponse = File_goat_bitcoin_v1_tx_proto.Messages().ByName("MsgNewWithdrawalResponse")
+	md_MsgInitializeWithdrawalResponse = File_goat_bitcoin_v1_tx_proto.Messages().ByName("MsgInitializeWithdrawalResponse")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgNewWithdrawalResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgInitializeWithdrawalResponse)(nil)
 
-type fastReflection_MsgNewWithdrawalResponse MsgNewWithdrawalResponse
+type fastReflection_MsgInitializeWithdrawalResponse MsgInitializeWithdrawalResponse
 
-func (x *MsgNewWithdrawalResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgNewWithdrawalResponse)(x)
+func (x *MsgInitializeWithdrawalResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgInitializeWithdrawalResponse)(x)
 }
 
-func (x *MsgNewWithdrawalResponse) slowProtoReflect() protoreflect.Message {
+func (x *MsgInitializeWithdrawalResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_goat_bitcoin_v1_tx_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3791,43 +3791,43 @@ func (x *MsgNewWithdrawalResponse) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgNewWithdrawalResponse_messageType fastReflection_MsgNewWithdrawalResponse_messageType
-var _ protoreflect.MessageType = fastReflection_MsgNewWithdrawalResponse_messageType{}
+var _fastReflection_MsgInitializeWithdrawalResponse_messageType fastReflection_MsgInitializeWithdrawalResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgInitializeWithdrawalResponse_messageType{}
 
-type fastReflection_MsgNewWithdrawalResponse_messageType struct{}
+type fastReflection_MsgInitializeWithdrawalResponse_messageType struct{}
 
-func (x fastReflection_MsgNewWithdrawalResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgNewWithdrawalResponse)(nil)
+func (x fastReflection_MsgInitializeWithdrawalResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgInitializeWithdrawalResponse)(nil)
 }
-func (x fastReflection_MsgNewWithdrawalResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgNewWithdrawalResponse)
+func (x fastReflection_MsgInitializeWithdrawalResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgInitializeWithdrawalResponse)
 }
-func (x fastReflection_MsgNewWithdrawalResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgNewWithdrawalResponse
+func (x fastReflection_MsgInitializeWithdrawalResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgInitializeWithdrawalResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgNewWithdrawalResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgNewWithdrawalResponse
+func (x *fastReflection_MsgInitializeWithdrawalResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgInitializeWithdrawalResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgNewWithdrawalResponse) Type() protoreflect.MessageType {
-	return _fastReflection_MsgNewWithdrawalResponse_messageType
+func (x *fastReflection_MsgInitializeWithdrawalResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgInitializeWithdrawalResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgNewWithdrawalResponse) New() protoreflect.Message {
-	return new(fastReflection_MsgNewWithdrawalResponse)
+func (x *fastReflection_MsgInitializeWithdrawalResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgInitializeWithdrawalResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgNewWithdrawalResponse) Interface() protoreflect.ProtoMessage {
-	return (*MsgNewWithdrawalResponse)(x)
+func (x *fastReflection_MsgInitializeWithdrawalResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgInitializeWithdrawalResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -3835,7 +3835,7 @@ func (x *fastReflection_MsgNewWithdrawalResponse) Interface() protoreflect.Proto
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgNewWithdrawalResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgInitializeWithdrawalResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 }
 
 // Has reports whether a field is populated.
@@ -3849,13 +3849,13 @@ func (x *fastReflection_MsgNewWithdrawalResponse) Range(f func(protoreflect.Fiel
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgNewWithdrawalResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgInitializeWithdrawalResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewWithdrawalResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgInitializeWithdrawalResponse"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewWithdrawalResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgInitializeWithdrawalResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -3865,13 +3865,13 @@ func (x *fastReflection_MsgNewWithdrawalResponse) Has(fd protoreflect.FieldDescr
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgNewWithdrawalResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgInitializeWithdrawalResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewWithdrawalResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgInitializeWithdrawalResponse"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewWithdrawalResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgInitializeWithdrawalResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -3881,13 +3881,13 @@ func (x *fastReflection_MsgNewWithdrawalResponse) Clear(fd protoreflect.FieldDes
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgNewWithdrawalResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgInitializeWithdrawalResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewWithdrawalResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgInitializeWithdrawalResponse"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewWithdrawalResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgInitializeWithdrawalResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -3901,13 +3901,13 @@ func (x *fastReflection_MsgNewWithdrawalResponse) Get(descriptor protoreflect.Fi
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgNewWithdrawalResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgInitializeWithdrawalResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewWithdrawalResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgInitializeWithdrawalResponse"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewWithdrawalResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgInitializeWithdrawalResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -3921,36 +3921,36 @@ func (x *fastReflection_MsgNewWithdrawalResponse) Set(fd protoreflect.FieldDescr
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgNewWithdrawalResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgInitializeWithdrawalResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewWithdrawalResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgInitializeWithdrawalResponse"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewWithdrawalResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgInitializeWithdrawalResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgNewWithdrawalResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgInitializeWithdrawalResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewWithdrawalResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgInitializeWithdrawalResponse"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewWithdrawalResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgInitializeWithdrawalResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgNewWithdrawalResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgInitializeWithdrawalResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in goat.bitcoin.v1.MsgNewWithdrawalResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in goat.bitcoin.v1.MsgInitializeWithdrawalResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -3958,7 +3958,7 @@ func (x *fastReflection_MsgNewWithdrawalResponse) WhichOneof(d protoreflect.Oneo
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgNewWithdrawalResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgInitializeWithdrawalResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -3969,7 +3969,7 @@ func (x *fastReflection_MsgNewWithdrawalResponse) GetUnknown() protoreflect.RawF
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgNewWithdrawalResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgInitializeWithdrawalResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -3981,7 +3981,7 @@ func (x *fastReflection_MsgNewWithdrawalResponse) SetUnknown(fields protoreflect
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgNewWithdrawalResponse) IsValid() bool {
+func (x *fastReflection_MsgInitializeWithdrawalResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -3991,9 +3991,9 @@ func (x *fastReflection_MsgNewWithdrawalResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgNewWithdrawalResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgInitializeWithdrawalResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgNewWithdrawalResponse)
+		x := input.Message.Interface().(*MsgInitializeWithdrawalResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -4015,7 +4015,7 @@ func (x *fastReflection_MsgNewWithdrawalResponse) ProtoMethods() *protoiface.Met
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgNewWithdrawalResponse)
+		x := input.Message.Interface().(*MsgInitializeWithdrawalResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -4045,7 +4045,7 @@ func (x *fastReflection_MsgNewWithdrawalResponse) ProtoMethods() *protoiface.Met
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgNewWithdrawalResponse)
+		x := input.Message.Interface().(*MsgInitializeWithdrawalResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -4077,10 +4077,10 @@ func (x *fastReflection_MsgNewWithdrawalResponse) ProtoMethods() *protoiface.Met
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgNewWithdrawalResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgInitializeWithdrawalResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgNewWithdrawalResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgInitializeWithdrawalResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			default:
@@ -6406,7 +6406,7 @@ func (*MsgNewPubkeyResponse) Descriptor() ([]byte, []int) {
 }
 
 // MsgNewWithdrawal
-type MsgNewWithdrawal struct {
+type MsgInitializeWithdrawal struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -6416,8 +6416,8 @@ type MsgNewWithdrawal struct {
 	Proposal *WithdrawalProposal `protobuf:"bytes,3,opt,name=proposal,proto3" json:"proposal,omitempty"`
 }
 
-func (x *MsgNewWithdrawal) Reset() {
-	*x = MsgNewWithdrawal{}
+func (x *MsgInitializeWithdrawal) Reset() {
+	*x = MsgInitializeWithdrawal{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_goat_bitcoin_v1_tx_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -6425,32 +6425,32 @@ func (x *MsgNewWithdrawal) Reset() {
 	}
 }
 
-func (x *MsgNewWithdrawal) String() string {
+func (x *MsgInitializeWithdrawal) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgNewWithdrawal) ProtoMessage() {}
+func (*MsgInitializeWithdrawal) ProtoMessage() {}
 
-// Deprecated: Use MsgNewWithdrawal.ProtoReflect.Descriptor instead.
-func (*MsgNewWithdrawal) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgInitializeWithdrawal.ProtoReflect.Descriptor instead.
+func (*MsgInitializeWithdrawal) Descriptor() ([]byte, []int) {
 	return file_goat_bitcoin_v1_tx_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *MsgNewWithdrawal) GetProposer() string {
+func (x *MsgInitializeWithdrawal) GetProposer() string {
 	if x != nil {
 		return x.Proposer
 	}
 	return ""
 }
 
-func (x *MsgNewWithdrawal) GetVote() *v1.Votes {
+func (x *MsgInitializeWithdrawal) GetVote() *v1.Votes {
 	if x != nil {
 		return x.Vote
 	}
 	return nil
 }
 
-func (x *MsgNewWithdrawal) GetProposal() *WithdrawalProposal {
+func (x *MsgInitializeWithdrawal) GetProposal() *WithdrawalProposal {
 	if x != nil {
 		return x.Proposal
 	}
@@ -6458,14 +6458,14 @@ func (x *MsgNewWithdrawal) GetProposal() *WithdrawalProposal {
 }
 
 // MsgNewWithdrawalResponse
-type MsgNewWithdrawalResponse struct {
+type MsgInitializeWithdrawalResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *MsgNewWithdrawalResponse) Reset() {
-	*x = MsgNewWithdrawalResponse{}
+func (x *MsgInitializeWithdrawalResponse) Reset() {
+	*x = MsgInitializeWithdrawalResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_goat_bitcoin_v1_tx_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -6473,14 +6473,14 @@ func (x *MsgNewWithdrawalResponse) Reset() {
 	}
 }
 
-func (x *MsgNewWithdrawalResponse) String() string {
+func (x *MsgInitializeWithdrawalResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgNewWithdrawalResponse) ProtoMessage() {}
+func (*MsgInitializeWithdrawalResponse) ProtoMessage() {}
 
-// Deprecated: Use MsgNewWithdrawalResponse.ProtoReflect.Descriptor instead.
-func (*MsgNewWithdrawalResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgInitializeWithdrawalResponse.ProtoReflect.Descriptor instead.
+func (*MsgInitializeWithdrawalResponse) Descriptor() ([]byte, []int) {
 	return file_goat_bitcoin_v1_tx_proto_rawDescGZIP(), []int{7}
 }
 
@@ -6731,106 +6731,108 @@ var file_goat_bitcoin_v1_tx_proto_rawDesc = []byte{
 	0xe7, 0xb0, 0x2a, 0x1b, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x78, 0x2f, 0x62, 0x69, 0x74, 0x63, 0x6f,
 	0x69, 0x6e, 0x2f, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x50, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x22,
 	0x16, 0x0a, 0x14, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x50, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xe8, 0x01, 0x0a, 0x10, 0x4d, 0x73, 0x67, 0x4e,
-	0x65, 0x77, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x12, 0x34, 0x0a, 0x08,
-	0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18,
-	0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65,
-	0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73,
-	0x65, 0x72, 0x12, 0x2a, 0x0a, 0x04, 0x76, 0x6f, 0x74, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x16, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x2e,
-	0x76, 0x31, 0x2e, 0x56, 0x6f, 0x74, 0x65, 0x73, 0x52, 0x04, 0x76, 0x6f, 0x74, 0x65, 0x12, 0x3f,
-	0x0a, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x61, 0x6c, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x23, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e,
-	0x76, 0x31, 0x2e, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x50, 0x72, 0x6f,
-	0x70, 0x6f, 0x73, 0x61, 0x6c, 0x52, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x61, 0x6c, 0x3a,
-	0x31, 0x82, 0xe7, 0xb0, 0x2a, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x8a, 0xe7,
-	0xb0, 0x2a, 0x1f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x78, 0x2f, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69,
-	0x6e, 0x2f, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77,
-	0x61, 0x6c, 0x22, 0x1a, 0x0a, 0x18, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x57, 0x69, 0x74, 0x68,
-	0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xa9,
-	0x02, 0x0a, 0x15, 0x4d, 0x73, 0x67, 0x46, 0x69, 0x6e, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x57, 0x69,
-	0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x12, 0x34, 0x0a, 0x08, 0x70, 0x72, 0x6f, 0x70,
-	0x6f, 0x73, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14,
-	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74,
-	0x72, 0x69, 0x6e, 0x67, 0x52, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x12, 0x12,
-	0x0a, 0x04, 0x74, 0x78, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x74, 0x78,
-	0x69, 0x64, 0x12, 0x21, 0x0a, 0x0c, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x6e, 0x75, 0x6d, 0x62,
-	0x65, 0x72, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0b, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x4e,
-	0x75, 0x6d, 0x62, 0x65, 0x72, 0x12, 0x19, 0x0a, 0x08, 0x74, 0x78, 0x5f, 0x69, 0x6e, 0x64, 0x65,
-	0x78, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x07, 0x74, 0x78, 0x49, 0x6e, 0x64, 0x65, 0x78,
-	0x12, 0x2d, 0x0a, 0x12, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x6d, 0x65, 0x64, 0x69, 0x61, 0x74, 0x65,
-	0x5f, 0x70, 0x72, 0x6f, 0x6f, 0x66, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x11, 0x69, 0x6e,
-	0x74, 0x65, 0x72, 0x6d, 0x65, 0x64, 0x69, 0x61, 0x74, 0x65, 0x50, 0x72, 0x6f, 0x6f, 0x66, 0x12,
-	0x21, 0x0a, 0x0c, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x68, 0x65, 0x61, 0x64, 0x65, 0x72, 0x18,
-	0x06, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0b, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x65, 0x61, 0x64,
-	0x65, 0x72, 0x3a, 0x36, 0x82, 0xe7, 0xb0, 0x2a, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65,
-	0x72, 0x8a, 0xe7, 0xb0, 0x2a, 0x24, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x78, 0x2f, 0x62, 0x69, 0x74,
-	0x63, 0x6f, 0x69, 0x6e, 0x2f, 0x4d, 0x73, 0x67, 0x46, 0x69, 0x6e, 0x61, 0x6c, 0x69, 0x7a, 0x65,
-	0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x22, 0x1f, 0x0a, 0x1d, 0x4d, 0x73,
-	0x67, 0x46, 0x69, 0x6e, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61,
-	0x77, 0x61, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x97, 0x01, 0x0a, 0x16,
-	0x4d, 0x73, 0x67, 0x41, 0x70, 0x70, 0x72, 0x6f, 0x76, 0x65, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c,
-	0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x34, 0x0a, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xef, 0x01, 0x0a, 0x17, 0x4d, 0x73, 0x67, 0x49,
+	0x6e, 0x69, 0x74, 0x69, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61,
+	0x77, 0x61, 0x6c, 0x12, 0x34, 0x0a, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
+	0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52,
+	0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x12, 0x2a, 0x0a, 0x04, 0x76, 0x6f, 0x74,
+	0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x16, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x72,
+	0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x2e, 0x76, 0x31, 0x2e, 0x56, 0x6f, 0x74, 0x65, 0x73, 0x52,
+	0x04, 0x76, 0x6f, 0x74, 0x65, 0x12, 0x3f, 0x0a, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x61,
+	0x6c, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62,
+	0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72,
+	0x61, 0x77, 0x61, 0x6c, 0x50, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x61, 0x6c, 0x52, 0x08, 0x70, 0x72,
+	0x6f, 0x70, 0x6f, 0x73, 0x61, 0x6c, 0x3a, 0x31, 0x82, 0xe7, 0xb0, 0x2a, 0x08, 0x70, 0x72, 0x6f,
+	0x70, 0x6f, 0x73, 0x65, 0x72, 0x8a, 0xe7, 0xb0, 0x2a, 0x1f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x78,
+	0x2f, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2f, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x57,
+	0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x22, 0x21, 0x0a, 0x1f, 0x4d, 0x73, 0x67,
+	0x49, 0x6e, 0x69, 0x74, 0x69, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72,
+	0x61, 0x77, 0x61, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xa9, 0x02, 0x0a,
+	0x15, 0x4d, 0x73, 0x67, 0x46, 0x69, 0x6e, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x57, 0x69, 0x74, 0x68,
+	0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x12, 0x34, 0x0a, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73,
 	0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f,
 	0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69,
-	0x6e, 0x67, 0x52, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x12, 0x0e, 0x0a, 0x02,
-	0x69, 0x64, 0x18, 0x02, 0x20, 0x03, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x3a, 0x37, 0x82, 0xe7,
-	0xb0, 0x2a, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x8a, 0xe7, 0xb0, 0x2a, 0x25,
-	0x67, 0x6f, 0x61, 0x74, 0x2f, 0x78, 0x2f, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2f, 0x4d,
-	0x73, 0x67, 0x41, 0x70, 0x70, 0x72, 0x6f, 0x76, 0x65, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x6c,
-	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x20, 0x0a, 0x1e, 0x4d, 0x73, 0x67, 0x41, 0x70, 0x70, 0x72,
-	0x6f, 0x76, 0x65, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0xd8, 0x04, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12,
-	0x60, 0x0a, 0x0e, 0x4e, 0x65, 0x77, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x61, 0x73, 0x68, 0x65,
-	0x73, 0x12, 0x22, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e,
-	0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x48,
-	0x61, 0x73, 0x68, 0x65, 0x73, 0x1a, 0x2a, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74,
-	0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x42, 0x6c,
-	0x6f, 0x63, 0x6b, 0x48, 0x61, 0x73, 0x68, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x12, 0x57, 0x0a, 0x0b, 0x4e, 0x65, 0x77, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73,
-	0x12, 0x1f, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e,
-	0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74,
-	0x73, 0x1a, 0x27, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e,
-	0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69,
-	0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x51, 0x0a, 0x09, 0x4e, 0x65,
-	0x77, 0x50, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x12, 0x1d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62,
-	0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77,
-	0x50, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x1a, 0x25, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69,
-	0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x50,
-	0x75, 0x62, 0x6b, 0x65, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x5d, 0x0a,
-	0x0d, 0x4e, 0x65, 0x77, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x12, 0x21,
-	0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31,
-	0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61,
-	0x6c, 0x1a, 0x29, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e,
-	0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72,
-	0x61, 0x77, 0x61, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6c, 0x0a, 0x12,
-	0x46, 0x69, 0x6e, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77,
-	0x61, 0x6c, 0x12, 0x26, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69,
-	0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x46, 0x69, 0x6e, 0x61, 0x6c, 0x69, 0x7a, 0x65,
-	0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x1a, 0x2e, 0x2e, 0x67, 0x6f, 0x61,
-	0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67,
-	0x46, 0x69, 0x6e, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77,
-	0x61, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6f, 0x0a, 0x13, 0x41, 0x70,
-	0x70, 0x72, 0x6f, 0x76, 0x65, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x6c, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x12, 0x27, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e,
-	0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x70, 0x70, 0x72, 0x6f, 0x76, 0x65, 0x43, 0x61,
-	0x6e, 0x63, 0x65, 0x6c, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x1a, 0x2f, 0x2e, 0x67, 0x6f, 0x61,
-	0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67,
+	0x6e, 0x67, 0x52, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x12, 0x12, 0x0a, 0x04,
+	0x74, 0x78, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x74, 0x78, 0x69, 0x64,
+	0x12, 0x21, 0x0a, 0x0c, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x6e, 0x75, 0x6d, 0x62, 0x65, 0x72,
+	0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0b, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x4e, 0x75, 0x6d,
+	0x62, 0x65, 0x72, 0x12, 0x19, 0x0a, 0x08, 0x74, 0x78, 0x5f, 0x69, 0x6e, 0x64, 0x65, 0x78, 0x18,
+	0x04, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x07, 0x74, 0x78, 0x49, 0x6e, 0x64, 0x65, 0x78, 0x12, 0x2d,
+	0x0a, 0x12, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x6d, 0x65, 0x64, 0x69, 0x61, 0x74, 0x65, 0x5f, 0x70,
+	0x72, 0x6f, 0x6f, 0x66, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x11, 0x69, 0x6e, 0x74, 0x65,
+	0x72, 0x6d, 0x65, 0x64, 0x69, 0x61, 0x74, 0x65, 0x50, 0x72, 0x6f, 0x6f, 0x66, 0x12, 0x21, 0x0a,
+	0x0c, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x68, 0x65, 0x61, 0x64, 0x65, 0x72, 0x18, 0x06, 0x20,
+	0x01, 0x28, 0x0c, 0x52, 0x0b, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x65, 0x61, 0x64, 0x65, 0x72,
+	0x3a, 0x36, 0x82, 0xe7, 0xb0, 0x2a, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x8a,
+	0xe7, 0xb0, 0x2a, 0x24, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x78, 0x2f, 0x62, 0x69, 0x74, 0x63, 0x6f,
+	0x69, 0x6e, 0x2f, 0x4d, 0x73, 0x67, 0x46, 0x69, 0x6e, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x57, 0x69,
+	0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x22, 0x1f, 0x0a, 0x1d, 0x4d, 0x73, 0x67, 0x46,
+	0x69, 0x6e, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61,
+	0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x97, 0x01, 0x0a, 0x16, 0x4d, 0x73,
+	0x67, 0x41, 0x70, 0x70, 0x72, 0x6f, 0x76, 0x65, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x6c, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x12, 0x34, 0x0a, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d,
+	0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67,
+	0x52, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64,
+	0x18, 0x02, 0x20, 0x03, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x3a, 0x37, 0x82, 0xe7, 0xb0, 0x2a,
+	0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x8a, 0xe7, 0xb0, 0x2a, 0x25, 0x67, 0x6f,
+	0x61, 0x74, 0x2f, 0x78, 0x2f, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2f, 0x4d, 0x73, 0x67,
 	0x41, 0x70, 0x70, 0x72, 0x6f, 0x76, 0x65, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x6c, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0,
-	0x2a, 0x01, 0x42, 0xb7, 0x01, 0x0a, 0x13, 0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e,
-	0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x42, 0x07, 0x54, 0x78, 0x50, 0x72,
-	0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x39, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f,
-	0x6d, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x67, 0x6f,
-	0x61, 0x74, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x62, 0x69, 0x74, 0x63,
-	0x6f, 0x69, 0x6e, 0x2f, 0x76, 0x31, 0x3b, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x76, 0x31,
-	0xa2, 0x02, 0x03, 0x47, 0x42, 0x58, 0xaa, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x2e, 0x42, 0x69,
-	0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x5c,
-	0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x1b, 0x47, 0x6f, 0x61,
-	0x74, 0x5c, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42,
-	0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x11, 0x47, 0x6f, 0x61, 0x74, 0x3a,
-	0x3a, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x33,
+	0x69, 0x6f, 0x6e, 0x22, 0x20, 0x0a, 0x1e, 0x4d, 0x73, 0x67, 0x41, 0x70, 0x70, 0x72, 0x6f, 0x76,
+	0x65, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0xed, 0x04, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12, 0x60, 0x0a,
+	0x0e, 0x4e, 0x65, 0x77, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x61, 0x73, 0x68, 0x65, 0x73, 0x12,
+	0x22, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76,
+	0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x61, 0x73,
+	0x68, 0x65, 0x73, 0x1a, 0x2a, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f,
+	0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x42, 0x6c, 0x6f, 0x63,
+	0x6b, 0x48, 0x61, 0x73, 0x68, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
+	0x57, 0x0a, 0x0b, 0x4e, 0x65, 0x77, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x12, 0x1f,
+	0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31,
+	0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x1a,
+	0x27, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76,
+	0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x51, 0x0a, 0x09, 0x4e, 0x65, 0x77, 0x50,
+	0x75, 0x62, 0x6b, 0x65, 0x79, 0x12, 0x1d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74,
+	0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x50, 0x75,
+	0x62, 0x6b, 0x65, 0x79, 0x1a, 0x25, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63,
+	0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x50, 0x75, 0x62,
+	0x6b, 0x65, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x72, 0x0a, 0x14, 0x49,
+	0x6e, 0x69, 0x74, 0x69, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61,
+	0x77, 0x61, 0x6c, 0x12, 0x28, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f,
+	0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x49, 0x6e, 0x69, 0x74, 0x69, 0x61, 0x6c,
+	0x69, 0x7a, 0x65, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x1a, 0x30, 0x2e,
+	0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e,
+	0x4d, 0x73, 0x67, 0x49, 0x6e, 0x69, 0x74, 0x69, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x57, 0x69, 0x74,
+	0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
+	0x6c, 0x0a, 0x12, 0x46, 0x69, 0x6e, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x57, 0x69, 0x74, 0x68, 0x64,
+	0x72, 0x61, 0x77, 0x61, 0x6c, 0x12, 0x26, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74,
+	0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x46, 0x69, 0x6e, 0x61, 0x6c,
+	0x69, 0x7a, 0x65, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x1a, 0x2e, 0x2e,
+	0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e,
+	0x4d, 0x73, 0x67, 0x46, 0x69, 0x6e, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x57, 0x69, 0x74, 0x68, 0x64,
+	0x72, 0x61, 0x77, 0x61, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6f, 0x0a,
+	0x13, 0x41, 0x70, 0x70, 0x72, 0x6f, 0x76, 0x65, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x6c, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x12, 0x27, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63,
+	0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x70, 0x70, 0x72, 0x6f, 0x76,
+	0x65, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x1a, 0x2f, 0x2e,
+	0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e,
+	0x4d, 0x73, 0x67, 0x41, 0x70, 0x70, 0x72, 0x6f, 0x76, 0x65, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c,
+	0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05,
+	0x80, 0xe7, 0xb0, 0x2a, 0x01, 0x42, 0xb7, 0x01, 0x0a, 0x13, 0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x6f,
+	0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x42, 0x07, 0x54,
+	0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x39, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62,
+	0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b,
+	0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x62,
+	0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2f, 0x76, 0x31, 0x3b, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69,
+	0x6e, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x47, 0x42, 0x58, 0xaa, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74,
+	0x2e, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x0f, 0x47, 0x6f,
+	0x61, 0x74, 0x5c, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x1b,
+	0x47, 0x6f, 0x61, 0x74, 0x5c, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x5c, 0x56, 0x31, 0x5c,
+	0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x11, 0x47, 0x6f,
+	0x61, 0x74, 0x3a, 0x3a, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x3a, 0x3a, 0x56, 0x31, 0x62,
+	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -6847,23 +6849,23 @@ func file_goat_bitcoin_v1_tx_proto_rawDescGZIP() []byte {
 
 var file_goat_bitcoin_v1_tx_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_goat_bitcoin_v1_tx_proto_goTypes = []interface{}{
-	(*MsgNewBlockHashes)(nil),              // 0: goat.bitcoin.v1.MsgNewBlockHashes
-	(*MsgNewBlockHashesResponse)(nil),      // 1: goat.bitcoin.v1.MsgNewBlockHashesResponse
-	(*MsgNewDeposits)(nil),                 // 2: goat.bitcoin.v1.MsgNewDeposits
-	(*MsgNewDepositsResponse)(nil),         // 3: goat.bitcoin.v1.MsgNewDepositsResponse
-	(*MsgNewPubkey)(nil),                   // 4: goat.bitcoin.v1.MsgNewPubkey
-	(*MsgNewPubkeyResponse)(nil),           // 5: goat.bitcoin.v1.MsgNewPubkeyResponse
-	(*MsgNewWithdrawal)(nil),               // 6: goat.bitcoin.v1.MsgNewWithdrawal
-	(*MsgNewWithdrawalResponse)(nil),       // 7: goat.bitcoin.v1.MsgNewWithdrawalResponse
-	(*MsgFinalizeWithdrawal)(nil),          // 8: goat.bitcoin.v1.MsgFinalizeWithdrawal
-	(*MsgFinalizeWithdrawalResponse)(nil),  // 9: goat.bitcoin.v1.MsgFinalizeWithdrawalResponse
-	(*MsgApproveCancellation)(nil),         // 10: goat.bitcoin.v1.MsgApproveCancellation
-	(*MsgApproveCancellationResponse)(nil), // 11: goat.bitcoin.v1.MsgApproveCancellationResponse
-	nil,                                    // 12: goat.bitcoin.v1.MsgNewDeposits.BlockHeadersEntry
-	(*v1.Votes)(nil),                       // 13: goat.relayer.v1.Votes
-	(*Deposit)(nil),                        // 14: goat.bitcoin.v1.Deposit
-	(*v1.PublicKey)(nil),                   // 15: goat.relayer.v1.PublicKey
-	(*WithdrawalProposal)(nil),             // 16: goat.bitcoin.v1.WithdrawalProposal
+	(*MsgNewBlockHashes)(nil),               // 0: goat.bitcoin.v1.MsgNewBlockHashes
+	(*MsgNewBlockHashesResponse)(nil),       // 1: goat.bitcoin.v1.MsgNewBlockHashesResponse
+	(*MsgNewDeposits)(nil),                  // 2: goat.bitcoin.v1.MsgNewDeposits
+	(*MsgNewDepositsResponse)(nil),          // 3: goat.bitcoin.v1.MsgNewDepositsResponse
+	(*MsgNewPubkey)(nil),                    // 4: goat.bitcoin.v1.MsgNewPubkey
+	(*MsgNewPubkeyResponse)(nil),            // 5: goat.bitcoin.v1.MsgNewPubkeyResponse
+	(*MsgInitializeWithdrawal)(nil),         // 6: goat.bitcoin.v1.MsgInitializeWithdrawal
+	(*MsgInitializeWithdrawalResponse)(nil), // 7: goat.bitcoin.v1.MsgInitializeWithdrawalResponse
+	(*MsgFinalizeWithdrawal)(nil),           // 8: goat.bitcoin.v1.MsgFinalizeWithdrawal
+	(*MsgFinalizeWithdrawalResponse)(nil),   // 9: goat.bitcoin.v1.MsgFinalizeWithdrawalResponse
+	(*MsgApproveCancellation)(nil),          // 10: goat.bitcoin.v1.MsgApproveCancellation
+	(*MsgApproveCancellationResponse)(nil),  // 11: goat.bitcoin.v1.MsgApproveCancellationResponse
+	nil,                                     // 12: goat.bitcoin.v1.MsgNewDeposits.BlockHeadersEntry
+	(*v1.Votes)(nil),                        // 13: goat.relayer.v1.Votes
+	(*Deposit)(nil),                         // 14: goat.bitcoin.v1.Deposit
+	(*v1.PublicKey)(nil),                    // 15: goat.relayer.v1.PublicKey
+	(*WithdrawalProposal)(nil),              // 16: goat.bitcoin.v1.WithdrawalProposal
 }
 var file_goat_bitcoin_v1_tx_proto_depIdxs = []int32{
 	13, // 0: goat.bitcoin.v1.MsgNewBlockHashes.vote:type_name -> goat.relayer.v1.Votes
@@ -6871,18 +6873,18 @@ var file_goat_bitcoin_v1_tx_proto_depIdxs = []int32{
 	14, // 2: goat.bitcoin.v1.MsgNewDeposits.deposits:type_name -> goat.bitcoin.v1.Deposit
 	13, // 3: goat.bitcoin.v1.MsgNewPubkey.vote:type_name -> goat.relayer.v1.Votes
 	15, // 4: goat.bitcoin.v1.MsgNewPubkey.pubkey:type_name -> goat.relayer.v1.PublicKey
-	13, // 5: goat.bitcoin.v1.MsgNewWithdrawal.vote:type_name -> goat.relayer.v1.Votes
-	16, // 6: goat.bitcoin.v1.MsgNewWithdrawal.proposal:type_name -> goat.bitcoin.v1.WithdrawalProposal
+	13, // 5: goat.bitcoin.v1.MsgInitializeWithdrawal.vote:type_name -> goat.relayer.v1.Votes
+	16, // 6: goat.bitcoin.v1.MsgInitializeWithdrawal.proposal:type_name -> goat.bitcoin.v1.WithdrawalProposal
 	0,  // 7: goat.bitcoin.v1.Msg.NewBlockHashes:input_type -> goat.bitcoin.v1.MsgNewBlockHashes
 	2,  // 8: goat.bitcoin.v1.Msg.NewDeposits:input_type -> goat.bitcoin.v1.MsgNewDeposits
 	4,  // 9: goat.bitcoin.v1.Msg.NewPubkey:input_type -> goat.bitcoin.v1.MsgNewPubkey
-	6,  // 10: goat.bitcoin.v1.Msg.NewWithdrawal:input_type -> goat.bitcoin.v1.MsgNewWithdrawal
+	6,  // 10: goat.bitcoin.v1.Msg.InitializeWithdrawal:input_type -> goat.bitcoin.v1.MsgInitializeWithdrawal
 	8,  // 11: goat.bitcoin.v1.Msg.FinalizeWithdrawal:input_type -> goat.bitcoin.v1.MsgFinalizeWithdrawal
 	10, // 12: goat.bitcoin.v1.Msg.ApproveCancellation:input_type -> goat.bitcoin.v1.MsgApproveCancellation
 	1,  // 13: goat.bitcoin.v1.Msg.NewBlockHashes:output_type -> goat.bitcoin.v1.MsgNewBlockHashesResponse
 	3,  // 14: goat.bitcoin.v1.Msg.NewDeposits:output_type -> goat.bitcoin.v1.MsgNewDepositsResponse
 	5,  // 15: goat.bitcoin.v1.Msg.NewPubkey:output_type -> goat.bitcoin.v1.MsgNewPubkeyResponse
-	7,  // 16: goat.bitcoin.v1.Msg.NewWithdrawal:output_type -> goat.bitcoin.v1.MsgNewWithdrawalResponse
+	7,  // 16: goat.bitcoin.v1.Msg.InitializeWithdrawal:output_type -> goat.bitcoin.v1.MsgInitializeWithdrawalResponse
 	9,  // 17: goat.bitcoin.v1.Msg.FinalizeWithdrawal:output_type -> goat.bitcoin.v1.MsgFinalizeWithdrawalResponse
 	11, // 18: goat.bitcoin.v1.Msg.ApproveCancellation:output_type -> goat.bitcoin.v1.MsgApproveCancellationResponse
 	13, // [13:19] is the sub-list for method output_type
@@ -6972,7 +6974,7 @@ func file_goat_bitcoin_v1_tx_proto_init() {
 			}
 		}
 		file_goat_bitcoin_v1_tx_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgNewWithdrawal); i {
+			switch v := v.(*MsgInitializeWithdrawal); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -6984,7 +6986,7 @@ func file_goat_bitcoin_v1_tx_proto_init() {
 			}
 		}
 		file_goat_bitcoin_v1_tx_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgNewWithdrawalResponse); i {
+			switch v := v.(*MsgInitializeWithdrawalResponse); i {
 			case 0:
 				return &v.state
 			case 1:

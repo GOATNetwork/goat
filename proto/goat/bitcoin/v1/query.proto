@@ -22,12 +22,12 @@ service Query {
     option (google.api.http).get = "/goatnetwork/goat/bitcoin/v1/pubkey";
   }
 
-  // DepositAddress
+  // DepositAddress queries current address for deposit
   rpc DepositAddress(QueryDepositAddress) returns (QueryDepositAddressResponse) {
     option (google.api.http).get = "/goatnetwork/goat/bitcoin/v1/depositAddress";
   }
 
-  // HasDeposited
+  // HasDeposited checks if a deposit transaction is confirmed on chain
   rpc HasDeposited(QueryHasDeposited) returns (QueryHasDepositedResponse) {
     option (google.api.http).get = "/goatnetwork/goat/bitcoin/v1/hasDeposited";
   }
@@ -64,6 +64,7 @@ message QueryPubkeyResponse {
 // QueryDepositAddress is request type for the Query/DepositAddress RPC method
 message QueryDepositAddress {
   uint32 version = 1;
+  // evm_address is an eth address to deposit
   string evm_address = 2;
 }
 
@@ -73,16 +74,6 @@ message QueryDepositAddressResponse {
   string address = 2;
   goat.relayer.v1.PublicKey public_key = 3;
   bytes op_return_script = 4;
-}
-
-// QueryWithdrawalAddress is request type for the Query/WithdrawalAddress RPC method
-message QueryWithdrawalAddress {
-  string address = 1;
-}
-
-// QueryWithdrawalAddressReponse is response type for the Query/WithdrawalAddress RPC method
-message QueryWithdrawalAddressResponse {
-  bytes address = 1;
 }
 
 // QueryHasDeposited

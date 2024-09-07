@@ -34,9 +34,9 @@ type QueryClient interface {
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
 	// Pubkeys queries current public key for deposit
 	Pubkey(ctx context.Context, in *QueryPubkeyRequest, opts ...grpc.CallOption) (*QueryPubkeyResponse, error)
-	// DepositAddress
+	// DepositAddress queries current address for deposit
 	DepositAddress(ctx context.Context, in *QueryDepositAddress, opts ...grpc.CallOption) (*QueryDepositAddressResponse, error)
-	// HasDeposited
+	// HasDeposited checks if a deposit transaction is confirmed on chain
 	HasDeposited(ctx context.Context, in *QueryHasDeposited, opts ...grpc.CallOption) (*QueryHasDepositedResponse, error)
 	// Withdrawal queries all current public keys
 	Withdrawal(ctx context.Context, in *QueryWithdrawalRequest, opts ...grpc.CallOption) (*QueryWithdrawalResponse, error)
@@ -103,9 +103,9 @@ type QueryServer interface {
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
 	// Pubkeys queries current public key for deposit
 	Pubkey(context.Context, *QueryPubkeyRequest) (*QueryPubkeyResponse, error)
-	// DepositAddress
+	// DepositAddress queries current address for deposit
 	DepositAddress(context.Context, *QueryDepositAddress) (*QueryDepositAddressResponse, error)
-	// HasDeposited
+	// HasDeposited checks if a deposit transaction is confirmed on chain
 	HasDeposited(context.Context, *QueryHasDeposited) (*QueryHasDepositedResponse, error)
 	// Withdrawal queries all current public keys
 	Withdrawal(context.Context, *QueryWithdrawalRequest) (*QueryWithdrawalResponse, error)

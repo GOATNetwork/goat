@@ -16,17 +16,16 @@ func NewParams() Params {
 			ScriptHashAddrPrefix: uint32(chaincfg.RegressionNetParams.ScriptHashAddrID),
 			Bech32Hrp:            chaincfg.RegressionNetParams.Bech32HRPSegwit,
 		},
-		SafeConfirmationBlock: 3,
-		HardConfirmationBlock: 6,
-		MinDepositAmount:      DustTxoutAmount,
-		DepositMagicPrefix:    []byte("GTT0"),
+		ConfirmationNumber: 1,
+		MinDepositAmount:   DustTxoutAmount,
+		DepositMagicPrefix: []byte("GTT0"),
 	}
 
 	/*
 		DepositMagicPrefix
-			- regtest/devnet: `GTT0`
-			- testnet: `GTV1`
-			- mainnet: `GTV2`
+			- regtest/devnet: GTT0
+			- testnet: GTV1
+			- mainnet: GTV2
 	*/
 }
 
@@ -51,11 +50,8 @@ func (p Params) Validate() error {
 		return errors.New("invalid DepositMagicPrefix length")
 	}
 
-	if p.HardConfirmationBlock == 0 || p.SafeConfirmationBlock == 0 {
-		return errors.New("mempool txs are not reliable (confirmation number can't set to zero)")
-	}
-	if p.HardConfirmationBlock < p.SafeConfirmationBlock {
-		return fmt.Errorf("hard block(%d) < safe block(%d)", p.HardConfirmationBlock, p.SafeConfirmationBlock)
+	if p.ConfirmationNumber == 0 {
+		return errors.New("confirmation number can't set to zero(mempool txs are not reliable )")
 	}
 	return nil
 }

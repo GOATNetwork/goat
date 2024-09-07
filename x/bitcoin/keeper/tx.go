@@ -141,7 +141,7 @@ func (k msgServer) NewPubkey(ctx context.Context, req *types.MsgNewPubkey) (*typ
 	return &types.MsgNewPubkeyResponse{}, nil
 }
 
-func (k msgServer) NewWithdrawal(ctx context.Context, req *types.MsgNewWithdrawal) (*types.MsgNewWithdrawalResponse, error) {
+func (k msgServer) InitializeWithdrawal(ctx context.Context, req *types.MsgInitializeWithdrawal) (*types.MsgInitializeWithdrawalResponse, error) {
 	if err := req.Validate(); err != nil {
 		return nil, types.ErrInvalidRequest.Wrap(err.Error())
 	}
@@ -179,6 +179,10 @@ func (k msgServer) NewWithdrawal(ctx context.Context, req *types.MsgNewWithdrawa
 			return nil, types.ErrInvalidRequest.Wrapf("witdhrawal %d is not pending or canceling", wid)
 		}
 
+		if req.Proposal.TxPrice > withdrawal.MaxTxPrice {
+			return nil, types.ErrInvalidRequest.Wrapf("tx price is larger than user request for witdhrawal %d", wid)
+		}
+
 		txout := tx.TxOut[idx]
 		if !bytes.Equal(withdrawal.OutputScript, txout.PkScript) {
 			return nil, types.ErrInvalidRequest.Wrapf("witdhrawal %d script not matched", wid)
@@ -211,7 +215,7 @@ func (k msgServer) NewWithdrawal(ctx context.Context, req *types.MsgNewWithdrawa
 
 	sdktypes.UnwrapSDKContext(ctx).EventManager().EmitEvent(types.NewWithdrawalEvent(txid))
 
-	return &types.MsgNewWithdrawalResponse{}, nil
+	return &types.MsgInitializeWithdrawalResponse{}, nil
 }
 
 func (k msgServer) FinalizeWithdrawal(ctx context.Context, req *types.MsgFinalizeWithdrawal) (*types.MsgFinalizeWithdrawalResponse, error) {
@@ -267,10 +271,11 @@ func (k msgServer) FinalizeWithdrawal(ctx context.Context, req *types.MsgFinaliz
 		})
 	}
 
-	sdktypes.UnwrapSDKContext(ctx).EventManager().EmitEvent(types.NewWithdrawalEvent(req.Txid))
 	if err := k.ExecuableQueue.Set(ctx, queue); err != nil {
 		return nil, err
 	}
+
+	sdktypes.UnwrapSDKContext(ctx).EventManager().EmitEvent(types.NewWithdrawalEvent(req.Txid))
 	return &types.MsgFinalizeWithdrawalResponse{}, nil
 }
 

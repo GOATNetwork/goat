@@ -60,12 +60,7 @@ func Bitcoin() *cobra.Command {
 					return fmt.Errorf("unknown bitcoin network: %s", networkName)
 				}
 
-				safe, err := cmd.Flags().GetUint32(FlagSafe)
-				if err != nil {
-					return err
-				}
-
-				hard, err := cmd.Flags().GetUint32(FlagHard)
+				confirmationNumber, err := cmd.Flags().GetUint32(FlagHard)
 				if err != nil {
 					return err
 				}
@@ -87,10 +82,9 @@ func Bitcoin() *cobra.Command {
 						ScriptHashAddrPrefix: uint32(network.ScriptHashAddrID),
 						Bech32Hrp:            network.Bech32HRPSegwit,
 					},
-					SafeConfirmationBlock: safe,
-					HardConfirmationBlock: hard,
-					DepositMagicPrefix:    []byte(depositMagicPreifx),
-					MinDepositAmount:      minDeposit,
+					ConfirmationNumber: confirmationNumber,
+					DepositMagicPrefix: []byte(depositMagicPreifx),
+					MinDepositAmount:   minDeposit,
 				}
 
 				pubkey, err := cmd.Flags().GetBytesHex(FlagPubkey)
@@ -127,8 +121,7 @@ func Bitcoin() *cobra.Command {
 	}
 
 	param := types.DefaultParams()
-	cmd.Flags().Uint32(FlagSafe, param.SafeConfirmationBlock, "the safe confirmation number")
-	cmd.Flags().Uint32(FlagHard, param.HardConfirmationBlock, "the hard confirmation number")
+	cmd.Flags().Uint32(FlagHard, param.ConfirmationNumber, "the confirmation number")
 	cmd.Flags().BytesHex(FlagPubkey, nil, "the initial relayer public key")
 	cmd.Flags().String(FlagPubkeyType, "secp256k1", "the public key type [secp256k1,schnorr]")
 	cmd.Flags().String(FlagNetworkName, param.ChainConfig.NetworkName, "the bitcoin network name(mainnet|testnet3|regtest|signet)")

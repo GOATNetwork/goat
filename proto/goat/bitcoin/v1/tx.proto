@@ -14,20 +14,36 @@ service Msg {
   option (cosmos.msg.v1.service) = true;
 
   // NewBlockHashs adds new bitcoin block hashes
+  // the block hashes are not only for deposit/withdrawal spv, but also a on-chain oracle for dapps
+  // ** it requires off-chain vote by relayer group
+  // ** the block should have a hard confirmation number which incosistent with the param.
+  // ** every block after startBlockNumber in the geneis should be submitted on chain
   rpc NewBlockHashes(MsgNewBlockHashes) returns (MsgNewBlockHashesResponse);
 
   // NewDeposit adds new deposits
+  // ** it doesn't need off-chain vote process since we have spv
   rpc NewDeposits(MsgNewDeposits) returns (MsgNewDepositsResponse);
 
   // NewPubkey adds new deposit public key
+  // ** it requires off-chain vote by relayer group
   rpc NewPubkey(MsgNewPubkey) returns (MsgNewPubkeyResponse);
 
-  // NewWithdrawal submits a passed proposal for withdrawal requests
-  // This is the first step to process withdrawals to
-  // inform every voter that the proposal has been approved and they can process signing then
-  rpc NewWithdrawal(MsgNewWithdrawal) returns (MsgNewWithdrawalResponse);
+  // InitializeWithdrawal submits a non-signed raw tx and its vote for the withdrawal requests
+  // This is the first step to process withdrawals
+  // ** it requires off-chain vote by relayer group
+  // ** the output index and withdrawal id list are in one-to-one correspondence
+  // ** the tx price should not be larger than withdrawal request
+  //
+  // It informs every voter that the proposal has been approved and they can process signing then.
+  // The most relayer member can construct the final signed transaction and submit the transaction to the bitcoin chain when the signing process is finished
+  // Since the signing is an off chain process, so relayer proposer doesn't need to submit the signed transaction to the chain
+  rpc InitializeWithdrawal(MsgInitializeWithdrawal) returns (MsgInitializeWithdrawalResponse);
 
-  // FinalizeWithdrawal
+  // FinalizeWithdrawal finlizes withdrawals and informs the chain to create the withdrawal receipts
+  // This is the final step to process withdrawals
+  //
+  // ** proposer should provide spv to prove the withdarwal is confirmed
+  // ** it doesn't need off-chain vote process
   rpc FinalizeWithdrawal(MsgFinalizeWithdrawal) returns (MsgFinalizeWithdrawalResponse);
 
   // ApproveCancellation approves cancelation requests
@@ -78,7 +94,7 @@ message MsgNewPubkey {
 message MsgNewPubkeyResponse {}
 
 // MsgNewWithdrawal
-message MsgNewWithdrawal {
+message MsgInitializeWithdrawal {
   option (cosmos.msg.v1.signer) = "proposer";
   option (amino.name) = "goat/x/bitcoin/MsgNewWithdrawal";
 
@@ -88,7 +104,7 @@ message MsgNewWithdrawal {
 }
 
 // MsgNewWithdrawalResponse
-message MsgNewWithdrawalResponse {}
+message MsgInitializeWithdrawalResponse {}
 
 // MsgFinalizeWithdrawal
 message MsgFinalizeWithdrawal {

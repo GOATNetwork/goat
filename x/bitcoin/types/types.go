@@ -11,9 +11,9 @@ import (
 )
 
 const (
-	NewPubkeyMethodSigName     = "Bitcoin/NewPubkey"
-	NewBlocksMethodSigName     = "Bitcoin/NewBlocks"
-	NewWithdrawalMethodSigName = "Bitcoin/NewWithdrawal"
+	NewPubkeyMethodSigName            = "Bitcoin/NewPubkey"
+	NewBlocksMethodSigName            = "Bitcoin/NewBlocks"
+	InitializeWithdrawalMethodSigName = "Bitcoin/InitializeWithdrawal"
 )
 
 const (
@@ -123,18 +123,18 @@ func (req *MsgNewDeposits) Validate() error {
 	return nil
 }
 
-func (req *MsgNewWithdrawal) MethodName() string {
-	return NewWithdrawalMethodSigName
+func (req *MsgInitializeWithdrawal) MethodName() string {
+	return InitializeWithdrawalMethodSigName
 }
 
-func (req *MsgNewWithdrawal) VoteSigDoc() []byte {
+func (req *MsgInitializeWithdrawal) VoteSigDoc() []byte {
 	ids := goatcrypto.Uint64LE(req.Proposal.Id...)
 	price := goatcrypto.Uint64LE(req.Proposal.TxPrice)
 	tx := goatcrypto.SHA256Sum(req.Proposal.NoWitnessTx)
 	return slices.Concat(ids, tx, price)
 }
 
-func (req *MsgNewWithdrawal) Validate() error {
+func (req *MsgInitializeWithdrawal) Validate() error {
 	if req == nil {
 		return errors.New("empty MsgNewWithdrawal")
 	}

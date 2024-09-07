@@ -2696,848 +2696,6 @@ func (x *fastReflection_QueryDepositAddressResponse) ProtoMethods() *protoiface.
 }
 
 var (
-	md_QueryWithdrawalAddress         protoreflect.MessageDescriptor
-	fd_QueryWithdrawalAddress_address protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_goat_bitcoin_v1_query_proto_init()
-	md_QueryWithdrawalAddress = File_goat_bitcoin_v1_query_proto.Messages().ByName("QueryWithdrawalAddress")
-	fd_QueryWithdrawalAddress_address = md_QueryWithdrawalAddress.Fields().ByName("address")
-}
-
-var _ protoreflect.Message = (*fastReflection_QueryWithdrawalAddress)(nil)
-
-type fastReflection_QueryWithdrawalAddress QueryWithdrawalAddress
-
-func (x *QueryWithdrawalAddress) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryWithdrawalAddress)(x)
-}
-
-func (x *QueryWithdrawalAddress) slowProtoReflect() protoreflect.Message {
-	mi := &file_goat_bitcoin_v1_query_proto_msgTypes[6]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_QueryWithdrawalAddress_messageType fastReflection_QueryWithdrawalAddress_messageType
-var _ protoreflect.MessageType = fastReflection_QueryWithdrawalAddress_messageType{}
-
-type fastReflection_QueryWithdrawalAddress_messageType struct{}
-
-func (x fastReflection_QueryWithdrawalAddress_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryWithdrawalAddress)(nil)
-}
-func (x fastReflection_QueryWithdrawalAddress_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryWithdrawalAddress)
-}
-func (x fastReflection_QueryWithdrawalAddress_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryWithdrawalAddress
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_QueryWithdrawalAddress) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryWithdrawalAddress
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryWithdrawalAddress) Type() protoreflect.MessageType {
-	return _fastReflection_QueryWithdrawalAddress_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryWithdrawalAddress) New() protoreflect.Message {
-	return new(fastReflection_QueryWithdrawalAddress)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryWithdrawalAddress) Interface() protoreflect.ProtoMessage {
-	return (*QueryWithdrawalAddress)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_QueryWithdrawalAddress) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Address != "" {
-		value := protoreflect.ValueOfString(x.Address)
-		if !f(fd_QueryWithdrawalAddress_address, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryWithdrawalAddress) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "goat.bitcoin.v1.QueryWithdrawalAddress.address":
-		return x.Address != ""
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.QueryWithdrawalAddress"))
-		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.QueryWithdrawalAddress does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryWithdrawalAddress) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "goat.bitcoin.v1.QueryWithdrawalAddress.address":
-		x.Address = ""
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.QueryWithdrawalAddress"))
-		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.QueryWithdrawalAddress does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryWithdrawalAddress) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "goat.bitcoin.v1.QueryWithdrawalAddress.address":
-		value := x.Address
-		return protoreflect.ValueOfString(value)
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.QueryWithdrawalAddress"))
-		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.QueryWithdrawalAddress does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryWithdrawalAddress) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "goat.bitcoin.v1.QueryWithdrawalAddress.address":
-		x.Address = value.Interface().(string)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.QueryWithdrawalAddress"))
-		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.QueryWithdrawalAddress does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryWithdrawalAddress) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "goat.bitcoin.v1.QueryWithdrawalAddress.address":
-		panic(fmt.Errorf("field address of message goat.bitcoin.v1.QueryWithdrawalAddress is not mutable"))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.QueryWithdrawalAddress"))
-		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.QueryWithdrawalAddress does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryWithdrawalAddress) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "goat.bitcoin.v1.QueryWithdrawalAddress.address":
-		return protoreflect.ValueOfString("")
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.QueryWithdrawalAddress"))
-		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.QueryWithdrawalAddress does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryWithdrawalAddress) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in goat.bitcoin.v1.QueryWithdrawalAddress", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryWithdrawalAddress) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryWithdrawalAddress) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_QueryWithdrawalAddress) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryWithdrawalAddress) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryWithdrawalAddress)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		l = len(x.Address)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryWithdrawalAddress)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if len(x.Address) > 0 {
-			i -= len(x.Address)
-			copy(dAtA[i:], x.Address)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Address)))
-			i--
-			dAtA[i] = 0xa
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryWithdrawalAddress)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryWithdrawalAddress: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryWithdrawalAddress: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Address = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var (
-	md_QueryWithdrawalAddressResponse         protoreflect.MessageDescriptor
-	fd_QueryWithdrawalAddressResponse_address protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_goat_bitcoin_v1_query_proto_init()
-	md_QueryWithdrawalAddressResponse = File_goat_bitcoin_v1_query_proto.Messages().ByName("QueryWithdrawalAddressResponse")
-	fd_QueryWithdrawalAddressResponse_address = md_QueryWithdrawalAddressResponse.Fields().ByName("address")
-}
-
-var _ protoreflect.Message = (*fastReflection_QueryWithdrawalAddressResponse)(nil)
-
-type fastReflection_QueryWithdrawalAddressResponse QueryWithdrawalAddressResponse
-
-func (x *QueryWithdrawalAddressResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryWithdrawalAddressResponse)(x)
-}
-
-func (x *QueryWithdrawalAddressResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_goat_bitcoin_v1_query_proto_msgTypes[7]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_QueryWithdrawalAddressResponse_messageType fastReflection_QueryWithdrawalAddressResponse_messageType
-var _ protoreflect.MessageType = fastReflection_QueryWithdrawalAddressResponse_messageType{}
-
-type fastReflection_QueryWithdrawalAddressResponse_messageType struct{}
-
-func (x fastReflection_QueryWithdrawalAddressResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryWithdrawalAddressResponse)(nil)
-}
-func (x fastReflection_QueryWithdrawalAddressResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryWithdrawalAddressResponse)
-}
-func (x fastReflection_QueryWithdrawalAddressResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryWithdrawalAddressResponse
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_QueryWithdrawalAddressResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryWithdrawalAddressResponse
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryWithdrawalAddressResponse) Type() protoreflect.MessageType {
-	return _fastReflection_QueryWithdrawalAddressResponse_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryWithdrawalAddressResponse) New() protoreflect.Message {
-	return new(fastReflection_QueryWithdrawalAddressResponse)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryWithdrawalAddressResponse) Interface() protoreflect.ProtoMessage {
-	return (*QueryWithdrawalAddressResponse)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_QueryWithdrawalAddressResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if len(x.Address) != 0 {
-		value := protoreflect.ValueOfBytes(x.Address)
-		if !f(fd_QueryWithdrawalAddressResponse_address, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryWithdrawalAddressResponse) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "goat.bitcoin.v1.QueryWithdrawalAddressResponse.address":
-		return len(x.Address) != 0
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.QueryWithdrawalAddressResponse"))
-		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.QueryWithdrawalAddressResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryWithdrawalAddressResponse) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "goat.bitcoin.v1.QueryWithdrawalAddressResponse.address":
-		x.Address = nil
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.QueryWithdrawalAddressResponse"))
-		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.QueryWithdrawalAddressResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryWithdrawalAddressResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "goat.bitcoin.v1.QueryWithdrawalAddressResponse.address":
-		value := x.Address
-		return protoreflect.ValueOfBytes(value)
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.QueryWithdrawalAddressResponse"))
-		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.QueryWithdrawalAddressResponse does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryWithdrawalAddressResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "goat.bitcoin.v1.QueryWithdrawalAddressResponse.address":
-		x.Address = value.Bytes()
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.QueryWithdrawalAddressResponse"))
-		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.QueryWithdrawalAddressResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryWithdrawalAddressResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "goat.bitcoin.v1.QueryWithdrawalAddressResponse.address":
-		panic(fmt.Errorf("field address of message goat.bitcoin.v1.QueryWithdrawalAddressResponse is not mutable"))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.QueryWithdrawalAddressResponse"))
-		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.QueryWithdrawalAddressResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryWithdrawalAddressResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "goat.bitcoin.v1.QueryWithdrawalAddressResponse.address":
-		return protoreflect.ValueOfBytes(nil)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.QueryWithdrawalAddressResponse"))
-		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.QueryWithdrawalAddressResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryWithdrawalAddressResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in goat.bitcoin.v1.QueryWithdrawalAddressResponse", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryWithdrawalAddressResponse) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryWithdrawalAddressResponse) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_QueryWithdrawalAddressResponse) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryWithdrawalAddressResponse) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryWithdrawalAddressResponse)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		l = len(x.Address)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryWithdrawalAddressResponse)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if len(x.Address) > 0 {
-			i -= len(x.Address)
-			copy(dAtA[i:], x.Address)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Address)))
-			i--
-			dAtA[i] = 0xa
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryWithdrawalAddressResponse)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryWithdrawalAddressResponse: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryWithdrawalAddressResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
-				}
-				var byteLen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					byteLen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if byteLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + byteLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Address = append(x.Address[:0], dAtA[iNdEx:postIndex]...)
-				if x.Address == nil {
-					x.Address = []byte{}
-				}
-				iNdEx = postIndex
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var (
 	md_QueryHasDeposited       protoreflect.MessageDescriptor
 	fd_QueryHasDeposited_txid  protoreflect.FieldDescriptor
 	fd_QueryHasDeposited_txout protoreflect.FieldDescriptor
@@ -3559,7 +2717,7 @@ func (x *QueryHasDeposited) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryHasDeposited) slowProtoReflect() protoreflect.Message {
-	mi := &file_goat_bitcoin_v1_query_proto_msgTypes[8]
+	mi := &file_goat_bitcoin_v1_query_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4025,7 +3183,7 @@ func (x *QueryHasDepositedResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryHasDepositedResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_goat_bitcoin_v1_query_proto_msgTypes[9]
+	mi := &file_goat_bitcoin_v1_query_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4435,7 +3593,7 @@ func (x *QueryWithdrawalRequest) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryWithdrawalRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_goat_bitcoin_v1_query_proto_msgTypes[10]
+	mi := &file_goat_bitcoin_v1_query_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4839,7 +3997,7 @@ func (x *QueryWithdrawalResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryWithdrawalResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_goat_bitcoin_v1_query_proto_msgTypes[11]
+	mi := &file_goat_bitcoin_v1_query_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5400,7 +4558,8 @@ type QueryDepositAddress struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Version    uint32 `protobuf:"varint,1,opt,name=version,proto3" json:"version,omitempty"`
+	Version uint32 `protobuf:"varint,1,opt,name=version,proto3" json:"version,omitempty"`
+	// evm_address is an eth address to deposit
 	EvmAddress string `protobuf:"bytes,2,opt,name=evm_address,json=evmAddress,proto3" json:"evm_address,omitempty"`
 }
 
@@ -5498,78 +4657,6 @@ func (x *QueryDepositAddressResponse) GetOpReturnScript() []byte {
 	return nil
 }
 
-// QueryWithdrawalAddress is request type for the Query/WithdrawalAddress RPC method
-type QueryWithdrawalAddress struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
-}
-
-func (x *QueryWithdrawalAddress) Reset() {
-	*x = QueryWithdrawalAddress{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_goat_bitcoin_v1_query_proto_msgTypes[6]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *QueryWithdrawalAddress) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*QueryWithdrawalAddress) ProtoMessage() {}
-
-// Deprecated: Use QueryWithdrawalAddress.ProtoReflect.Descriptor instead.
-func (*QueryWithdrawalAddress) Descriptor() ([]byte, []int) {
-	return file_goat_bitcoin_v1_query_proto_rawDescGZIP(), []int{6}
-}
-
-func (x *QueryWithdrawalAddress) GetAddress() string {
-	if x != nil {
-		return x.Address
-	}
-	return ""
-}
-
-// QueryWithdrawalAddressReponse is response type for the Query/WithdrawalAddress RPC method
-type QueryWithdrawalAddressResponse struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Address []byte `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
-}
-
-func (x *QueryWithdrawalAddressResponse) Reset() {
-	*x = QueryWithdrawalAddressResponse{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_goat_bitcoin_v1_query_proto_msgTypes[7]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *QueryWithdrawalAddressResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*QueryWithdrawalAddressResponse) ProtoMessage() {}
-
-// Deprecated: Use QueryWithdrawalAddressResponse.ProtoReflect.Descriptor instead.
-func (*QueryWithdrawalAddressResponse) Descriptor() ([]byte, []int) {
-	return file_goat_bitcoin_v1_query_proto_rawDescGZIP(), []int{7}
-}
-
-func (x *QueryWithdrawalAddressResponse) GetAddress() []byte {
-	if x != nil {
-		return x.Address
-	}
-	return nil
-}
-
 // QueryHasDeposited
 type QueryHasDeposited struct {
 	state         protoimpl.MessageState
@@ -5583,7 +4670,7 @@ type QueryHasDeposited struct {
 func (x *QueryHasDeposited) Reset() {
 	*x = QueryHasDeposited{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_goat_bitcoin_v1_query_proto_msgTypes[8]
+		mi := &file_goat_bitcoin_v1_query_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5597,7 +4684,7 @@ func (*QueryHasDeposited) ProtoMessage() {}
 
 // Deprecated: Use QueryHasDeposited.ProtoReflect.Descriptor instead.
 func (*QueryHasDeposited) Descriptor() ([]byte, []int) {
-	return file_goat_bitcoin_v1_query_proto_rawDescGZIP(), []int{8}
+	return file_goat_bitcoin_v1_query_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *QueryHasDeposited) GetTxid() string {
@@ -5626,7 +4713,7 @@ type QueryHasDepositedResponse struct {
 func (x *QueryHasDepositedResponse) Reset() {
 	*x = QueryHasDepositedResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_goat_bitcoin_v1_query_proto_msgTypes[9]
+		mi := &file_goat_bitcoin_v1_query_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5640,7 +4727,7 @@ func (*QueryHasDepositedResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryHasDepositedResponse.ProtoReflect.Descriptor instead.
 func (*QueryHasDepositedResponse) Descriptor() ([]byte, []int) {
-	return file_goat_bitcoin_v1_query_proto_rawDescGZIP(), []int{9}
+	return file_goat_bitcoin_v1_query_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *QueryHasDepositedResponse) GetYes() bool {
@@ -5662,7 +4749,7 @@ type QueryWithdrawalRequest struct {
 func (x *QueryWithdrawalRequest) Reset() {
 	*x = QueryWithdrawalRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_goat_bitcoin_v1_query_proto_msgTypes[10]
+		mi := &file_goat_bitcoin_v1_query_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5676,7 +4763,7 @@ func (*QueryWithdrawalRequest) ProtoMessage() {}
 
 // Deprecated: Use QueryWithdrawalRequest.ProtoReflect.Descriptor instead.
 func (*QueryWithdrawalRequest) Descriptor() ([]byte, []int) {
-	return file_goat_bitcoin_v1_query_proto_rawDescGZIP(), []int{10}
+	return file_goat_bitcoin_v1_query_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *QueryWithdrawalRequest) GetId() uint64 {
@@ -5698,7 +4785,7 @@ type QueryWithdrawalResponse struct {
 func (x *QueryWithdrawalResponse) Reset() {
 	*x = QueryWithdrawalResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_goat_bitcoin_v1_query_proto_msgTypes[11]
+		mi := &file_goat_bitcoin_v1_query_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5712,7 +4799,7 @@ func (*QueryWithdrawalResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryWithdrawalResponse.ProtoReflect.Descriptor instead.
 func (*QueryWithdrawalResponse) Descriptor() ([]byte, []int) {
-	return file_goat_bitcoin_v1_query_proto_rawDescGZIP(), []int{11}
+	return file_goat_bitcoin_v1_query_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *QueryWithdrawalResponse) GetWithdrawal() *Withdrawal {
@@ -5769,14 +4856,7 @@ var file_goat_bitcoin_v1_query_proto_rawDesc = []byte{
 	0x62, 0x6c, 0x69, 0x63, 0x4b, 0x65, 0x79, 0x12, 0x28, 0x0a, 0x10, 0x6f, 0x70, 0x5f, 0x72, 0x65,
 	0x74, 0x75, 0x72, 0x6e, 0x5f, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28,
 	0x0c, 0x52, 0x0e, 0x6f, 0x70, 0x52, 0x65, 0x74, 0x75, 0x72, 0x6e, 0x53, 0x63, 0x72, 0x69, 0x70,
-	0x74, 0x22, 0x32, 0x0a, 0x16, 0x51, 0x75, 0x65, 0x72, 0x79, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72,
-	0x61, 0x77, 0x61, 0x6c, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x18, 0x0a, 0x07, 0x61,
-	0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64,
-	0x64, 0x72, 0x65, 0x73, 0x73, 0x22, 0x3a, 0x0a, 0x1e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x57, 0x69,
-	0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65,
-	0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73,
-	0x73, 0x22, 0x3d, 0x0a, 0x11, 0x51, 0x75, 0x65, 0x72, 0x79, 0x48, 0x61, 0x73, 0x44, 0x65, 0x70,
+	0x74, 0x22, 0x3d, 0x0a, 0x11, 0x51, 0x75, 0x65, 0x72, 0x79, 0x48, 0x61, 0x73, 0x44, 0x65, 0x70,
 	0x6f, 0x73, 0x69, 0x74, 0x65, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x78, 0x69, 0x64, 0x18, 0x01,
 	0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x74, 0x78, 0x69, 0x64, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x78,
 	0x6f, 0x75, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x05, 0x74, 0x78, 0x6f, 0x75, 0x74,
@@ -5863,39 +4943,37 @@ func file_goat_bitcoin_v1_query_proto_rawDescGZIP() []byte {
 	return file_goat_bitcoin_v1_query_proto_rawDescData
 }
 
-var file_goat_bitcoin_v1_query_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_goat_bitcoin_v1_query_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_goat_bitcoin_v1_query_proto_goTypes = []interface{}{
-	(*QueryParamsRequest)(nil),             // 0: goat.bitcoin.v1.QueryParamsRequest
-	(*QueryParamsResponse)(nil),            // 1: goat.bitcoin.v1.QueryParamsResponse
-	(*QueryPubkeyRequest)(nil),             // 2: goat.bitcoin.v1.QueryPubkeyRequest
-	(*QueryPubkeyResponse)(nil),            // 3: goat.bitcoin.v1.QueryPubkeyResponse
-	(*QueryDepositAddress)(nil),            // 4: goat.bitcoin.v1.QueryDepositAddress
-	(*QueryDepositAddressResponse)(nil),    // 5: goat.bitcoin.v1.QueryDepositAddressResponse
-	(*QueryWithdrawalAddress)(nil),         // 6: goat.bitcoin.v1.QueryWithdrawalAddress
-	(*QueryWithdrawalAddressResponse)(nil), // 7: goat.bitcoin.v1.QueryWithdrawalAddressResponse
-	(*QueryHasDeposited)(nil),              // 8: goat.bitcoin.v1.QueryHasDeposited
-	(*QueryHasDepositedResponse)(nil),      // 9: goat.bitcoin.v1.QueryHasDepositedResponse
-	(*QueryWithdrawalRequest)(nil),         // 10: goat.bitcoin.v1.QueryWithdrawalRequest
-	(*QueryWithdrawalResponse)(nil),        // 11: goat.bitcoin.v1.QueryWithdrawalResponse
-	(*Params)(nil),                         // 12: goat.bitcoin.v1.Params
-	(*v1.PublicKey)(nil),                   // 13: goat.relayer.v1.PublicKey
-	(*Withdrawal)(nil),                     // 14: goat.bitcoin.v1.Withdrawal
+	(*QueryParamsRequest)(nil),          // 0: goat.bitcoin.v1.QueryParamsRequest
+	(*QueryParamsResponse)(nil),         // 1: goat.bitcoin.v1.QueryParamsResponse
+	(*QueryPubkeyRequest)(nil),          // 2: goat.bitcoin.v1.QueryPubkeyRequest
+	(*QueryPubkeyResponse)(nil),         // 3: goat.bitcoin.v1.QueryPubkeyResponse
+	(*QueryDepositAddress)(nil),         // 4: goat.bitcoin.v1.QueryDepositAddress
+	(*QueryDepositAddressResponse)(nil), // 5: goat.bitcoin.v1.QueryDepositAddressResponse
+	(*QueryHasDeposited)(nil),           // 6: goat.bitcoin.v1.QueryHasDeposited
+	(*QueryHasDepositedResponse)(nil),   // 7: goat.bitcoin.v1.QueryHasDepositedResponse
+	(*QueryWithdrawalRequest)(nil),      // 8: goat.bitcoin.v1.QueryWithdrawalRequest
+	(*QueryWithdrawalResponse)(nil),     // 9: goat.bitcoin.v1.QueryWithdrawalResponse
+	(*Params)(nil),                      // 10: goat.bitcoin.v1.Params
+	(*v1.PublicKey)(nil),                // 11: goat.relayer.v1.PublicKey
+	(*Withdrawal)(nil),                  // 12: goat.bitcoin.v1.Withdrawal
 }
 var file_goat_bitcoin_v1_query_proto_depIdxs = []int32{
-	12, // 0: goat.bitcoin.v1.QueryParamsResponse.params:type_name -> goat.bitcoin.v1.Params
-	13, // 1: goat.bitcoin.v1.QueryPubkeyResponse.public_key:type_name -> goat.relayer.v1.PublicKey
-	13, // 2: goat.bitcoin.v1.QueryDepositAddressResponse.public_key:type_name -> goat.relayer.v1.PublicKey
-	14, // 3: goat.bitcoin.v1.QueryWithdrawalResponse.withdrawal:type_name -> goat.bitcoin.v1.Withdrawal
+	10, // 0: goat.bitcoin.v1.QueryParamsResponse.params:type_name -> goat.bitcoin.v1.Params
+	11, // 1: goat.bitcoin.v1.QueryPubkeyResponse.public_key:type_name -> goat.relayer.v1.PublicKey
+	11, // 2: goat.bitcoin.v1.QueryDepositAddressResponse.public_key:type_name -> goat.relayer.v1.PublicKey
+	12, // 3: goat.bitcoin.v1.QueryWithdrawalResponse.withdrawal:type_name -> goat.bitcoin.v1.Withdrawal
 	0,  // 4: goat.bitcoin.v1.Query.Params:input_type -> goat.bitcoin.v1.QueryParamsRequest
 	2,  // 5: goat.bitcoin.v1.Query.Pubkey:input_type -> goat.bitcoin.v1.QueryPubkeyRequest
 	4,  // 6: goat.bitcoin.v1.Query.DepositAddress:input_type -> goat.bitcoin.v1.QueryDepositAddress
-	8,  // 7: goat.bitcoin.v1.Query.HasDeposited:input_type -> goat.bitcoin.v1.QueryHasDeposited
-	10, // 8: goat.bitcoin.v1.Query.Withdrawal:input_type -> goat.bitcoin.v1.QueryWithdrawalRequest
+	6,  // 7: goat.bitcoin.v1.Query.HasDeposited:input_type -> goat.bitcoin.v1.QueryHasDeposited
+	8,  // 8: goat.bitcoin.v1.Query.Withdrawal:input_type -> goat.bitcoin.v1.QueryWithdrawalRequest
 	1,  // 9: goat.bitcoin.v1.Query.Params:output_type -> goat.bitcoin.v1.QueryParamsResponse
 	3,  // 10: goat.bitcoin.v1.Query.Pubkey:output_type -> goat.bitcoin.v1.QueryPubkeyResponse
 	5,  // 11: goat.bitcoin.v1.Query.DepositAddress:output_type -> goat.bitcoin.v1.QueryDepositAddressResponse
-	9,  // 12: goat.bitcoin.v1.Query.HasDeposited:output_type -> goat.bitcoin.v1.QueryHasDepositedResponse
-	11, // 13: goat.bitcoin.v1.Query.Withdrawal:output_type -> goat.bitcoin.v1.QueryWithdrawalResponse
+	7,  // 12: goat.bitcoin.v1.Query.HasDeposited:output_type -> goat.bitcoin.v1.QueryHasDepositedResponse
+	9,  // 13: goat.bitcoin.v1.Query.Withdrawal:output_type -> goat.bitcoin.v1.QueryWithdrawalResponse
 	9,  // [9:14] is the sub-list for method output_type
 	4,  // [4:9] is the sub-list for method input_type
 	4,  // [4:4] is the sub-list for extension type_name
@@ -5984,30 +5062,6 @@ func file_goat_bitcoin_v1_query_proto_init() {
 			}
 		}
 		file_goat_bitcoin_v1_query_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryWithdrawalAddress); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_goat_bitcoin_v1_query_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryWithdrawalAddressResponse); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_goat_bitcoin_v1_query_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*QueryHasDeposited); i {
 			case 0:
 				return &v.state
@@ -6019,7 +5073,7 @@ func file_goat_bitcoin_v1_query_proto_init() {
 				return nil
 			}
 		}
-		file_goat_bitcoin_v1_query_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+		file_goat_bitcoin_v1_query_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*QueryHasDepositedResponse); i {
 			case 0:
 				return &v.state
@@ -6031,7 +5085,7 @@ func file_goat_bitcoin_v1_query_proto_init() {
 				return nil
 			}
 		}
-		file_goat_bitcoin_v1_query_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
+		file_goat_bitcoin_v1_query_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*QueryWithdrawalRequest); i {
 			case 0:
 				return &v.state
@@ -6043,7 +5097,7 @@ func file_goat_bitcoin_v1_query_proto_init() {
 				return nil
 			}
 		}
-		file_goat_bitcoin_v1_query_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
+		file_goat_bitcoin_v1_query_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*QueryWithdrawalResponse); i {
 			case 0:
 				return &v.state
@@ -6062,7 +5116,7 @@ func file_goat_bitcoin_v1_query_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_goat_bitcoin_v1_query_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   12,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
