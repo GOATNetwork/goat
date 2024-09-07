@@ -35,13 +35,13 @@ func (k msgServer) NewVoter(ctx context.Context, req *types.MsgNewVoterRequest) 
 		return nil, err
 	}
 
-	address := sdktypes.AccAddress(goatcrypto.Hash160Sum(req.VoterTxKey))
-	addressStr, err := k.AddrCodec.BytesToString(address)
+	addrRaw := sdktypes.AccAddress(goatcrypto.Hash160Sum(req.VoterTxKey))
+	addrStr, err := k.AddrCodec.BytesToString(addrRaw)
 	if err != nil {
 		return nil, err
 	}
 
-	voter, err := k.Voters.Get(ctx, address)
+	voter, err := k.Voters.Get(ctx, addrStr)
 	if err != nil {
 		return nil, err
 	}
@@ -54,7 +54,7 @@ func (k msgServer) NewVoter(ctx context.Context, req *types.MsgNewVoterRequest) 
 		return nil, types.ErrInvalid.Wrapf("vote key hash not match")
 	}
 
-	reqMsg := types.NewOnBoardingVoterRequest(voter.Height, address, voter.VoteKey)
+	reqMsg := types.NewOnBoardingVoterRequest(voter.Height, addrRaw, voter.VoteKey)
 	sigMsg := types.VoteSignDoc(
 		reqMsg.MethodName(), sdkctx.ChainID(), req.Proposer, 0 /* sequence */, relayer.GetEpoch(), reqMsg.SignDoc())
 
@@ -70,11 +70,11 @@ func (k msgServer) NewVoter(ctx context.Context, req *types.MsgNewVoterRequest) 
 	if err != nil {
 		return nil, err
 	}
-	queue.OnBoarding = append(queue.OnBoarding, addressStr)
+	queue.OnBoarding = append(queue.OnBoarding, addrStr)
 
 	voter.VoteKey = req.VoterBlsKey
 	voter.Status = types.VOTER_STATUS_ON_BOARDING
-	if err := k.Voters.Set(ctx, address, voter); err != nil {
+	if err := k.Voters.Set(ctx, addrStr, voter); err != nil {
 		return nil, err
 	}
 
@@ -82,7 +82,7 @@ func (k msgServer) NewVoter(ctx context.Context, req *types.MsgNewVoterRequest) 
 		return nil, err
 	}
 
-	sdkctx.EventManager().EmitEvent(types.VoterBoardedEvent(relayer.GetProposer(), addressStr))
+	sdkctx.EventManager().EmitEvent(types.VoterBoardedEvent(relayer.GetProposer(), addrStr))
 	return &types.MsgNewVoterResponse{}, nil
 }
 

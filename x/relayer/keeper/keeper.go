@@ -30,7 +30,7 @@ type (
 		Params    collections.Item[types.Params]
 		Relayer   collections.Item[types.Relayer]
 		Sequence  collections.Sequence
-		Voters    collections.Map[sdktypes.AccAddress, types.Voter]
+		Voters    collections.Map[string, types.Voter]
 		Queue     collections.Item[types.VoterQueue]
 		Pubkeys   collections.KeySet[[]byte]
 		Randao    collections.Item[[]byte]
@@ -54,7 +54,7 @@ func NewKeeper(
 		Params:   collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 		Relayer:  collections.NewItem(sb, types.RelayerKey, "relayer", codec.CollValue[types.Relayer](cdc)),
 		Sequence: collections.NewSequence(sb, types.SequenceKey, "sequence"),
-		Voters:   collections.NewMap(sb, types.VotersKey, "voters", sdktypes.AccAddressKey, codec.CollValue[types.Voter](cdc)),
+		Voters:   collections.NewMap(sb, types.VotersKey, "voters", collections.StringKey, codec.CollValue[types.Voter](cdc)),
 		Pubkeys:  collections.NewKeySet(sb, types.PubkeysKey, "pubkeys", collections.BytesKey),
 		Queue:    collections.NewItem(sb, types.QueueKey, "queue", codec.CollValue[types.VoterQueue](cdc)),
 		Randao:   collections.NewItem(sb, types.RandDAOKey, "randao", collections.BytesValue),
@@ -110,12 +110,7 @@ func (k Keeper) VerifyProposal(ctx context.Context, req types.IVoteMsg, verifyFn
 	}
 
 	pubkeys := make([][]byte, 0, bmpLen+1)
-	p, err := k.AddrCodec.StringToBytes(relayer.Proposer)
-	if err != nil {
-		return 0, err
-	}
-
-	proposer, err := k.Voters.Get(ctx, p)
+	proposer, err := k.Voters.Get(ctx, relayer.Proposer)
 	if err != nil {
 		return 0, err
 	}
@@ -126,21 +121,15 @@ func (k Keeper) VerifyProposal(ctx context.Context, req types.IVoteMsg, verifyFn
 			continue
 		}
 
-		v, err := k.AddrCodec.StringToBytes(relayer.GetVoters()[i])
-		if err != nil {
-			return 0, err
-		}
-
-		voter, err := k.Voters.Get(ctx, v)
+		voter, err := k.Voters.Get(ctx, voters[i])
 		if err != nil {
 			return 0, err
 		}
 		pubkeys = append(pubkeys, voter.VoteKey)
 	}
 
-	chainId := sdktypes.UnwrapSDKContext(ctx).HeaderInfo().ChainID
-
-	sigdoc := types.VoteSignDoc(req.MethodName(), chainId, relayer.Proposer, sequence, relayer.Epoch, req.VoteSigDoc())
+	sdkctx := sdktypes.UnwrapSDKContext(ctx)
+	sigdoc := types.VoteSignDoc(req.MethodName(), sdkctx.ChainID(), relayer.Proposer, sequence, relayer.Epoch, req.VoteSigDoc())
 	if !goatcrypto.AggregateVerify(pubkeys, sigdoc, req.GetVote().GetSignature()) {
 		return 0, types.ErrInvalidProposalSignature.Wrapf("invalid signature")
 	}
@@ -236,16 +225,12 @@ func (k Keeper) ElectProposer(ctx context.Context) error {
 	onBoarding, offBoarding := len(queue.OnBoarding) > 0, len(queue.OffBoarding) > 0
 	if onBoarding {
 		for _, v := range queue.OnBoarding {
-			addr, err := k.AddrCodec.StringToBytes(v)
-			if err != nil {
-				return err
-			}
-			voter, err := k.Voters.Get(ctx, addr)
+			voter, err := k.Voters.Get(ctx, v)
 			if err != nil {
 				return err
 			}
 			voter.Status = types.VOTER_STATUS_ACTIVATED
-			if err := k.Voters.Set(ctx, addr, voter); err != nil {
+			if err := k.Voters.Set(ctx, v, voter); err != nil {
 				return err
 			}
 		}
@@ -254,30 +239,30 @@ func (k Keeper) ElectProposer(ctx context.Context) error {
 
 	var isProposerRemvoed bool
 	if offBoarding {
-		delSet := make(map[string]bool, len(queue.OffBoarding))
+		set := make(map[string]bool, len(queue.OffBoarding))
 		for _, v := range queue.OffBoarding {
-			addr, err := k.AddrCodec.StringToBytes(v)
-			if err != nil {
+			if err := k.Voters.Remove(ctx, v); err != nil {
 				return err
 			}
-			if err := k.Voters.Remove(ctx, addr); err != nil {
-				return err
-			}
-			delSet[v] = true
+			set[v] = true
 		}
 
-		isProposerRemvoed = delSet[relayer.Proposer]
-		voters := slices.DeleteFunc(append([]string{relayer.Proposer}, relayer.Voters...), func(e string) bool {
-			return delSet[e]
+		isProposerRemvoed = set[relayer.Proposer]
+		newVoters := slices.DeleteFunc(relayer.Voters, func(e string) bool {
+			return set[e]
 		})
 
-		if len(voters) == 0 { // it should never happen
-			k.Logger().Error("too few voters avaliable to remove")
-			return nil
+		if isProposerRemvoed {
+			if len(newVoters) == 0 { // it should never happen
+				k.Logger().Error("delete too many voters in ElectProposer")
+				return nil
+			}
+			// use the first voter as the new proposer
+			relayer.Proposer = newVoters[0]
+			relayer.Voters = newVoters[1:]
+		} else {
+			relayer.Voters = newVoters[:]
 		}
-
-		relayer.Proposer = voters[0]
-		relayer.Voters = voters[1:]
 	}
 
 	// epoch number is constantly increasing even if we don't have a new election
