@@ -5,11 +5,19 @@ import "amino/amino.proto";
 
 option go_package = "github.com/goatnetwork/goat/x/bitcoin/types";
 
+// ChainConfig
+message ChainConfig {
+  string network_name = 1;
+  uint32 pubkey_hash_addr_prefix = 2;
+  uint32 script_hash_addr_prefix = 3;
+  string bech32_hrp = 4;
+}
+
 // Params defines the parameters for the module.
 message Params {
   option (amino.name) = "goat/x/bitcoin/Params";
 
-  string network_name = 1;
+  ChainConfig chain_config = 1;
   uint32 safe_confirmation_block = 2;
   uint32 hard_confirmation_block = 3;
   uint64 min_deposit_amount = 4;

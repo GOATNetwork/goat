@@ -78,27 +78,6 @@ func DepositAddressV1(pubkey *relayer.PublicKey, magicPrefix, evmAddress []byte,
 	return nil, nil, errors.New("unknown key type")
 }
 
-// func WithdrawalAddress(address string, netwk *chaincfg.Params) ([]byte, error) {
-// 	addr, err := btcutil.DecodeAddress(address, netwk)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	switch v := addr.(type) {
-// 	case *btcutil.AddressPubKeyHash:
-// 		return append([]byte{0}, v.ScriptAddress()...), nil
-// 	case *btcutil.AddressScriptHash:
-// 		return append([]byte{1}, v.ScriptAddress()...), nil
-// 	case *btcutil.AddressWitnessPubKeyHash:
-// 		return append([]byte{2}, v.ScriptAddress()...), nil
-// 	case *btcutil.AddressWitnessScriptHash:
-// 		return append([]byte{3}, v.ScriptAddress()...), nil
-// 	case *btcutil.AddressTaproot:
-// 		return append([]byte{4}, v.ScriptAddress()...), nil
-// 	}
-// 	return nil, errors.New("unknown address type")
-// }
-
 func VerifyDespositScriptV0(pubkey *relayer.PublicKey, evmAddress, txout []byte) error {
 	if len(txout) != DepositV0TxoutSize {
 		return errors.New("invalid output script")

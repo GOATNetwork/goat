@@ -5,8 +5,6 @@ import (
 	"context"
 
 	"cosmossdk.io/collections"
-	"github.com/btcsuite/btcd/btcutil"
-	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcd/wire"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
@@ -150,11 +148,11 @@ func (k msgServer) NewWithdrawal(ctx context.Context, req *types.MsgNewWithdrawa
 
 	tx, txrd := new(wire.MsgTx), bytes.NewReader(req.Proposal.NoWitnessTx)
 	if err := tx.DeserializeNoWitness(txrd); err != nil || txrd.Len() > 0 {
-		return nil, types.ErrInvalidRequest.Wrapf("invalid non-witness tx")
+		return nil, types.ErrInvalidRequest.Wrap("invalid non-witness tx")
 	}
 
 	if len(tx.TxOut) < len(req.Proposal.Id) {
-		return nil, types.ErrInvalidRequest.Wrapf("invalid tx output size for withdrawals")
+		return nil, types.ErrInvalidRequest.Wrap("invalid tx output size for withdrawals")
 	}
 
 	sequence, err := k.relayerKeeper.VerifyProposal(ctx, req)
@@ -162,13 +160,15 @@ func (k msgServer) NewWithdrawal(ctx context.Context, req *types.MsgNewWithdrawa
 		return nil, err
 	}
 
-	param, err := k.Params.Get(ctx)
+	txid := goatcrypto.DoubleSHA256Sum(req.Proposal.NoWitnessTx)
+	duplicated, err := k.WithdrawalProposals.Has(ctx, txid)
 	if err != nil {
 		return nil, err
 	}
+	if duplicated {
+		return nil, types.ErrInvalidRequest.Wrap("duplicated withdrawal proposal txid")
+	}
 
-	network := types.BitcoinNetworks[param.NetworkName]
-	txid := goatcrypto.DoubleSHA256Sum(req.Proposal.NoWitnessTx)
 	for idx, wid := range req.Proposal.Id {
 		withdrawal, err := k.Withdrawals.Get(ctx, wid)
 		if err != nil {
@@ -179,17 +179,8 @@ func (k msgServer) NewWithdrawal(ctx context.Context, req *types.MsgNewWithdrawa
 			return nil, types.ErrInvalidRequest.Wrapf("witdhrawal %d is not pending or canceling", wid)
 		}
 
-		addr, err := btcutil.DecodeAddress(withdrawal.Address, network)
-		if err != nil {
-			return nil, types.ErrInternalError.Wrapf("processing withdrawal %d with invalid address", wid)
-		}
-		script, err := txscript.PayToAddrScript(addr)
-		if err != nil {
-			return nil, types.ErrInternalError.Wrapf("processing withdrawal %d with invalid address", wid)
-		}
-
 		txout := tx.TxOut[idx]
-		if !bytes.Equal(script, txout.PkScript) {
+		if !bytes.Equal(withdrawal.OutputScript, txout.PkScript) {
 			return nil, types.ErrInvalidRequest.Wrapf("witdhrawal %d script not matched", wid)
 		}
 
@@ -205,7 +196,8 @@ func (k msgServer) NewWithdrawal(ctx context.Context, req *types.MsgNewWithdrawa
 		}
 	}
 
-	if err := k.WithdrawalProposals.Set(ctx, txid, *req.Proposal); err != nil {
+	if err := k.WithdrawalProposals.Set(ctx, txid,
+		types.WithdrawalIds{Id: req.Proposal.Id}); err != nil {
 		return nil, err
 	}
 

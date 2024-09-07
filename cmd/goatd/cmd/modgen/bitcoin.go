@@ -54,6 +54,12 @@ func Bitcoin() *cobra.Command {
 				if err != nil {
 					return err
 				}
+
+				network, ok := BitcoinNetworks[networkName]
+				if !ok {
+					return fmt.Errorf("unknown bitcoin network: %s", networkName)
+				}
+
 				safe, err := cmd.Flags().GetUint32(FlagSafe)
 				if err != nil {
 					return err
@@ -75,7 +81,12 @@ func Bitcoin() *cobra.Command {
 				}
 
 				genesis.Params = types.Params{
-					NetworkName:           networkName,
+					ChainConfig: &types.ChainConfig{
+						NetworkName:          network.Name,
+						PubkeyHashAddrPrefix: uint32(network.PubKeyHashAddrID),
+						ScriptHashAddrPrefix: uint32(network.ScriptHashAddrID),
+						Bech32Hrp:            network.Bech32HRPSegwit,
+					},
 					SafeConfirmationBlock: safe,
 					HardConfirmationBlock: hard,
 					DepositMagicPrefix:    []byte(depositMagicPreifx),
@@ -120,7 +131,7 @@ func Bitcoin() *cobra.Command {
 	cmd.Flags().Uint32(FlagHard, param.HardConfirmationBlock, "the hard confirmation number")
 	cmd.Flags().BytesHex(FlagPubkey, nil, "the initial relayer public key")
 	cmd.Flags().String(FlagPubkeyType, "secp256k1", "the public key type [secp256k1,schnorr]")
-	cmd.Flags().String(FlagNetworkName, string(param.NetworkName), "the bitcoin network name(mainnet|testnet3|regtest|signet)")
+	cmd.Flags().String(FlagNetworkName, param.ChainConfig.NetworkName, "the bitcoin network name(mainnet|testnet3|regtest|signet)")
 	cmd.Flags().String(FlagDepositMagicPrefix, string(param.DepositMagicPrefix), "the deposit magic prefix for OP_RETURNS")
 	cmd.Flags().Uint64(FlagMinDeposit, param.MinDepositAmount, "minimal allowed deposit amount")
 

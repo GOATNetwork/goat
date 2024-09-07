@@ -62,6 +62,11 @@ func (q queryServer) DepositAddress(ctx context.Context, req *types.QueryDeposit
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
+	evmAddress, err := types.DecodeEthAddress(req.EvmAddress)
+	if err != nil {
+		return nil, err
+	}
+
 	pubkey, err := q.k.Pubkey.Get(ctx)
 	if err != nil {
 		return nil, status.Error(codes.Internal, "internal error")
@@ -72,16 +77,7 @@ func (q queryServer) DepositAddress(ctx context.Context, req *types.QueryDeposit
 		return nil, status.Error(codes.Internal, "internal error")
 	}
 
-	chainConfig, ok := types.BitcoinNetworks[param.NetworkName]
-	if !ok {
-		return nil, status.Errorf(codes.Internal, "internal error: undefined network %s", param.NetworkName)
-	}
-
-	evmAddress, err := types.DecodeEthAddress(req.EvmAddress)
-	if err != nil {
-		return nil, err
-	}
-
+	chainConfig := param.ChainConfig.ToBtcdParam()
 	switch req.Version {
 	case 0:
 		address, err := types.DepositAddressV0(&pubkey, evmAddress, chainConfig)
@@ -89,9 +85,9 @@ func (q queryServer) DepositAddress(ctx context.Context, req *types.QueryDeposit
 			return nil, status.Errorf(codes.InvalidArgument, "invalid request: %s", err.Error())
 		}
 		return &types.QueryDepositAddressResponse{
-			Address:     address.EncodeAddress(),
+			NetworkName: param.ChainConfig.NetworkName,
 			PublicKey:   &pubkey,
-			NetworkName: param.NetworkName,
+			Address:     address.EncodeAddress(),
 		}, nil
 	case 1:
 		address, script, err := types.DepositAddressV1(&pubkey, param.DepositMagicPrefix, evmAddress, chainConfig)
@@ -99,7 +95,7 @@ func (q queryServer) DepositAddress(ctx context.Context, req *types.QueryDeposit
 			return nil, status.Errorf(codes.InvalidArgument, "invalid request: %s", err.Error())
 		}
 		return &types.QueryDepositAddressResponse{
-			NetworkName:    param.NetworkName,
+			NetworkName:    param.ChainConfig.NetworkName,
 			PublicKey:      &pubkey,
 			Address:        address.EncodeAddress(),
 			OpReturnScript: script,

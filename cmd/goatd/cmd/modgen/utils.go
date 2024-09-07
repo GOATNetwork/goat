@@ -7,8 +7,16 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 )
+
+var BitcoinNetworks = map[string]*chaincfg.Params{
+	chaincfg.MainNetParams.Name:       &chaincfg.MainNetParams,
+	chaincfg.TestNet3Params.Name:      &chaincfg.TestNet3Params,
+	chaincfg.SigNetParams.Name:        &chaincfg.SigNetParams,
+	chaincfg.RegressionNetParams.Name: &chaincfg.RegressionNetParams,
+}
 
 func DecodeHexOrBase64String(str string) ([]byte, error) {
 	pubkeyRaw, err := hex.DecodeString(str)

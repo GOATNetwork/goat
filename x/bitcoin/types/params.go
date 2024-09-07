@@ -10,12 +10,24 @@ import (
 // NewParams creates a new Params instance.
 func NewParams() Params {
 	return Params{
-		NetworkName:           chaincfg.MainNetParams.Name,
+		ChainConfig: &ChainConfig{
+			NetworkName:          chaincfg.RegressionNetParams.Name,
+			PubkeyHashAddrPrefix: uint32(chaincfg.RegressionNetParams.PubKeyHashAddrID),
+			ScriptHashAddrPrefix: uint32(chaincfg.RegressionNetParams.ScriptHashAddrID),
+			Bech32Hrp:            chaincfg.RegressionNetParams.Bech32HRPSegwit,
+		},
 		SafeConfirmationBlock: 3,
 		HardConfirmationBlock: 6,
 		MinDepositAmount:      DustTxoutAmount,
-		DepositMagicPrefix:    []byte("GTV2"),
+		DepositMagicPrefix:    []byte("GTT0"),
 	}
+
+	/*
+		DepositMagicPrefix
+			- regtest/devnet: `GTT0`
+			- testnet: `GTV1`
+			- mainnet: `GTV2`
+	*/
 }
 
 // DefaultParams returns a default set of parameters.
@@ -25,8 +37,10 @@ func DefaultParams() Params {
 
 // Validate validates the set of params.
 func (p Params) Validate() error {
-	if BitcoinNetworks[p.NetworkName] == nil {
-		return fmt.Errorf("unknown bitcoin network: %s", p.NetworkName)
+	switch p.ChainConfig.NetworkName {
+	case chaincfg.MainNetParams.Name, chaincfg.TestNet3Params.Name, chaincfg.SigNetParams.Name, chaincfg.RegressionNetParams.Name:
+	default:
+		return fmt.Errorf("unknown bitcoin network: %s", p.ChainConfig.NetworkName)
 	}
 
 	if p.MinDepositAmount < DustTxoutAmount {

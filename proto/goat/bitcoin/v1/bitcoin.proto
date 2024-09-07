@@ -1,8 +1,6 @@
 syntax = "proto3";
 package goat.bitcoin.v1;
 
-// import "amino/amino.proto";
-// import "cosmos_proto/cosmos.proto";
 import "goat/relayer/v1/relayer.proto";
 import "gogoproto/gogo.proto";
 
@@ -51,15 +49,6 @@ enum WithdrawalStatus {
   WITHDRAWAL_STATUS_PAID = 5;
 }
 
-// Withdrawal
-message Withdrawal {
-  string address = 1;
-  uint64 request_amount = 2;
-  uint64 max_tx_price = 3;
-  WithdrawalStatus status = 4;
-  WithdrawalReceipt receipt = 5;
-}
-
 // WithdrawalReceipt
 message WithdrawalReceipt {
   bytes txid = 1;
@@ -67,32 +56,15 @@ message WithdrawalReceipt {
   uint64 amount = 3;
 }
 
-// ...ConsolidationProposal
-
-// DepositReceipt
-message DepositExecReceipt {
-  bytes txid = 1;
-  uint32 txout = 2;
-  bytes address = 3;
-  uint64 amount = 4;
-  // string amount = 4 [
-  //   (cosmos_proto.scalar) = "cosmos.Int",
-  //   (gogoproto.customtype) = "cosmossdk.io/math.Int",
-  //   (gogoproto.nullable) = false,
-  //   (amino.dont_omitempty) = true
-  // ];
-}
-
-// WithdrawalExecReceipt
-message WithdrawalExecReceipt {
-  uint64 id = 1;
-  WithdrawalReceipt receipt = 2;
-}
-
-// ExecuableQueue
-message ExecuableQueue {
-  uint64 block_number = 1;
-  repeated DepositExecReceipt deposits = 2;
-  repeated WithdrawalExecReceipt paid_withdrawals = 3;
-  repeated uint64 rejected_withdrawals = 4;
+// Withdrawal
+message Withdrawal {
+  string address = 1;
+  uint64 request_amount = 2;
+  uint64 max_tx_price = 3;
+  // the expected output script
+  // we need to check if the withdrawal address is valid in advance
+  // so we don't have to calculate it again in the withdrawal proposal
+  bytes output_script = 4;
+  WithdrawalStatus status = 5;
+  WithdrawalReceipt receipt = 6;
 }

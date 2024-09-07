@@ -34,7 +34,7 @@ type (
 		Deposited           collections.Map[collections.Pair[[]byte, uint32], uint64]
 		EthTxNonce          collections.Sequence
 		Withdrawals         collections.Map[uint64, types.Withdrawal]
-		WithdrawalProposals collections.Map[[]byte, types.WithdrawalProposal]
+		WithdrawalProposals collections.Map[[]byte, types.WithdrawalIds]
 		ExecuableQueue      collections.Item[types.ExecuableQueue]
 		// this line is used by starport scaffolding # collection/type
 
@@ -68,7 +68,7 @@ func NewKeeper(
 		ExecuableQueue: collections.NewItem(sb, types.ExecuableQueueKey, "queue", codec.CollValue[types.ExecuableQueue](cdc)),
 
 		Withdrawals:         collections.NewMap(sb, types.WithdrawalKey, "withdrawals", collections.Uint64Key, codec.CollValue[types.Withdrawal](cdc)),
-		WithdrawalProposals: collections.NewMap(sb, types.WithdrawalProposalKey, "withdrawal_proposals", collections.BytesKey, codec.CollValue[types.WithdrawalProposal](cdc)),
+		WithdrawalProposals: collections.NewMap(sb, types.WithdrawalProposalKey, "withdrawal_proposals", collections.BytesKey, codec.CollValue[types.WithdrawalIds](cdc)),
 		// this line is used by starport scaffolding # collection/instantiate
 	}
 

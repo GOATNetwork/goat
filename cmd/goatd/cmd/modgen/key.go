@@ -9,7 +9,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
-	"github.com/goatnetwork/goat/x/bitcoin/types"
 	"github.com/spf13/cobra"
 )
 
@@ -40,7 +39,7 @@ func NewKey() *cobra.Command {
 				return err
 			}
 
-			network, ok := types.BitcoinNetworks[networkName]
+			network, ok := BitcoinNetworks[networkName]
 			if !ok {
 				return fmt.Errorf("unknown bitcoin network: %s", networkName)
 			}
