@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 
+	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
@@ -64,6 +65,15 @@ func (k msgServer) NewVoter(ctx context.Context, req *types.MsgNewVoterRequest) 
 
 	if !goatcrypto.Verify(req.VoterBlsKey, sigMsg, req.VoterBlsKeyProof) {
 		return nil, types.ErrInvalid.Wrapf("false vote key proof")
+	}
+
+	// add account
+	if !k.accountKeeper.HasAccount(ctx, addrRaw) {
+		acc := k.accountKeeper.NewAccountWithAddress(ctx, addrRaw)
+		if err := acc.SetPubKey(&secp256k1.PubKey{Key: req.VoterTxKey}); err != nil {
+			return nil, types.ErrInvalid.Wrapf("unable to set pubkey")
+		}
+		k.accountKeeper.SetAccount(ctx, acc)
 	}
 
 	queue, err := k.Queue.Get(ctx)

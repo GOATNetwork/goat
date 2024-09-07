@@ -34,6 +34,8 @@ type (
 		Queue     collections.Item[types.VoterQueue]
 		Pubkeys   collections.KeySet[[]byte]
 		Randao    collections.Item[[]byte]
+
+		accountKeeper types.AccountKeeper
 	}
 )
 
@@ -41,15 +43,17 @@ func NewKeeper(
 	cdc codec.BinaryCodec,
 	addressCodec address.Codec,
 	storeService store.KVStoreService,
+	accountKeeper types.AccountKeeper,
 	logger log.Logger,
 ) Keeper {
 	sb := collections.NewSchemaBuilder(storeService)
 
 	k := Keeper{
-		cdc:          cdc,
-		AddrCodec:    addressCodec,
-		storeService: storeService,
-		logger:       logger,
+		cdc:           cdc,
+		AddrCodec:     addressCodec,
+		storeService:  storeService,
+		logger:        logger,
+		accountKeeper: accountKeeper,
 
 		Params:   collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 		Relayer:  collections.NewItem(sb, types.RelayerKey, "relayer", codec.CollValue[types.Relayer](cdc)),
