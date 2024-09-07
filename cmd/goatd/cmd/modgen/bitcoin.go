@@ -1,9 +1,11 @@
 package modgen
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
+	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/server"
@@ -18,7 +20,6 @@ func Bitcoin() *cobra.Command {
 		FlagPubkey             = "pubkey"
 		FlagPubkeyType         = "pubkey-type"
 		FlagMinDeposit         = "min-deposit"
-		FlagDepositMagicPrefix = "deposit-magic-prefix"
 		FlagNetworkName        = "network"
 		FlagConfirmationNumber = "confirmation-number"
 	)
@@ -64,9 +65,10 @@ func Bitcoin() *cobra.Command {
 					return err
 				}
 
-				depositMagicPreifx, err := cmd.Flags().GetString(FlagDepositMagicPrefix)
-				if err != nil {
-					return err
+				if networkName == chaincfg.MainNetParams.Name {
+					if confirmationNumber < 6 {
+						return errors.New("confirmation number can't be less than 6")
+					}
 				}
 
 				minDeposit, err := cmd.Flags().GetUint64(FlagMinDeposit)
@@ -82,7 +84,7 @@ func Bitcoin() *cobra.Command {
 						Bech32Hrp:            network.Bech32HRPSegwit,
 					},
 					ConfirmationNumber: confirmationNumber,
-					DepositMagicPrefix: []byte(depositMagicPreifx),
+					DepositMagicPrefix: []byte(DepositMagicPreifxs[networkName]),
 					MinDepositAmount:   minDeposit,
 				}
 
@@ -124,7 +126,6 @@ func Bitcoin() *cobra.Command {
 	cmd.Flags().BytesHex(FlagPubkey, nil, "the initial relayer public key")
 	cmd.Flags().String(FlagPubkeyType, "secp256k1", "the public key type [secp256k1,schnorr]")
 	cmd.Flags().String(FlagNetworkName, param.ChainConfig.NetworkName, "the bitcoin network name(mainnet|testnet3|regtest|signet)")
-	cmd.Flags().String(FlagDepositMagicPrefix, string(param.DepositMagicPrefix), "the deposit magic prefix for OP_RETURNS")
 	cmd.Flags().Uint64(FlagMinDeposit, param.MinDepositAmount, "minimal allowed deposit amount")
 
 	return cmd

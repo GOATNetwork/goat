@@ -3,30 +3,21 @@ package types
 import (
 	"errors"
 	"fmt"
-
-	"github.com/btcsuite/btcd/chaincfg"
 )
 
 // NewParams creates a new Params instance.
 func NewParams() Params {
 	return Params{
 		ChainConfig: &ChainConfig{
-			NetworkName:          chaincfg.RegressionNetParams.Name,
-			PubkeyHashAddrPrefix: uint32(chaincfg.RegressionNetParams.PubKeyHashAddrID),
-			ScriptHashAddrPrefix: uint32(chaincfg.RegressionNetParams.ScriptHashAddrID),
-			Bech32Hrp:            chaincfg.RegressionNetParams.Bech32HRPSegwit,
+			NetworkName:          "regtest",
+			PubkeyHashAddrPrefix: 0x6f,
+			ScriptHashAddrPrefix: 0xc4,
+			Bech32Hrp:            "bcrt",
 		},
 		ConfirmationNumber: 1,
-		MinDepositAmount:   DustTxoutAmount,
+		MinDepositAmount:   1e4,
 		DepositMagicPrefix: []byte("GTT0"),
 	}
-
-	/*
-		DepositMagicPrefix
-			- regtest/devnet: GTT0
-			- testnet: GTV1
-			- mainnet: GTV2
-	*/
 }
 
 // DefaultParams returns a default set of parameters.
@@ -36,10 +27,21 @@ func DefaultParams() Params {
 
 // Validate validates the set of params.
 func (p Params) Validate() error {
-	switch p.ChainConfig.NetworkName {
-	case chaincfg.MainNetParams.Name, chaincfg.TestNet3Params.Name, chaincfg.SigNetParams.Name, chaincfg.RegressionNetParams.Name:
-	default:
-		return fmt.Errorf("unknown bitcoin network: %s", p.ChainConfig.NetworkName)
+	if p.ChainConfig.NetworkName == "" {
+		return errors.New("emtpy network name")
+	}
+
+	if p.ChainConfig.Bech32Hrp == "" {
+		return errors.New("emtpy bech32 hrp")
+	}
+
+	// uint8
+	if p.ChainConfig.PubkeyHashAddrPrefix > 255 {
+		return fmt.Errorf("overflow for PubkeyHashAddrPrefix: %d", p.ChainConfig.PubkeyHashAddrPrefix)
+	}
+
+	if p.ChainConfig.ScriptHashAddrPrefix > 255 {
+		return fmt.Errorf("overflow for ScriptHashAddrPrefix: %d", p.ChainConfig.ScriptHashAddrPrefix)
 	}
 
 	if p.MinDepositAmount < DustTxoutAmount {

@@ -18,6 +18,13 @@ var BitcoinNetworks = map[string]*chaincfg.Params{
 	chaincfg.RegressionNetParams.Name: &chaincfg.RegressionNetParams,
 }
 
+var DepositMagicPreifxs = map[string]string{
+	chaincfg.MainNetParams.Name:       "GTV2",
+	chaincfg.TestNet3Params.Name:      "GTV1",
+	chaincfg.SigNetParams.Name:        "GTV1",
+	chaincfg.RegressionNetParams.Name: "GTT0",
+}
+
 func DecodeHexOrBase64String(str string) ([]byte, error) {
 	pubkeyRaw, err := hex.DecodeString(str)
 	if err != nil {
