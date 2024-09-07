@@ -15,6 +15,12 @@ var sha256Pool = &sync.Pool{
 	},
 }
 
+var ripemd160Pool = &sync.Pool{
+	New: func() any {
+		return ripemd160.New()
+	},
+}
+
 func DoubleSHA256Sum(data []byte) []byte {
 	h := sha256Pool.Get().(hash.Hash)
 	defer sha256Pool.Put(h)
@@ -41,6 +47,17 @@ func SHA256Sum(data ...[]byte) []byte {
 	return h.Sum(nil)
 }
 
+func ripemd160Sum(data ...[]byte) []byte {
+	h := ripemd160Pool.Get().(hash.Hash)
+	defer ripemd160Pool.Put(h)
+	h.Reset()
+
+	for _, v := range data {
+		_, _ = h.Write(v)
+	}
+	return h.Sum(nil)
+}
+
 func Uint64LE(n ...uint64) []byte {
 	raw := make([]byte, len(n)*8)
 	for i := 0; i < len(n); i++ {
@@ -52,8 +69,5 @@ func Uint64LE(n ...uint64) []byte {
 }
 
 func Hash160Sum(data []byte) []byte {
-	sha := SHA256Sum(data)
-	hasherRIPEMD160 := ripemd160.New()
-	hasherRIPEMD160.Write(sha[:])
-	return hasherRIPEMD160.Sum(nil)
+	return ripemd160Sum(SHA256Sum(data))
 }

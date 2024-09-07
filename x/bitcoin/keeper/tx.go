@@ -151,7 +151,8 @@ func (k msgServer) InitializeWithdrawal(ctx context.Context, req *types.MsgIniti
 		return nil, types.ErrInvalidRequest.Wrap("invalid non-witness tx")
 	}
 
-	if len(tx.TxOut) < len(req.Proposal.Id) {
+	txoutLen, withdrawalLen := len(tx.TxOut), len(req.Proposal.Id)
+	if txoutLen != withdrawalLen && txoutLen != withdrawalLen+1 { // change output up to 1
 		return nil, types.ErrInvalidRequest.Wrap("invalid tx output size for withdrawals")
 	}
 
@@ -169,6 +170,19 @@ func (k msgServer) InitializeWithdrawal(ctx context.Context, req *types.MsgIniti
 		return nil, types.ErrInvalidRequest.Wrap("duplicated withdrawal proposal txid")
 	}
 
+	/*
+		Note:
+
+		we don't check if relayer owns tx inputs since we don't manage utxo database on the chain
+
+		we should allow relayer to spend the changes of the withdrawals which not reach the confirmation number
+
+		to reduce complexity, we only have validations for the outputs.
+	*/
+
+	// Sat Per Byte
+	txPrice := float64(req.Proposal.TxFee) / float64(len(req.Proposal.NoWitnessTx))
+
 	for idx, wid := range req.Proposal.Id {
 		withdrawal, err := k.Withdrawals.Get(ctx, wid)
 		if err != nil {
@@ -179,7 +193,7 @@ func (k msgServer) InitializeWithdrawal(ctx context.Context, req *types.MsgIniti
 			return nil, types.ErrInvalidRequest.Wrapf("witdhrawal %d is not pending or canceling", wid)
 		}
 
-		if req.Proposal.TxPrice > withdrawal.MaxTxPrice {
+		if txPrice > float64(withdrawal.MaxTxPrice) {
 			return nil, types.ErrInvalidRequest.Wrapf("tx price is larger than user request for witdhrawal %d", wid)
 		}
 
@@ -197,6 +211,18 @@ func (k msgServer) InitializeWithdrawal(ctx context.Context, req *types.MsgIniti
 		withdrawal.Receipt = &types.WithdrawalReceipt{Txid: txid, Txout: uint32(idx), Amount: uint64(txout.Value)}
 		if err := k.Withdrawals.Set(ctx, wid, withdrawal); err != nil {
 			return nil, err
+		}
+	}
+
+	// check if the change output should be for current pubkey
+	if txoutLen != withdrawalLen {
+		change := tx.TxOut[withdrawalLen]
+		pubkey, err := k.Pubkey.Get(ctx)
+		if err != nil {
+			return nil, err
+		}
+		if !types.VerifySystemAddressScript(&pubkey, change.PkScript) {
+			return nil, types.ErrInvalidRequest.Wrap("give change to not a latest relayer pubkey")
 		}
 	}
 

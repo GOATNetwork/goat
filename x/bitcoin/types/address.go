@@ -17,6 +17,33 @@ import (
 	relayer "github.com/goatnetwork/goat/x/relayer/types"
 )
 
+func VerifySystemAddressScript(pubkey *relayer.PublicKey, script []byte) bool {
+	switch v := pubkey.GetKey().(type) {
+	case *relayer.PublicKey_Secp256K1:
+		if len(script) != P2WPKHScriptSize {
+			return false
+		}
+		if script[0] != txscript.OP_0 || script[1] != txscript.OP_DATA_20 {
+			return false
+		}
+		return bytes.Equal(goatcrypto.Hash160Sum(v.Secp256K1), script[2:])
+	case *relayer.PublicKey_Schnorr:
+		if len(script) != P2TRScriptSize {
+			return false
+		}
+		if script[0] != txscript.OP_1 || script[1] != txscript.OP_DATA_32 {
+			return false
+		}
+		pubkey, err := schnorr.ParsePubKey(v.Schnorr)
+		if err != nil {
+			return false
+		}
+		witnessProg := schnorr.SerializePubKey(txscript.ComputeTaprootKeyNoScript(pubkey))
+		return bytes.Equal(witnessProg, script[2:])
+	}
+	return false
+}
+
 func DepositAddressV0(pubkey *relayer.PublicKey, evmAddress []byte, netwk *chaincfg.Params) (btcutil.Address, error) {
 	if len(evmAddress) != common.AddressLength {
 		return nil, fmt.Errorf("invalid evm address")
@@ -63,7 +90,7 @@ func DepositAddressV1(pubkey *relayer.PublicKey, magicPrefix, evmAddress []byte,
 
 	switch v := pubkey.GetKey().(type) {
 	case *relayer.PublicKey_Secp256K1:
-		addr, err := btcutil.NewAddressWitnessPubKeyHash(btcutil.Hash160(v.Secp256K1), netwk)
+		addr, err := btcutil.NewAddressWitnessPubKeyHash(goatcrypto.Hash160Sum(v.Secp256K1), netwk)
 		if err != nil {
 			return nil, nil, err
 		}
@@ -79,16 +106,16 @@ func DepositAddressV1(pubkey *relayer.PublicKey, magicPrefix, evmAddress []byte,
 }
 
 func VerifyDespositScriptV0(pubkey *relayer.PublicKey, evmAddress, txout []byte) error {
-	if len(txout) != DepositV0TxoutSize {
-		return errors.New("invalid output script")
-	}
-
 	if len(evmAddress) != common.AddressLength {
 		return errors.New("invalid evm address")
 	}
 
 	switch v := pubkey.GetKey().(type) {
 	case *relayer.PublicKey_Secp256K1:
+		if len(txout) != P2WSHScriptSize {
+			return errors.New("invalid ouptut length")
+		}
+
 		if txout[0] != txscript.OP_0 || txout[1] != txscript.OP_DATA_32 {
 			return errors.New("invalid p2wsh output")
 		}
@@ -103,6 +130,10 @@ func VerifyDespositScriptV0(pubkey *relayer.PublicKey, evmAddress, txout []byte)
 		}
 		return nil
 	case *relayer.PublicKey_Schnorr:
+		if len(txout) != P2TRScriptSize {
+			return errors.New("invalid ouptut length")
+		}
+
 		if txout[0] != txscript.OP_1 || txout[1] != txscript.OP_DATA_32 {
 			return errors.New("invalid p2tr output")
 		}
@@ -131,7 +162,7 @@ func VerifyDespositScriptV1(pubkey *relayer.PublicKey, magicPrefix, evmAddress, 
 
 	switch v := pubkey.GetKey().(type) {
 	case *relayer.PublicKey_Secp256K1:
-		if len(txout0) != P2whScriptSize {
+		if len(txout0) != P2WPKHScriptSize {
 			return errors.New("invalid output script")
 		}
 
@@ -139,7 +170,7 @@ func VerifyDespositScriptV1(pubkey *relayer.PublicKey, magicPrefix, evmAddress, 
 			return errors.New("invalid p2wpkh output")
 		}
 
-		if !bytes.Equal(btcutil.Hash160(v.Secp256K1), txout0[2:]) {
+		if !bytes.Equal(goatcrypto.Hash160Sum(v.Secp256K1), txout0[2:]) {
 			return errors.New("p2wpkh script mismatched")
 		}
 

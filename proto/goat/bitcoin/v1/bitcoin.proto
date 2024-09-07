@@ -28,7 +28,7 @@ message Deposit {
 message WithdrawalProposal {
   repeated uint64 id = 1;
   bytes no_witness_tx = 2;
-  uint64 tx_price = 3;
+  uint64 tx_fee = 3; // tx fee in satoshi
 }
 
 // WithdrawalStatus is the status of a withdrawal.

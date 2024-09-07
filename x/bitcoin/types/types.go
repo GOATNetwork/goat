@@ -20,8 +20,9 @@ const (
 	DepositMagicLen    = 4
 	DustTxoutAmount    = 546
 	RawBtcHeaderSize   = 80
-	DepositV0TxoutSize = 34
-	P2whScriptSize     = 22
+	P2TRScriptSize     = 34
+	P2WSHScriptSize    = 34
+	P2WPKHScriptSize   = 22
 	MinBtcTxSize       = 4 + 1 + 32 + 4 + 1 + 0 + 4 + 1 + 8 + 1 + 22 + 4
 	DepositV1TxoutSize = 26
 	// 4 version
@@ -129,9 +130,9 @@ func (req *MsgInitializeWithdrawal) MethodName() string {
 
 func (req *MsgInitializeWithdrawal) VoteSigDoc() []byte {
 	ids := goatcrypto.Uint64LE(req.Proposal.Id...)
-	price := goatcrypto.Uint64LE(req.Proposal.TxPrice)
+	fee := goatcrypto.Uint64LE(req.Proposal.TxFee)
 	tx := goatcrypto.SHA256Sum(req.Proposal.NoWitnessTx)
-	return slices.Concat(ids, tx, price)
+	return slices.Concat(ids, tx, fee)
 }
 
 func (req *MsgInitializeWithdrawal) Validate() error {
@@ -145,6 +146,10 @@ func (req *MsgInitializeWithdrawal) Validate() error {
 
 	if txSize := len(req.Proposal.NoWitnessTx); txSize < MinBtcTxSize || txSize > MaxAllowedBtcTxSize {
 		return errors.New("invalid non-witness tx size")
+	}
+
+	if req.Proposal.TxFee == 0 {
+		return errors.New("invalid tx fee")
 	}
 
 	if len(req.Proposal.Id) == 0 {
