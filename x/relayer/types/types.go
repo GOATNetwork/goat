@@ -4,6 +4,7 @@ import (
 	"crypto/sha256"
 	"errors"
 	"slices"
+	"time"
 
 	"github.com/btcsuite/btcd/btcec/v2"
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
@@ -14,6 +15,17 @@ type IVoteMsg interface {
 	GetVote() *Votes
 	MethodName() string
 	VoteSigDoc() []byte
+}
+
+type INonVoteMsg interface {
+	GetProposer() string
+}
+
+type IRelayer interface {
+	GetProposer() string
+	GetEpoch() uint64
+	GetLastElected() time.Time
+	GetVoters() []string
 }
 
 func (v *Votes) Validate() error {

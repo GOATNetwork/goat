@@ -30,13 +30,9 @@ func (k msgServer) NewVoter(ctx context.Context, req *types.MsgNewVoterRequest) 
 		return nil, types.ErrInvalid.Wrapf("invalid request: %s", err.Error())
 	}
 
-	relayer, err := k.Relayer.Get(ctx)
+	relayer, err := k.VerifyNonProposal(ctx, req)
 	if err != nil {
 		return nil, err
-	}
-
-	if relayer.Proposer != req.Proposer {
-		return nil, types.ErrInvalid.Wrapf("not the current proposer")
 	}
 
 	address := sdktypes.AccAddress(goatcrypto.Hash160Sum(req.VoterTxKey))
@@ -60,7 +56,7 @@ func (k msgServer) NewVoter(ctx context.Context, req *types.MsgNewVoterRequest) 
 
 	reqMsg := types.NewOnBoardingVoterRequest(voter.Height, address, voter.VoteKey)
 	sigMsg := types.VoteSignDoc(
-		reqMsg.MethodName(), sdkctx.ChainID(), req.Proposer, 0 /* sequence */, relayer.Epoch, reqMsg.SignDoc())
+		reqMsg.MethodName(), sdkctx.ChainID(), req.Proposer, 0 /* sequence */, relayer.GetEpoch(), reqMsg.SignDoc())
 
 	if !ethcrypto.VerifySignature(req.VoterTxKey, sigMsg, req.VoterTxKeyProof) {
 		return nil, types.ErrInvalid.Wrapf("false tx key proof")
@@ -86,7 +82,7 @@ func (k msgServer) NewVoter(ctx context.Context, req *types.MsgNewVoterRequest) 
 		return nil, err
 	}
 
-	sdkctx.EventManager().EmitEvent(types.VoterBoardedEvent(relayer.Proposer, addressStr))
+	sdkctx.EventManager().EmitEvent(types.VoterBoardedEvent(relayer.GetProposer(), addressStr))
 	return &types.MsgNewVoterResponse{}, nil
 }
 

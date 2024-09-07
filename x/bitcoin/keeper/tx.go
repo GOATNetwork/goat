@@ -29,6 +29,10 @@ func (k msgServer) NewDeposits(ctx context.Context, req *types.MsgNewDeposits) (
 		return nil, types.ErrInvalidRequest.Wrap(err.Error())
 	}
 
+	if _, err := k.relayerKeeper.VerifyNonProposal(ctx, req); err != nil {
+		return nil, err
+	}
+
 	events := make(sdktypes.Events, 0, len(req.Deposits))
 	deposits := make([]*types.DepositExecReceipt, 0, len(req.Deposits))
 	for _, v := range req.Deposits {
@@ -249,6 +253,10 @@ func (k msgServer) FinalizeWithdrawal(ctx context.Context, req *types.MsgFinaliz
 		return nil, err
 	}
 
+	if _, err := k.relayerKeeper.VerifyNonProposal(ctx, req); err != nil {
+		return nil, err
+	}
+
 	// check if the block is voted
 	blockHash, err := k.BlockHashes.Get(ctx, req.BlockNumber)
 	if err != nil {
@@ -308,6 +316,10 @@ func (k msgServer) FinalizeWithdrawal(ctx context.Context, req *types.MsgFinaliz
 func (k msgServer) ApproveCancellation(ctx context.Context, req *types.MsgApproveCancellation) (*types.MsgApproveCancellationResponse, error) {
 	if err := req.Validate(); err != nil {
 		return nil, types.ErrInvalidRequest.Wrap(err.Error())
+	}
+
+	if _, err := k.relayerKeeper.VerifyNonProposal(ctx, req); err != nil {
+		return nil, err
 	}
 
 	queue, err := k.ExecuableQueue.Get(ctx)

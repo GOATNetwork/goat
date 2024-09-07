@@ -146,11 +146,42 @@ func (k Keeper) VerifyProposal(ctx context.Context, req types.IVoteMsg, verifyFn
 		return 0, types.ErrInvalidProposalSignature.Wrapf("invalid signature")
 	}
 
-	if len(verifyFn) == 1 && verifyFn[0] != nil {
-		return sequence, verifyFn[0](sigdoc)
+	for _, fn := range verifyFn {
+		if err := fn(sigdoc); err != nil {
+			return 0, err
+		}
+	}
+
+	// As long as the proposer sends a valid tx, it should be considered that the proposer is accepted.
+	if !relayer.ProposerAccepted {
+		relayer.ProposerAccepted = true
+		if err := k.Relayer.Set(ctx, relayer); err != nil {
+			return 0, err
+		}
 	}
 
 	return sequence, nil
+}
+
+func (k Keeper) VerifyNonProposal(ctx context.Context, req types.INonVoteMsg) (types.IRelayer, error) {
+	relayer, err := k.Relayer.Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if relayer.Proposer != req.GetProposer() {
+		return nil, types.ErrNotProposer.Wrapf("not proposer")
+	}
+
+	// As long as the proposer sends a valid tx, it should be considered that the proposer is accepted.
+	if !relayer.ProposerAccepted {
+		relayer.ProposerAccepted = true
+		if err := k.Relayer.Set(ctx, relayer); err != nil {
+			return nil, err
+		}
+	}
+
+	return &relayer, nil
 }
 
 func (k Keeper) UpdateRandao(ctx context.Context, req types.IVoteMsg) error {
@@ -209,6 +240,9 @@ func (k Keeper) ElecteProposer(ctx context.Context) error {
 				return err
 			}
 			voter.Status = types.VOTER_STATUS_ACTIVATED
+			if err := k.Voters.Set(ctx, addr, voter); err != nil {
+				return err
+			}
 		}
 		relayer.Voters = append(relayer.Voters, queue.OnBoarding...)
 	}
