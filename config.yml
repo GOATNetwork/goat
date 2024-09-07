@@ -1,22 +1,7 @@
 version: 1
 validation: sovereign
 accounts:
-  - name: alice
-    coins:
-      - 20000goat
-      - 200000000gstake
-  - name: bob
-    coins:
-      - 10000goat
-      - 100000000gstake
+  - name: ignite
 client:
   openapi:
     path: docs/static/openapi.yml
-validators:
-  - name: alice
-    bonded: 100000000gstake
-    home: "./tmp/alice"
-    config:
-      moniker: "regtest"
-    client:
-      output: "json"

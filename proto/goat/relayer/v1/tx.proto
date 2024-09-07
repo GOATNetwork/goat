@@ -1,0 +1,54 @@
+syntax = "proto3";
+package goat.relayer.v1;
+
+import "amino/amino.proto";
+import "cosmos/msg/v1/msg.proto";
+import "cosmos_proto/cosmos.proto";
+
+option go_package = "github.com/goatnetwork/goat/x/relayer/types";
+
+// Msg defines the Msg service.
+service Msg {
+  option (cosmos.msg.v1.service) = true;
+
+  // NewVoter adds a pending voter with the online proof
+  // an address is approved to engage as a relayer voter
+  // the voter must send online proof to current proposer
+  // then proposer initiates NewVoter tx to add the voter to the active list
+  rpc NewVoter(MsgNewVoterRequest) returns (MsgNewVoterResponse);
+
+  // AcceptProposer accepts the proposer role
+  // if a voter is elected as a proposer
+  // the voter must initiate AcceptProposer tx to prove online status
+  // the consensus layer can wait for Param.AcceptProposerTimeout at most
+  // Note: if the timeout is zero, the consensus layer won't use it
+  rpc AcceptProposer(MsgAcceptProposerRequest) returns (MsgAcceptProposerResponse);
+}
+
+// MsgAddVoterRequest
+message MsgNewVoterRequest {
+  option (cosmos.msg.v1.signer) = "proposer";
+  option (amino.name) = "goat/x/relayer/MsgNewVoterRequest";
+
+  string proposer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  bytes voter_bls_key = 2;
+  bytes voter_tx_key = 3;
+  bytes voter_tx_key_proof = 4;
+  bytes voter_bls_key_proof = 5;
+}
+
+// MsgNewVoterResponse
+message MsgNewVoterResponse {}
+
+// MsgPingRequest
+message MsgAcceptProposerRequest {
+  option (cosmos.msg.v1.signer) = "proposer";
+  option (amino.name) = "goat/x/relayer/MsgNewVoterRequest";
+
+  string proposer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  // the current epoch number
+  uint64 epoch = 2;
+}
+
+// MsgAcceptProposerResponse
+message MsgAcceptProposerResponse {}

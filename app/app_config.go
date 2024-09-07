@@ -6,9 +6,6 @@ import (
 	authmodulev1 "cosmossdk.io/api/cosmos/auth/module/v1"
 	bankmodulev1 "cosmossdk.io/api/cosmos/bank/module/v1"
 	consensusmodulev1 "cosmossdk.io/api/cosmos/consensus/module/v1"
-	distrmodulev1 "cosmossdk.io/api/cosmos/distribution/module/v1"
-	genutilmodulev1 "cosmossdk.io/api/cosmos/genutil/module/v1"
-	stakingmodulev1 "cosmossdk.io/api/cosmos/staking/module/v1"
 	txconfigv1 "cosmossdk.io/api/cosmos/tx/config/v1"
 	"cosmossdk.io/core/appconfig"
 	upgradetypes "cosmossdk.io/x/upgrade/types"
@@ -17,58 +14,46 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	consensustypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
-	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
+
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	goatmodulev1 "github.com/goatnetwork/goat/api/goat/goat/module/v1"
+	bitcoinmodulev1 "github.com/goatnetwork/goat/api/goat/bitcoin/module/v1"
+	relayermodulev1 "github.com/goatnetwork/goat/api/goat/relayer/module/v1"
+	_ "github.com/goatnetwork/goat/x/relayer/module"
+	relayermoduletypes "github.com/goatnetwork/goat/x/relayer/types"
 
-	// NOTE: The genutils module must occur after staking so that pools are
-	// properly initialized with tokens from genesis accounts.
-	// NOTE: The genutils module must also occur after auth so that it can access the params from auth.
-	// NOTE: Capability module must occur first so that it can initialize any capabilities
-	// so that other modules that want to create or claim capabilities afterwards in InitChain
-	// can do so safely.
+	// cosmos-sdk modules
+	goatmodulev1 "github.com/goatnetwork/goat/api/goat/goat/module/v1"
+	lockingmodulev1 "github.com/goatnetwork/goat/api/goat/locking/module/v1"
+	_ "github.com/goatnetwork/goat/x/bitcoin/module"
+	bitcoinmoduletypes "github.com/goatnetwork/goat/x/bitcoin/types"
 	_ "github.com/goatnetwork/goat/x/goat/module"
 	goatmoduletypes "github.com/goatnetwork/goat/x/goat/types"
+	_ "github.com/goatnetwork/goat/x/locking/module"
+	lockingmoduletypes "github.com/goatnetwork/goat/x/locking/types"
 )
 
 var (
 	genesisModuleOrder = []string{
-		// cosmos-sdk modules
+
 		authtypes.ModuleName,
 		banktypes.ModuleName,
-		distrtypes.ModuleName,
-		stakingtypes.ModuleName,
-		genutiltypes.ModuleName,
-		// chain modules
+		relayermoduletypes.ModuleName,
+		bitcoinmoduletypes.ModuleName,
+		lockingmoduletypes.ModuleName,
 		goatmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
-	// During begin block slashing happens after distr.BeginBlocker so that
-	// there is nothing left over in the validator fee pool, so as to keep the
-	// CanWithdrawInvariant invariant.
-	// NOTE: staking module is required if HistoricalEntries param > 0
-	beginBlockers = []string{
-		// cosmos sdk modules
-		distrtypes.ModuleName,
-		stakingtypes.ModuleName,
-		// chain modules
-		goatmoduletypes.ModuleName,
-		// this line is used by starport scaffolding # stargate/app/beginBlockers
-	}
+	beginBlockers = []string{}
 
 	endBlockers = []string{
-		// cosmos sdk modules
-		stakingtypes.ModuleName,
-		// chain modules
+		relayermoduletypes.ModuleName,
 		goatmoduletypes.ModuleName,
-		// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
 
 	preBlockers = []string{
 		upgradetypes.ModuleName,
-		// this line is used by starport scaffolding # stargate/app/preBlockers
 	}
 
 	// module account permissions
@@ -78,6 +63,7 @@ var (
 		{Account: minttypes.ModuleName, Permissions: []string{authtypes.Minter}},
 		{Account: stakingtypes.BondedPoolName, Permissions: []string{authtypes.Burner, stakingtypes.ModuleName}},
 		{Account: stakingtypes.NotBondedPoolName, Permissions: []string{authtypes.Burner, stakingtypes.ModuleName}},
+		{Account: goatmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner, stakingtypes.ModuleName}},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 
@@ -106,11 +92,6 @@ var (
 							KvStoreKey: "acc",
 						},
 					},
-					// When ExportGenesis is not specified, the export genesis module order
-					// is equal to the init genesis order
-					// ExportGenesis: genesisModuleOrder,
-					// Uncomment if you want to set a custom migration order here.
-					// OrderMigrations: nil,
 				}),
 			},
 			{
@@ -118,14 +99,11 @@ var (
 				Config: appconfig.WrapAny(&authmodulev1.Module{
 					Bech32Prefix:             AccountAddressPrefix,
 					ModuleAccountPermissions: moduleAccPerms,
-					// By default modules authority is the governance module. This is configurable with the following:
-					// Authority: "group", // A custom module authority can be set using a module name
-					// Authority: "cosmos1cwwv22j5ca08ggdv9c2uky355k908694z577tv", // or a specific address
 				}),
 			},
 			{
 				Name:   "tx",
-				Config: appconfig.WrapAny(&txconfigv1.Config{}),
+				Config: appconfig.WrapAny(&txconfigv1.Config{SkipAnteHandler: true}),
 			},
 			{
 				Name: banktypes.ModuleName,
@@ -138,21 +116,16 @@ var (
 				Config: appconfig.WrapAny(&consensusmodulev1.Module{}),
 			},
 			{
-				Name:   distrtypes.ModuleName,
-				Config: appconfig.WrapAny(&distrmodulev1.Module{}),
+				Name:   relayermoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&relayermodulev1.Module{}),
 			},
 			{
-				Name: stakingtypes.ModuleName,
-				Config: appconfig.WrapAny(&stakingmodulev1.Module{
-					// NOTE: specifying a prefix is only necessary when using bech32 addresses
-					// If not specfied, the auth Bech32Prefix appended with "valoper" and "valcons" is used by default
-					Bech32PrefixValidator: AccountAddressPrefix + "valoper",
-					Bech32PrefixConsensus: AccountAddressPrefix + "valcons",
-				}),
+				Name:   bitcoinmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&bitcoinmodulev1.Module{}),
 			},
 			{
-				Name:   genutiltypes.ModuleName,
-				Config: appconfig.WrapAny(&genutilmodulev1.Module{}),
+				Name:   lockingmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&lockingmodulev1.Module{}),
 			},
 			{
 				Name:   goatmoduletypes.ModuleName,

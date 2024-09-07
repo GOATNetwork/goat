@@ -27,20 +27,21 @@ import (
 	_ "github.com/cosmos/cosmos-sdk/x/consensus" // import for side-effects
 	consensuskeeper "github.com/cosmos/cosmos-sdk/x/consensus/keeper"
 	_ "github.com/cosmos/cosmos-sdk/x/distribution" // import for side-effects
-	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
-	"github.com/cosmos/cosmos-sdk/x/genutil"
-	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
-	_ "github.com/cosmos/cosmos-sdk/x/mint"    // import for side-effects
-	_ "github.com/cosmos/cosmos-sdk/x/staking" // import for side-effects
-	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
+	_ "github.com/cosmos/cosmos-sdk/x/mint"         // import for side-effects
+	_ "github.com/cosmos/cosmos-sdk/x/staking"      // import for side-effects
+	"go.uber.org/automaxprocs/maxprocs"
 
 	"github.com/goatnetwork/goat/docs"
+	"github.com/goatnetwork/goat/pkg/ethrpc"
+	bitcoinmodulekeeper "github.com/goatnetwork/goat/x/bitcoin/keeper"
 	goatmodulekeeper "github.com/goatnetwork/goat/x/goat/keeper"
+	lockingmodulekeeper "github.com/goatnetwork/goat/x/locking/keeper"
+	relayermodulekeeper "github.com/goatnetwork/goat/x/relayer/keeper"
 )
 
 const (
-	AccountAddressPrefix = "goat"
 	Name                 = "goat"
+	AccountAddressPrefix = Name
 )
 
 var (
@@ -66,11 +67,13 @@ type App struct {
 	// keepers
 	AccountKeeper         authkeeper.AccountKeeper
 	BankKeeper            bankkeeper.Keeper
-	StakingKeeper         *stakingkeeper.Keeper
-	DistrKeeper           distrkeeper.Keeper
 	ConsensusParamsKeeper consensuskeeper.Keeper
 
-	GoatKeeper goatmodulekeeper.Keeper
+	EthClient     *ethrpc.Client
+	RelayerKeeper relayermodulekeeper.Keeper
+	BitcoinKeeper bitcoinmodulekeeper.Keeper
+	LockingKeeper lockingmodulekeeper.Keeper
+	GoatKeeper    goatmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -84,22 +87,12 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
+	_, _ = maxprocs.Set()
 }
 
 // AppConfig returns the default app config.
 func AppConfig() depinject.Config {
-	return depinject.Configs(
-		appConfig,
-		// Alternatively, load the app config from a YAML file.
-		// appconfig.LoadYAML(AppConfigYAML),
-		depinject.Supply(
-			// supply custom module basics
-			map[string]module.AppModuleBasic{
-				genutiltypes.ModuleName: genutil.NewAppModuleBasic(genutiltypes.DefaultMessageValidator),
-				// this line is used by starport scaffolding # stargate/appConfig/moduleBasic
-			},
-		),
-	)
+	return appConfig
 }
 
 // New returns a reference to an initialized App.
@@ -117,7 +110,11 @@ func New(
 
 		// merge the AppConfig and other configuration in one config
 		appConfig = depinject.Configs(
-			AppConfig(),
+			appConfig,
+			depinject.Provide(
+				ProvideEngineClient,
+				ProvideValidatorPrvKey,
+			),
 			depinject.Supply(
 				appOpts, // supply app options
 				logger,  // supply logger
@@ -139,10 +136,14 @@ func New(
 		&app.interfaceRegistry,
 		&app.AccountKeeper,
 		&app.BankKeeper,
-		&app.StakingKeeper,
-		&app.DistrKeeper,
+		// &app.StakingKeeper,
+		// &app.DistrKeeper,
 		&app.ConsensusParamsKeeper,
+		&app.RelayerKeeper,
+		&app.BitcoinKeeper,
+		&app.LockingKeeper,
 		&app.GoatKeeper,
+		&app.EthClient,
 	); err != nil {
 		panic(err)
 	}
@@ -163,16 +164,10 @@ func New(
 	app.sm = module.NewSimulationManagerFromAppModules(app.ModuleManager.Modules, make(map[string]module.AppModuleSimulation))
 	app.sm.RegisterStoreDecoders()
 
-	// A custom InitChainer can be set if extra pre-init-genesis logic is required.
-	// By default, when using app wiring enabled module, this is not required.
-	// For instance, the upgrade module will set automatically the module version map in its init genesis thanks to app wiring.
-	// However, when registering a module manually (i.e. that does not support app wiring), the module version map
-	// must be set manually as follow. The upgrade module will de-duplicate the module version map.
-	//
-	// app.SetInitChainer(func(ctx sdk.Context, req *abci.RequestInitChain) (*abci.ResponseInitChain, error) {
-	// 	app.UpgradeKeeper.SetModuleVersionMap(ctx, app.ModuleManager.GetVersionMap())
-	// 	return app.App.InitChainer(ctx, req)
-	// })
+	// register goat handlers
+	app.SetPrepareProposal(app.GoatKeeper.PrepareProposalHandler(app.Mempool(), app))
+	app.SetProcessProposal(app.GoatKeeper.ProcessProposalHandler(app))
+	app.SetAnteHandler(NewAnteHandler(app.AccountKeeper, app.RelayerKeeper, app.txConfig.SignModeHandler()))
 
 	if err := app.Load(loadLatest); err != nil {
 		return nil, err

@@ -1,0 +1,92 @@
+syntax = "proto3";
+package goat.relayer.v1;
+
+// import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/goatnetwork/goat/x/relayer/types";
+
+// Relayer represents the current relayer group state
+message Relayer {
+  // the epoch number, increasing every election
+  uint64 epoch = 1;
+  string proposer = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  repeated string voters = 3 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  google.protobuf.Timestamp last_elected = 4 [
+    (gogoproto.nullable) = false,
+    (gogoproto.stdtime) = true
+  ];
+  // proposer_accepted defined proposer has accepted the election result
+  bool proposer_accepted = 5;
+}
+
+// VoterStatus is the status of a voter.
+enum VoterStatus {
+  option (gogoproto.goproto_enum_prefix) = false;
+
+  // VOTER_STATUS_UNSPECIFIED defines an invalid status.
+  VOTER_STATUS_UNSPECIFIED = 0;
+  // VOTER_STATUS_PENDING defines a pending voter which was added on the chain
+  // he still needs to send online proof to proposer to prove readiness and ownership of public keys
+  VOTER_STATUS_PENDING = 1;
+  // VOTER_STATUS_ON_BOARDING defines a voter that is approved from current proposer
+  // the voter will be added to voter list in the next election
+  VOTER_STATUS_ON_BOARDING = 2;
+  // VOTER_STATUS_OFF_BOARDING defines a voter that is removing from relayer group
+  // the voter will be removed from **chain state db** in the next election
+  VOTER_STATUS_OFF_BOARDING = 3;
+  // VOTER_STATUS_ACTIVATED defines a voter that is working.
+  VOTER_STATUS_ACTIVATED = 4;
+
+  // there is no removed/discharged status
+}
+
+// Voter the relayer voter
+message Voter {
+  // vote key is the bls12-381 G2 compressed pubkey(96 bytes)
+  // the key is a sha256 hash if the voter is pending to join the relayer network
+  bytes vote_key = 1;
+  // status represents the current voter status
+  VoterStatus status = 2;
+  // height represents the block number of conensus layer when voter is approved to join on execution layer
+  uint64 height = 3;
+}
+
+// PublicKey defines the keys available for use with relayer
+message PublicKey {
+  option (gogoproto.compare) = true;
+  option (gogoproto.equal) = true;
+
+  // the key
+  oneof key {
+    bytes secp256k1 = 1;
+    bytes schnorr = 2;
+  }
+}
+
+// message Votes the proposal vote result
+message Votes {
+  // the current proposal sequence
+  uint64 sequence = 1;
+  // the current relayer epoch number
+  uint64 epoch = 2;
+  // voters represents the voter bitmap
+  bytes voters = 3;
+  // signature is the aggregate signature by voters
+  bytes signature = 4;
+}
+
+// OnBoardingVoterRequest
+message OnBoardingVoterRequest {
+  uint64 height = 1;
+  bytes tx_key_hash = 2; // aka. voter address
+  bytes vote_key_hash = 3;
+}
+
+// VoterQueue
+message VoterQueue {
+  repeated string on_boarding = 1;
+  repeated string off_boarding = 2;
+}

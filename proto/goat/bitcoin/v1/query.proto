@@ -1,0 +1,98 @@
+syntax = "proto3";
+package goat.bitcoin.v1;
+
+import "amino/amino.proto";
+import "goat/bitcoin/v1/bitcoin.proto";
+import "goat/bitcoin/v1/params.proto";
+import "goat/relayer/v1/relayer.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+
+option go_package = "github.com/goatnetwork/goat/x/bitcoin/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Parameters queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/goatnetwork/goat/bitcoin/v1/params";
+  }
+
+  // Pubkeys queries current public key for deposit
+  rpc Pubkey(QueryPubkeyRequest) returns (QueryPubkeyResponse) {
+    option (google.api.http).get = "/goatnetwork/goat/bitcoin/v1/pubkey";
+  }
+
+  // DepositAddress queries current address for deposit
+  rpc DepositAddress(QueryDepositAddress) returns (QueryDepositAddressResponse) {
+    option (google.api.http).get = "/goatnetwork/goat/bitcoin/v1/depositAddress";
+  }
+
+  // HasDeposited checks if a deposit transaction is confirmed on chain
+  rpc HasDeposited(QueryHasDeposited) returns (QueryHasDepositedResponse) {
+    option (google.api.http).get = "/goatnetwork/goat/bitcoin/v1/hasDeposited";
+  }
+
+  // Withdrawal queries all current public keys
+  rpc Withdrawal(QueryWithdrawalRequest) returns (QueryWithdrawalResponse) {
+    option (google.api.http).get = "/goatnetwork/goat/bitcoin/v1/withdrawal";
+  }
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+// QueryPubkeyRequest is request type for the Query/Pubkey RPC method
+message QueryPubkeyRequest {}
+
+// QueryPubkeyResponse is response type for the Query/Pubkey RPC method
+message QueryPubkeyResponse {
+  goat.relayer.v1.PublicKey public_key = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+// QueryDepositAddress is request type for the Query/DepositAddress RPC method
+message QueryDepositAddress {
+  uint32 version = 1;
+  // evm_address is an eth address to deposit
+  string evm_address = 2;
+}
+
+// QueryDepositAddressResponse is response type for the Query/DepositAddress RPC method
+message QueryDepositAddressResponse {
+  string network_name = 1;
+  string address = 2;
+  goat.relayer.v1.PublicKey public_key = 3;
+  bytes op_return_script = 4;
+}
+
+// QueryHasDeposited
+message QueryHasDeposited {
+  string txid = 1; // big endian encoded txid
+  uint32 txout = 2;
+}
+
+// QueryHasDepositedResponse
+message QueryHasDepositedResponse {
+  bool yes = 1;
+}
+
+// QueryWithdrawalRequest
+message QueryWithdrawalRequest {
+  uint64 id = 1;
+}
+
+// QueryWithdrawalResponse
+message QueryWithdrawalResponse {
+  Withdrawal withdrawal = 1;
+}

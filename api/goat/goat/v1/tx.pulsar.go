@@ -17,27 +17,27 @@ import (
 )
 
 var (
-	md_MsgUpdateParams           protoreflect.MessageDescriptor
-	fd_MsgUpdateParams_authority protoreflect.FieldDescriptor
-	fd_MsgUpdateParams_params    protoreflect.FieldDescriptor
+	md_MsgNewEthBlock          protoreflect.MessageDescriptor
+	fd_MsgNewEthBlock_proposer protoreflect.FieldDescriptor
+	fd_MsgNewEthBlock_payload  protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_goat_goat_v1_tx_proto_init()
-	md_MsgUpdateParams = File_goat_goat_v1_tx_proto.Messages().ByName("MsgUpdateParams")
-	fd_MsgUpdateParams_authority = md_MsgUpdateParams.Fields().ByName("authority")
-	fd_MsgUpdateParams_params = md_MsgUpdateParams.Fields().ByName("params")
+	md_MsgNewEthBlock = File_goat_goat_v1_tx_proto.Messages().ByName("MsgNewEthBlock")
+	fd_MsgNewEthBlock_proposer = md_MsgNewEthBlock.Fields().ByName("proposer")
+	fd_MsgNewEthBlock_payload = md_MsgNewEthBlock.Fields().ByName("payload")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgUpdateParams)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgNewEthBlock)(nil)
 
-type fastReflection_MsgUpdateParams MsgUpdateParams
+type fastReflection_MsgNewEthBlock MsgNewEthBlock
 
-func (x *MsgUpdateParams) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgUpdateParams)(x)
+func (x *MsgNewEthBlock) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgNewEthBlock)(x)
 }
 
-func (x *MsgUpdateParams) slowProtoReflect() protoreflect.Message {
+func (x *MsgNewEthBlock) slowProtoReflect() protoreflect.Message {
 	mi := &file_goat_goat_v1_tx_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -49,43 +49,43 @@ func (x *MsgUpdateParams) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgUpdateParams_messageType fastReflection_MsgUpdateParams_messageType
-var _ protoreflect.MessageType = fastReflection_MsgUpdateParams_messageType{}
+var _fastReflection_MsgNewEthBlock_messageType fastReflection_MsgNewEthBlock_messageType
+var _ protoreflect.MessageType = fastReflection_MsgNewEthBlock_messageType{}
 
-type fastReflection_MsgUpdateParams_messageType struct{}
+type fastReflection_MsgNewEthBlock_messageType struct{}
 
-func (x fastReflection_MsgUpdateParams_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgUpdateParams)(nil)
+func (x fastReflection_MsgNewEthBlock_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgNewEthBlock)(nil)
 }
-func (x fastReflection_MsgUpdateParams_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgUpdateParams)
+func (x fastReflection_MsgNewEthBlock_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgNewEthBlock)
 }
-func (x fastReflection_MsgUpdateParams_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgUpdateParams
+func (x fastReflection_MsgNewEthBlock_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgNewEthBlock
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgUpdateParams) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgUpdateParams
+func (x *fastReflection_MsgNewEthBlock) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgNewEthBlock
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgUpdateParams) Type() protoreflect.MessageType {
-	return _fastReflection_MsgUpdateParams_messageType
+func (x *fastReflection_MsgNewEthBlock) Type() protoreflect.MessageType {
+	return _fastReflection_MsgNewEthBlock_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgUpdateParams) New() protoreflect.Message {
-	return new(fastReflection_MsgUpdateParams)
+func (x *fastReflection_MsgNewEthBlock) New() protoreflect.Message {
+	return new(fastReflection_MsgNewEthBlock)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgUpdateParams) Interface() protoreflect.ProtoMessage {
-	return (*MsgUpdateParams)(x)
+func (x *fastReflection_MsgNewEthBlock) Interface() protoreflect.ProtoMessage {
+	return (*MsgNewEthBlock)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -93,16 +93,16 @@ func (x *fastReflection_MsgUpdateParams) Interface() protoreflect.ProtoMessage {
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgUpdateParams) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Authority != "" {
-		value := protoreflect.ValueOfString(x.Authority)
-		if !f(fd_MsgUpdateParams_authority, value) {
+func (x *fastReflection_MsgNewEthBlock) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Proposer != "" {
+		value := protoreflect.ValueOfString(x.Proposer)
+		if !f(fd_MsgNewEthBlock_proposer, value) {
 			return
 		}
 	}
-	if x.Params != nil {
-		value := protoreflect.ValueOfMessage(x.Params.ProtoReflect())
-		if !f(fd_MsgUpdateParams_params, value) {
+	if x.Payload != nil {
+		value := protoreflect.ValueOfMessage(x.Payload.ProtoReflect())
+		if !f(fd_MsgNewEthBlock_payload, value) {
 			return
 		}
 	}
@@ -119,17 +119,17 @@ func (x *fastReflection_MsgUpdateParams) Range(f func(protoreflect.FieldDescript
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgUpdateParams) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgNewEthBlock) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "goat.goat.v1.MsgUpdateParams.authority":
-		return x.Authority != ""
-	case "goat.goat.v1.MsgUpdateParams.params":
-		return x.Params != nil
+	case "goat.goat.v1.MsgNewEthBlock.proposer":
+		return x.Proposer != ""
+	case "goat.goat.v1.MsgNewEthBlock.payload":
+		return x.Payload != nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.MsgUpdateParams"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.MsgNewEthBlock"))
 		}
-		panic(fmt.Errorf("message goat.goat.v1.MsgUpdateParams does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.goat.v1.MsgNewEthBlock does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -139,17 +139,17 @@ func (x *fastReflection_MsgUpdateParams) Has(fd protoreflect.FieldDescriptor) bo
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgUpdateParams) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgNewEthBlock) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "goat.goat.v1.MsgUpdateParams.authority":
-		x.Authority = ""
-	case "goat.goat.v1.MsgUpdateParams.params":
-		x.Params = nil
+	case "goat.goat.v1.MsgNewEthBlock.proposer":
+		x.Proposer = ""
+	case "goat.goat.v1.MsgNewEthBlock.payload":
+		x.Payload = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.MsgUpdateParams"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.MsgNewEthBlock"))
 		}
-		panic(fmt.Errorf("message goat.goat.v1.MsgUpdateParams does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.goat.v1.MsgNewEthBlock does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -159,19 +159,19 @@ func (x *fastReflection_MsgUpdateParams) Clear(fd protoreflect.FieldDescriptor) 
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgUpdateParams) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgNewEthBlock) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "goat.goat.v1.MsgUpdateParams.authority":
-		value := x.Authority
+	case "goat.goat.v1.MsgNewEthBlock.proposer":
+		value := x.Proposer
 		return protoreflect.ValueOfString(value)
-	case "goat.goat.v1.MsgUpdateParams.params":
-		value := x.Params
+	case "goat.goat.v1.MsgNewEthBlock.payload":
+		value := x.Payload
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.MsgUpdateParams"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.MsgNewEthBlock"))
 		}
-		panic(fmt.Errorf("message goat.goat.v1.MsgUpdateParams does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message goat.goat.v1.MsgNewEthBlock does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -185,17 +185,17 @@ func (x *fastReflection_MsgUpdateParams) Get(descriptor protoreflect.FieldDescri
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgUpdateParams) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgNewEthBlock) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "goat.goat.v1.MsgUpdateParams.authority":
-		x.Authority = value.Interface().(string)
-	case "goat.goat.v1.MsgUpdateParams.params":
-		x.Params = value.Message().Interface().(*Params)
+	case "goat.goat.v1.MsgNewEthBlock.proposer":
+		x.Proposer = value.Interface().(string)
+	case "goat.goat.v1.MsgNewEthBlock.payload":
+		x.Payload = value.Message().Interface().(*ExecutionPayload)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.MsgUpdateParams"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.MsgNewEthBlock"))
 		}
-		panic(fmt.Errorf("message goat.goat.v1.MsgUpdateParams does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.goat.v1.MsgNewEthBlock does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -209,48 +209,48 @@ func (x *fastReflection_MsgUpdateParams) Set(fd protoreflect.FieldDescriptor, va
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgUpdateParams) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgNewEthBlock) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "goat.goat.v1.MsgUpdateParams.params":
-		if x.Params == nil {
-			x.Params = new(Params)
+	case "goat.goat.v1.MsgNewEthBlock.payload":
+		if x.Payload == nil {
+			x.Payload = new(ExecutionPayload)
 		}
-		return protoreflect.ValueOfMessage(x.Params.ProtoReflect())
-	case "goat.goat.v1.MsgUpdateParams.authority":
-		panic(fmt.Errorf("field authority of message goat.goat.v1.MsgUpdateParams is not mutable"))
+		return protoreflect.ValueOfMessage(x.Payload.ProtoReflect())
+	case "goat.goat.v1.MsgNewEthBlock.proposer":
+		panic(fmt.Errorf("field proposer of message goat.goat.v1.MsgNewEthBlock is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.MsgUpdateParams"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.MsgNewEthBlock"))
 		}
-		panic(fmt.Errorf("message goat.goat.v1.MsgUpdateParams does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.goat.v1.MsgNewEthBlock does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgUpdateParams) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgNewEthBlock) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "goat.goat.v1.MsgUpdateParams.authority":
+	case "goat.goat.v1.MsgNewEthBlock.proposer":
 		return protoreflect.ValueOfString("")
-	case "goat.goat.v1.MsgUpdateParams.params":
-		m := new(Params)
+	case "goat.goat.v1.MsgNewEthBlock.payload":
+		m := new(ExecutionPayload)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.MsgUpdateParams"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.MsgNewEthBlock"))
 		}
-		panic(fmt.Errorf("message goat.goat.v1.MsgUpdateParams does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.goat.v1.MsgNewEthBlock does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgUpdateParams) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgNewEthBlock) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in goat.goat.v1.MsgUpdateParams", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in goat.goat.v1.MsgNewEthBlock", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -258,7 +258,7 @@ func (x *fastReflection_MsgUpdateParams) WhichOneof(d protoreflect.OneofDescript
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgUpdateParams) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgNewEthBlock) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -269,7 +269,7 @@ func (x *fastReflection_MsgUpdateParams) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgUpdateParams) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgNewEthBlock) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -281,7 +281,7 @@ func (x *fastReflection_MsgUpdateParams) SetUnknown(fields protoreflect.RawField
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgUpdateParams) IsValid() bool {
+func (x *fastReflection_MsgNewEthBlock) IsValid() bool {
 	return x != nil
 }
 
@@ -291,9 +291,9 @@ func (x *fastReflection_MsgUpdateParams) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgUpdateParams) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgNewEthBlock) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgUpdateParams)
+		x := input.Message.Interface().(*MsgNewEthBlock)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -305,12 +305,12 @@ func (x *fastReflection_MsgUpdateParams) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
-		l = len(x.Authority)
+		l = len(x.Proposer)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.Params != nil {
-			l = options.Size(x.Params)
+		if x.Payload != nil {
+			l = options.Size(x.Payload)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if x.unknownFields != nil {
@@ -323,7 +323,7 @@ func (x *fastReflection_MsgUpdateParams) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgUpdateParams)
+		x := input.Message.Interface().(*MsgNewEthBlock)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -342,8 +342,8 @@ func (x *fastReflection_MsgUpdateParams) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if x.Params != nil {
-			encoded, err := options.Marshal(x.Params)
+		if x.Payload != nil {
+			encoded, err := options.Marshal(x.Payload)
 			if err != nil {
 				return protoiface.MarshalOutput{
 					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -356,10 +356,10 @@ func (x *fastReflection_MsgUpdateParams) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x12
 		}
-		if len(x.Authority) > 0 {
-			i -= len(x.Authority)
-			copy(dAtA[i:], x.Authority)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Authority)))
+		if len(x.Proposer) > 0 {
+			i -= len(x.Proposer)
+			copy(dAtA[i:], x.Proposer)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Proposer)))
 			i--
 			dAtA[i] = 0xa
 		}
@@ -374,7 +374,7 @@ func (x *fastReflection_MsgUpdateParams) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgUpdateParams)
+		x := input.Message.Interface().(*MsgNewEthBlock)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -406,15 +406,15 @@ func (x *fastReflection_MsgUpdateParams) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgUpdateParams: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgNewEthBlock: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgUpdateParams: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgNewEthBlock: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Authority", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Proposer", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -442,11 +442,11 @@ func (x *fastReflection_MsgUpdateParams) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.Authority = string(dAtA[iNdEx:postIndex])
+				x.Proposer = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 2:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Params", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Payload", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -473,10 +473,10 @@ func (x *fastReflection_MsgUpdateParams) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				if x.Params == nil {
-					x.Params = &Params{}
+				if x.Payload == nil {
+					x.Payload = &ExecutionPayload{}
 				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Params); err != nil {
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Payload); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
@@ -516,23 +516,23 @@ func (x *fastReflection_MsgUpdateParams) ProtoMethods() *protoiface.Methods {
 }
 
 var (
-	md_MsgUpdateParamsResponse protoreflect.MessageDescriptor
+	md_MsgNewEthBlockResponse protoreflect.MessageDescriptor
 )
 
 func init() {
 	file_goat_goat_v1_tx_proto_init()
-	md_MsgUpdateParamsResponse = File_goat_goat_v1_tx_proto.Messages().ByName("MsgUpdateParamsResponse")
+	md_MsgNewEthBlockResponse = File_goat_goat_v1_tx_proto.Messages().ByName("MsgNewEthBlockResponse")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgUpdateParamsResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgNewEthBlockResponse)(nil)
 
-type fastReflection_MsgUpdateParamsResponse MsgUpdateParamsResponse
+type fastReflection_MsgNewEthBlockResponse MsgNewEthBlockResponse
 
-func (x *MsgUpdateParamsResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgUpdateParamsResponse)(x)
+func (x *MsgNewEthBlockResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgNewEthBlockResponse)(x)
 }
 
-func (x *MsgUpdateParamsResponse) slowProtoReflect() protoreflect.Message {
+func (x *MsgNewEthBlockResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_goat_goat_v1_tx_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -544,43 +544,43 @@ func (x *MsgUpdateParamsResponse) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgUpdateParamsResponse_messageType fastReflection_MsgUpdateParamsResponse_messageType
-var _ protoreflect.MessageType = fastReflection_MsgUpdateParamsResponse_messageType{}
+var _fastReflection_MsgNewEthBlockResponse_messageType fastReflection_MsgNewEthBlockResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgNewEthBlockResponse_messageType{}
 
-type fastReflection_MsgUpdateParamsResponse_messageType struct{}
+type fastReflection_MsgNewEthBlockResponse_messageType struct{}
 
-func (x fastReflection_MsgUpdateParamsResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgUpdateParamsResponse)(nil)
+func (x fastReflection_MsgNewEthBlockResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgNewEthBlockResponse)(nil)
 }
-func (x fastReflection_MsgUpdateParamsResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgUpdateParamsResponse)
+func (x fastReflection_MsgNewEthBlockResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgNewEthBlockResponse)
 }
-func (x fastReflection_MsgUpdateParamsResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgUpdateParamsResponse
+func (x fastReflection_MsgNewEthBlockResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgNewEthBlockResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgUpdateParamsResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgUpdateParamsResponse
+func (x *fastReflection_MsgNewEthBlockResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgNewEthBlockResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgUpdateParamsResponse) Type() protoreflect.MessageType {
-	return _fastReflection_MsgUpdateParamsResponse_messageType
+func (x *fastReflection_MsgNewEthBlockResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgNewEthBlockResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgUpdateParamsResponse) New() protoreflect.Message {
-	return new(fastReflection_MsgUpdateParamsResponse)
+func (x *fastReflection_MsgNewEthBlockResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgNewEthBlockResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgUpdateParamsResponse) Interface() protoreflect.ProtoMessage {
-	return (*MsgUpdateParamsResponse)(x)
+func (x *fastReflection_MsgNewEthBlockResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgNewEthBlockResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -588,7 +588,7 @@ func (x *fastReflection_MsgUpdateParamsResponse) Interface() protoreflect.ProtoM
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgUpdateParamsResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgNewEthBlockResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 }
 
 // Has reports whether a field is populated.
@@ -602,13 +602,13 @@ func (x *fastReflection_MsgUpdateParamsResponse) Range(f func(protoreflect.Field
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgUpdateParamsResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgNewEthBlockResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.MsgUpdateParamsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.MsgNewEthBlockResponse"))
 		}
-		panic(fmt.Errorf("message goat.goat.v1.MsgUpdateParamsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.goat.v1.MsgNewEthBlockResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -618,13 +618,13 @@ func (x *fastReflection_MsgUpdateParamsResponse) Has(fd protoreflect.FieldDescri
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgUpdateParamsResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgNewEthBlockResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.MsgUpdateParamsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.MsgNewEthBlockResponse"))
 		}
-		panic(fmt.Errorf("message goat.goat.v1.MsgUpdateParamsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.goat.v1.MsgNewEthBlockResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -634,13 +634,13 @@ func (x *fastReflection_MsgUpdateParamsResponse) Clear(fd protoreflect.FieldDesc
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgUpdateParamsResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgNewEthBlockResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.MsgUpdateParamsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.MsgNewEthBlockResponse"))
 		}
-		panic(fmt.Errorf("message goat.goat.v1.MsgUpdateParamsResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message goat.goat.v1.MsgNewEthBlockResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -654,13 +654,13 @@ func (x *fastReflection_MsgUpdateParamsResponse) Get(descriptor protoreflect.Fie
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgUpdateParamsResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgNewEthBlockResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.MsgUpdateParamsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.MsgNewEthBlockResponse"))
 		}
-		panic(fmt.Errorf("message goat.goat.v1.MsgUpdateParamsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.goat.v1.MsgNewEthBlockResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -674,36 +674,36 @@ func (x *fastReflection_MsgUpdateParamsResponse) Set(fd protoreflect.FieldDescri
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgUpdateParamsResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgNewEthBlockResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.MsgUpdateParamsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.MsgNewEthBlockResponse"))
 		}
-		panic(fmt.Errorf("message goat.goat.v1.MsgUpdateParamsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.goat.v1.MsgNewEthBlockResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgUpdateParamsResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgNewEthBlockResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.MsgUpdateParamsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.MsgNewEthBlockResponse"))
 		}
-		panic(fmt.Errorf("message goat.goat.v1.MsgUpdateParamsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.goat.v1.MsgNewEthBlockResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgUpdateParamsResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgNewEthBlockResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in goat.goat.v1.MsgUpdateParamsResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in goat.goat.v1.MsgNewEthBlockResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -711,7 +711,7 @@ func (x *fastReflection_MsgUpdateParamsResponse) WhichOneof(d protoreflect.Oneof
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgUpdateParamsResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgNewEthBlockResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -722,7 +722,7 @@ func (x *fastReflection_MsgUpdateParamsResponse) GetUnknown() protoreflect.RawFi
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgUpdateParamsResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgNewEthBlockResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -734,7 +734,7 @@ func (x *fastReflection_MsgUpdateParamsResponse) SetUnknown(fields protoreflect.
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgUpdateParamsResponse) IsValid() bool {
+func (x *fastReflection_MsgNewEthBlockResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -744,9 +744,9 @@ func (x *fastReflection_MsgUpdateParamsResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgUpdateParamsResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgNewEthBlockResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgUpdateParamsResponse)
+		x := input.Message.Interface().(*MsgNewEthBlockResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -768,7 +768,7 @@ func (x *fastReflection_MsgUpdateParamsResponse) ProtoMethods() *protoiface.Meth
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgUpdateParamsResponse)
+		x := input.Message.Interface().(*MsgNewEthBlockResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -798,7 +798,7 @@ func (x *fastReflection_MsgUpdateParamsResponse) ProtoMethods() *protoiface.Meth
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgUpdateParamsResponse)
+		x := input.Message.Interface().(*MsgNewEthBlockResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -830,10 +830,10 @@ func (x *fastReflection_MsgUpdateParamsResponse) ProtoMethods() *protoiface.Meth
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgUpdateParamsResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgNewEthBlockResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgUpdateParamsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgNewEthBlockResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			default:
@@ -884,22 +884,18 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// MsgUpdateParams is the Msg/UpdateParams request type.
-type MsgUpdateParams struct {
+// MsgNewEthBlock is the Msg/NewEthBlock request type.
+type MsgNewEthBlock struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// authority is the address that controls the module (defaults to x/gov unless overwritten).
-	Authority string `protobuf:"bytes,1,opt,name=authority,proto3" json:"authority,omitempty"`
-	// params defines the module parameters to update.
-	//
-	// NOTE: All parameters must be supplied.
-	Params *Params `protobuf:"bytes,2,opt,name=params,proto3" json:"params,omitempty"`
+	Proposer string            `protobuf:"bytes,1,opt,name=proposer,proto3" json:"proposer,omitempty"`
+	Payload  *ExecutionPayload `protobuf:"bytes,2,opt,name=payload,proto3" json:"payload,omitempty"`
 }
 
-func (x *MsgUpdateParams) Reset() {
-	*x = MsgUpdateParams{}
+func (x *MsgNewEthBlock) Reset() {
+	*x = MsgNewEthBlock{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_goat_goat_v1_tx_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -907,41 +903,40 @@ func (x *MsgUpdateParams) Reset() {
 	}
 }
 
-func (x *MsgUpdateParams) String() string {
+func (x *MsgNewEthBlock) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgUpdateParams) ProtoMessage() {}
+func (*MsgNewEthBlock) ProtoMessage() {}
 
-// Deprecated: Use MsgUpdateParams.ProtoReflect.Descriptor instead.
-func (*MsgUpdateParams) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgNewEthBlock.ProtoReflect.Descriptor instead.
+func (*MsgNewEthBlock) Descriptor() ([]byte, []int) {
 	return file_goat_goat_v1_tx_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *MsgUpdateParams) GetAuthority() string {
+func (x *MsgNewEthBlock) GetProposer() string {
 	if x != nil {
-		return x.Authority
+		return x.Proposer
 	}
 	return ""
 }
 
-func (x *MsgUpdateParams) GetParams() *Params {
+func (x *MsgNewEthBlock) GetPayload() *ExecutionPayload {
 	if x != nil {
-		return x.Params
+		return x.Payload
 	}
 	return nil
 }
 
-// MsgUpdateParamsResponse defines the response structure for executing a
-// MsgUpdateParams message.
-type MsgUpdateParamsResponse struct {
+// MsgNewEthBlockResponse is the Msg/NewEthBlock response type.
+type MsgNewEthBlockResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *MsgUpdateParamsResponse) Reset() {
-	*x = MsgUpdateParamsResponse{}
+func (x *MsgNewEthBlockResponse) Reset() {
+	*x = MsgNewEthBlockResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_goat_goat_v1_tx_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -949,14 +944,14 @@ func (x *MsgUpdateParamsResponse) Reset() {
 	}
 }
 
-func (x *MsgUpdateParamsResponse) String() string {
+func (x *MsgNewEthBlockResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgUpdateParamsResponse) ProtoMessage() {}
+func (*MsgNewEthBlockResponse) ProtoMessage() {}
 
-// Deprecated: Use MsgUpdateParamsResponse.ProtoReflect.Descriptor instead.
-func (*MsgUpdateParamsResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgNewEthBlockResponse.ProtoReflect.Descriptor instead.
+func (*MsgNewEthBlockResponse) Descriptor() ([]byte, []int) {
 	return file_goat_goat_v1_tx_proto_rawDescGZIP(), []int{1}
 }
 
@@ -969,40 +964,40 @@ var file_goat_goat_v1_tx_proto_rawDesc = []byte{
 	0x6e, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x17, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
 	0x2f, 0x6d, 0x73, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x6d, 0x73, 0x67, 0x2e, 0x70, 0x72, 0x6f, 0x74,
 	0x6f, 0x1a, 0x19, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f,
-	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x19, 0x67, 0x6f,
-	0x61, 0x74, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x76, 0x31, 0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d,
-	0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xb2, 0x01,
-	0x0a, 0x0f, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d,
-	0x73, 0x12, 0x36, 0x0a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
-	0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x09,
-	0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x12, 0x37, 0x0a, 0x06, 0x70, 0x61, 0x72,
-	0x61, 0x6d, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x67, 0x6f, 0x61, 0x74,
-	0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42,
-	0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61,
-	0x6d, 0x73, 0x3a, 0x2e, 0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69,
-	0x74, 0x79, 0x8a, 0xe7, 0xb0, 0x2a, 0x1b, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x78, 0x2f, 0x67, 0x6f,
-	0x61, 0x74, 0x2f, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61,
-	0x6d, 0x73, 0x22, 0x19, 0x0a, 0x17, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50,
-	0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0x62, 0x0a,
-	0x03, 0x4d, 0x73, 0x67, 0x12, 0x54, 0x0a, 0x0c, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61,
-	0x72, 0x61, 0x6d, 0x73, 0x12, 0x1d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x67, 0x6f, 0x61, 0x74,
-	0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72,
-	0x61, 0x6d, 0x73, 0x1a, 0x25, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e,
-	0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61,
-	0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0, 0x2a,
-	0x01, 0x42, 0xa2, 0x01, 0x0a, 0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x67,
-	0x6f, 0x61, 0x74, 0x2e, 0x76, 0x31, 0x42, 0x07, 0x54, 0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50,
-	0x01, 0x5a, 0x33, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f,
-	0x61, 0x74, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x61,
-	0x70, 0x69, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x76, 0x31, 0x3b,
-	0x67, 0x6f, 0x61, 0x74, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x47, 0x47, 0x58, 0xaa, 0x02, 0x0c, 0x47,
-	0x6f, 0x61, 0x74, 0x2e, 0x47, 0x6f, 0x61, 0x74, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x0c, 0x47, 0x6f,
-	0x61, 0x74, 0x5c, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x18, 0x47, 0x6f, 0x61,
-	0x74, 0x5c, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74,
-	0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0e, 0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x47, 0x6f,
-	0x61, 0x74, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x17, 0x67, 0x6f,
+	0x61, 0x74, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x76, 0x31, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xb9, 0x01, 0x0a, 0x0e,
+	0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x45, 0x74, 0x68, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x12, 0x34,
+	0x0a, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
+	0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64,
+	0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x08, 0x70, 0x72, 0x6f, 0x70,
+	0x6f, 0x73, 0x65, 0x72, 0x12, 0x43, 0x0a, 0x07, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1e, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x67, 0x6f, 0x61,
+	0x74, 0x2e, 0x76, 0x31, 0x2e, 0x45, 0x78, 0x65, 0x63, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x50, 0x61,
+	0x79, 0x6c, 0x6f, 0x61, 0x64, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01,
+	0x52, 0x07, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x3a, 0x2c, 0x82, 0xe7, 0xb0, 0x2a, 0x08,
+	0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x8a, 0xe7, 0xb0, 0x2a, 0x1a, 0x67, 0x6f, 0x61,
+	0x74, 0x2f, 0x78, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x45,
+	0x74, 0x68, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x22, 0x18, 0x0a, 0x16, 0x4d, 0x73, 0x67, 0x4e, 0x65,
+	0x77, 0x45, 0x74, 0x68, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x32, 0x5f, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12, 0x51, 0x0a, 0x0b, 0x4e, 0x65, 0x77, 0x45,
+	0x74, 0x68, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x12, 0x1c, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x67,
+	0x6f, 0x61, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x45, 0x74, 0x68,
+	0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x1a, 0x24, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x67, 0x6f, 0x61,
+	0x74, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x45, 0x74, 0x68, 0x42, 0x6c,
+	0x6f, 0x63, 0x6b, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0,
+	0x2a, 0x01, 0x42, 0xa2, 0x01, 0x0a, 0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e,
+	0x67, 0x6f, 0x61, 0x74, 0x2e, 0x76, 0x31, 0x42, 0x07, 0x54, 0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f,
+	0x50, 0x01, 0x5a, 0x33, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67,
+	0x6f, 0x61, 0x74, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f,
+	0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x76, 0x31,
+	0x3b, 0x67, 0x6f, 0x61, 0x74, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x47, 0x47, 0x58, 0xaa, 0x02, 0x0c,
+	0x47, 0x6f, 0x61, 0x74, 0x2e, 0x47, 0x6f, 0x61, 0x74, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x0c, 0x47,
+	0x6f, 0x61, 0x74, 0x5c, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x18, 0x47, 0x6f,
+	0x61, 0x74, 0x5c, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65,
+	0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0e, 0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x47,
+	0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1019,14 +1014,14 @@ func file_goat_goat_v1_tx_proto_rawDescGZIP() []byte {
 
 var file_goat_goat_v1_tx_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_goat_goat_v1_tx_proto_goTypes = []interface{}{
-	(*MsgUpdateParams)(nil),         // 0: goat.goat.v1.MsgUpdateParams
-	(*MsgUpdateParamsResponse)(nil), // 1: goat.goat.v1.MsgUpdateParamsResponse
-	(*Params)(nil),                  // 2: goat.goat.v1.Params
+	(*MsgNewEthBlock)(nil),         // 0: goat.goat.v1.MsgNewEthBlock
+	(*MsgNewEthBlockResponse)(nil), // 1: goat.goat.v1.MsgNewEthBlockResponse
+	(*ExecutionPayload)(nil),       // 2: goat.goat.v1.ExecutionPayload
 }
 var file_goat_goat_v1_tx_proto_depIdxs = []int32{
-	2, // 0: goat.goat.v1.MsgUpdateParams.params:type_name -> goat.goat.v1.Params
-	0, // 1: goat.goat.v1.Msg.UpdateParams:input_type -> goat.goat.v1.MsgUpdateParams
-	1, // 2: goat.goat.v1.Msg.UpdateParams:output_type -> goat.goat.v1.MsgUpdateParamsResponse
+	2, // 0: goat.goat.v1.MsgNewEthBlock.payload:type_name -> goat.goat.v1.ExecutionPayload
+	0, // 1: goat.goat.v1.Msg.NewEthBlock:input_type -> goat.goat.v1.MsgNewEthBlock
+	1, // 2: goat.goat.v1.Msg.NewEthBlock:output_type -> goat.goat.v1.MsgNewEthBlockResponse
 	2, // [2:3] is the sub-list for method output_type
 	1, // [1:2] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
@@ -1039,10 +1034,10 @@ func file_goat_goat_v1_tx_proto_init() {
 	if File_goat_goat_v1_tx_proto != nil {
 		return
 	}
-	file_goat_goat_v1_params_proto_init()
+	file_goat_goat_v1_goat_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_goat_goat_v1_tx_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgUpdateParams); i {
+			switch v := v.(*MsgNewEthBlock); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1054,7 +1049,7 @@ func file_goat_goat_v1_tx_proto_init() {
 			}
 		}
 		file_goat_goat_v1_tx_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgUpdateParamsResponse); i {
+			switch v := v.(*MsgNewEthBlockResponse); i {
 			case 0:
 				return &v.state
 			case 1:

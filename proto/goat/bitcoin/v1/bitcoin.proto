@@ -1,0 +1,70 @@
+syntax = "proto3";
+package goat.bitcoin.v1;
+
+import "goat/relayer/v1/relayer.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/goatnetwork/goat/x/bitcoin/types";
+
+// Deposit defines the deposit transaction and its proof
+message Deposit {
+  uint32 version = 1;
+  // block_number the block number that transaction located at
+  uint64 block_number = 2;
+  // tx_index is the index of transaction in the block
+  uint32 tx_index = 3;
+  // tx is the raw transaction withtout witness
+  bytes no_witness_tx = 4;
+  uint32 output_index = 5;
+  // intermediate proof is the proof without the txid and merkel root
+  bytes intermediate_proof = 6;
+  // evm_address is the user wallet address in goat evm
+  bytes evm_address = 7;
+  // relayer_pubkey is the compressed secp256k1 public key which managed by the relayer group
+  goat.relayer.v1.PublicKey relayer_pubkey = 8;
+}
+
+// WithdrawalProposal
+message WithdrawalProposal {
+  repeated uint64 id = 1;
+  bytes no_witness_tx = 2;
+  uint64 tx_price = 3;
+}
+
+// WithdrawalStatus is the status of a withdrawal.
+enum WithdrawalStatus {
+  option (gogoproto.goproto_enum_prefix) = false;
+
+  // WITHDRAWAL_STATUS_UNSPECIFIED defines an invalid status.
+  WITHDRAWAL_STATUS_UNSPECIFIED = 0;
+  // WITHDRAWAL_STATUS_PENDING
+  WITHDRAWAL_STATUS_PENDING = 1;
+  // WITHDRAWAL_STATUS_PROCESSING
+  WITHDRAWAL_STATUS_PROCESSING = 2;
+  // WITHDRAWAL_STATUS_CANCELING
+  WITHDRAWAL_STATUS_CANCELING = 3;
+  // WITHDRAWAL_STATUS_CANCELED
+  WITHDRAWAL_STATUS_CANCELED = 4;
+  // WITHDRAWAL_STATUS_PAID
+  WITHDRAWAL_STATUS_PAID = 5;
+}
+
+// WithdrawalReceipt
+message WithdrawalReceipt {
+  bytes txid = 1;
+  uint32 txout = 2;
+  uint64 amount = 3;
+}
+
+// Withdrawal
+message Withdrawal {
+  string address = 1;
+  uint64 request_amount = 2;
+  uint64 max_tx_price = 3;
+  // the expected output script
+  // we need to check if the withdrawal address is valid in advance
+  // so we don't have to calculate it again in the withdrawal proposal
+  bytes output_script = 4;
+  WithdrawalStatus status = 5;
+  WithdrawalReceipt receipt = 6;
+}

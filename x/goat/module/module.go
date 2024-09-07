@@ -13,15 +13,15 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
+	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 
 	// this line is used by starport scaffolding # 1
 
 	modulev1 "github.com/goatnetwork/goat/api/goat/goat/module/v1"
+	"github.com/goatnetwork/goat/pkg/ethrpc"
 	"github.com/goatnetwork/goat/x/goat/keeper"
 	"github.com/goatnetwork/goat/x/goat/types"
 )
@@ -33,9 +33,8 @@ var (
 	_ module.HasInvariants       = (*AppModule)(nil)
 	_ module.HasConsensusVersion = (*AppModule)(nil)
 
-	_ appmodule.AppModule       = (*AppModule)(nil)
-	_ appmodule.HasBeginBlocker = (*AppModule)(nil)
-	_ appmodule.HasEndBlocker   = (*AppModule)(nil)
+	_ appmodule.AppModule     = (*AppModule)(nil)
+	_ appmodule.HasEndBlocker = (*AppModule)(nil)
 )
 
 // ----------------------------------------------------------------------------
@@ -144,16 +143,10 @@ func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.Raw
 // To avoid wrong/empty versions, the initial version should be set to 1.
 func (AppModule) ConsensusVersion() uint64 { return 1 }
 
-// BeginBlock contains the logic that is automatically triggered at the beginning of each block.
-// The begin block implementation is optional.
-func (am AppModule) BeginBlock(_ context.Context) error {
-	return nil
-}
-
 // EndBlock contains the logic that is automatically triggered at the end of each block.
 // The end block implementation is optional.
-func (am AppModule) EndBlock(_ context.Context) error {
-	return nil
+func (am AppModule) EndBlock(ctx context.Context) error {
+	return am.keeper.Finalized(ctx)
 }
 
 // IsOnePerModuleType implements the depinject.OnePerModuleType interface.
@@ -184,6 +177,12 @@ type ModuleInputs struct {
 
 	AccountKeeper types.AccountKeeper
 	BankKeeper    types.BankKeeper
+	BitcoinKeeper types.BitcoinKeeper
+	LockingKeeper types.LockingKeeper
+	RelayerKeeper types.RelayerKeeper
+	TxConfig      client.TxConfig
+	PrivKey       cryptotypes.PrivKey `optional:"true"` // optinal for client context
+	EngineClient  *ethrpc.Client      `optional:"true"` // optinal for client context
 }
 
 type ModuleOutputs struct {
@@ -194,17 +193,18 @@ type ModuleOutputs struct {
 }
 
 func ProvideModule(in ModuleInputs) ModuleOutputs {
-	// default to governance authority if not provided
-	authority := authtypes.NewModuleAddress(govtypes.ModuleName)
-	if in.Config.Authority != "" {
-		authority = authtypes.NewModuleAddressOrBech32Address(in.Config.Authority)
-	}
 	k := keeper.NewKeeper(
 		in.Cdc,
 		in.AddressCodec,
 		in.StoreService,
 		in.Logger,
-		authority.String(),
+		in.BitcoinKeeper,
+		in.LockingKeeper,
+		in.RelayerKeeper,
+		in.AccountKeeper,
+		in.EngineClient,
+		in.TxConfig,
+		in.PrivKey,
 	)
 	m := NewAppModule(
 		in.Cdc,

@@ -1,0 +1,140 @@
+syntax = "proto3";
+package goat.bitcoin.v1;
+
+import "amino/amino.proto";
+import "cosmos/msg/v1/msg.proto";
+import "cosmos_proto/cosmos.proto";
+import "goat/bitcoin/v1/bitcoin.proto";
+import "goat/relayer/v1/relayer.proto";
+
+option go_package = "github.com/goatnetwork/goat/x/bitcoin/types";
+
+// Msg defines the Msg service.
+service Msg {
+  option (cosmos.msg.v1.service) = true;
+
+  // NewBlockHashs adds new bitcoin block hashes
+  // the block hashes are not only for deposit/withdrawal spv, but also a on-chain oracle for dapps
+  // ** it requires off-chain vote by relayer group
+  // ** the block should have a hard confirmation number which incosistent with the param.
+  // ** every block after startBlockNumber in the geneis should be submitted on chain
+  rpc NewBlockHashes(MsgNewBlockHashes) returns (MsgNewBlockHashesResponse);
+
+  // NewDeposit adds new deposits
+  // ** it doesn't need off-chain vote process since we have spv
+  rpc NewDeposits(MsgNewDeposits) returns (MsgNewDepositsResponse);
+
+  // NewPubkey adds new deposit public key
+  // ** it requires off-chain vote by relayer group
+  rpc NewPubkey(MsgNewPubkey) returns (MsgNewPubkeyResponse);
+
+  // InitializeWithdrawal submits a non-signed raw tx and its vote for the withdrawal requests
+  // This is the first step to process withdrawals
+  // ** it requires off-chain vote by relayer group
+  // ** the output index and withdrawal id list are in one-to-one correspondence
+  // ** the tx price should not be larger than withdrawal request
+  //
+  // It informs every voter that the proposal has been approved and they can process signing then.
+  // The most relayer member can construct the final signed transaction and submit the transaction to the bitcoin chain when the signing process is finished
+  // Since the signing is an off chain process, so relayer proposer doesn't need to submit the signed transaction to the chain
+  rpc InitializeWithdrawal(MsgInitializeWithdrawal) returns (MsgInitializeWithdrawalResponse);
+
+  // FinalizeWithdrawal finlizes withdrawals and informs the chain to create the withdrawal receipts
+  // This is the final step to process withdrawals
+  //
+  // ** proposer should provide spv to prove the withdarwal is confirmed
+  // ** it doesn't need off-chain vote process
+  rpc FinalizeWithdrawal(MsgFinalizeWithdrawal) returns (MsgFinalizeWithdrawalResponse);
+
+  // ApproveCancellation approves cancelation requests
+  rpc ApproveCancellation(MsgApproveCancellation) returns (MsgApproveCancellationResponse);
+}
+
+// MsgNewBlockHashes represents a solid block header is confirmed by relayer group
+message MsgNewBlockHashes {
+  option (cosmos.msg.v1.signer) = "proposer";
+  option (amino.name) = "goat/x/bitcoin/MsgNewBlockHashes";
+
+  string proposer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  goat.relayer.v1.Votes vote = 2;
+  uint64 start_block_number = 3;
+  repeated bytes block_hash = 4;
+}
+
+// MsgNewBlockHashesResponse defines the Msg/NewHeaders response type.
+message MsgNewBlockHashesResponse {}
+
+// MsgNewDeposits represents new deposits
+message MsgNewDeposits {
+  option (cosmos.msg.v1.signer) = "proposer";
+  option (amino.name) = "goat/x/bitcoin/MsgNewDeposits";
+
+  string proposer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  // block_header is a height and raw header pair
+  // a raw block header is always 80 bytes
+  // refer to https://github.com/btcsuite/btcd/blob/master/wire/blockheader.go#L65 for the details
+  map<uint64, bytes> block_headers = 2;
+  repeated Deposit deposits = 3;
+}
+
+// MsgNewDepositsResponse defines the Msg/NewDeposits response type.
+message MsgNewDepositsResponse {}
+
+// MsgNewPubkey is the Msg/NewPubkey request type.
+message MsgNewPubkey {
+  option (cosmos.msg.v1.signer) = "proposer";
+  option (amino.name) = "goat/x/bitcoin/MsgNewPubkey";
+
+  string proposer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  goat.relayer.v1.Votes vote = 2;
+  goat.relayer.v1.PublicKey pubkey = 3;
+}
+
+// MsgNewPubkeyResponse is the Msg/NewPubkey response type.
+message MsgNewPubkeyResponse {}
+
+// MsgNewWithdrawal
+message MsgInitializeWithdrawal {
+  option (cosmos.msg.v1.signer) = "proposer";
+  option (amino.name) = "goat/x/bitcoin/MsgNewWithdrawal";
+
+  string proposer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  goat.relayer.v1.Votes vote = 2;
+  WithdrawalProposal proposal = 3;
+}
+
+// MsgNewWithdrawalResponse
+message MsgInitializeWithdrawalResponse {}
+
+// MsgFinalizeWithdrawal
+message MsgFinalizeWithdrawal {
+  option (cosmos.msg.v1.signer) = "proposer";
+  option (amino.name) = "goat/x/bitcoin/MsgFinalizeWithdrawal";
+
+  string proposer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  // the txid for the withdrawal proposal
+  bytes txid = 2;
+  // block_number the block number that transaction located at
+  uint64 block_number = 3;
+  // tx_index is the index of transaction in the block
+  uint32 tx_index = 4;
+  // intermediate proof is the proof without the txid and merkel root
+  bytes intermediate_proof = 5;
+  // block_header is the raw bitcoin block header bytes
+  bytes block_header = 6;
+}
+
+// MsgFinalizeWithdrawalResponse
+message MsgFinalizeWithdrawalResponse {}
+
+// MsgApproveCancellation
+message MsgApproveCancellation {
+  option (cosmos.msg.v1.signer) = "proposer";
+  option (amino.name) = "goat/x/bitcoin/MsgApproveCancellation";
+
+  string proposer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  repeated uint64 id = 2;
+}
+
+// MsgApproveCancellationResponse
+message MsgApproveCancellationResponse {}

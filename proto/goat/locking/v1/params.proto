@@ -1,0 +1,13 @@
+syntax = "proto3";
+package goat.locking.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/goatnetwork/goat/x/locking/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (amino.name) = "goat/x/locking/Params";
+  option (gogoproto.equal) = true;
+}

@@ -3,18 +3,61 @@ package types
 import (
 	"context"
 
+	"cosmossdk.io/core/address"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	ethtypes "github.com/ethereum/go-ethereum/core/types"
 )
+
+type BitcoinKeeper interface {
+	DequeueBitcoinModuleTx(ctx context.Context) ([]*ethtypes.Transaction, error)
+}
+
+type LockingKeeper interface {
+	DequeueLockingModuleTx(ctx context.Context) ([]*ethtypes.Transaction, error)
+}
+
+type RelayerKeeper interface {
+	GetCurrentProposer(ctx context.Context) (sdk.AccAddress, error)
+}
 
 // AccountKeeper defines the expected interface for the Account module.
 type AccountKeeper interface {
-	GetAccount(context.Context, sdk.AccAddress) sdk.AccountI // only used for simulation
+	// Return a new account with the next account number and the specified address. Does not save the new account to the store.
+	NewAccountWithAddress(context.Context, sdk.AccAddress) sdk.AccountI
+
+	// Return a new account with the next account number. Does not save the new account to the store.
+	NewAccount(context.Context, sdk.AccountI) sdk.AccountI
+
+	// Check if an account exists in the store.
+	HasAccount(context.Context, sdk.AccAddress) bool
+
+	// Retrieve an account from the store.
+	GetAccount(context.Context, sdk.AccAddress) sdk.AccountI
+
+	// Set an account in the store.
+	SetAccount(context.Context, sdk.AccountI)
+
+	// Fetch the sequence of an account at a specified address.
+	GetSequence(context.Context, sdk.AccAddress) (uint64, error)
+
+	// Fetch the next account number, and increment the internal counter.
+	NextAccountNumber(context.Context) uint64
+
+	// AddressCodec returns the account address codec.
+	AddressCodec() address.Codec
 	// Methods imported from account should be defined here
 }
 
 // BankKeeper defines the expected interface for the Bank module.
 type BankKeeper interface {
 	SpendableCoins(context.Context, sdk.AccAddress) sdk.Coins
+	SendCoinsFromModuleToAccount(ctx context.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error
+	SendCoinsFromModuleToModule(ctx context.Context, senderModule, recipientModule string, amt sdk.Coins) error
+	SendCoinsFromAccountToModule(ctx context.Context, senderAddr sdk.AccAddress, recipientModule string, amt sdk.Coins) error
+	DelegateCoinsFromAccountToModule(ctx context.Context, senderAddr sdk.AccAddress, recipientModule string, amt sdk.Coins) error
+	UndelegateCoinsFromModuleToAccount(ctx context.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error
+	MintCoins(ctx context.Context, moduleName string, amt sdk.Coins) error
+	BurnCoins(ctx context.Context, moduleName string, amt sdk.Coins) error
 	// Methods imported from bank should be defined here
 }
 

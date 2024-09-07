@@ -18,12 +18,11 @@ import (
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	authcmd "github.com/cosmos/cosmos-sdk/x/auth/client/cli"
-	"github.com/cosmos/cosmos-sdk/x/crisis"
-	genutilcli "github.com/cosmos/cosmos-sdk/x/genutil/client/cli"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
 	"github.com/goatnetwork/goat/app"
+	"github.com/goatnetwork/goat/cmd/goatd/cmd/modgen"
 )
 
 func initRootCmd(
@@ -32,37 +31,28 @@ func initRootCmd(
 	basicManager module.BasicManager,
 ) {
 	rootCmd.AddCommand(
-		genutilcli.InitCmd(basicManager, app.DefaultNodeHome),
+		InitCmd(basicManager),
+		ModgenCommand(),
 		debug.Cmd(),
 		confixcmd.ConfigCommand(),
 		pruning.Cmd(newApp, app.DefaultNodeHome),
 		snapshot.Cmd(newApp),
 	)
 
-	server.AddCommands(rootCmd, app.DefaultNodeHome, newApp, appExport, addModuleInitFlags)
+	server.AddCommandsWithStartCmdOptions(rootCmd, app.DefaultNodeHome, newApp, appExport, server.StartCmdOptions{
+		AddFlags: func(cmd *cobra.Command) {
+			cmd.Flags().String(FlagGoatGeth, "http://127.0.0.1:8545", "the goat-geth endpoint, ipc is recommended")
+			cmd.Flags().String(FlagGoatJwtSecret, "", "the jwt secret file for engine api, it's only required if connecting to an goat-geth via http")
+		},
+	})
 
 	// add keybase, auxiliary RPC, query, genesis, and tx child commands
 	rootCmd.AddCommand(
 		server.StatusCommand(),
-		genesisCommand(txConfig, basicManager),
 		queryCommand(),
 		txCommand(),
 		keys.Commands(),
 	)
-}
-
-func addModuleInitFlags(startCmd *cobra.Command) {
-	crisis.AddModuleInitFlags(startCmd)
-}
-
-// genesisCommand builds genesis-related `goatd genesis` command. Users may provide application specific commands as a parameter
-func genesisCommand(txConfig client.TxConfig, basicManager module.BasicManager, cmds ...*cobra.Command) *cobra.Command {
-	cmd := genutilcli.Commands(txConfig, basicManager, app.DefaultNodeHome)
-
-	for _, subCmd := range cmds {
-		cmd.AddCommand(subCmd)
-	}
-	return cmd
 }
 
 func queryCommand() *cobra.Command {
@@ -184,4 +174,21 @@ func appExport(
 	}
 
 	return bApp.ExportAppStateAndValidators(forZeroHeight, jailAllowedAddrs, modulesToExport)
+}
+
+func ModgenCommand() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "modgen",
+		Short: "update module genesis",
+		RunE:  client.ValidateCmd,
+	}
+	cmd.PersistentFlags().String(flags.FlagHome, app.DefaultNodeHome, "node's home directory")
+	cmd.AddCommand(
+		modgen.Bitcoin(),
+		modgen.Relayer(),
+		modgen.Goat(),
+		modgen.Validator(),
+		modgen.NewKey(),
+	)
+	return cmd
 }
