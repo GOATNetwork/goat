@@ -1,4 +1,4 @@
-FROM golang:1.22-alpine AS builder
+FROM golang:1.23-alpine AS builder
 RUN apk add --no-cache curl make git libc-dev bash file gcc linux-headers eudev-dev
 WORKDIR /app
 COPY go.mod go.sum* ./
