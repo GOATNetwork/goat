@@ -311,10 +311,12 @@ func (k Keeper) ElectProposer(ctx context.Context) error {
 	voterLen := len(relayer.Voters)
 	// no voter no election
 	if voterLen == 0 {
-		sdkctx.EventManager().EmitEvents(events)
+		relayer.LastElected = sdkctx.BlockTime()
+		relayer.ProposerAccepted = true
 		if err := k.Relayer.Set(ctx, relayer); err != nil {
 			return err
 		}
+		sdkctx.EventManager().EmitEvents(events)
 		return nil
 	}
 
