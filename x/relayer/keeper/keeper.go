@@ -209,6 +209,7 @@ func (k Keeper) SetProposalSeq(ctx context.Context, seq uint64) error {
 	return k.Sequence.Set(ctx, seq)
 }
 
+// ElectProposer elects new proposer and increase epoch number at regular intervals
 func (k Keeper) ElectProposer(ctx context.Context) error {
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
 
@@ -279,7 +280,9 @@ func (k Keeper) ElectProposer(ctx context.Context) error {
 		relayer.Voters = voters[1:]
 	}
 
+	// epoch number is constantly increasing even if we don't have a new election
 	relayer.Epoch++
+	relayer.LastElected = sdkctx.BlockTime()
 
 	var events = sdktypes.Events{types.NewEpochEvent(relayer.Epoch)}
 	if offBoarding || onBoarding {
@@ -293,10 +296,9 @@ func (k Keeper) ElectProposer(ctx context.Context) error {
 
 		// if the proposer is removed, we don't make a election, just use the next voter as the new proposer
 		if isProposerRemvoed {
-			relayer.LastElected = sdkctx.BlockTime()
 			relayer.ProposerAccepted = false
 
-			k.Logger().Debug("New proposer", "height", sdkctx.BlockHeight(), "proposer", relayer.Proposer)
+			k.Logger().Debug("New proposer", "height", sdkctx.BlockHeight(), "epoch", relayer.Epoch, "proposer", relayer.Proposer)
 			if err := k.Relayer.Set(ctx, relayer); err != nil {
 				return err
 			}
@@ -311,7 +313,6 @@ func (k Keeper) ElectProposer(ctx context.Context) error {
 	voterLen := len(relayer.Voters)
 	// no voter no election
 	if voterLen == 0 {
-		relayer.LastElected = sdkctx.BlockTime()
 		relayer.ProposerAccepted = true
 		if err := k.Relayer.Set(ctx, relayer); err != nil {
 			return err
@@ -334,10 +335,8 @@ func (k Keeper) ElectProposer(ctx context.Context) error {
 		relayer.Proposer, relayer.Voters[0] = relayer.Voters[0], relayer.Proposer
 	}
 
-	relayer.LastElected = sdkctx.BlockTime()
+	k.Logger().Debug("New proposer", "height", sdkctx.BlockHeight(), "epoch", relayer.Epoch, "proposer", relayer.Proposer)
 	relayer.ProposerAccepted = false
-
-	k.Logger().Debug("New proposer", "height", sdkctx.BlockHeight(), "proposer", relayer.Proposer)
 	if err := k.Relayer.Set(ctx, relayer); err != nil {
 		return err
 	}
