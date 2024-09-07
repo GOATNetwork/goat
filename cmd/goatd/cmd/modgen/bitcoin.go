@@ -15,13 +15,12 @@ import (
 
 func Bitcoin() *cobra.Command {
 	const (
-		FlagSafe               = "safe"
-		FlagHard               = "hard"
 		FlagPubkey             = "pubkey"
 		FlagPubkeyType         = "pubkey-type"
 		FlagMinDeposit         = "min-deposit"
 		FlagDepositMagicPrefix = "deposit-magic-prefix"
 		FlagNetworkName        = "network"
+		FlagConfirmationNumber = "confirmation-number"
 	)
 
 	parsePubkey := func(raw []byte, typ string) (*relayer.PublicKey, error) {
@@ -60,7 +59,7 @@ func Bitcoin() *cobra.Command {
 					return fmt.Errorf("unknown bitcoin network: %s", networkName)
 				}
 
-				confirmationNumber, err := cmd.Flags().GetUint32(FlagHard)
+				confirmationNumber, err := cmd.Flags().GetUint32(FlagConfirmationNumber)
 				if err != nil {
 					return err
 				}
@@ -121,7 +120,7 @@ func Bitcoin() *cobra.Command {
 	}
 
 	param := types.DefaultParams()
-	cmd.Flags().Uint32(FlagHard, param.ConfirmationNumber, "the confirmation number")
+	cmd.Flags().Uint32(FlagConfirmationNumber, param.ConfirmationNumber, "the confirmation number")
 	cmd.Flags().BytesHex(FlagPubkey, nil, "the initial relayer public key")
 	cmd.Flags().String(FlagPubkeyType, "secp256k1", "the public key type [secp256k1,schnorr]")
 	cmd.Flags().String(FlagNetworkName, param.ChainConfig.NetworkName, "the bitcoin network name(mainnet|testnet3|regtest|signet)")
