@@ -39,8 +39,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 
 	keySet := make(map[string]bool)
 	for addr, v := range genState.Voters {
-		addrByte, err := k.AddrCodec.StringToBytes(addr)
-		if err != nil {
+		if _, err := k.AddrCodec.StringToBytes(addr); err != nil {
 			panic(err)
 		}
 
@@ -54,7 +53,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 		keySet[string(v.VoteKey)] = true
 
 		relayer.Voters = append(relayer.Voters, addr)
-		if err := k.Voters.Set(ctx, addrByte, *v); err != nil {
+		if err := k.Voters.Set(ctx, addr, *v); err != nil {
 			panic(err)
 		}
 
@@ -114,7 +113,7 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 		if err != nil {
 			panic(err)
 		}
-		genesis.Voters[kv.Key.String()] = &kv.Value
+		genesis.Voters[kv.Key] = &kv.Value
 	}
 
 	genesis.Sequence, err = k.Sequence.Peek(ctx)
