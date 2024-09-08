@@ -110,7 +110,7 @@ func Bitcoin() *cobra.Command {
 
 				genesis.BlockHash = genesis.BlockHash[1:]
 				for _, hash := range args[1:] {
-					r, err := chainhash.NewHashFromStr(hash)
+					r, err := chainhash.NewHashFromStr(strings.TrimPrefix(hash, "0x"))
 					if err != nil {
 						return fmt.Errorf("invalid block hash: %s", hash)
 					}
