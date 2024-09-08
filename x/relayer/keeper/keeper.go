@@ -271,7 +271,7 @@ func (k Keeper) ElectProposer(ctx context.Context) error {
 
 	var events = sdktypes.Events{types.NewEpochEvent(relayer.Epoch)}
 	if offBoarding || onBoarding {
-		events = append(events, types.VoterChangedEvent(relayer.Epoch, queue.OnBoarding, queue.OffBoarding)...)
+		events = append(types.VoterChangedEvent(relayer.Epoch, queue.OnBoarding, queue.OffBoarding), events...)
 
 		queue.OnBoarding = queue.OnBoarding[:0]
 		queue.OffBoarding = queue.OffBoarding[:0]

@@ -50,7 +50,7 @@ func ElectedProposerEvent(proposer string, epoch uint64) sdktypes.Event {
 }
 
 func VoterChangedEvent(epoch uint64, added, removed []string) sdktypes.Events {
-	events := make(sdktypes.Events, 0, len(added)+len(removed)+1) // +1 for EventElectedProposer
+	events := make(sdktypes.Events, 0, len(added)+len(removed)+2) // +2 for EventElectedProposer and EventTypeNewEpoch
 	epochStr := strconv.FormatUint(epoch, 10)
 	for _, v := range added {
 		events = append(events, sdktypes.NewEvent(
