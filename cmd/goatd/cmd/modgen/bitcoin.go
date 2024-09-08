@@ -38,9 +38,9 @@ func Bitcoin() *cobra.Command {
 	}
 
 	var cmd = &cobra.Command{
-		Use:   "bitcoin height hash...",
+		Use:   "bitcoin [height] [hash...]",
 		Short: "init bitcoin module genesis",
-		Args:  cobra.RangeArgs(2, 7),
+		Args:  cobra.RangeArgs(0, 7),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 			serverCtx := server.GetServerContextFromCmd(cmd)
@@ -103,18 +103,20 @@ func Bitcoin() *cobra.Command {
 					return err
 				}
 
-				genesis.StartBlockNumber, err = cast.ToUint64E(args[0])
-				if err != nil {
-					return fmt.Errorf("invalid height: %s", args[0])
-				}
-
-				genesis.BlockHash = genesis.BlockHash[1:]
-				for _, hash := range args[1:] {
-					r, err := chainhash.NewHashFromStr(strings.TrimPrefix(hash, "0x"))
+				if len(args) > 0 {
+					genesis.StartBlockNumber, err = cast.ToUint64E(args[0])
 					if err != nil {
-						return fmt.Errorf("invalid block hash: %s", hash)
+						return fmt.Errorf("invalid height: %s", args[0])
 					}
-					genesis.BlockHash = append(genesis.BlockHash, r[:])
+
+					genesis.BlockHash = genesis.BlockHash[1:]
+					for _, hash := range args[1:] {
+						r, err := chainhash.NewHashFromStr(strings.TrimPrefix(hash, "0x"))
+						if err != nil {
+							return fmt.Errorf("invalid block hash: %s", hash)
+						}
+						genesis.BlockHash = append(genesis.BlockHash, r[:])
+					}
 				}
 				return genesis.Validate()
 			})
