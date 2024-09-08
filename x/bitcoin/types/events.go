@@ -5,7 +5,6 @@ import (
 	"encoding/hex"
 	"strconv"
 
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
 	relayertypes "github.com/goatnetwork/goat/x/relayer/types"
 )
@@ -42,7 +41,7 @@ func NewKeyEvent(key *relayertypes.PublicKey) sdktypes.Event {
 func NewDepositEvent(deposit *DepositExecReceipt) sdktypes.Event {
 	return sdktypes.NewEvent(
 		EventTypeNewDeposit,
-		sdktypes.NewAttribute("txid", chainhash.Hash(deposit.Txid).String()), // we must use big endian
+		sdktypes.NewAttribute("txid", BtcTxid(deposit.Txid)), // we must use big endian
 		sdktypes.NewAttribute("txout", strconv.FormatUint(uint64(deposit.Txout), 10)),
 		sdktypes.NewAttribute("address", hex.EncodeToString(deposit.Address)),
 		sdktypes.NewAttribute("amount", strconv.FormatUint(deposit.Amount, 10)),
@@ -53,21 +52,21 @@ func NewBlockHashEvent(height uint64, hash []byte) sdktypes.Event {
 	return sdktypes.NewEvent(
 		EventTypeNewBlockHash,
 		sdktypes.NewAttribute("height", strconv.FormatUint(height, 10)),
-		sdktypes.NewAttribute("hash", chainhash.Hash(hash).String()), // we must use big endian
+		sdktypes.NewAttribute("hash", BtcTxid(hash)), // we must use big endian
 	)
 }
 
 func NewWithdrawalEvent(hash []byte) sdktypes.Event {
 	return sdktypes.NewEvent(
 		EventTypeNewWithdrawal,
-		sdktypes.NewAttribute("txid", chainhash.Hash(hash).String()), // we must use big endian
+		sdktypes.NewAttribute("txid", BtcTxid(hash)), // we must use big endian
 	)
 }
 
 func FinalizeWithdrawalEvent(hash []byte) sdktypes.Event {
 	return sdktypes.NewEvent(
 		EventTypeFinalizeWithdrawal,
-		sdktypes.NewAttribute("txid", chainhash.Hash(hash).String()), // we must use big endian
+		sdktypes.NewAttribute("txid", BtcTxid(hash)), // we must use big endian
 	)
 }
 
