@@ -102,14 +102,10 @@ func (k Keeper) VerifyProposal(ctx context.Context, req types.IVoteMsg, verifyFn
 		return 0, types.ErrInvalidProposalSignature.Wrap("incorrect epoch")
 	}
 
-	threshold := (1 + len(voters)) * 2 / 3
-	if threshold == 0 {
-		threshold = 1
-	}
-
 	bmp := bitmap.FromBytes(req.GetVote().GetVoters())
+
 	bmpLen := bmp.Count()
-	if bmpLen+1 < threshold || bmpLen > len(voters) {
+	if bmpLen+1 < relayer.Threshold() || bmpLen > len(voters) {
 		return 0, types.ErrInvalidProposalSignature.Wrapf("malformed signature length")
 	}
 

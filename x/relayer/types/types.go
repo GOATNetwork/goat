@@ -4,29 +4,10 @@ import (
 	"crypto/sha256"
 	"errors"
 	"slices"
-	"time"
 
 	"github.com/btcsuite/btcd/btcec/v2"
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 )
-
-type IVoteMsg interface {
-	GetProposer() string
-	GetVote() *Votes
-	MethodName() string
-	VoteSigDoc() []byte
-}
-
-type INonVoteMsg interface {
-	GetProposer() string
-}
-
-type IRelayer interface {
-	GetProposer() string
-	GetEpoch() uint64
-	GetLastElected() time.Time
-	GetVoters() []string
-}
 
 func (v *Votes) Validate() error {
 	if len(v.Voters) > sha256.Size { // we have max 256 voters
@@ -44,17 +25,6 @@ func (v *Voter) Validate() error {
 		return errors.New("invalid bls pubkey length")
 	}
 	return nil
-}
-
-func VoteSignDoc(method, chainId, proposer string, sequence, epoch uint64, data []byte) []byte {
-	sigdoc := goatcrypto.SHA256Sum(
-		[]byte(chainId),
-		goatcrypto.Uint64LE(sequence, epoch),
-		[]byte(method),
-		[]byte(proposer),
-		data,
-	)
-	return sigdoc
 }
 
 func (msg *MsgNewVoterRequest) Validate() error {

@@ -2,6 +2,7 @@ package types
 
 import (
 	"context"
+	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -24,4 +25,22 @@ type BankKeeper interface {
 type ParamSubspace interface {
 	Get(context.Context, []byte, interface{})
 	Set(context.Context, []byte, interface{})
+}
+
+type IVoteMsg interface {
+	GetProposer() string
+	GetVote() *Votes
+	MethodName() string
+	VoteSigDoc() []byte
+}
+
+type INonVoteMsg interface {
+	GetProposer() string
+}
+
+type IRelayer interface {
+	GetProposer() string
+	GetEpoch() uint64
+	GetLastElected() time.Time
+	GetVoters() []string
 }
