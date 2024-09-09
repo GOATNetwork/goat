@@ -69,13 +69,12 @@ type App struct {
 	AccountKeeper         authkeeper.AccountKeeper
 	BankKeeper            bankkeeper.Keeper
 	ConsensusParamsKeeper consensuskeeper.Keeper
-
-	EthClient       *ethrpc.Client
-	RelayerKeeper   relayermodulekeeper.Keeper
-	BitcoinKeeper   bitcoinmodulekeeper.Keeper
-	LockingKeeper   lockingmodulekeeper.Keeper
-	GoatKeeper      goatmodulekeeper.Keeper
-	NodeKeyProvider cryptotypes.PrivKey
+	RelayerKeeper         relayermodulekeeper.Keeper
+	BitcoinKeeper         bitcoinmodulekeeper.Keeper
+	LockingKeeper         lockingmodulekeeper.Keeper
+	GoatKeeper            goatmodulekeeper.Keeper
+	EthClient             ethrpc.EngineClient
+	NodeKeyProvider       cryptotypes.PrivKey
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -230,30 +229,4 @@ func (app *App) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIConfig
 
 	// register app's OpenAPI routes.
 	docs.RegisterOpenAPIService(Name, apiSvr.Router)
-}
-
-// GetMaccPerms returns a copy of the module account permissions
-//
-// NOTE: This is solely to be used for testing purposes.
-func GetMaccPerms() map[string][]string {
-	dup := make(map[string][]string)
-	for _, perms := range moduleAccPerms {
-		dup[perms.Account] = perms.Permissions
-	}
-	return dup
-}
-
-// BlockedAddresses returns all the app's blocked account addresses.
-func BlockedAddresses() map[string]bool {
-	result := make(map[string]bool)
-	if len(blockAccAddrs) > 0 {
-		for _, addr := range blockAccAddrs {
-			result[addr] = true
-		}
-	} else {
-		for addr := range GetMaccPerms() {
-			result[addr] = true
-		}
-	}
-	return result
 }

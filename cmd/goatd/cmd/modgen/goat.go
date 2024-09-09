@@ -1,61 +1,29 @@
 package modgen
 
 import (
-	"encoding/json"
-	"fmt"
-	"os"
-
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/server"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/goatnetwork/goat/x/goat/types"
 	"github.com/spf13/cobra"
 )
 
 func Goat() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "goat ethHeaderJsonFile",
+		Use:   "goat eth-genesis-file",
 		Short: "update goat module genesis",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			data, err := os.ReadFile(args[0])
+			header, err := GetEthGenesisHeaderByFile(args[0])
 			if err != nil {
 				return err
-			}
-
-			var header ethtypes.Header
-			if err := json.Unmarshal(data, &header); err != nil {
-				return err
-			}
-
-			if header.BaseFee == nil || header.WithdrawalsHash == nil {
-				return fmt.Errorf("shanghai upgrade should be activated")
-			}
-
-			if *header.WithdrawalsHash != ethtypes.EmptyWithdrawalsHash {
-				return fmt.Errorf("No withdrawals required")
-			}
-
-			if header.GasUsed != 0 || header.TxHash != ethtypes.EmptyTxsHash {
-				return fmt.Errorf("No txs required")
-			}
-
-			if header.BlobGasUsed == nil || header.ExcessBlobGas == nil || header.ParentBeaconRoot == nil {
-				return fmt.Errorf("cancun upgrade should be activated")
-			}
-
-			if *header.BlobGasUsed != 0 {
-				return fmt.Errorf("No blob txes required")
 			}
 
 			clientCtx := client.GetClientContextFromCmd(cmd)
 			serverCtx := server.GetServerContextFromCmd(cmd)
 
-			config := serverCtx.Config.SetRoot(clientCtx.HomeDir)
-			genesisFile := config.GenesisFile()
-
-			serverCtx.Logger.Info("update genesis", "module", types.ModuleName, "geneis", genesisFile)
-			return UpdateModuleGenesis(genesisFile, types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
+			srvConfig := serverCtx.Config.SetRoot(clientCtx.HomeDir)
+			serverCtx.Logger.Info("update genesis", "module", types.ModuleName, "geneis", srvConfig.GenesisFile())
+			return UpdateModuleGenesis(srvConfig.GenesisFile(), types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
 				genesis.EthBlock = types.ExecutionPayload{
 					ParentHash:    header.ParentHash.Bytes(),
 					FeeRecipient:  header.Coinbase.Bytes(),
