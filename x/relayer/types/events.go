@@ -60,7 +60,7 @@ func VoterChangedEvent(epoch uint64, added, removed []string) sdktypes.Events {
 		))
 	}
 
-	for _, v := range added {
+	for _, v := range removed {
 		events = append(events, sdktypes.NewEvent(
 			EventVoterDischarged,
 			sdktypes.NewAttribute("epoch", epochStr),
