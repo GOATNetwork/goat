@@ -12,6 +12,7 @@ import (
 	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client/tx"
+	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/mempool"
@@ -24,7 +25,11 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func (k Keeper) PrepareProposalHandler(txpool mempool.Mempool, txVerifier baseapp.ProposalTxVerifier) sdk.PrepareProposalHandler {
+func (k Keeper) PrepareProposalHandler(txpool mempool.Mempool, txVerifier baseapp.ProposalTxVerifier, keyProvider cryptotypes.PrivKey) sdk.PrepareProposalHandler {
+	if keyProvider == nil {
+		panic("no eth block signer provided")
+	}
+
 	return func(sdkctx sdk.Context, rpp *abci.RequestPrepareProposal) (*abci.ResponsePrepareProposal, error) {
 		var ethTx []byte
 
@@ -32,7 +37,7 @@ func (k Keeper) PrepareProposalHandler(txpool mempool.Mempool, txVerifier baseap
 
 		// build eth block msg
 		eg.Go(func() (err error) {
-			ethTx, err = k.createEthBlockProposal(sdkctx, rpp)
+			ethTx, err = k.createEthBlockProposal(sdkctx, keyProvider, rpp)
 			return
 		})
 
@@ -66,11 +71,7 @@ func (k Keeper) PrepareProposalHandler(txpool mempool.Mempool, txVerifier baseap
 	}
 }
 
-func (k Keeper) createEthBlockProposal(sdkctx sdk.Context, rpp *abci.RequestPrepareProposal) ([]byte, error) {
-	if k.PrivKey == nil {
-		return nil, errors.New("no eth block signer provided")
-	}
-
+func (k Keeper) createEthBlockProposal(sdkctx sdk.Context, keyProvider cryptotypes.PrivKey, rpp *abci.RequestPrepareProposal) ([]byte, error) {
 	validatorAddr, err := k.addressCodec.BytesToString(rpp.ProposerAddress)
 	if err != nil {
 		return nil, err
@@ -81,8 +82,8 @@ func (k Keeper) createEthBlockProposal(sdkctx sdk.Context, rpp *abci.RequestPrep
 		return nil, fmt.Errorf("nil validator account: %s", validatorAddr)
 	}
 
-	if !bytes.Equal(validatorAcc.GetPubKey().Bytes(), k.PrivKey.PubKey().Bytes()) {
-		return nil, fmt.Errorf("validator pubkey mismatched: expected %x got %x", validatorAcc.GetPubKey().Bytes(), k.PrivKey.PubKey().Bytes())
+	if !bytes.Equal(validatorAcc.GetPubKey().Bytes(), keyProvider.PubKey().Bytes()) {
+		return nil, fmt.Errorf("validator pubkey mismatched: expected %x got %x", validatorAcc.GetPubKey().Bytes(), keyProvider.PubKey().Bytes())
 	}
 
 	parentBlock, err := k.Block.Get(sdkctx)
@@ -167,7 +168,7 @@ func (k Keeper) createEthBlockProposal(sdkctx sdk.Context, rpp *abci.RequestPrep
 		AccountNumber: validatorAcc.GetAccountNumber(),
 		Sequence:      validatorAcc.GetSequence(),
 		PubKey:        validatorAcc.GetPubKey(),
-	}, txBuilder, k.PrivKey, k.txConfig, validatorAcc.GetSequence())
+	}, txBuilder, keyProvider, k.txConfig, validatorAcc.GetSequence())
 	if err != nil {
 		return nil, err
 	}

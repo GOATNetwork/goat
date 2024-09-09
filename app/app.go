@@ -13,6 +13,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
+	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
 	"github.com/cosmos/cosmos-sdk/server"
 	"github.com/cosmos/cosmos-sdk/server/api"
@@ -69,11 +70,12 @@ type App struct {
 	BankKeeper            bankkeeper.Keeper
 	ConsensusParamsKeeper consensuskeeper.Keeper
 
-	EthClient     *ethrpc.Client
-	RelayerKeeper relayermodulekeeper.Keeper
-	BitcoinKeeper bitcoinmodulekeeper.Keeper
-	LockingKeeper lockingmodulekeeper.Keeper
-	GoatKeeper    goatmodulekeeper.Keeper
+	EthClient       *ethrpc.Client
+	RelayerKeeper   relayermodulekeeper.Keeper
+	BitcoinKeeper   bitcoinmodulekeeper.Keeper
+	LockingKeeper   lockingmodulekeeper.Keeper
+	GoatKeeper      goatmodulekeeper.Keeper
+	NodeKeyProvider cryptotypes.PrivKey
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -118,12 +120,6 @@ func New(
 			depinject.Supply(
 				appOpts, // supply app options
 				logger,  // supply logger
-
-				// here alternative options can be supplied to the DI container.
-				// those options can be used f.e to override the default behavior of some modules.
-				// for instance supplying a custom address codec for not using bech32 addresses.
-				// read the depinject documentation and depinject module wiring for more information
-				// on available options and how to use them.
 			),
 		)
 	)
@@ -136,14 +132,13 @@ func New(
 		&app.interfaceRegistry,
 		&app.AccountKeeper,
 		&app.BankKeeper,
-		// &app.StakingKeeper,
-		// &app.DistrKeeper,
 		&app.ConsensusParamsKeeper,
 		&app.RelayerKeeper,
 		&app.BitcoinKeeper,
 		&app.LockingKeeper,
 		&app.GoatKeeper,
 		&app.EthClient,
+		&app.NodeKeyProvider,
 	); err != nil {
 		panic(err)
 	}
@@ -161,7 +156,7 @@ func New(
 	app.sm.RegisterStoreDecoders()
 
 	// register goat handlers
-	app.SetPrepareProposal(app.GoatKeeper.PrepareProposalHandler(app.Mempool(), app))
+	app.SetPrepareProposal(app.GoatKeeper.PrepareProposalHandler(app.Mempool(), app, app.NodeKeyProvider))
 	app.SetProcessProposal(app.GoatKeeper.ProcessProposalHandler(app))
 	app.SetAnteHandler(NewAnteHandler(app.AccountKeeper, app.RelayerKeeper, app.txConfig.SignModeHandler()))
 

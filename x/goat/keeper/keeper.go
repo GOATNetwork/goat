@@ -12,7 +12,6 @@ import (
 	"cosmossdk.io/log"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
-	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	"github.com/ethereum/go-ethereum/beacon/engine"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
@@ -32,7 +31,7 @@ type (
 		Params     collections.Item[types.Params]
 		BeaconRoot collections.Item[[]byte] // the cometbft blockhash
 		Block      collections.Item[types.ExecutionPayload]
-		ethclient  *ethrpc.Client
+		ethclient  ethrpc.EngineClient
 		txConfig   client.TxConfig
 		// this line is used by starport scaffolding # collection/type
 
@@ -40,7 +39,6 @@ type (
 		lockingKeeper types.LockingKeeper
 		relayerKeeper types.RelayerKeeper
 		accountKeeper types.AccountKeeper
-		PrivKey       cryptotypes.PrivKey
 	}
 )
 
@@ -54,9 +52,8 @@ func NewKeeper(
 	lockingKeeper types.LockingKeeper,
 	relayerKeeper types.RelayerKeeper,
 	accountKeeper types.AccountKeeper,
-	ethclient *ethrpc.Client,
+	ethclient ethrpc.EngineClient,
 	txConfig client.TxConfig,
-	privKey cryptotypes.PrivKey,
 ) Keeper {
 	sb := collections.NewSchemaBuilder(storeService)
 
@@ -75,7 +72,6 @@ func NewKeeper(
 		BeaconRoot:    collections.NewItem(sb, types.ConsHashKey, "consensus_hash", collections.BytesValue),
 		ethclient:     ethclient,
 		txConfig:      txConfig,
-		PrivKey:       privKey,
 		// this line is used by starport scaffolding # collection/instantiate
 	}
 

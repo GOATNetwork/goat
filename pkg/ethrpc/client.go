@@ -13,6 +13,8 @@ type Client struct {
 	*ethclient.Client
 }
 
+var _ EngineClient = (*Client)(nil)
+
 // DialContext connects a client to the given URL with context.
 func DialContext(ctx context.Context, rawurl string, jwt []byte) (*Client, error) {
 	var opts []rpc.ClientOption

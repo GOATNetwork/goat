@@ -13,7 +13,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
-	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -181,8 +180,7 @@ type ModuleInputs struct {
 	LockingKeeper types.LockingKeeper
 	RelayerKeeper types.RelayerKeeper
 	TxConfig      client.TxConfig
-	PrivKey       cryptotypes.PrivKey `optional:"true"` // optinal for client context
-	EngineClient  *ethrpc.Client      `optional:"true"` // optinal for client context
+	EngineClient  ethrpc.EngineClient `optional:"true"` // optinal for client context
 }
 
 type ModuleOutputs struct {
@@ -204,7 +202,6 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.AccountKeeper,
 		in.EngineClient,
 		in.TxConfig,
-		in.PrivKey,
 	)
 	m := NewAppModule(
 		in.Cdc,
