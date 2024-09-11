@@ -58,7 +58,18 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 
 	genesis.Pubkey = &pubkey
 
-	// this line is used by starport scaffolding # genesis/module/export
+	// todo: there is no enough data for recover state
+
+	blockNumber, err := k.BlockTip.Peek(ctx)
+	if err != nil {
+		panic(err)
+	}
+	genesis.StartBlockNumber = blockNumber
+	blockHash, err := k.BlockHashes.Get(ctx, blockNumber)
+	if err != nil {
+		panic(err)
+	}
+	genesis.BlockHash = [][]byte{blockHash}
 
 	return genesis
 }
