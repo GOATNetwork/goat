@@ -183,7 +183,7 @@ func (k Keeper) UpdateRandao(ctx context.Context, req types.IVoteMsg) error {
 	if err := k.Randao.Set(ctx, newRandao); err != nil {
 		return err
 	}
-	k.Logger().Debug("Randao updated", "previous", hex.EncodeToString(randao), "current", hex.EncodeToString(newRandao))
+	k.Logger().Info("Randao updated", "current", hex.EncodeToString(newRandao))
 	return nil
 }
 
@@ -283,12 +283,11 @@ func (k Keeper) ElectProposer(ctx context.Context) error {
 		// if the proposer is removed, we don't make a election, just use the next voter as the new proposer
 		if isProposerRemvoed {
 			relayer.ProposerAccepted = false
-
-			k.Logger().Debug("New proposer", "height", sdkctx.BlockHeight(), "epoch", relayer.Epoch, "proposer", relayer.Proposer)
 			if err := k.Relayer.Set(ctx, relayer); err != nil {
 				return err
 			}
 
+			k.Logger().Info("New proposer", "height", sdkctx.BlockHeight(), "epoch", relayer.Epoch, "proposer", relayer.Proposer)
 			sdkctx.EventManager().EmitEvents(
 				append(events, types.ElectedProposerEvent(relayer.Proposer, relayer.Epoch)),
 			)
@@ -321,12 +320,12 @@ func (k Keeper) ElectProposer(ctx context.Context) error {
 		relayer.Proposer, relayer.Voters[0] = relayer.Voters[0], relayer.Proposer
 	}
 
-	k.Logger().Debug("New proposer", "height", sdkctx.BlockHeight(), "epoch", relayer.Epoch, "proposer", relayer.Proposer)
 	relayer.ProposerAccepted = false
 	if err := k.Relayer.Set(ctx, relayer); err != nil {
 		return err
 	}
 
+	k.Logger().Info("New proposer", "height", sdkctx.BlockHeight(), "epoch", relayer.Epoch, "proposer", relayer.Proposer)
 	sdkctx.EventManager().EmitEvents(
 		append(events, types.ElectedProposerEvent(relayer.Proposer, relayer.Epoch)),
 	)
@@ -365,7 +364,7 @@ func (k Keeper) ProcessRelayerRequest(ctx context.Context, adds []*goattypes.Add
 		}); err != nil {
 			return nil, err
 		}
-
+		k.Logger().Info("New on-boarding voter", "voter", addr)
 		events = append(events, types.PendingVoterEvent(addr))
 	}
 
@@ -378,6 +377,13 @@ func (k Keeper) ProcessRelayerRequest(ctx context.Context, adds []*goattypes.Add
 		return nil, err
 	}
 
+	// get current voter count in the active set
+	relayer, err := k.Relayer.Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	active := len(relayer.Voters) + 1 - len(queue.OffBoarding)
 	for _, rm := range rms {
 		addr, err := k.AddrCodec.BytesToString(rm.Voter)
 		if err != nil {
@@ -397,10 +403,17 @@ func (k Keeper) ProcessRelayerRequest(ctx context.Context, adds []*goattypes.Add
 			return nil, err
 		}
 
-		if voter.Status == types.VOTER_STATUS_OFF_BOARDING {
+		if voter.Status != types.VOTER_STATUS_ACTIVATED {
 			continue
 		}
 
+		active--
+		if active < 1 {
+			k.Logger().Warn("requires 1 voter at least in active set, disreguard the removal", "voter", addr)
+			continue
+		}
+
+		k.Logger().Info("New off-boarding voter", "voter", addr)
 		voter.Status = types.VOTER_STATUS_OFF_BOARDING
 		if err := k.Voters.Set(sdkctx, addr, voter); err != nil {
 			return nil, err
