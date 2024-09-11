@@ -98,5 +98,9 @@ func GetEthGenesisHeaderByFile(genesisPath string) (*ethtypes.Header, error) {
 		return nil, errors.New("No blob txes required")
 	}
 
+	if header.RequestsHash == nil {
+		return nil, errors.New("No requests provided")
+	}
+
 	return header, nil
 }

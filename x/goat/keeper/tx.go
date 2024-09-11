@@ -38,6 +38,14 @@ func (k msgServer) NewEthBlock(ctx context.Context, req *types.MsgNewEthBlock) (
 	}
 
 	payload := req.Payload
+	if payload == nil {
+		return nil, types.ErrInvalidRequest.Wrap("empty payload")
+	}
+
+	if payload.GasRevenue == nil {
+		return nil, types.ErrInvalidRequest.Wrap("no gas revenue request")
+	}
+
 	if !bytes.Equal(block.BlockHash, payload.ParentHash) || block.BlockNumber+1 != payload.BlockNumber {
 		return nil, types.ErrInvalidRequest.Wrap("refer to incorrect parent block")
 	}
@@ -58,24 +66,30 @@ func (k msgServer) NewEthBlock(ctx context.Context, req *types.MsgNewEthBlock) (
 		return nil, types.ErrInvalidRequest.Wrap("refer to inconsistent beacon root")
 	}
 
-	if err := k.VerifyDequeue(ctx, req.Payload.ExtraData, req.Payload.Transactions); err != nil {
+	if err := k.VerifyDequeue(sdkctx, payload.ExtraData, payload.Transactions); err != nil {
 		return nil, types.ErrInvalidRequest.Wrap("dequeue mismatched")
 	}
 
-	// todo: handle request from execution node
+	if err := k.Block.Set(sdkctx, *payload); err != nil {
+		return nil, err
+	}
 
-	if err := k.Block.Set(ctx, req.Payload); err != nil {
+	event1, err := k.bitcoinKeeper.ProcessBridgeRequest(sdkctx, payload.WithdrawalReq, payload.RbfReq, payload.Cancel1Req)
+	if err != nil {
+		return nil, err
+	}
+
+	event2, err := k.relayerKeeper.ProcessRelayerRequest(sdkctx, payload.AddVoterReq, payload.RmVoterReq)
+	if err != nil {
 		return nil, err
 	}
 
 	// Update beacon root
-	if err := k.BeaconRoot.Set(ctx, sdkctx.HeaderHash()); err != nil {
+	if err := k.BeaconRoot.Set(sdkctx, sdkctx.HeaderHash()); err != nil {
 		return nil, err
 	}
 
-	sdkctx.EventManager().EmitEvent(
-		types.NewEthBlockEvent(req.Payload.BlockNumber, req.Payload.BlockHash),
-	)
-
+	events := append(event1, event2...)
+	sdkctx.EventManager().EmitEvents(append(events, types.NewEthBlockEvent(req.Payload.BlockNumber, req.Payload.BlockHash)))
 	return &types.MsgNewEthBlockResponse{}, nil
 }

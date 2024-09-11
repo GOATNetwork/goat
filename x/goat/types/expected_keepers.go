@@ -10,6 +10,7 @@ import (
 
 type BitcoinKeeper interface {
 	DequeueBitcoinModuleTx(ctx context.Context) ([]*ethtypes.Transaction, error)
+	ProcessBridgeRequest(ctx context.Context, withdrawals []*WithdrawalReq, rbf []*ReplaceByFeeReq, cancel1 []*Cancel1Req) (sdk.Events, error)
 }
 
 type LockingKeeper interface {
@@ -18,6 +19,7 @@ type LockingKeeper interface {
 
 type RelayerKeeper interface {
 	GetCurrentProposer(ctx context.Context) (sdk.AccAddress, error)
+	ProcessRelayerRequest(ctx context.Context, adds []*AddVoterReq, rms []*RemoveVoterReq) (sdk.Events, error)
 }
 
 // AccountKeeper defines the expected interface for the Account module.

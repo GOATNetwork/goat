@@ -19,6 +19,20 @@ const (
 	EventVoterDischarged   = "voter_discharged"
 )
 
+func PendingVoterEvent(voter string) sdktypes.Event {
+	return sdktypes.NewEvent(
+		EventVoterPending,
+		sdktypes.NewAttribute("voter", voter),
+	)
+}
+
+func RemovingVoterEvent(voter string) sdktypes.Event {
+	return sdktypes.NewEvent(
+		EventVoterOffBoarding,
+		sdktypes.NewAttribute("voter", voter),
+	)
+}
+
 func NewEpochEvent(epoch uint64) sdktypes.Event {
 	return sdktypes.NewEvent(
 		EventTypeNewEpoch,

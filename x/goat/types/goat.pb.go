@@ -4,7 +4,11 @@
 package types
 
 import (
+	cosmossdk_io_math "cosmossdk.io/math"
 	fmt "fmt"
+	_ "github.com/cosmos/cosmos-proto"
+	_ "github.com/cosmos/cosmos-sdk/types/tx/amino"
+	_ "github.com/cosmos/gogoproto/gogoproto"
 	proto "github.com/cosmos/gogoproto/proto"
 	io "io"
 	math "math"
@@ -24,23 +28,29 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // ExecutionPayload
 type ExecutionPayload struct {
-	ParentHash    []byte   `protobuf:"bytes,1,opt,name=parent_hash,json=parentHash,proto3" json:"parent_hash,omitempty"`
-	FeeRecipient  []byte   `protobuf:"bytes,2,opt,name=fee_recipient,json=feeRecipient,proto3" json:"fee_recipient,omitempty"`
-	StateRoot     []byte   `protobuf:"bytes,3,opt,name=state_root,json=stateRoot,proto3" json:"state_root,omitempty"`
-	ReceiptsRoot  []byte   `protobuf:"bytes,4,opt,name=receipts_root,json=receiptsRoot,proto3" json:"receipts_root,omitempty"`
-	LogsBloom     []byte   `protobuf:"bytes,5,opt,name=logs_bloom,json=logsBloom,proto3" json:"logs_bloom,omitempty"`
-	PrevRandao    []byte   `protobuf:"bytes,6,opt,name=prev_randao,json=prevRandao,proto3" json:"prev_randao,omitempty"`
-	BlockNumber   uint64   `protobuf:"varint,7,opt,name=block_number,json=blockNumber,proto3" json:"block_number,omitempty"`
-	GasLimit      uint64   `protobuf:"varint,8,opt,name=gas_limit,json=gasLimit,proto3" json:"gas_limit,omitempty"`
-	GasUsed       uint64   `protobuf:"varint,9,opt,name=gas_used,json=gasUsed,proto3" json:"gas_used,omitempty"`
-	Timestamp     uint64   `protobuf:"varint,10,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
-	ExtraData     []byte   `protobuf:"bytes,11,opt,name=extra_data,json=extraData,proto3" json:"extra_data,omitempty"`
-	BaseFeePerGas []byte   `protobuf:"bytes,12,opt,name=base_fee_per_gas,json=baseFeePerGas,proto3" json:"base_fee_per_gas,omitempty"`
-	BlockHash     []byte   `protobuf:"bytes,13,opt,name=block_hash,json=blockHash,proto3" json:"block_hash,omitempty"`
-	Transactions  [][]byte `protobuf:"bytes,14,rep,name=transactions,proto3" json:"transactions,omitempty"`
-	BeaconRoot    []byte   `protobuf:"bytes,15,opt,name=beacon_root,json=beaconRoot,proto3" json:"beacon_root,omitempty"`
-	BlobGasUsed   uint64   `protobuf:"varint,16,opt,name=blob_gas_used,json=blobGasUsed,proto3" json:"blob_gas_used,omitempty"`
-	ExcessBlobGas uint64   `protobuf:"varint,17,opt,name=excess_blob_gas,json=excessBlobGas,proto3" json:"excess_blob_gas,omitempty"`
+	ParentHash    []byte             `protobuf:"bytes,1,opt,name=parent_hash,json=parentHash,proto3" json:"parent_hash,omitempty"`
+	FeeRecipient  []byte             `protobuf:"bytes,2,opt,name=fee_recipient,json=feeRecipient,proto3" json:"fee_recipient,omitempty"`
+	StateRoot     []byte             `protobuf:"bytes,3,opt,name=state_root,json=stateRoot,proto3" json:"state_root,omitempty"`
+	ReceiptsRoot  []byte             `protobuf:"bytes,4,opt,name=receipts_root,json=receiptsRoot,proto3" json:"receipts_root,omitempty"`
+	LogsBloom     []byte             `protobuf:"bytes,5,opt,name=logs_bloom,json=logsBloom,proto3" json:"logs_bloom,omitempty"`
+	PrevRandao    []byte             `protobuf:"bytes,6,opt,name=prev_randao,json=prevRandao,proto3" json:"prev_randao,omitempty"`
+	BlockNumber   uint64             `protobuf:"varint,7,opt,name=block_number,json=blockNumber,proto3" json:"block_number,omitempty"`
+	GasLimit      uint64             `protobuf:"varint,8,opt,name=gas_limit,json=gasLimit,proto3" json:"gas_limit,omitempty"`
+	GasUsed       uint64             `protobuf:"varint,9,opt,name=gas_used,json=gasUsed,proto3" json:"gas_used,omitempty"`
+	Timestamp     uint64             `protobuf:"varint,10,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	ExtraData     []byte             `protobuf:"bytes,11,opt,name=extra_data,json=extraData,proto3" json:"extra_data,omitempty"`
+	BaseFeePerGas []byte             `protobuf:"bytes,12,opt,name=base_fee_per_gas,json=baseFeePerGas,proto3" json:"base_fee_per_gas,omitempty"`
+	BlockHash     []byte             `protobuf:"bytes,13,opt,name=block_hash,json=blockHash,proto3" json:"block_hash,omitempty"`
+	Transactions  [][]byte           `protobuf:"bytes,14,rep,name=transactions,proto3" json:"transactions,omitempty"`
+	BeaconRoot    []byte             `protobuf:"bytes,15,opt,name=beacon_root,json=beaconRoot,proto3" json:"beacon_root,omitempty"`
+	BlobGasUsed   uint64             `protobuf:"varint,16,opt,name=blob_gas_used,json=blobGasUsed,proto3" json:"blob_gas_used,omitempty"`
+	ExcessBlobGas uint64             `protobuf:"varint,17,opt,name=excess_blob_gas,json=excessBlobGas,proto3" json:"excess_blob_gas,omitempty"`
+	GasRevenue    *GasRevenueReq     `protobuf:"bytes,18,opt,name=gas_revenue,json=gasRevenue,proto3" json:"gas_revenue,omitempty"`
+	AddVoterReq   []*AddVoterReq     `protobuf:"bytes,19,rep,name=add_voter_req,json=addVoterReq,proto3" json:"add_voter_req,omitempty"`
+	RmVoterReq    []*RemoveVoterReq  `protobuf:"bytes,20,rep,name=rm_voter_req,json=rmVoterReq,proto3" json:"rm_voter_req,omitempty"`
+	WithdrawalReq []*WithdrawalReq   `protobuf:"bytes,21,rep,name=withdrawal_req,json=withdrawalReq,proto3" json:"withdrawal_req,omitempty"`
+	RbfReq        []*ReplaceByFeeReq `protobuf:"bytes,22,rep,name=rbf_req,json=rbfReq,proto3" json:"rbf_req,omitempty"`
+	Cancel1Req    []*Cancel1Req      `protobuf:"bytes,23,rep,name=cancel1_req,json=cancel1Req,proto3" json:"cancel1_req,omitempty"`
 }
 
 func (m *ExecutionPayload) Reset()         { *m = ExecutionPayload{} }
@@ -195,43 +205,419 @@ func (m *ExecutionPayload) GetExcessBlobGas() uint64 {
 	return 0
 }
 
+func (m *ExecutionPayload) GetGasRevenue() *GasRevenueReq {
+	if m != nil {
+		return m.GasRevenue
+	}
+	return nil
+}
+
+func (m *ExecutionPayload) GetAddVoterReq() []*AddVoterReq {
+	if m != nil {
+		return m.AddVoterReq
+	}
+	return nil
+}
+
+func (m *ExecutionPayload) GetRmVoterReq() []*RemoveVoterReq {
+	if m != nil {
+		return m.RmVoterReq
+	}
+	return nil
+}
+
+func (m *ExecutionPayload) GetWithdrawalReq() []*WithdrawalReq {
+	if m != nil {
+		return m.WithdrawalReq
+	}
+	return nil
+}
+
+func (m *ExecutionPayload) GetRbfReq() []*ReplaceByFeeReq {
+	if m != nil {
+		return m.RbfReq
+	}
+	return nil
+}
+
+func (m *ExecutionPayload) GetCancel1Req() []*Cancel1Req {
+	if m != nil {
+		return m.Cancel1Req
+	}
+	return nil
+}
+
+// GasRevenueReq
+type GasRevenueReq struct {
+	Amount cosmossdk_io_math.Int `protobuf:"bytes,4,opt,name=amount,proto3,customtype=cosmossdk.io/math.Int" json:"amount"`
+}
+
+func (m *GasRevenueReq) Reset()         { *m = GasRevenueReq{} }
+func (m *GasRevenueReq) String() string { return proto.CompactTextString(m) }
+func (*GasRevenueReq) ProtoMessage()    {}
+func (*GasRevenueReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e240fa210386b3d7, []int{1}
+}
+func (m *GasRevenueReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GasRevenueReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GasRevenueReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GasRevenueReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GasRevenueReq.Merge(m, src)
+}
+func (m *GasRevenueReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *GasRevenueReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_GasRevenueReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GasRevenueReq proto.InternalMessageInfo
+
+// AddVoterReq
+type AddVoterReq struct {
+	Voter      []byte `protobuf:"bytes,1,opt,name=voter,proto3" json:"voter,omitempty"`
+	PubkeyHash []byte `protobuf:"bytes,2,opt,name=pubkey_hash,json=pubkeyHash,proto3" json:"pubkey_hash,omitempty"`
+}
+
+func (m *AddVoterReq) Reset()         { *m = AddVoterReq{} }
+func (m *AddVoterReq) String() string { return proto.CompactTextString(m) }
+func (*AddVoterReq) ProtoMessage()    {}
+func (*AddVoterReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e240fa210386b3d7, []int{2}
+}
+func (m *AddVoterReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AddVoterReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_AddVoterReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *AddVoterReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AddVoterReq.Merge(m, src)
+}
+func (m *AddVoterReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *AddVoterReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_AddVoterReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AddVoterReq proto.InternalMessageInfo
+
+func (m *AddVoterReq) GetVoter() []byte {
+	if m != nil {
+		return m.Voter
+	}
+	return nil
+}
+
+func (m *AddVoterReq) GetPubkeyHash() []byte {
+	if m != nil {
+		return m.PubkeyHash
+	}
+	return nil
+}
+
+// RemoveVoterReq
+type RemoveVoterReq struct {
+	Voter []byte `protobuf:"bytes,1,opt,name=voter,proto3" json:"voter,omitempty"`
+}
+
+func (m *RemoveVoterReq) Reset()         { *m = RemoveVoterReq{} }
+func (m *RemoveVoterReq) String() string { return proto.CompactTextString(m) }
+func (*RemoveVoterReq) ProtoMessage()    {}
+func (*RemoveVoterReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e240fa210386b3d7, []int{3}
+}
+func (m *RemoveVoterReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RemoveVoterReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_RemoveVoterReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *RemoveVoterReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RemoveVoterReq.Merge(m, src)
+}
+func (m *RemoveVoterReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *RemoveVoterReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_RemoveVoterReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RemoveVoterReq proto.InternalMessageInfo
+
+func (m *RemoveVoterReq) GetVoter() []byte {
+	if m != nil {
+		return m.Voter
+	}
+	return nil
+}
+
+// WithdrawalReq
+type WithdrawalReq struct {
+	Id         uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Amount     uint64 `protobuf:"varint,2,opt,name=amount,proto3" json:"amount,omitempty"`
+	MaxTxPrice uint64 `protobuf:"varint,3,opt,name=max_tx_price,json=maxTxPrice,proto3" json:"max_tx_price,omitempty"`
+	Address    string `protobuf:"bytes,4,opt,name=address,proto3" json:"address,omitempty"`
+}
+
+func (m *WithdrawalReq) Reset()         { *m = WithdrawalReq{} }
+func (m *WithdrawalReq) String() string { return proto.CompactTextString(m) }
+func (*WithdrawalReq) ProtoMessage()    {}
+func (*WithdrawalReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e240fa210386b3d7, []int{4}
+}
+func (m *WithdrawalReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *WithdrawalReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_WithdrawalReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *WithdrawalReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_WithdrawalReq.Merge(m, src)
+}
+func (m *WithdrawalReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *WithdrawalReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_WithdrawalReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_WithdrawalReq proto.InternalMessageInfo
+
+func (m *WithdrawalReq) GetId() uint64 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+func (m *WithdrawalReq) GetAmount() uint64 {
+	if m != nil {
+		return m.Amount
+	}
+	return 0
+}
+
+func (m *WithdrawalReq) GetMaxTxPrice() uint64 {
+	if m != nil {
+		return m.MaxTxPrice
+	}
+	return 0
+}
+
+func (m *WithdrawalReq) GetAddress() string {
+	if m != nil {
+		return m.Address
+	}
+	return ""
+}
+
+// ReplaceByFeeReq
+type ReplaceByFeeReq struct {
+	Id         uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	MaxTxPrice uint64 `protobuf:"varint,2,opt,name=max_tx_price,json=maxTxPrice,proto3" json:"max_tx_price,omitempty"`
+}
+
+func (m *ReplaceByFeeReq) Reset()         { *m = ReplaceByFeeReq{} }
+func (m *ReplaceByFeeReq) String() string { return proto.CompactTextString(m) }
+func (*ReplaceByFeeReq) ProtoMessage()    {}
+func (*ReplaceByFeeReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e240fa210386b3d7, []int{5}
+}
+func (m *ReplaceByFeeReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceByFeeReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ReplaceByFeeReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ReplaceByFeeReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceByFeeReq.Merge(m, src)
+}
+func (m *ReplaceByFeeReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceByFeeReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceByFeeReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplaceByFeeReq proto.InternalMessageInfo
+
+func (m *ReplaceByFeeReq) GetId() uint64 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+func (m *ReplaceByFeeReq) GetMaxTxPrice() uint64 {
+	if m != nil {
+		return m.MaxTxPrice
+	}
+	return 0
+}
+
+// Cancel1Req
+type Cancel1Req struct {
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (m *Cancel1Req) Reset()         { *m = Cancel1Req{} }
+func (m *Cancel1Req) String() string { return proto.CompactTextString(m) }
+func (*Cancel1Req) ProtoMessage()    {}
+func (*Cancel1Req) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e240fa210386b3d7, []int{6}
+}
+func (m *Cancel1Req) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Cancel1Req) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_Cancel1Req.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *Cancel1Req) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Cancel1Req.Merge(m, src)
+}
+func (m *Cancel1Req) XXX_Size() int {
+	return m.Size()
+}
+func (m *Cancel1Req) XXX_DiscardUnknown() {
+	xxx_messageInfo_Cancel1Req.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Cancel1Req proto.InternalMessageInfo
+
+func (m *Cancel1Req) GetId() uint64 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
 func init() {
 	proto.RegisterType((*ExecutionPayload)(nil), "goat.goat.v1.ExecutionPayload")
+	proto.RegisterType((*GasRevenueReq)(nil), "goat.goat.v1.GasRevenueReq")
+	proto.RegisterType((*AddVoterReq)(nil), "goat.goat.v1.AddVoterReq")
+	proto.RegisterType((*RemoveVoterReq)(nil), "goat.goat.v1.RemoveVoterReq")
+	proto.RegisterType((*WithdrawalReq)(nil), "goat.goat.v1.WithdrawalReq")
+	proto.RegisterType((*ReplaceByFeeReq)(nil), "goat.goat.v1.ReplaceByFeeReq")
+	proto.RegisterType((*Cancel1Req)(nil), "goat.goat.v1.Cancel1Req")
 }
 
 func init() { proto.RegisterFile("goat/goat/v1/goat.proto", fileDescriptor_e240fa210386b3d7) }
 
 var fileDescriptor_e240fa210386b3d7 = []byte{
-	// 463 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x4c, 0x92, 0xcf, 0x6e, 0xd3, 0x40,
-	0x10, 0xc6, 0x63, 0x1a, 0xda, 0x66, 0x63, 0xd3, 0xe0, 0x0b, 0x8b, 0xa0, 0x26, 0x04, 0x09, 0x72,
-	0x2a, 0xaa, 0x78, 0x83, 0x08, 0x28, 0x07, 0x84, 0x2a, 0x4b, 0x5c, 0xb8, 0xac, 0x66, 0xed, 0xa9,
-	0x63, 0xd5, 0xf6, 0x5a, 0xbb, 0x93, 0x90, 0xbe, 0x05, 0x8f, 0xc5, 0x05, 0xa9, 0x47, 0x8e, 0x28,
-	0x79, 0x11, 0xb4, 0xb3, 0x6d, 0xe0, 0xb2, 0x7f, 0x7e, 0xf3, 0x69, 0x34, 0xf3, 0xcd, 0x88, 0x27,
-	0x95, 0x01, 0x7a, 0xcb, 0xc7, 0xfa, 0x9c, 0xef, 0xb3, 0xde, 0x1a, 0x32, 0x69, 0xcc, 0x6f, 0x3e,
-	0xd6, 0xe7, 0xb3, 0x5f, 0x43, 0x31, 0xf9, 0xb0, 0xc1, 0x62, 0x45, 0xb5, 0xe9, 0x2e, 0xe1, 0xa6,
-	0x31, 0x50, 0xa6, 0x2f, 0xc4, 0xb8, 0x07, 0x8b, 0x1d, 0xa9, 0x25, 0xb8, 0xa5, 0x8c, 0xa6, 0xd1,
-	0x3c, 0xce, 0x45, 0x40, 0x9f, 0xc0, 0x2d, 0xd3, 0x57, 0x22, 0xb9, 0x42, 0x54, 0x16, 0x8b, 0xba,
-	0xaf, 0xb1, 0x23, 0xf9, 0x80, 0x25, 0xf1, 0x15, 0x62, 0x7e, 0xcf, 0xd2, 0x53, 0x21, 0x1c, 0x01,
-	0xa1, 0xb2, 0xc6, 0x90, 0x3c, 0x60, 0xc5, 0x88, 0x49, 0x6e, 0x0c, 0xf9, 0x1c, 0x16, 0x0b, 0xac,
-	0x7b, 0x72, 0x41, 0x31, 0x0c, 0x39, 0xee, 0x21, 0x8b, 0x4e, 0x85, 0x68, 0x4c, 0xe5, 0x94, 0x6e,
-	0x8c, 0x69, 0xe5, 0xc3, 0x90, 0xc3, 0x93, 0x85, 0x07, 0x5c, 0xa8, 0xc5, 0xb5, 0xb2, 0xd0, 0x95,
-	0x60, 0xe4, 0xe1, 0x5d, 0xa1, 0x16, 0xd7, 0x39, 0x93, 0xf4, 0xa5, 0x88, 0x75, 0x63, 0x8a, 0x6b,
-	0xd5, 0xad, 0x5a, 0x8d, 0x56, 0x1e, 0x4d, 0xa3, 0xf9, 0x30, 0x1f, 0x33, 0xfb, 0xc2, 0x28, 0x7d,
-	0x26, 0x46, 0x15, 0x38, 0xd5, 0xd4, 0x6d, 0x4d, 0xf2, 0x98, 0xe3, 0xc7, 0x15, 0xb8, 0xcf, 0xfe,
-	0x9f, 0x3e, 0x15, 0xfe, 0xad, 0x56, 0x0e, 0x4b, 0x39, 0xe2, 0xd8, 0x51, 0x05, 0xee, 0xab, 0xc3,
-	0x32, 0x7d, 0x2e, 0x46, 0x54, 0xb7, 0xe8, 0x08, 0xda, 0x5e, 0x0a, 0x8e, 0xfd, 0x03, 0xbe, 0x70,
-	0xdc, 0x90, 0x05, 0x55, 0x02, 0x81, 0x1c, 0x87, 0xc2, 0x99, 0xbc, 0x07, 0x82, 0xf4, 0x8d, 0x98,
-	0x68, 0x70, 0xa8, 0xbc, 0x8b, 0x3d, 0x5a, 0x55, 0x81, 0x93, 0x31, 0x8b, 0x12, 0xcf, 0x3f, 0x22,
-	0x5e, 0xa2, 0xbd, 0x00, 0xe7, 0xf3, 0x84, 0x06, 0x78, 0x12, 0x49, 0xc8, 0xc3, 0x84, 0x07, 0x31,
-	0x13, 0x31, 0x59, 0xe8, 0x1c, 0x14, 0x7e, 0x7e, 0x4e, 0x3e, 0x9a, 0x1e, 0x78, 0x0f, 0xff, 0x67,
-	0xde, 0x24, 0x8d, 0x50, 0x98, 0x2e, 0xd8, 0x7c, 0x12, 0x4c, 0x0a, 0x88, 0x4d, 0x9e, 0x89, 0x44,
-	0x37, 0x46, 0xab, 0x7d, 0xa7, 0x93, 0xbd, 0x4b, 0xfa, 0xe2, 0xae, 0xdb, 0xd7, 0xe2, 0x04, 0x37,
-	0x05, 0x3a, 0x1e, 0x05, 0x4b, 0xe5, 0x63, 0x56, 0x25, 0x01, 0x2f, 0x82, 0x76, 0xb1, 0xf8, 0xb9,
-	0xcd, 0xa2, 0xdb, 0x6d, 0x16, 0xfd, 0xd9, 0x66, 0xd1, 0x8f, 0x5d, 0x36, 0xb8, 0xdd, 0x65, 0x83,
-	0xdf, 0xbb, 0x6c, 0xf0, 0x6d, 0x5e, 0xd5, 0xb4, 0x5c, 0xe9, 0xb3, 0xc2, 0xb4, 0xbc, 0x8e, 0x1d,
-	0xd2, 0x77, 0x63, 0xaf, 0xc3, 0x8a, 0x6e, 0xc2, 0x45, 0x37, 0x3d, 0x3a, 0x7d, 0xc8, 0x8b, 0xfa,
-	0xee, 0x6f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x2a, 0x5f, 0x62, 0x17, 0xc3, 0x02, 0x00, 0x00,
+	// 855 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x54, 0x5d, 0x6f, 0x1b, 0x45,
+	0x14, 0x8d, 0xdd, 0x34, 0xae, 0xaf, 0xed, 0x24, 0x1d, 0xd2, 0x76, 0xd3, 0x26, 0x8e, 0x59, 0xa4,
+	0x62, 0x21, 0xe1, 0x90, 0x22, 0x21, 0x21, 0x01, 0x12, 0x6e, 0x69, 0x5a, 0x09, 0xa1, 0x68, 0xc5,
+	0x87, 0xe0, 0x65, 0x75, 0x77, 0xf7, 0x66, 0xbd, 0xca, 0xee, 0xce, 0x76, 0x66, 0xec, 0x38, 0xff,
+	0x82, 0x9f, 0xc1, 0x23, 0x0f, 0xfc, 0x01, 0xde, 0xfa, 0x58, 0xf1, 0x84, 0x78, 0xa8, 0x50, 0xf2,
+	0xc0, 0xdf, 0x40, 0x73, 0xc7, 0x71, 0x6c, 0xc3, 0xcb, 0xee, 0xdc, 0x33, 0xe7, 0x9c, 0x9d, 0x39,
+	0xb3, 0x73, 0xe1, 0x41, 0x2a, 0xd1, 0x1c, 0xf2, 0x63, 0x72, 0xc4, 0xef, 0x41, 0xa5, 0xa4, 0x91,
+	0xa2, 0xcd, 0x63, 0x7e, 0x4c, 0x8e, 0x1e, 0xde, 0xc5, 0x22, 0x2b, 0xe5, 0x21, 0x3f, 0x1d, 0xe1,
+	0xe1, 0x6e, 0x2c, 0x75, 0x21, 0x75, 0xc8, 0xd5, 0xa1, 0x2b, 0x66, 0x53, 0x3b, 0xa9, 0x4c, 0xa5,
+	0xc3, 0xed, 0xc8, 0xa1, 0xfe, 0xef, 0x0d, 0xd8, 0xfe, 0x6a, 0x4a, 0xf1, 0xd8, 0x64, 0xb2, 0x3c,
+	0xc1, 0x8b, 0x5c, 0x62, 0x22, 0x0e, 0xa0, 0x55, 0xa1, 0xa2, 0xd2, 0x84, 0x23, 0xd4, 0x23, 0xaf,
+	0xd6, 0xab, 0xf5, 0xdb, 0x01, 0x38, 0xe8, 0x05, 0xea, 0x91, 0x78, 0x0f, 0x3a, 0xa7, 0x44, 0xa1,
+	0xa2, 0x38, 0xab, 0x32, 0x2a, 0x8d, 0x57, 0x67, 0x4a, 0xfb, 0x94, 0x28, 0xb8, 0xc6, 0xc4, 0x3e,
+	0x80, 0x36, 0x68, 0x28, 0x54, 0x52, 0x1a, 0xef, 0x16, 0x33, 0x9a, 0x8c, 0x04, 0x52, 0x1a, 0xeb,
+	0xa1, 0x28, 0xa6, 0xac, 0x32, 0xda, 0x31, 0xd6, 0x9d, 0xc7, 0x35, 0xc8, 0xa4, 0x7d, 0x80, 0x5c,
+	0xa6, 0x3a, 0x8c, 0x72, 0x29, 0x0b, 0xef, 0xb6, 0xf3, 0xb0, 0xc8, 0xd0, 0x02, 0xbc, 0x50, 0x45,
+	0x93, 0x50, 0x61, 0x99, 0xa0, 0xf4, 0x36, 0x66, 0x0b, 0x55, 0x34, 0x09, 0x18, 0x11, 0xef, 0x42,
+	0x3b, 0xca, 0x65, 0x7c, 0x16, 0x96, 0xe3, 0x22, 0x22, 0xe5, 0x35, 0x7a, 0xb5, 0xfe, 0x7a, 0xd0,
+	0x62, 0xec, 0x1b, 0x86, 0xc4, 0x23, 0x68, 0xa6, 0xa8, 0xc3, 0x3c, 0x2b, 0x32, 0xe3, 0xdd, 0xe1,
+	0xf9, 0x3b, 0x29, 0xea, 0xaf, 0x6d, 0x2d, 0x76, 0xc1, 0x8e, 0xc3, 0xb1, 0xa6, 0xc4, 0x6b, 0xf2,
+	0x5c, 0x23, 0x45, 0xfd, 0x9d, 0xa6, 0x44, 0xec, 0x41, 0xd3, 0x64, 0x05, 0x69, 0x83, 0x45, 0xe5,
+	0x01, 0xcf, 0xdd, 0x00, 0x76, 0xe1, 0x34, 0x35, 0x0a, 0xc3, 0x04, 0x0d, 0x7a, 0x2d, 0xb7, 0x70,
+	0x46, 0x9e, 0xa1, 0x41, 0xf1, 0x3e, 0x6c, 0x47, 0xa8, 0x29, 0xb4, 0x29, 0x56, 0xa4, 0xc2, 0x14,
+	0xb5, 0xd7, 0x66, 0x52, 0xc7, 0xe2, 0xcf, 0x89, 0x4e, 0x48, 0x1d, 0xa3, 0xb6, 0x3e, 0x6e, 0x03,
+	0x7c, 0x12, 0x1d, 0xe7, 0xc3, 0x08, 0x1f, 0x84, 0x0f, 0x6d, 0xa3, 0xb0, 0xd4, 0x18, 0xdb, 0xf3,
+	0xd3, 0xde, 0x66, 0xef, 0x96, 0xcd, 0x70, 0x11, 0xb3, 0x21, 0x45, 0x84, 0xb1, 0x2c, 0x5d, 0xcc,
+	0x5b, 0x2e, 0x24, 0x07, 0x71, 0xc8, 0x3e, 0x74, 0xa2, 0x5c, 0x46, 0xe1, 0x7c, 0xa7, 0xdb, 0xf3,
+	0x94, 0xa2, 0xe3, 0xd9, 0x6e, 0x1f, 0xc3, 0x16, 0x4d, 0x63, 0xd2, 0x7c, 0x14, 0x4c, 0xf5, 0xee,
+	0x32, 0xab, 0xe3, 0xe0, 0xa1, 0xe3, 0x8a, 0xcf, 0xa0, 0x65, 0x6d, 0x14, 0x4d, 0xa8, 0x1c, 0x93,
+	0x27, 0x7a, 0xb5, 0x7e, 0xeb, 0xc9, 0xa3, 0xc1, 0xe2, 0x7f, 0x3b, 0x38, 0x46, 0x1d, 0xb8, 0xf9,
+	0x80, 0x5e, 0x05, 0x90, 0xce, 0x4b, 0xf1, 0x39, 0x74, 0x30, 0x49, 0xc2, 0x89, 0x34, 0xa4, 0x42,
+	0x45, 0xaf, 0xbc, 0x77, 0x7a, 0xb7, 0xfa, 0xad, 0x27, 0xbb, 0xcb, 0xfa, 0x2f, 0x93, 0xe4, 0x7b,
+	0xcb, 0xb0, 0xea, 0x16, 0xde, 0x14, 0xe2, 0x0b, 0x68, 0xab, 0x62, 0x41, 0xbd, 0xc3, 0xea, 0xbd,
+	0x65, 0x75, 0x40, 0x85, 0x9c, 0xd0, 0xdc, 0x00, 0x54, 0x31, 0xd7, 0x0f, 0x61, 0xf3, 0x3c, 0x33,
+	0xa3, 0x44, 0xe1, 0x39, 0xe6, 0xec, 0x70, 0x8f, 0x1d, 0x56, 0xd6, 0xff, 0xc3, 0x9c, 0x63, 0x0d,
+	0x3a, 0xe7, 0x8b, 0xa5, 0xf8, 0x04, 0x1a, 0x2a, 0x3a, 0x65, 0xf1, 0x7d, 0x16, 0xef, 0xaf, 0x7e,
+	0xbe, 0xca, 0x31, 0xa6, 0xe1, 0xc5, 0x73, 0xe2, 0xed, 0x6f, 0xa8, 0xe8, 0xd4, 0xea, 0x3e, 0x85,
+	0x56, 0x8c, 0x65, 0x4c, 0xf9, 0x11, 0x6b, 0x1f, 0xb0, 0xd6, 0x5b, 0xd6, 0x3e, 0x75, 0x04, 0x5e,
+	0x76, 0x3c, 0x1f, 0xfb, 0x3f, 0x42, 0x67, 0x29, 0x52, 0xf1, 0x02, 0x36, 0xb0, 0x90, 0xe3, 0xd2,
+	0xdd, 0xa9, 0xe6, 0xf0, 0xa3, 0xd7, 0x6f, 0x0f, 0xd6, 0xfe, 0x7a, 0x7b, 0x70, 0xcf, 0x35, 0x04,
+	0x9d, 0x9c, 0x0d, 0x32, 0x79, 0x58, 0xa0, 0x19, 0x0d, 0x5e, 0x96, 0xe6, 0x8f, 0xdf, 0x3e, 0x84,
+	0x59, 0xa7, 0x78, 0x59, 0x9a, 0x5f, 0xfe, 0xf9, 0xf5, 0x83, 0x5a, 0x30, 0xd3, 0xfb, 0xcf, 0xa0,
+	0xb5, 0x90, 0xb6, 0xd8, 0x81, 0xdb, 0x9c, 0xee, 0xac, 0x25, 0xb8, 0x82, 0x6f, 0xe1, 0x38, 0x3a,
+	0xa3, 0x0b, 0xf7, 0x93, 0xd6, 0x67, 0xb7, 0x90, 0x21, 0xfb, 0x97, 0xfa, 0x8f, 0x61, 0x73, 0x39,
+	0xf5, 0xff, 0x37, 0xf2, 0x35, 0x74, 0x96, 0xb2, 0x15, 0x9b, 0x50, 0xcf, 0x12, 0xe6, 0xac, 0x07,
+	0xf5, 0x2c, 0x11, 0xf7, 0xe7, 0x1b, 0xab, 0x33, 0x36, 0xab, 0x44, 0x0f, 0xda, 0x05, 0x4e, 0x43,
+	0x33, 0x0d, 0x2b, 0x95, 0xc5, 0xc4, 0xcd, 0x66, 0x3d, 0x80, 0x02, 0xa7, 0xdf, 0x4e, 0x4f, 0x2c,
+	0x22, 0x3c, 0x68, 0x60, 0x92, 0x28, 0xd2, 0xda, 0x65, 0x12, 0x5c, 0x97, 0xfe, 0x53, 0xd8, 0x5a,
+	0x39, 0x93, 0xff, 0x7c, 0x76, 0xd5, 0xbe, 0xbe, 0x6a, 0xef, 0xef, 0x01, 0xdc, 0x1c, 0xce, 0xaa,
+	0x7e, 0x38, 0x7c, 0x7d, 0xd9, 0xad, 0xbd, 0xb9, 0xec, 0xd6, 0xfe, 0xbe, 0xec, 0xd6, 0x7e, 0xbe,
+	0xea, 0xae, 0xbd, 0xb9, 0xea, 0xae, 0xfd, 0x79, 0xd5, 0x5d, 0xfb, 0xa9, 0x9f, 0x66, 0x66, 0x34,
+	0x8e, 0x06, 0xb1, 0x2c, 0xb8, 0xcf, 0x97, 0x64, 0xce, 0xa5, 0x3a, 0x73, 0xbd, 0x7f, 0xea, 0x5e,
+	0xe6, 0xa2, 0x22, 0x1d, 0x6d, 0x70, 0xbf, 0xfe, 0xf8, 0xdf, 0x00, 0x00, 0x00, 0xff, 0xff, 0xf6,
+	0xa6, 0x7c, 0x5a, 0x1c, 0x06, 0x00, 0x00,
 }
 
 func (m *ExecutionPayload) Marshal() (dAtA []byte, err error) {
@@ -254,6 +640,100 @@ func (m *ExecutionPayload) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.Cancel1Req) > 0 {
+		for iNdEx := len(m.Cancel1Req) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Cancel1Req[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintGoat(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0xba
+		}
+	}
+	if len(m.RbfReq) > 0 {
+		for iNdEx := len(m.RbfReq) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.RbfReq[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintGoat(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0xb2
+		}
+	}
+	if len(m.WithdrawalReq) > 0 {
+		for iNdEx := len(m.WithdrawalReq) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.WithdrawalReq[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintGoat(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0xaa
+		}
+	}
+	if len(m.RmVoterReq) > 0 {
+		for iNdEx := len(m.RmVoterReq) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.RmVoterReq[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintGoat(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0xa2
+		}
+	}
+	if len(m.AddVoterReq) > 0 {
+		for iNdEx := len(m.AddVoterReq) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.AddVoterReq[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintGoat(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0x9a
+		}
+	}
+	if m.GasRevenue != nil {
+		{
+			size, err := m.GasRevenue.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGoat(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
+	}
 	if m.ExcessBlobGas != 0 {
 		i = encodeVarintGoat(dAtA, i, uint64(m.ExcessBlobGas))
 		i--
@@ -370,6 +850,212 @@ func (m *ExecutionPayload) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *GasRevenueReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GasRevenueReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GasRevenueReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size := m.Amount.Size()
+		i -= size
+		if _, err := m.Amount.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintGoat(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x22
+	return len(dAtA) - i, nil
+}
+
+func (m *AddVoterReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AddVoterReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AddVoterReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.PubkeyHash) > 0 {
+		i -= len(m.PubkeyHash)
+		copy(dAtA[i:], m.PubkeyHash)
+		i = encodeVarintGoat(dAtA, i, uint64(len(m.PubkeyHash)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Voter) > 0 {
+		i -= len(m.Voter)
+		copy(dAtA[i:], m.Voter)
+		i = encodeVarintGoat(dAtA, i, uint64(len(m.Voter)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *RemoveVoterReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RemoveVoterReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RemoveVoterReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Voter) > 0 {
+		i -= len(m.Voter)
+		copy(dAtA[i:], m.Voter)
+		i = encodeVarintGoat(dAtA, i, uint64(len(m.Voter)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *WithdrawalReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *WithdrawalReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *WithdrawalReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = encodeVarintGoat(dAtA, i, uint64(len(m.Address)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.MaxTxPrice != 0 {
+		i = encodeVarintGoat(dAtA, i, uint64(m.MaxTxPrice))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.Amount != 0 {
+		i = encodeVarintGoat(dAtA, i, uint64(m.Amount))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Id != 0 {
+		i = encodeVarintGoat(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ReplaceByFeeReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ReplaceByFeeReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceByFeeReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.MaxTxPrice != 0 {
+		i = encodeVarintGoat(dAtA, i, uint64(m.MaxTxPrice))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Id != 0 {
+		i = encodeVarintGoat(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *Cancel1Req) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Cancel1Req) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Cancel1Req) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Id != 0 {
+		i = encodeVarintGoat(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintGoat(dAtA []byte, offset int, v uint64) int {
 	offset -= sovGoat(v)
 	base := offset
@@ -450,6 +1136,130 @@ func (m *ExecutionPayload) Size() (n int) {
 	}
 	if m.ExcessBlobGas != 0 {
 		n += 2 + sovGoat(uint64(m.ExcessBlobGas))
+	}
+	if m.GasRevenue != nil {
+		l = m.GasRevenue.Size()
+		n += 2 + l + sovGoat(uint64(l))
+	}
+	if len(m.AddVoterReq) > 0 {
+		for _, e := range m.AddVoterReq {
+			l = e.Size()
+			n += 2 + l + sovGoat(uint64(l))
+		}
+	}
+	if len(m.RmVoterReq) > 0 {
+		for _, e := range m.RmVoterReq {
+			l = e.Size()
+			n += 2 + l + sovGoat(uint64(l))
+		}
+	}
+	if len(m.WithdrawalReq) > 0 {
+		for _, e := range m.WithdrawalReq {
+			l = e.Size()
+			n += 2 + l + sovGoat(uint64(l))
+		}
+	}
+	if len(m.RbfReq) > 0 {
+		for _, e := range m.RbfReq {
+			l = e.Size()
+			n += 2 + l + sovGoat(uint64(l))
+		}
+	}
+	if len(m.Cancel1Req) > 0 {
+		for _, e := range m.Cancel1Req {
+			l = e.Size()
+			n += 2 + l + sovGoat(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *GasRevenueReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = m.Amount.Size()
+	n += 1 + l + sovGoat(uint64(l))
+	return n
+}
+
+func (m *AddVoterReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Voter)
+	if l > 0 {
+		n += 1 + l + sovGoat(uint64(l))
+	}
+	l = len(m.PubkeyHash)
+	if l > 0 {
+		n += 1 + l + sovGoat(uint64(l))
+	}
+	return n
+}
+
+func (m *RemoveVoterReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Voter)
+	if l > 0 {
+		n += 1 + l + sovGoat(uint64(l))
+	}
+	return n
+}
+
+func (m *WithdrawalReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Id != 0 {
+		n += 1 + sovGoat(uint64(m.Id))
+	}
+	if m.Amount != 0 {
+		n += 1 + sovGoat(uint64(m.Amount))
+	}
+	if m.MaxTxPrice != 0 {
+		n += 1 + sovGoat(uint64(m.MaxTxPrice))
+	}
+	l = len(m.Address)
+	if l > 0 {
+		n += 1 + l + sovGoat(uint64(l))
+	}
+	return n
+}
+
+func (m *ReplaceByFeeReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Id != 0 {
+		n += 1 + sovGoat(uint64(m.Id))
+	}
+	if m.MaxTxPrice != 0 {
+		n += 1 + sovGoat(uint64(m.MaxTxPrice))
+	}
+	return n
+}
+
+func (m *Cancel1Req) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Id != 0 {
+		n += 1 + sovGoat(uint64(m.Id))
 	}
 	return n
 }
@@ -971,6 +1781,794 @@ func (m *ExecutionPayload) Unmarshal(dAtA []byte) error {
 				b := dAtA[iNdEx]
 				iNdEx++
 				m.ExcessBlobGas |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 18:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GasRevenue", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGoat
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGoat
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGoat
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.GasRevenue == nil {
+				m.GasRevenue = &GasRevenueReq{}
+			}
+			if err := m.GasRevenue.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 19:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AddVoterReq", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGoat
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGoat
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGoat
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AddVoterReq = append(m.AddVoterReq, &AddVoterReq{})
+			if err := m.AddVoterReq[len(m.AddVoterReq)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 20:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RmVoterReq", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGoat
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGoat
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGoat
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RmVoterReq = append(m.RmVoterReq, &RemoveVoterReq{})
+			if err := m.RmVoterReq[len(m.RmVoterReq)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 21:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field WithdrawalReq", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGoat
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGoat
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGoat
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.WithdrawalReq = append(m.WithdrawalReq, &WithdrawalReq{})
+			if err := m.WithdrawalReq[len(m.WithdrawalReq)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 22:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RbfReq", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGoat
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGoat
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGoat
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RbfReq = append(m.RbfReq, &ReplaceByFeeReq{})
+			if err := m.RbfReq[len(m.RbfReq)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 23:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Cancel1Req", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGoat
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGoat
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGoat
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Cancel1Req = append(m.Cancel1Req, &Cancel1Req{})
+			if err := m.Cancel1Req[len(m.Cancel1Req)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGoat(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthGoat
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GasRevenueReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGoat
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GasRevenueReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GasRevenueReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGoat
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGoat
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGoat
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Amount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGoat(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthGoat
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AddVoterReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGoat
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AddVoterReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AddVoterReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Voter", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGoat
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthGoat
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGoat
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Voter = append(m.Voter[:0], dAtA[iNdEx:postIndex]...)
+			if m.Voter == nil {
+				m.Voter = []byte{}
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PubkeyHash", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGoat
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthGoat
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGoat
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PubkeyHash = append(m.PubkeyHash[:0], dAtA[iNdEx:postIndex]...)
+			if m.PubkeyHash == nil {
+				m.PubkeyHash = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGoat(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthGoat
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RemoveVoterReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGoat
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RemoveVoterReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RemoveVoterReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Voter", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGoat
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthGoat
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGoat
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Voter = append(m.Voter[:0], dAtA[iNdEx:postIndex]...)
+			if m.Voter == nil {
+				m.Voter = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGoat(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthGoat
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *WithdrawalReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGoat
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: WithdrawalReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: WithdrawalReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGoat
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
+			}
+			m.Amount = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGoat
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Amount |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxTxPrice", wireType)
+			}
+			m.MaxTxPrice = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGoat
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.MaxTxPrice |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGoat
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGoat
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGoat
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Address = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGoat(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthGoat
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ReplaceByFeeReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGoat
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ReplaceByFeeReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ReplaceByFeeReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGoat
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxTxPrice", wireType)
+			}
+			m.MaxTxPrice = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGoat
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.MaxTxPrice |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGoat(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthGoat
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Cancel1Req) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGoat
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Cancel1Req: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Cancel1Req: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGoat
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}

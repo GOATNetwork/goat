@@ -2,8 +2,6 @@ syntax = "proto3";
 package goat.bitcoin.v1;
 
 import "goat/bitcoin/v1/bitcoin.proto";
-// import "amino/amino.proto";
-// import "cosmos_proto/cosmos.proto";
 
 option go_package = "github.com/goatnetwork/goat/x/bitcoin/types";
 
@@ -18,12 +16,6 @@ message DepositExecReceipt {
   uint32 txout = 2;
   bytes address = 3;
   uint64 amount = 4;
-  // string amount = 4 [
-  //   (cosmos_proto.scalar) = "cosmos.Int",
-  //   (gogoproto.customtype) = "cosmossdk.io/math.Int",
-  //   (gogoproto.nullable) = false,
-  //   (amino.dont_omitempty) = true
-  // ];
 }
 
 // WithdrawalExecReceipt

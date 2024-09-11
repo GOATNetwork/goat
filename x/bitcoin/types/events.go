@@ -10,12 +10,15 @@ import (
 )
 
 const (
-	EventTypeNewKey              = "new_key"
-	EventTypeNewDeposit          = "new_deposit"
-	EventTypeNewBlockHash        = "new_block_hash"
-	EventTypeNewWithdrawal       = "new_withdrawal"
-	EventTypeApproveCancellation = "approve_cancellation_withdrawal"
-	EventTypeFinalizeWithdrawal  = "finalize_withdrawal"
+	EventTypeNewKey                 = "new_key"
+	EventTypeNewDeposit             = "new_deposit"
+	EventTypeNewBlockHash           = "new_block_hash"
+	EventTypeInitializeWithdrawal   = "initialize_withdrawal"
+	EventTypeWithdrawalRequest      = "withdrawal_request"
+	EventTypeWithdrawalReplace      = "withdrawal_rbf_request"
+	EventTypeWithdrawalCancellation = "withdrawal_cancellation_request"
+	EventTypeApproveCancellation    = "approve_cancellation_withdrawal"
+	EventTypeFinalizeWithdrawal     = "finalize_withdrawal"
 )
 
 func NewKeyEvent(key *relayertypes.PublicKey) sdktypes.Event {
@@ -28,7 +31,7 @@ func NewKeyEvent(key *relayertypes.PublicKey) sdktypes.Event {
 		typ = "schnorr"
 		raw = base64.StdEncoding.EncodeToString(v.Schnorr)
 	default:
-		panic("unknown relayer public key type")
+		typ = "unknown"
 	}
 
 	return sdktypes.NewEvent(
@@ -48,6 +51,31 @@ func NewDepositEvent(deposit *DepositExecReceipt) sdktypes.Event {
 	)
 }
 
+func NewWithdrawalRequestEvent(address string, id, txPrice, amount uint64) sdktypes.Event {
+	return sdktypes.NewEvent(
+		EventTypeNewDeposit,
+		sdktypes.NewAttribute("id", strconv.FormatUint(id, 10)),
+		sdktypes.NewAttribute("address", address),
+		sdktypes.NewAttribute("tx_price", strconv.FormatUint(txPrice, 10)),
+		sdktypes.NewAttribute("amount", strconv.FormatUint(amount, 10)),
+	)
+}
+
+func NewWithdrawalReplaceEvent(id, txPrice uint64) sdktypes.Event {
+	return sdktypes.NewEvent(
+		EventTypeWithdrawalReplace,
+		sdktypes.NewAttribute("id", strconv.FormatUint(id, 10)),
+		sdktypes.NewAttribute("tx_price", strconv.FormatUint(txPrice, 10)),
+	)
+}
+
+func NewWithdrawalCancellationEvent(id uint64) sdktypes.Event {
+	return sdktypes.NewEvent(
+		EventTypeWithdrawalCancellation,
+		sdktypes.NewAttribute("id", strconv.FormatUint(id, 10)),
+	)
+}
+
 func NewBlockHashEvent(height uint64, hash []byte) sdktypes.Event {
 	return sdktypes.NewEvent(
 		EventTypeNewBlockHash,
@@ -56,9 +84,9 @@ func NewBlockHashEvent(height uint64, hash []byte) sdktypes.Event {
 	)
 }
 
-func NewWithdrawalEvent(hash []byte) sdktypes.Event {
+func InitializeWithdrawalEvent(hash []byte) sdktypes.Event {
 	return sdktypes.NewEvent(
-		EventTypeNewWithdrawal,
+		EventTypeInitializeWithdrawal,
 		sdktypes.NewAttribute("txid", BtcTxid(hash)), // we must use big endian
 	)
 }

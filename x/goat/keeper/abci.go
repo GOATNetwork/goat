@@ -148,8 +148,9 @@ func (k Keeper) createEthBlockProposal(sdkctx sdk.Context, keyProvider cryptotyp
 	txBuilder.SetGasLimit(1e8)
 	txBuilder.SetTimeoutHeight(uint64(rpp.Height))
 
-	if err := txBuilder.SetMsgs(&types.MsgNewEthBlock{Proposer: validatorAddr,
-		Payload: types.ExecutableDataToPayload(envelope.ExecutionPayload, beaconBlock)}); err != nil {
+	payload := types.ExecutableDataToPayload(envelope.ExecutionPayload, beaconBlock)
+	k.Logger().Info("Propose new executable payload", payload.LogKeyVals()...)
+	if err := txBuilder.SetMsgs(&types.MsgNewEthBlock{Proposer: validatorAddr, Payload: payload}); err != nil {
 		return nil, err
 	}
 
@@ -228,21 +229,28 @@ func (k Keeper) ProcessProposalHandler(txVerifier baseapp.ProposalTxVerifier) sd
 }
 
 func (k Keeper) verifyEthBlockProposal(sdkctx sdk.Context, msg *types.MsgNewEthBlock) error {
-	eg, egctx := errgroup.WithContext(sdkctx)
+	payload := msg.Payload
+	if payload == nil {
+		return errors.New("empty payload")
+	}
 
+	if payload.GasRevenue == nil {
+		return errors.New("no gas revenue request")
+	}
+
+	k.Logger().Info("Verify new executable payload", payload.LogKeyVals()...)
+	eg, egctx := errgroup.WithContext(sdkctx)
 	eg.Go(func() error {
-		k.logger.Debug("verifyEthBlockProposal", "proposal", msg.Proposer, "payload", msg.Payload)
 		proposer, err := k.addressCodec.StringToBytes(msg.Proposer)
 		if err != nil {
 			return err
 		}
 
-		if !bytes.Equal(proposer, sdkctx.CometInfo().GetProposerAddress()) {
-			return errors.New("invalid MsgNewEthBlock proposer")
+		if expect := sdkctx.CometInfo().GetProposerAddress(); !bytes.Equal(proposer, expect) {
+			return fmt.Errorf("invalid MsgNewEthBlock proposer: expect %x got %x", expect, proposer)
 		}
 
-		payload := msg.Payload
-		if !bytes.Equal(proposer, msg.Payload.FeeRecipient) {
+		if !bytes.Equal(proposer, payload.FeeRecipient) {
 			return errors.New("fee recipient mismatched")
 		}
 
@@ -291,8 +299,7 @@ func (k Keeper) verifyEthBlockProposal(sdkctx sdk.Context, msg *types.MsgNewEthB
 	})
 
 	eg.Go(func() error {
-		payload := msg.Payload
-		res, err := k.ethclient.NewPayloadV3(egctx, types.PayloadToExecutableData(&payload),
+		res, err := k.ethclient.NewPayloadV3(egctx, types.PayloadToExecutableData(payload),
 			[]common.Hash{}, common.BytesToHash(payload.BeaconRoot))
 		if err != nil {
 			return err

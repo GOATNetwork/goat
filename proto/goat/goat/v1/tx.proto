@@ -5,7 +5,6 @@ import "amino/amino.proto";
 import "cosmos/msg/v1/msg.proto";
 import "cosmos_proto/cosmos.proto";
 import "goat/goat/v1/goat.proto";
-import "gogoproto/gogo.proto";
 
 option go_package = "github.com/goatnetwork/goat/x/goat/types";
 
@@ -23,10 +22,7 @@ message MsgNewEthBlock {
   option (amino.name) = "goat/x/goat/MsgNewEthBlock";
 
   string proposer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  ExecutionPayload payload = 2 [
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
-  ];
+  ExecutionPayload payload = 2;
 }
 
 // MsgNewEthBlockResponse is the Msg/NewEthBlock response type.

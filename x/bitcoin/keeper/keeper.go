@@ -9,12 +9,16 @@ import (
 	"cosmossdk.io/core/address"
 	"cosmossdk.io/core/store"
 	"cosmossdk.io/log"
+	"github.com/btcsuite/btcd/btcutil"
+	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcd/wire"
 	"github.com/cosmos/cosmos-sdk/codec"
+	sdktypes "github.com/cosmos/cosmos-sdk/types"
 
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 	"github.com/goatnetwork/goat/x/bitcoin/types"
+	goattypes "github.com/goatnetwork/goat/x/goat/types"
 	relayertypes "github.com/goatnetwork/goat/x/relayer/types"
 )
 
@@ -267,4 +271,89 @@ func (k Keeper) DequeueBitcoinModuleTx(ctx context.Context) (txs []*ethtypes.Tra
 		}
 	}
 	return txs, nil
+}
+
+func (k Keeper) ProcessBridgeRequest(ctx context.Context, withdrawals []*goattypes.WithdrawalReq, rbf []*goattypes.ReplaceByFeeReq, cancel1 []*goattypes.Cancel1Req) (sdktypes.Events, error) {
+	param, err := k.Params.Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	chaincfg := param.ChainConfig.ToBtcdParam()
+
+	queue, err := k.ExecuableQueue.Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var rejecting bool
+
+	events := make(sdktypes.Events, 0, len(withdrawals)+len(rbf)+len(cancel1))
+
+	for _, v := range withdrawals {
+		// reject if we have an invalid address
+		addr, err := btcutil.DecodeAddress(v.Address, chaincfg)
+		if err != nil {
+			queue.RejectedWithdrawals = append(queue.RejectedWithdrawals, v.Id)
+			rejecting = true
+			continue
+		}
+
+		script, err := txscript.PayToAddrScript(addr)
+		if err != nil {
+			queue.RejectedWithdrawals = append(queue.RejectedWithdrawals, v.Id)
+			rejecting = true
+			continue
+		}
+
+		if err := k.Withdrawals.Set(ctx, v.Id, types.Withdrawal{
+			Address:       v.Address,
+			RequestAmount: v.Amount,
+			MaxTxPrice:    v.MaxTxPrice,
+			OutputScript:  script,
+			Status:        types.WITHDRAWAL_STATUS_PENDING,
+		}); err != nil {
+			return nil, err
+		}
+		events = append(events, types.NewWithdrawalRequestEvent(v.Address, v.Id, v.MaxTxPrice, v.Amount))
+	}
+
+	if rejecting {
+		if err := k.ExecuableQueue.Set(ctx, queue); err != nil {
+			return nil, err
+		}
+	}
+
+	for _, v := range rbf {
+		withdrawal, err := k.Withdrawals.Get(ctx, v.Id)
+		if err != nil {
+			return nil, err
+		}
+		if withdrawal.Status != types.WITHDRAWAL_STATUS_PENDING {
+			continue
+		}
+		withdrawal.MaxTxPrice = v.MaxTxPrice
+		if err := k.Withdrawals.Set(ctx, v.Id, withdrawal); err != nil {
+			return nil, err
+		}
+		events = append(events, types.NewWithdrawalReplaceEvent(v.Id, v.MaxTxPrice))
+	}
+
+	for _, v := range cancel1 {
+		withdrawal, err := k.Withdrawals.Get(ctx, v.Id)
+		if err != nil {
+			return nil, err
+		}
+
+		if withdrawal.Status != types.WITHDRAWAL_STATUS_PENDING {
+			continue
+		}
+
+		withdrawal.Status = types.WITHDRAWAL_STATUS_CANCELING
+		if err := k.Withdrawals.Set(ctx, v.Id, withdrawal); err != nil {
+			return nil, err
+		}
+		events = append(events, types.NewWithdrawalCancellationEvent(v.Id))
+	}
+	return events, nil
 }

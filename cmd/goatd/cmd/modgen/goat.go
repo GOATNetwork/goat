@@ -1,6 +1,7 @@
 package modgen
 
 import (
+	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/server"
 	"github.com/goatnetwork/goat/x/goat/types"
@@ -42,6 +43,7 @@ func Goat() *cobra.Command {
 					BeaconRoot:    header.ParentBeaconRoot.Bytes(),
 					BlobGasUsed:   *header.BlobGasUsed,
 					ExcessBlobGas: *header.ExcessBlobGas,
+					GasRevenue:    &types.GasRevenueReq{Amount: math.NewInt(0)},
 				}
 				return nil
 			})

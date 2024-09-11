@@ -243,7 +243,7 @@ func (k msgServer) InitializeWithdrawal(ctx context.Context, req *types.MsgIniti
 		return nil, err
 	}
 
-	sdktypes.UnwrapSDKContext(ctx).EventManager().EmitEvent(types.NewWithdrawalEvent(txid))
+	sdktypes.UnwrapSDKContext(ctx).EventManager().EmitEvent(types.InitializeWithdrawalEvent(txid))
 
 	return &types.MsgInitializeWithdrawalResponse{}, nil
 }
@@ -309,7 +309,7 @@ func (k msgServer) FinalizeWithdrawal(ctx context.Context, req *types.MsgFinaliz
 		return nil, err
 	}
 
-	sdktypes.UnwrapSDKContext(ctx).EventManager().EmitEvent(types.NewWithdrawalEvent(req.Txid))
+	sdktypes.UnwrapSDKContext(ctx).EventManager().EmitEvent(types.InitializeWithdrawalEvent(req.Txid))
 	return &types.MsgFinalizeWithdrawalResponse{}, nil
 }
 

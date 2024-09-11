@@ -14,6 +14,7 @@ import (
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/params"
 	"github.com/goatnetwork/goat/pkg/ethrpc"
 	"github.com/spf13/cast"
 )
@@ -50,7 +51,8 @@ func ProvideEngineClient(logger log.Logger, appOpts servertypes.AppOptions) *eth
 		logger.Info("try to connect goat-geth", "endpoint", endpoint)
 		ethclient, err = ethrpc.DialContext(ctx, endpoint, jwtSecret)
 		if err == nil {
-			conf, err := ethclient.GetChainConfig(ctx)
+			var conf *params.ChainConfig
+			conf, err = ethclient.GetChainConfig(ctx)
 			if err == nil {
 				if conf.Goat == nil {
 					panic("No goat config found in the goat-geth, please verify if you're using correct setup")

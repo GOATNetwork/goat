@@ -16,6 +16,7 @@ import (
 	"github.com/kelindar/bitmap"
 
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
+	goattypes "github.com/goatnetwork/goat/x/goat/types"
 	"github.com/goatnetwork/goat/x/relayer/types"
 )
 
@@ -338,4 +339,80 @@ func (k Keeper) GetCurrentProposer(ctx context.Context) (sdktypes.AccAddress, er
 		return nil, err
 	}
 	return k.AddrCodec.StringToBytes(relayer.Proposer)
+}
+
+func (k Keeper) ProcessRelayerRequest(ctx context.Context, adds []*goattypes.AddVoterReq, rms []*goattypes.RemoveVoterReq) (sdktypes.Events, error) {
+	sdkctx := sdktypes.UnwrapSDKContext(ctx)
+	events := make(sdktypes.Events, 0, len(adds)+len(rms))
+
+	height := uint64(sdkctx.BlockHeight())
+	for _, add := range adds {
+		addr, err := k.AddrCodec.BytesToString(add.Voter)
+		if err != nil {
+			return nil, err
+		}
+		exits, err := k.Voters.Has(sdkctx, addr)
+		if err != nil {
+			return nil, err
+		}
+		if exits {
+			continue
+		}
+		if err := k.Voters.Set(sdkctx, addr, types.Voter{
+			VoteKey: add.PubkeyHash,
+			Height:  height,
+			Status:  types.VOTER_STATUS_PENDING,
+		}); err != nil {
+			return nil, err
+		}
+
+		events = append(events, types.PendingVoterEvent(addr))
+	}
+
+	if len(rms) == 0 {
+		return events, nil
+	}
+
+	queue, err := k.Queue.Get(sdkctx)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, rm := range rms {
+		addr, err := k.AddrCodec.BytesToString(rm.Voter)
+		if err != nil {
+			return nil, err
+		}
+
+		exits, err := k.Voters.Has(sdkctx, addr)
+		if err != nil {
+			return nil, err
+		}
+		if !exits {
+			continue
+		}
+
+		voter, err := k.Voters.Get(sdkctx, addr)
+		if err != nil {
+			return nil, err
+		}
+
+		if voter.Status == types.VOTER_STATUS_OFF_BOARDING {
+			continue
+		}
+
+		voter.Status = types.VOTER_STATUS_OFF_BOARDING
+		if err := k.Voters.Set(sdkctx, addr, voter); err != nil {
+			return nil, err
+		}
+
+		events = append(events, types.RemovingVoterEvent(addr))
+		queue.OffBoarding = append(queue.OffBoarding, addr)
+	}
+
+	if err := k.Queue.Set(sdkctx, queue); err != nil {
+		return nil, err
+	}
+
+	return events, nil
 }
