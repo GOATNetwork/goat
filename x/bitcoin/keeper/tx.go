@@ -72,7 +72,7 @@ func (k msgServer) NewBlockHashes(ctx context.Context, req *types.MsgNewBlockHas
 		return nil, err
 	}
 	if req.StartBlockNumber != parentHeight+1 {
-		return nil, types.ErrInvalidRequest.Wrapf("block number is not the next of the current %d", parentHeight)
+		return nil, types.ErrInvalidRequest.Wrapf("block number is not the next of the block %d", parentHeight)
 	}
 
 	sequence, err := k.relayerKeeper.VerifyProposal(ctx, req)

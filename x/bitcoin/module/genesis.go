@@ -23,11 +23,13 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	}
 
 	blockNumber := genState.StartBlockNumber
-	for _, v := range genState.BlockHash {
+	for i, v := range genState.BlockHash {
+		if i != 0 { // the first block is the tip
+			blockNumber++
+		}
 		if err := k.BlockHashes.Set(ctx, blockNumber, v); err != nil {
 			panic(err)
 		}
-		blockNumber++
 	}
 	if err := k.BlockTip.Set(ctx, blockNumber); err != nil {
 		panic(err)
