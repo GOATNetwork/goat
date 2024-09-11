@@ -53,7 +53,7 @@ func NewDepositEvent(deposit *DepositExecReceipt) sdktypes.Event {
 
 func NewWithdrawalRequestEvent(address string, id, txPrice, amount uint64) sdktypes.Event {
 	return sdktypes.NewEvent(
-		EventTypeNewDeposit,
+		EventTypeWithdrawalRequest,
 		sdktypes.NewAttribute("id", strconv.FormatUint(id, 10)),
 		sdktypes.NewAttribute("address", address),
 		sdktypes.NewAttribute("tx_price", strconv.FormatUint(txPrice, 10)),
