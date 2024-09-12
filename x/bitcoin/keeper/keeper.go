@@ -274,6 +274,11 @@ func (k Keeper) DequeueBitcoinModuleTx(ctx context.Context) (txs []*ethtypes.Tra
 }
 
 func (k Keeper) ProcessBridgeRequest(ctx context.Context, withdrawals []*goattypes.WithdrawalReq, rbf []*goattypes.ReplaceByFeeReq, cancel1 []*goattypes.Cancel1Req) (sdktypes.Events, error) {
+	reqLens := len(withdrawals) + len(rbf) + len(cancel1)
+	if reqLens == 0 {
+		return nil, nil
+	}
+
 	param, err := k.Params.Get(ctx)
 	if err != nil {
 		return nil, err
@@ -288,8 +293,7 @@ func (k Keeper) ProcessBridgeRequest(ctx context.Context, withdrawals []*goattyp
 
 	var rejecting bool
 
-	events := make(sdktypes.Events, 0, len(withdrawals)+len(rbf)+len(cancel1))
-
+	events := make(sdktypes.Events, 0, reqLens)
 	for _, v := range withdrawals {
 		// reject if we have an invalid address
 		addr, err := btcutil.DecodeAddress(v.Address, chaincfg)
