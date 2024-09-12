@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"math/big"
 	"slices"
@@ -350,11 +351,11 @@ func (k Keeper) ProcessRelayerRequest(ctx context.Context, adds []*goattypes.Add
 		if err != nil {
 			return nil, err
 		}
-		exits, err := k.Voters.Has(sdkctx, addr)
+		exists, err := k.Voters.Has(sdkctx, addr)
 		if err != nil {
 			return nil, err
 		}
-		if exits {
+		if exists {
 			continue
 		}
 		if err := k.Voters.Set(sdkctx, addr, types.Voter{
@@ -390,16 +391,11 @@ func (k Keeper) ProcessRelayerRequest(ctx context.Context, adds []*goattypes.Add
 			return nil, err
 		}
 
-		exits, err := k.Voters.Has(sdkctx, addr)
-		if err != nil {
-			return nil, err
-		}
-		if !exits {
-			continue
-		}
-
 		voter, err := k.Voters.Get(sdkctx, addr)
 		if err != nil {
+			if errors.Is(err, collections.ErrNotFound) {
+				continue
+			}
 			return nil, err
 		}
 
@@ -409,8 +405,8 @@ func (k Keeper) ProcessRelayerRequest(ctx context.Context, adds []*goattypes.Add
 
 		active--
 		if active < 1 {
-			k.Logger().Warn("requires 1 voter at least in active set, disreguard the removal", "voter", addr)
-			continue
+			k.Logger().Warn("requires 1 voter at least in active set, disregard the removal", "voter", addr)
+			break
 		}
 
 		k.Logger().Info("New off-boarding voter", "voter", addr)
