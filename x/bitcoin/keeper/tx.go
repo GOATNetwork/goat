@@ -160,19 +160,13 @@ func (k msgServer) InitializeWithdrawal(ctx context.Context, req *types.MsgIniti
 		return nil, types.ErrInvalidRequest.Wrap("invalid tx output size for withdrawals")
 	}
 
-	sequence, err := k.relayerKeeper.VerifyProposal(ctx, req)
+	sdkctx := sdktypes.UnwrapSDKContext(ctx)
+	sequence, err := k.relayerKeeper.VerifyProposal(sdkctx, req)
 	if err != nil {
 		return nil, err
 	}
 
 	txid := goatcrypto.DoubleSHA256Sum(req.Proposal.NoWitnessTx)
-	duplicated, err := k.WithdrawalProposals.Has(ctx, txid)
-	if err != nil {
-		return nil, err
-	}
-	if duplicated {
-		return nil, types.ErrInvalidRequest.Wrap("duplicated withdrawal proposal txid")
-	}
 
 	/*
 		Note:
@@ -188,7 +182,7 @@ func (k msgServer) InitializeWithdrawal(ctx context.Context, req *types.MsgIniti
 	txPrice := float64(req.Proposal.TxFee) / float64(len(req.Proposal.NoWitnessTx))
 
 	for idx, wid := range req.Proposal.Id {
-		withdrawal, err := k.Withdrawals.Get(ctx, wid)
+		withdrawal, err := k.Withdrawals.Get(sdkctx, wid)
 		if err != nil {
 			return nil, err
 		}
@@ -213,7 +207,7 @@ func (k msgServer) InitializeWithdrawal(ctx context.Context, req *types.MsgIniti
 		// the withdrawal id can't be duplicated since we update the status here
 		withdrawal.Status = types.WITHDRAWAL_STATUS_PROCESSING
 		withdrawal.Receipt = &types.WithdrawalReceipt{Txid: txid, Txout: uint32(idx), Amount: uint64(txout.Value)}
-		if err := k.Withdrawals.Set(ctx, wid, withdrawal); err != nil {
+		if err := k.Withdrawals.Set(sdkctx, wid, withdrawal); err != nil {
 			return nil, err
 		}
 	}
@@ -230,20 +224,19 @@ func (k msgServer) InitializeWithdrawal(ctx context.Context, req *types.MsgIniti
 		}
 	}
 
-	if err := k.WithdrawalProposals.Set(ctx, txid,
-		types.WithdrawalIds{Id: req.Proposal.Id}); err != nil {
+	if err := k.Processing.Set(sdkctx, txid, types.WithdrawalIds{Id: req.Proposal.Id}); err != nil {
 		return nil, err
 	}
 
-	if err := k.relayerKeeper.SetProposalSeq(ctx, sequence+1); err != nil {
+	if err := k.relayerKeeper.SetProposalSeq(sdkctx, sequence+1); err != nil {
 		return nil, err
 	}
 
-	if err := k.relayerKeeper.UpdateRandao(ctx, req); err != nil {
+	if err := k.relayerKeeper.UpdateRandao(sdkctx, req); err != nil {
 		return nil, err
 	}
 
-	sdktypes.UnwrapSDKContext(ctx).EventManager().EmitEvent(types.InitializeWithdrawalEvent(txid))
+	sdkctx.EventManager().EmitEvent(types.InitializeWithdrawalEvent(txid))
 
 	return &types.MsgInitializeWithdrawalResponse{}, nil
 }
@@ -253,17 +246,18 @@ func (k msgServer) FinalizeWithdrawal(ctx context.Context, req *types.MsgFinaliz
 		return nil, err
 	}
 
-	if _, err := k.relayerKeeper.VerifyNonProposal(ctx, req); err != nil {
+	sdkctx := sdktypes.UnwrapSDKContext(ctx)
+	if _, err := k.relayerKeeper.VerifyNonProposal(sdkctx, req); err != nil {
 		return nil, err
 	}
 
 	// check if the block is voted
-	blockHash, err := k.BlockHashes.Get(ctx, req.BlockNumber)
+	blockHash, err := k.BlockHashes.Get(sdkctx, req.BlockNumber)
 	if err != nil {
 		return nil, err
 	}
 
-	proposal, err := k.WithdrawalProposals.Get(ctx, req.Txid)
+	proposal, err := k.Processing.Get(sdkctx, req.Txid)
 	if err != nil {
 		return nil, err
 	}
@@ -277,13 +271,13 @@ func (k msgServer) FinalizeWithdrawal(ctx context.Context, req *types.MsgFinaliz
 		return nil, types.ErrInvalidRequest.Wrap("invalid spv")
 	}
 
-	queue, err := k.ExecuableQueue.Get(ctx)
+	queue, err := k.ExecuableQueue.Get(sdkctx)
 	if err != nil {
 		return nil, err
 	}
 
 	for _, wid := range proposal.Id {
-		withdrawal, err := k.Withdrawals.Get(ctx, wid)
+		withdrawal, err := k.Withdrawals.Get(sdkctx, wid)
 		if err != nil {
 			return nil, err
 		}
@@ -296,7 +290,7 @@ func (k msgServer) FinalizeWithdrawal(ctx context.Context, req *types.MsgFinaliz
 		}
 
 		withdrawal.Status = types.WITHDRAWAL_STATUS_PAID
-		if err := k.Withdrawals.Set(ctx, wid, withdrawal); err != nil {
+		if err := k.Withdrawals.Set(sdkctx, wid, withdrawal); err != nil {
 			return nil, err
 		}
 		queue.PaidWithdrawals = append(queue.PaidWithdrawals, &types.WithdrawalExecReceipt{
@@ -305,7 +299,12 @@ func (k msgServer) FinalizeWithdrawal(ctx context.Context, req *types.MsgFinaliz
 		})
 	}
 
-	if err := k.ExecuableQueue.Set(ctx, queue); err != nil {
+	if err := k.ExecuableQueue.Set(sdkctx, queue); err != nil {
+		return nil, err
+	}
+
+	// we don't use it anymore
+	if err := k.Processing.Remove(sdkctx, req.Txid); err != nil {
 		return nil, err
 	}
 

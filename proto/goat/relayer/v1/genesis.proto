@@ -15,7 +15,9 @@ message GenesisState {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
-  uint64 epoch = 2;
+  Relayer relayer = 2;
   uint64 sequence = 3;
   map<string, Voter> voters = 4;
+  repeated PublicKey pubkeys = 5;
+  bytes randao = 6;
 }

@@ -30,16 +30,15 @@ type (
 		logger       log.Logger
 		schema       collections.Schema
 
-		Params              collections.Item[types.Params]
-		Pubkey              collections.Item[relayertypes.PublicKey]
-		BlockTip            collections.Sequence
-		BlockHashes         collections.Map[uint64, []byte]
-		Deposited           collections.Map[collections.Pair[[]byte, uint32], uint64]
-		EthTxNonce          collections.Sequence
-		Withdrawals         collections.Map[uint64, types.Withdrawal]
-		WithdrawalProposals collections.Map[[]byte, types.WithdrawalIds]
-		ExecuableQueue      collections.Item[types.ExecuableQueue]
-		// this line is used by starport scaffolding # collection/type
+		Params         collections.Item[types.Params]
+		Pubkey         collections.Item[relayertypes.PublicKey]
+		BlockTip       collections.Sequence
+		BlockHashes    collections.Map[uint64, []byte]
+		Deposited      collections.Map[collections.Pair[[]byte, uint32], uint64]
+		EthTxNonce     collections.Sequence
+		Withdrawals    collections.Map[uint64, types.Withdrawal]
+		Processing     collections.Map[[]byte, types.WithdrawalIds] // processing withdrawal(a pair of txid and withdrawal id list)
+		ExecuableQueue collections.Item[types.ExecuableQueue]
 
 		relayerKeeper types.RelayerKeeper
 	}
@@ -70,8 +69,8 @@ func NewKeeper(
 		EthTxNonce:     collections.NewSequence(sb, types.EthTxNonceKey, "eth_tx_nonce"),
 		ExecuableQueue: collections.NewItem(sb, types.ExecuableQueueKey, "queue", codec.CollValue[types.ExecuableQueue](cdc)),
 
-		Withdrawals:         collections.NewMap(sb, types.WithdrawalKey, "withdrawals", collections.Uint64Key, codec.CollValue[types.Withdrawal](cdc)),
-		WithdrawalProposals: collections.NewMap(sb, types.WithdrawalProposalKey, "withdrawal_proposals", collections.BytesKey, codec.CollValue[types.WithdrawalIds](cdc)),
+		Withdrawals: collections.NewMap(sb, types.WithdrawalKey, "withdrawals", collections.Uint64Key, codec.CollValue[types.Withdrawal](cdc)),
+		Processing:  collections.NewMap(sb, types.ProcessingKey, "processings", collections.BytesKey, codec.CollValue[types.WithdrawalIds](cdc)),
 		// this line is used by starport scaffolding # collection/instantiate
 	}
 
@@ -194,6 +193,17 @@ func (k Keeper) NewPubkey(ctx context.Context, pubkey *relayertypes.PublicKey) e
 		return err
 	}
 	return k.Pubkey.Set(ctx, *pubkey)
+}
+
+// MustHasKey is for genesis check
+func (k Keeper) MustHasKey(ctx context.Context, pubkey *relayertypes.PublicKey) {
+	hasKey, err := k.relayerKeeper.HasPubkey(ctx, relayertypes.EncodePublicKey(pubkey))
+	if err != nil {
+		panic(err)
+	}
+	if !hasKey {
+		panic(fmt.Sprintf("the pubkey %x doesn't exists", relayertypes.EncodePublicKey(pubkey)))
+	}
 }
 
 func (k Keeper) DequeueBitcoinModuleTx(ctx context.Context) (txs []*ethtypes.Transaction, err error) {

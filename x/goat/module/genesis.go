@@ -18,7 +18,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 		panic(err)
 	}
 
-	if err := k.BeaconRoot.Set(ctx, genState.EthBlock.BeaconRoot); err != nil {
+	if err := k.BeaconRoot.Set(ctx, genState.BeaconRoot); err != nil {
 		panic(err)
 	}
 }
@@ -27,7 +27,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	var err error
 
-	genesis := types.DefaultGenesis()
+	genesis := new(types.GenesisState)
 	genesis.Params, err = k.Params.Get(ctx)
 	if err != nil {
 		panic(err)
@@ -38,7 +38,10 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 		panic(err)
 	}
 
-	// this line is used by starport scaffolding # genesis/module/export
+	genesis.BeaconRoot, err = k.BeaconRoot.Get(ctx)
+	if err != nil {
+		panic(err)
+	}
 
 	return genesis
 }

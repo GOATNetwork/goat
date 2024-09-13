@@ -2,11 +2,26 @@ syntax = "proto3";
 package goat.bitcoin.v1;
 
 import "amino/amino.proto";
+import "goat/bitcoin/v1/bitcoin.proto";
 import "goat/bitcoin/v1/params.proto";
+import "goat/bitcoin/v1/types.proto";
 import "goat/relayer/v1/relayer.proto";
 import "gogoproto/gogo.proto";
 
 option go_package = "github.com/goatnetwork/goat/x/bitcoin/types";
+
+// WithdrawalGeneis
+message WithdrawalGenesis {
+  uint64 id = 1;
+  Withdrawal withdrawal = 2;
+}
+
+// DepositGenesis
+message DepositGenesis {
+  bytes txid = 1;
+  uint32 txout = 2;
+  uint64 amount = 3;
+}
 
 // GenesisState defines the bitcoin module's genesis state.
 message GenesisState {
@@ -15,7 +30,11 @@ message GenesisState {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
-  uint64 start_block_number = 2;
-  repeated bytes block_hash = 3;
-  goat.relayer.v1.PublicKey pubkey = 4;
+  uint64 block_tip = 2;
+  map<uint64, bytes> block_hashes = 3;
+  uint64 eth_tx_nonce = 4;
+  goat.relayer.v1.PublicKey pubkey = 5;
+  ExecuableQueue queue = 6;
+  repeated DepositGenesis deposits = 7;
+  repeated WithdrawalGenesis withdrawals = 8;
 }

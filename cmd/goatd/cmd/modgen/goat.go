@@ -25,6 +25,7 @@ func Goat() *cobra.Command {
 			srvConfig := serverCtx.Config.SetRoot(clientCtx.HomeDir)
 			serverCtx.Logger.Info("update genesis", "module", types.ModuleName, "geneis", srvConfig.GenesisFile())
 			return UpdateModuleGenesis(srvConfig.GenesisFile(), types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
+				genesis.BeaconRoot = header.ParentBeaconRoot.Bytes()
 				genesis.EthBlock = types.ExecutionPayload{
 					ParentHash:    header.ParentHash.Bytes(),
 					FeeRecipient:  header.Coinbase.Bytes(),

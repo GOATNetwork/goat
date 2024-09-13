@@ -19,4 +19,5 @@ message GenesisState {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
+  bytes beacon_root = 3;
 }

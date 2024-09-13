@@ -21,9 +21,8 @@ var (
 	DepositedKey      = collections.NewPrefix(4)
 	ExecuableQueueKey = collections.NewPrefix(5)
 	EthTxNonceKey     = collections.NewPrefix(6)
-
-	WithdrawalKey         = collections.NewPrefix(7)
-	WithdrawalProposalKey = collections.NewPrefix(8)
+	WithdrawalKey     = collections.NewPrefix(7)
+	ProcessingKey     = collections.NewPrefix(8)
 )
 
 func KeyPrefix(p string) []byte {

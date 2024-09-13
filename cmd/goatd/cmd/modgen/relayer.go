@@ -3,6 +3,7 @@ package modgen
 import (
 	"bytes"
 	"fmt"
+	"slices"
 	"time"
 
 	"github.com/cosmos/cosmos-sdk/client"
@@ -97,6 +98,20 @@ func Relayer() *cobra.Command {
 					serverCtx.Logger.Info("relayer already added", "addr", addr)
 					return nil
 				}
+
+				if genesis.Relayer == nil {
+					genesis.Relayer = &types.Relayer{
+						LastElected:      time.Now().UTC(),
+						ProposerAccepted: true,
+					}
+				}
+
+				genesis.Relayer.Voters = append(genesis.Relayer.Voters, addr)
+				slices.Sort(genesis.Relayer.Voters)
+
+				genesis.Relayer.Proposer = genesis.Relayer.Voters[0]
+				genesis.Relayer.Voters = genesis.Relayer.Voters[1:]
+
 				genesis.Voters[addr] = &types.Voter{VoteKey: voteKey, Status: types.VOTER_STATUS_ACTIVATED}
 				return genesis.Validate()
 			}); err != nil {

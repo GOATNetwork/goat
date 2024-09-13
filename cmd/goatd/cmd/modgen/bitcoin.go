@@ -49,7 +49,23 @@ func Bitcoin() *cobra.Command {
 			genesisFile := config.GenesisFile()
 
 			serverCtx.Logger.Info("update genesis", "module", types.ModuleName, "geneis", genesisFile)
-			return UpdateModuleGenesis(genesisFile, types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
+
+			rawPubkey, err := cmd.Flags().GetBytesHex(FlagPubkey)
+			if err != nil {
+				return err
+			}
+
+			keyType, err := cmd.Flags().GetString(FlagPubkeyType)
+			if err != nil {
+				return err
+			}
+
+			newPubkey, err := parsePubkey(rawPubkey, keyType)
+			if err != nil {
+				return err
+			}
+
+			if err := UpdateModuleGenesis(genesisFile, types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
 				networkName, err := cmd.Flags().GetString(FlagNetworkName)
 				if err != nil {
 					return err
@@ -88,37 +104,36 @@ func Bitcoin() *cobra.Command {
 					MinDepositAmount:   minDeposit,
 				}
 
-				pubkey, err := cmd.Flags().GetBytesHex(FlagPubkey)
-				if err != nil {
-					return err
-				}
-
-				keyType, err := cmd.Flags().GetString(FlagPubkeyType)
-				if err != nil {
-					return err
-				}
-
-				genesis.Pubkey, err = parsePubkey(pubkey, keyType)
-				if err != nil {
-					return err
-				}
+				genesis.Pubkey = newPubkey
 
 				if len(args) > 0 {
-					genesis.StartBlockNumber, err = cast.ToUint64E(args[0])
+					start, err := cast.ToUint64E(args[0])
 					if err != nil {
 						return fmt.Errorf("invalid height: %s", args[0])
 					}
 
-					genesis.BlockHash = genesis.BlockHash[1:]
-					for _, hash := range args[1:] {
+					genesis.BlockHashes = make(map[uint64][]byte)
+					for idx, hash := range args[1:] {
+						if idx != 0 {
+							start++
+						}
 						r, err := chainhash.NewHashFromStr(strings.TrimPrefix(hash, "0x"))
 						if err != nil {
 							return fmt.Errorf("invalid block hash: %s", hash)
 						}
-						genesis.BlockHash = append(genesis.BlockHash, r[:])
+						genesis.BlockHashes[start] = r[:]
 					}
+					genesis.BlockTip = start
 				}
 				return genesis.Validate()
+			}); err != nil {
+				panic(err)
+			}
+
+			serverCtx.Logger.Info("update genesis", "module", relayer.ModuleName, "geneis", genesisFile)
+			return UpdateModuleGenesis(genesisFile, relayer.ModuleName, new(relayer.GenesisState), clientCtx.Codec, func(state *relayer.GenesisState) error {
+				state.Pubkeys = append(state.Pubkeys, newPubkey)
+				return nil
 			})
 		},
 	}
