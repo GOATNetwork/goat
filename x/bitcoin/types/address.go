@@ -56,7 +56,7 @@ func DepositAddressV0(pubkey *relayer.PublicKey, evmAddress []byte, netwk *chain
 	switch v := pubkey.GetKey().(type) {
 	case *relayer.PublicKey_Secp256K1:
 		script, err := txscript.NewScriptBuilder().AddData(evmAddress).AddOp(txscript.OP_DROP).
-			AddData(v.Secp256K1).AddOp(txscript.OP_CHECKSIGVERIFY).Script()
+			AddData(v.Secp256K1).AddOp(txscript.OP_CHECKSIG).Script()
 		if err != nil {
 			return nil, err
 		}
@@ -96,7 +96,7 @@ func DepositAddressV1(pubkey *relayer.PublicKey, magicPrefix, evmAddress []byte,
 		}
 
 		script, err := txscript.NewScriptBuilder().
-			AddFullData(slices.Concat(magicPrefix, evmAddress)).Script()
+			AddOp(txscript.OP_RETURN).AddFullData(slices.Concat(magicPrefix, evmAddress)).Script()
 		if err != nil {
 			return nil, nil, err
 		}
@@ -120,7 +120,7 @@ func VerifyDespositScriptV0(pubkey *relayer.PublicKey, evmAddress, txout []byte)
 			return errors.New("invalid p2wsh output")
 		}
 		script, err := txscript.NewScriptBuilder().AddData(evmAddress).AddOp(txscript.OP_DROP).
-			AddData(v.Secp256K1).AddOp(txscript.OP_CHECKSIGVERIFY).Script()
+			AddData(v.Secp256K1).AddOp(txscript.OP_CHECKSIG).Script()
 		if err != nil {
 			return err
 		}

@@ -17,7 +17,7 @@ func TestGenesis(t *testing.T) {
 		// this line is used by starport scaffolding # genesis/test/state
 	}
 
-	k, ctx, _ := keepertest.BitcoinKeeper(t)
+	k, ctx, _ := keepertest.BitcoinKeeper(t, nil)
 	bitcoin.InitGenesis(ctx, k, genesisState)
 	got := bitcoin.ExportGenesis(ctx, k)
 	require.NotNil(t, got)

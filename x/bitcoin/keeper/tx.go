@@ -308,7 +308,7 @@ func (k msgServer) FinalizeWithdrawal(ctx context.Context, req *types.MsgFinaliz
 		return nil, err
 	}
 
-	sdktypes.UnwrapSDKContext(ctx).EventManager().EmitEvent(types.InitializeWithdrawalEvent(req.Txid))
+	sdkctx.EventManager().EmitEvent(types.FinalizeWithdrawalEvent(req.Txid))
 	return &types.MsgFinalizeWithdrawalResponse{}, nil
 }
 

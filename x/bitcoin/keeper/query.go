@@ -64,7 +64,7 @@ func (q queryServer) DepositAddress(ctx context.Context, req *types.QueryDeposit
 
 	evmAddress, err := types.DecodeEthAddress(req.EvmAddress)
 	if err != nil {
-		return nil, err
+		return nil, status.Error(codes.InvalidArgument, "invalid eth address")
 	}
 
 	pubkey, err := q.k.Pubkey.Get(ctx)

@@ -21,7 +21,7 @@ import (
 	"github.com/goatnetwork/goat/x/bitcoin/types"
 )
 
-func BitcoinKeeper(t testing.TB) (keeper.Keeper, sdk.Context, address.Codec) {
+func BitcoinKeeper(t testing.TB, relayerKeeper types.RelayerKeeper) (keeper.Keeper, sdk.Context, address.Codec) {
 	storeKey := storetypes.NewKVStoreKey(types.StoreKey)
 
 	db := dbm.NewMemDB()
@@ -38,7 +38,7 @@ func BitcoinKeeper(t testing.TB) (keeper.Keeper, sdk.Context, address.Codec) {
 		addressCodec,
 		runtime.NewKVStoreService(storeKey),
 		log.NewNopLogger(),
-		nil,
+		relayerKeeper,
 	)
 
 	ctx := sdk.NewContext(stateStore, cmtproto.Header{}, false, log.NewNopLogger())
