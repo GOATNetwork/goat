@@ -17,9 +17,11 @@ import (
 
 func Relayer() *cobra.Command {
 	const (
-		FlagParamElectingPeriod = "param.electing_period"
-		FlagPubkey              = "key.tx"
-		FlagVoteKey             = "key.vote"
+		FlagParamElectingPeriod        = "param.electing_period"
+		FlagParamAcceptProposerTimeout = "param.accept_proposer_timeout"
+
+		FlagPubkey  = "key.tx"
+		FlagVoteKey = "key.vote"
 	)
 
 	cmd := &cobra.Command{
@@ -38,6 +40,12 @@ func Relayer() *cobra.Command {
 					return err
 				}
 				genesis.Params.ElectingPeriod = period
+
+				timeout, err := cmd.Flags().GetDuration(FlagParamAcceptProposerTimeout)
+				if err != nil {
+					return err
+				}
+				genesis.Params.AcceptProposerTimeout = timeout
 				return nil
 			})
 		},
@@ -156,6 +164,7 @@ func Relayer() *cobra.Command {
 	}
 
 	cmd.Flags().Duration(FlagParamElectingPeriod, time.Minute*10, "")
+	cmd.Flags().Duration(FlagParamAcceptProposerTimeout, 0, "")
 	appendVoter.Flags().String(FlagPubkey, "", "the voter tx public key(compressed secp256k1)")
 	appendVoter.Flags().String(FlagVoteKey, "", "the voter vote public key(compressed bls12381 G2)")
 	cmd.AddCommand(appendVoter)
