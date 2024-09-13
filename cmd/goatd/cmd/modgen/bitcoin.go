@@ -137,6 +137,11 @@ func Bitcoin() *cobra.Command {
 
 			serverCtx.Logger.Info("update genesis", "module", relayer.ModuleName, "geneis", genesisFile)
 			return UpdateModuleGenesis(genesisFile, relayer.ModuleName, new(relayer.GenesisState), clientCtx.Codec, func(state *relayer.GenesisState) error {
+				for _, item := range state.Pubkeys {
+					if item.Equal(newPubkey) {
+						return nil
+					}
+				}
 				state.Pubkeys = append(state.Pubkeys, newPubkey)
 				return nil
 			})
