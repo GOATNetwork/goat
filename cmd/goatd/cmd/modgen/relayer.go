@@ -103,7 +103,7 @@ func Relayer() *cobra.Command {
 			serverCtx.Logger.Info("update genesis", "module", types.ModuleName)
 			if err := UpdateModuleGenesis(genesisFile, types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
 				if _, ok := genesis.Voters[addr]; ok {
-					serverCtx.Logger.Info("relayer already added", "addr", addr)
+					serverCtx.Logger.Error("relayer already added", "addr", addr)
 					return nil
 				}
 

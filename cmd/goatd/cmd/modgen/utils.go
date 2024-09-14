@@ -9,7 +9,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	"github.com/ethereum/go-ethereum/core"
 	"github.com/ethereum/go-ethereum/core/rawdb"
@@ -17,20 +16,6 @@ import (
 	"github.com/ethereum/go-ethereum/triedb"
 	"github.com/ethereum/go-ethereum/triedb/hashdb"
 )
-
-var BitcoinNetworks = map[string]*chaincfg.Params{
-	chaincfg.MainNetParams.Name:       &chaincfg.MainNetParams,
-	chaincfg.TestNet3Params.Name:      &chaincfg.TestNet3Params,
-	chaincfg.SigNetParams.Name:        &chaincfg.SigNetParams,
-	chaincfg.RegressionNetParams.Name: &chaincfg.RegressionNetParams,
-}
-
-var DepositMagicPreifxs = map[string]string{
-	chaincfg.MainNetParams.Name:       "GTV2",
-	chaincfg.TestNet3Params.Name:      "GTV1",
-	chaincfg.SigNetParams.Name:        "GTV1",
-	chaincfg.RegressionNetParams.Name: "GTT0",
-}
 
 func DecodeHexOrBase64String(str string) ([]byte, error) {
 	pubkeyRaw, err := hex.DecodeString(str)

@@ -71,7 +71,7 @@ func Bitcoin() *cobra.Command {
 					return err
 				}
 
-				network, ok := BitcoinNetworks[networkName]
+				network, ok := types.BitcoinNetworks[networkName]
 				if !ok {
 					return fmt.Errorf("unknown bitcoin network: %s", networkName)
 				}
@@ -100,7 +100,7 @@ func Bitcoin() *cobra.Command {
 						Bech32Hrp:            network.Bech32HRPSegwit,
 					},
 					ConfirmationNumber: confirmationNumber,
-					DepositMagicPrefix: []byte(DepositMagicPreifxs[networkName]),
+					DepositMagicPrefix: []byte(types.DepositMagicPreifxs[networkName]),
 					MinDepositAmount:   minDeposit,
 				}
 
