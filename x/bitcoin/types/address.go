@@ -2,7 +2,6 @@ package types
 
 import (
 	"bytes"
-	"crypto/sha256"
 	"errors"
 	"fmt"
 	"slices"
@@ -189,27 +188,6 @@ func VerifyDespositScriptV1(pubkey *relayer.PublicKey, magicPrefix, evmAddress, 
 		return nil
 	}
 	return errors.New("unknown key type")
-}
-
-func VerifyMerkelProof(txid, root, proof []byte, index uint32) bool {
-	if len(txid) != sha256.Size || len(root) != sha256.Size || len(proof)%sha256.Size != 0 {
-		return false
-	}
-
-	current := txid
-	for i := 0; i < len(proof)/sha256.Size; i++ {
-		start := i * sha256.Size
-		end := start + sha256.Size
-		next := proof[start:end]
-		if index&1 == 0 {
-			current = goatcrypto.DoubleSHA256Sum(slices.Concat(current, next))
-		} else {
-			current = goatcrypto.DoubleSHA256Sum(slices.Concat(next, current))
-		}
-		index >>= 1
-	}
-
-	return bytes.Equal(current, root)
 }
 
 func DecodeEthAddress(address string) ([]byte, error) {
