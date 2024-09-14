@@ -1,75 +1,75 @@
 package keeper_test
 
 import (
-	"testing"
+	"encoding/hex"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	keepertest "github.com/goatnetwork/goat/testutil/keeper"
 	"github.com/goatnetwork/goat/x/bitcoin/keeper"
 	"github.com/goatnetwork/goat/x/bitcoin/types"
-	relayer "github.com/goatnetwork/goat/x/relayer/types"
 )
 
-var TestingPubkey = relayer.PublicKey{Key: &relayer.PublicKey_Secp256K1{Secp256K1: common.Hex2Bytes("0383560def84048edefe637d0119a4428dd12a42765a118b2bf77984057633c50e")}}
-
-func TestParamsQuery(t *testing.T) {
-	k, ctx, _ := keepertest.BitcoinKeeper(t, nil)
-
-	qs := keeper.NewQueryServerImpl(k)
+func (suite *KeeperTestSuite) TestParamsQuery() {
+	qs := keeper.NewQueryServerImpl(suite.Keeper)
 	params := types.DefaultParams()
-	require.NoError(t, k.Params.Set(ctx, params))
+	suite.Require().NoError(suite.Keeper.Params.Set(suite.Context, params))
 
-	response, err := qs.Params(ctx, &types.QueryParamsRequest{})
-	require.NoError(t, err)
-	require.Equal(t, &types.QueryParamsResponse{Params: params}, response)
+	response, err := qs.Params(suite.Context, &types.QueryParamsRequest{})
+	suite.Require().NoError(err)
+	suite.Require().Equal(&types.QueryParamsResponse{Params: params}, response)
 }
 
-func TestPubkeyQuery(t *testing.T) {
-	k, ctx, _ := keepertest.BitcoinKeeper(t, nil)
+func (suite *KeeperTestSuite) TestPubkeyQuery() {
+	qs := keeper.NewQueryServerImpl(suite.Keeper)
 
-	qs := keeper.NewQueryServerImpl(k)
+	_, err := qs.Pubkey(suite.Context, &types.QueryPubkeyRequest{})
+	suite.Require().EqualError(err, status.Error(codes.NotFound, "not found").Error())
 
-	_, err := qs.Pubkey(ctx, &types.QueryPubkeyRequest{})
-	require.EqualError(t, err, status.Error(codes.NotFound, "not found").Error())
-
-	require.NoError(t, k.Pubkey.Set(ctx, TestingPubkey))
-
-	got, err := qs.Pubkey(ctx, &types.QueryPubkeyRequest{})
-	require.NoError(t, err)
-	require.Equal(t, got.PublicKey, TestingPubkey)
+	suite.Require().NoError(suite.Keeper.Pubkey.Set(suite.Context, suite.TestKey))
+	got, err := qs.Pubkey(suite.Context, &types.QueryPubkeyRequest{})
+	suite.Require().NoError(err)
+	suite.Require().Equal(got.PublicKey, suite.TestKey)
 }
 
-func TestDepositAddress(t *testing.T) {
-	k, ctx, _ := keepertest.BitcoinKeeper(t, nil)
-	require.NoError(t, k.Pubkey.Set(ctx, TestingPubkey))
+func (suite *KeeperTestSuite) TestDepositAddress() {
+	suite.Require().NoError(suite.Keeper.Pubkey.Set(suite.Context, suite.TestKey))
 
-	qs := keeper.NewQueryServerImpl(k)
+	qs := keeper.NewQueryServerImpl(suite.Keeper)
 
 	const invalid = "invalid"
 	const address = "0xBC1cb6A680cF76505F3C992Fa6ab4F91913511e8"
 
-	_, err := qs.DepositAddress(ctx, &types.QueryDepositAddress{EvmAddress: invalid})
-	require.EqualError(t, err, status.Error(codes.InvalidArgument, "invalid eth address").Error())
+	_, err := qs.DepositAddress(suite.Context, &types.QueryDepositAddress{EvmAddress: invalid})
+	suite.Require().EqualError(err, status.Error(codes.InvalidArgument, "invalid eth address").Error())
 
-	_, err = qs.DepositAddress(ctx, &types.QueryDepositAddress{EvmAddress: address, Version: 0xff})
-	require.EqualError(t, err, status.Error(codes.InvalidArgument, "unknown deposit version").Error())
+	_, err = qs.DepositAddress(suite.Context, &types.QueryDepositAddress{EvmAddress: address, Version: 0xff})
+	suite.Require().EqualError(err, status.Error(codes.InvalidArgument, "unknown deposit version").Error())
 
 	params := types.DefaultParams()
 	chaincfg := params.ChainConfig.ToBtcdParam()
 
 	{
-		resp, err := qs.DepositAddress(ctx, &types.QueryDepositAddress{EvmAddress: address, Version: 1})
-		require.NoError(t, err)
+		resp, err := qs.DepositAddress(suite.Context, &types.QueryDepositAddress{EvmAddress: address, Version: 0})
+		suite.Require().NoError(err)
 
-		require.Equal(t, resp.NetworkName, chaincfg.Name)
-		require.Equal(t, *resp.PublicKey, TestingPubkey)
-		require.Equal(t, resp.Address, "bcrt1qjav7664wdt0y8tnx9z558guewnxjr3wllz2s9u")
+		suite.Require().Equal(resp.NetworkName, chaincfg.Name)
+		suite.Require().Equal(*resp.PublicKey, suite.TestKey)
+		suite.Require().Equal(resp.Address, "bcrt1q6dxx7mfels0u4f59c0mjvltukvgnnur7v377nrusdm0r3gm0ycjsxjx0uj")
 
-		require.NoError(t, err)
-		require.Equal(t, resp.OpReturnScript, common.Hex2Bytes("1847545430bc1cb6a680cf76505f3c992fa6ab4f91913511e8"))
+		suite.Require().NoError(err)
+		suite.Require().Equal(hex.EncodeToString(resp.OpReturnScript), "")
+	}
+
+	{
+		resp, err := qs.DepositAddress(suite.Context, &types.QueryDepositAddress{EvmAddress: address, Version: 1})
+		suite.Require().NoError(err)
+
+		suite.Require().Equal(resp.NetworkName, chaincfg.Name)
+		suite.Require().Equal(*resp.PublicKey, suite.TestKey)
+		suite.Require().Equal(resp.Address, "bcrt1qjav7664wdt0y8tnx9z558guewnxjr3wllz2s9u")
+
+		suite.Require().NoError(err)
+		suite.Require().Equal(hex.EncodeToString(resp.OpReturnScript), "6a1847545430bc1cb6a680cf76505f3c992fa6ab4f91913511e8")
 	}
 }

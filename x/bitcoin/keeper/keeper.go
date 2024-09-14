@@ -242,11 +242,10 @@ func (k Keeper) DequeueBitcoinModuleTx(ctx context.Context) (txs []*ethtypes.Tra
 	// pop deposit up to 8
 	{
 		var n int
-		for i := 0; i < len(queue.Deposits) && n < MaxDeposit; i++ {
-			deposit := queue.Deposits[i]
+		for ; n < len(queue.Deposits) && n < MaxDeposit; n++ {
+			deposit := queue.Deposits[n]
 			txs = append(txs, deposit.EthTx(txNonce))
 
-			n++
 			txNonce++
 		}
 		queue.Deposits = queue.Deposits[n:]
@@ -255,19 +254,22 @@ func (k Keeper) DequeueBitcoinModuleTx(ctx context.Context) (txs []*ethtypes.Tra
 	// pop paid and reject withdrwal up to 8
 	{
 		var n int
-		for i := 0; i < len(queue.PaidWithdrawals) && n < MaxWithdrawal; i++ {
-			paid := queue.PaidWithdrawals[i]
+		for ; n < len(queue.PaidWithdrawals) && n < MaxWithdrawal; n++ {
+			paid := queue.PaidWithdrawals[n]
 			txs = append(txs, paid.EthTx(txNonce))
 
-			n++
 			txNonce++
 		}
+		queue.PaidWithdrawals = queue.PaidWithdrawals[n:]
 
-		for i := 0; n < len(queue.RejectedWithdrawals) && n < MaxWithdrawal; i++ {
+		var i int
+		for ; i < len(queue.RejectedWithdrawals) && n < MaxWithdrawal; i++ {
 			txs = append(txs, types.NewRejectEthTx(queue.RejectedWithdrawals[i], txNonce))
+
 			n++
 			txNonce++
 		}
+		queue.RejectedWithdrawals = queue.RejectedWithdrawals[i:]
 	}
 
 	if len(txs) > 0 {
@@ -301,9 +303,11 @@ func (k Keeper) ProcessBridgeRequest(ctx context.Context, withdrawals []*goattyp
 		// reject if we have an invalid address
 		script, err := types.DecodeBtcAddress(v.Address, netwk)
 		if err != nil {
+			k.Logger().Info("invalid withdrawal address", "id", v.Id, "address", v.Address, "err", err.Error())
 			rejecting = append(rejecting, v.Id)
 			continue
 		}
+
 		if err := k.Withdrawals.Set(ctx, v.Id, types.Withdrawal{
 			Address:       v.Address,
 			RequestAmount: v.Amount,
@@ -333,6 +337,7 @@ func (k Keeper) ProcessBridgeRequest(ctx context.Context, withdrawals []*goattyp
 			return err
 		}
 		if withdrawal.Status != types.WITHDRAWAL_STATUS_PENDING {
+			k.Logger().Info("disregard rbf request due to it's processing", "id", v.Id)
 			continue
 		}
 		withdrawal.MaxTxPrice = v.MaxTxPrice
@@ -349,6 +354,7 @@ func (k Keeper) ProcessBridgeRequest(ctx context.Context, withdrawals []*goattyp
 		}
 
 		if withdrawal.Status != types.WITHDRAWAL_STATUS_PENDING {
+			k.Logger().Info("disregard cancellation request due to it's processing", "id", v.Id)
 			continue
 		}
 

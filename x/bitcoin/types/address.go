@@ -208,6 +208,10 @@ func DecodeBtcAddress(address string, netwk *chaincfg.Params) ([]byte, error) {
 		return nil, err
 	}
 
+	if !addr.IsForNet(netwk) {
+		return nil, fmt.Errorf("not a %s network address", netwk.Name)
+	}
+
 	// the deprecated address, it takes more fee than others
 	if _, ok := addr.(*btcutil.AddressPubKey); ok {
 		return nil, err
