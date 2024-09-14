@@ -35,10 +35,6 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 		panic(err)
 	}
 
-	if err := k.Relayer.Set(ctx, *genState.Relayer); err != nil {
-		panic(err)
-	}
-
 	keySet := make(map[string]bool)
 	for _, voter := range genState.Relayer.Voters {
 		if keySet[voter] {
@@ -57,6 +53,10 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 		if _, ok := genState.Voters[voter]; !ok {
 			panic(fmt.Sprintf("missing proposer %s in the voter state", genState.Relayer.Proposer))
 		}
+	}
+
+	if err := k.Relayer.Set(ctx, *genState.Relayer); err != nil {
+		panic(err)
 	}
 
 	if err := k.Sequence.Set(ctx, genState.Sequence); err != nil {
@@ -98,6 +98,10 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 			queue.OnBoarding = append(queue.OnBoarding, addr)
 		case types.VOTER_STATUS_OFF_BOARDING:
 			queue.OffBoarding = append(queue.OnBoarding, addr)
+		}
+
+		if err := k.Voters.Set(ctx, addr, *v); err != nil {
+			panic(err)
 		}
 	}
 
