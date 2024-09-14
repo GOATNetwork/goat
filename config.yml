@@ -5,3 +5,5 @@ accounts:
 client:
   openapi:
     path: docs/static/openapi.yml
+build:
+  main: cmd/goatd
