@@ -13,22 +13,24 @@ func VerifyMerkelProof(txid, root, proof []byte, index uint32) bool {
 	}
 
 	var buf []byte
-	if len(proof) > 0 {
-		buf = make([]byte, 64)
+
+	nodes := len(proof) / sha256.Size
+	if nodes > 0 {
+		buf = make([]byte, sha256.Size*2)
 	}
 
 	current := txid
-	for i := 0; i < len(proof)/sha256.Size; i++ {
+	for i := 0; i < nodes; i++ {
 		start := i * sha256.Size
 		end := start + sha256.Size
 		next := proof[start:end]
 		if index&1 == 0 {
-			copy(buf[:32], current)
-			copy(buf[32:], next)
+			copy(buf[:sha256.Size], current)
+			copy(buf[sha256.Size:], next)
 			current = goatcrypto.DoubleSHA256Sum(buf)
 		} else {
-			copy(buf[:32], next)
-			copy(buf[32:], current)
+			copy(buf[:sha256.Size], next)
+			copy(buf[sha256.Size:], current)
 			current = goatcrypto.DoubleSHA256Sum(buf)
 		}
 		index >>= 1

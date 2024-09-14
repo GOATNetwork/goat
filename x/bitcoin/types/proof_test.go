@@ -42,6 +42,16 @@ func TestVerifyMerkelProof(t *testing.T) {
 			want: true,
 		},
 		{
+			name: "false",
+			args: args{
+				txid:  "6593c3e2836908ffbe9fa27238629dcf609baeef1c9a3521c1522aa56c163b37",
+				root:  common.Hex2Bytes("00"),
+				proof: nil,
+				index: 0,
+			},
+			want: false,
+		},
+		{
 			name: "height-101-0",
 			args: args{
 				txid:  "fed5dbea421b4c341a2abb94d90ad02a429fd012268c3b8fdd5d03433a8a189d",
@@ -113,6 +123,7 @@ func TestVerifyMerkelProof(t *testing.T) {
 		},
 	}
 
+	t.Parallel()
 	for idx, tt := range tests {
 		idx, tt := idx, tt
 		t.Run(tt.name, func(t *testing.T) {
