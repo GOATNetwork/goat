@@ -52,7 +52,7 @@ require (
 replace (
 	// github.com/cosmos/cosmos-sdk => ../goat-cosmos-sdk
 	// goat-geth implemention
-	github.com/ethereum/go-ethereum => github.com/goatnetwork/goat-geth v0.0.0-20240913013422-3aa3340870f8
+	github.com/ethereum/go-ethereum => github.com/goatnetwork/goat-geth v0.0.0-20240914112244-3d542424e758
 	// fix upstream GHSA-h395-qcrw-5vmq vulnerability.
 	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.7.0
 	// replace broken goleveldb
