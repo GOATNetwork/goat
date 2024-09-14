@@ -109,16 +109,17 @@ func Relayer() *cobra.Command {
 
 				if genesis.Relayer == nil {
 					genesis.Relayer = &types.Relayer{
+						Proposer:         addr,
 						LastElected:      time.Now().UTC(),
 						ProposerAccepted: true,
 					}
+				} else {
+					voters := append(genesis.Relayer.Voters, addr)
+					voters = append(voters, genesis.Relayer.Proposer)
+					slices.Sort(voters)
+					genesis.Relayer.Proposer = voters[0]
+					genesis.Relayer.Voters = voters[1:]
 				}
-
-				genesis.Relayer.Voters = append(genesis.Relayer.Voters, addr)
-				slices.Sort(genesis.Relayer.Voters)
-
-				genesis.Relayer.Proposer = genesis.Relayer.Voters[0]
-				genesis.Relayer.Voters = genesis.Relayer.Voters[1:]
 
 				genesis.Voters[addr] = &types.Voter{VoteKey: voteKey, Status: types.VOTER_STATUS_ACTIVATED}
 				return genesis.Validate()
