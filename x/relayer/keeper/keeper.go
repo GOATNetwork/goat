@@ -341,7 +341,7 @@ func (k Keeper) GetCurrentProposer(ctx context.Context) (sdktypes.AccAddress, er
 	return k.AddrCodec.StringToBytes(relayer.Proposer)
 }
 
-func (k Keeper) ProcessRelayerRequest(ctx context.Context, adds []*goattypes.AddVoterReq, rms []*goattypes.RemoveVoterReq) (sdktypes.Events, error) {
+func (k Keeper) ProcessRelayerRequest(ctx context.Context, adds []*goattypes.AddVoterReq, rms []*goattypes.RemoveVoterReq) error {
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
 	events := make(sdktypes.Events, 0, len(adds)+len(rms))
 
@@ -349,11 +349,11 @@ func (k Keeper) ProcessRelayerRequest(ctx context.Context, adds []*goattypes.Add
 	for _, add := range adds {
 		addr, err := k.AddrCodec.BytesToString(add.Voter)
 		if err != nil {
-			return nil, err
+			return err
 		}
 		exists, err := k.Voters.Has(sdkctx, addr)
 		if err != nil {
-			return nil, err
+			return err
 		}
 		if exists {
 			continue
@@ -363,32 +363,33 @@ func (k Keeper) ProcessRelayerRequest(ctx context.Context, adds []*goattypes.Add
 			Height:  height,
 			Status:  types.VOTER_STATUS_PENDING,
 		}); err != nil {
-			return nil, err
+			return err
 		}
 		k.Logger().Info("New on-boarding voter", "voter", addr)
 		events = append(events, types.PendingVoterEvent(addr))
 	}
 
 	if len(rms) == 0 {
-		return events, nil
+		sdkctx.EventManager().EmitEvents(events)
+		return nil
 	}
 
 	queue, err := k.Queue.Get(sdkctx)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	// get current voter count in the active set
 	relayer, err := k.Relayer.Get(ctx)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	active := len(relayer.Voters) + 1 - len(queue.OffBoarding)
 	for _, rm := range rms {
 		addr, err := k.AddrCodec.BytesToString(rm.Voter)
 		if err != nil {
-			return nil, err
+			return err
 		}
 
 		voter, err := k.Voters.Get(sdkctx, addr)
@@ -396,7 +397,7 @@ func (k Keeper) ProcessRelayerRequest(ctx context.Context, adds []*goattypes.Add
 			if errors.Is(err, collections.ErrNotFound) {
 				continue
 			}
-			return nil, err
+			return err
 		}
 
 		if voter.Status != types.VOTER_STATUS_ACTIVATED {
@@ -412,7 +413,7 @@ func (k Keeper) ProcessRelayerRequest(ctx context.Context, adds []*goattypes.Add
 		k.Logger().Info("New off-boarding voter", "voter", addr)
 		voter.Status = types.VOTER_STATUS_OFF_BOARDING
 		if err := k.Voters.Set(sdkctx, addr, voter); err != nil {
-			return nil, err
+			return err
 		}
 
 		events = append(events, types.RemovingVoterEvent(addr))
@@ -420,8 +421,9 @@ func (k Keeper) ProcessRelayerRequest(ctx context.Context, adds []*goattypes.Add
 	}
 
 	if err := k.Queue.Set(sdkctx, queue); err != nil {
-		return nil, err
+		return err
 	}
 
-	return events, nil
+	sdkctx.EventManager().EmitEvents(events)
+	return nil
 }

@@ -74,13 +74,11 @@ func (k msgServer) NewEthBlock(ctx context.Context, req *types.MsgNewEthBlock) (
 		return nil, err
 	}
 
-	event1, err := k.bitcoinKeeper.ProcessBridgeRequest(sdkctx, payload.WithdrawalReq, payload.RbfReq, payload.Cancel1Req)
-	if err != nil {
+	if err := k.bitcoinKeeper.ProcessBridgeRequest(sdkctx, payload.WithdrawalReq, payload.RbfReq, payload.Cancel1Req); err != nil {
 		return nil, err
 	}
 
-	event2, err := k.relayerKeeper.ProcessRelayerRequest(sdkctx, payload.AddVoterReq, payload.RmVoterReq)
-	if err != nil {
+	if err := k.relayerKeeper.ProcessRelayerRequest(sdkctx, payload.AddVoterReq, payload.RmVoterReq); err != nil {
 		return nil, err
 	}
 
@@ -89,7 +87,6 @@ func (k msgServer) NewEthBlock(ctx context.Context, req *types.MsgNewEthBlock) (
 		return nil, err
 	}
 
-	events := append(event1, event2...)
-	sdkctx.EventManager().EmitEvents(append(events, types.NewEthBlockEvent(req.Payload.BlockNumber, req.Payload.BlockHash)))
+	sdkctx.EventManager().EmitEvent(types.NewEthBlockEvent(req.Payload.BlockNumber, req.Payload.BlockHash))
 	return &types.MsgNewEthBlockResponse{}, nil
 }

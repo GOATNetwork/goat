@@ -125,7 +125,7 @@ func VerifyDespositScriptV0(pubkey *relayer.PublicKey, evmAddress, txout []byte)
 		}
 		witnessProg := goatcrypto.SHA256Sum(script)
 		if !bytes.Equal(witnessProg, txout[2:]) {
-			return errors.New("p2sh script mismatched")
+			return errors.New("p2wsh script mismatched")
 		}
 		return nil
 	case *relayer.PublicKey_Schnorr:
@@ -199,4 +199,24 @@ func DecodeEthAddress(address string) ([]byte, error) {
 		return nil, errors.New("invalid address length")
 	}
 	return data, nil
+}
+
+// DecodeBtcAddress verifies if the address is valid and returns its payment script for later verification
+func DecodeBtcAddress(address string, netwk *chaincfg.Params) ([]byte, error) {
+	addr, err := btcutil.DecodeAddress(address, netwk)
+	if err != nil {
+		return nil, err
+	}
+
+	// the deprecated address, it takes more fee than others
+	if _, ok := addr.(*btcutil.AddressPubKey); ok {
+		return nil, err
+	}
+
+	script, err := txscript.PayToAddrScript(addr)
+	if err != nil {
+		return nil, err
+	}
+
+	return script, nil
 }

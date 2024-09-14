@@ -9,8 +9,6 @@ import (
 	"cosmossdk.io/core/address"
 	"cosmossdk.io/core/store"
 	"cosmossdk.io/log"
-	"github.com/btcsuite/btcd/btcutil"
-	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcd/wire"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
@@ -283,43 +281,29 @@ func (k Keeper) DequeueBitcoinModuleTx(ctx context.Context) (txs []*ethtypes.Tra
 	return txs, nil
 }
 
-func (k Keeper) ProcessBridgeRequest(ctx context.Context, withdrawals []*goattypes.WithdrawalReq, rbf []*goattypes.ReplaceByFeeReq, cancel1 []*goattypes.Cancel1Req) (sdktypes.Events, error) {
+func (k Keeper) ProcessBridgeRequest(ctx context.Context, withdrawals []*goattypes.WithdrawalReq, rbf []*goattypes.ReplaceByFeeReq, cancel1 []*goattypes.Cancel1Req) error {
 	reqLens := len(withdrawals) + len(rbf) + len(cancel1)
 	if reqLens == 0 {
-		return nil, nil
+		return nil
 	}
 
 	param, err := k.Params.Get(ctx)
 	if err != nil {
-		return nil, err
+		return err
 	}
-
-	chaincfg := param.ChainConfig.ToBtcdParam()
-
-	queue, err := k.ExecuableQueue.Get(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	var rejecting bool
 
 	events := make(sdktypes.Events, 0, reqLens)
+
+	netwk := param.ChainConfig.ToBtcdParam()
+	var rejecting []uint64
+
 	for _, v := range withdrawals {
 		// reject if we have an invalid address
-		addr, err := btcutil.DecodeAddress(v.Address, chaincfg)
+		script, err := types.DecodeBtcAddress(v.Address, netwk)
 		if err != nil {
-			queue.RejectedWithdrawals = append(queue.RejectedWithdrawals, v.Id)
-			rejecting = true
+			rejecting = append(rejecting, v.Id)
 			continue
 		}
-
-		script, err := txscript.PayToAddrScript(addr)
-		if err != nil {
-			queue.RejectedWithdrawals = append(queue.RejectedWithdrawals, v.Id)
-			rejecting = true
-			continue
-		}
-
 		if err := k.Withdrawals.Set(ctx, v.Id, types.Withdrawal{
 			Address:       v.Address,
 			RequestAmount: v.Amount,
@@ -327,28 +311,33 @@ func (k Keeper) ProcessBridgeRequest(ctx context.Context, withdrawals []*goattyp
 			OutputScript:  script,
 			Status:        types.WITHDRAWAL_STATUS_PENDING,
 		}); err != nil {
-			return nil, err
+			return err
 		}
 		events = append(events, types.NewWithdrawalRequestEvent(v.Address, v.Id, v.MaxTxPrice, v.Amount))
 	}
 
-	if rejecting {
+	if len(rejecting) > 0 {
+		queue, err := k.ExecuableQueue.Get(ctx)
+		if err != nil {
+			return err
+		}
+		queue.RejectedWithdrawals = append(queue.RejectedWithdrawals, rejecting...)
 		if err := k.ExecuableQueue.Set(ctx, queue); err != nil {
-			return nil, err
+			return err
 		}
 	}
 
 	for _, v := range rbf {
 		withdrawal, err := k.Withdrawals.Get(ctx, v.Id)
 		if err != nil {
-			return nil, err
+			return err
 		}
 		if withdrawal.Status != types.WITHDRAWAL_STATUS_PENDING {
 			continue
 		}
 		withdrawal.MaxTxPrice = v.MaxTxPrice
 		if err := k.Withdrawals.Set(ctx, v.Id, withdrawal); err != nil {
-			return nil, err
+			return err
 		}
 		events = append(events, types.NewWithdrawalReplaceEvent(v.Id, v.MaxTxPrice))
 	}
@@ -356,7 +345,7 @@ func (k Keeper) ProcessBridgeRequest(ctx context.Context, withdrawals []*goattyp
 	for _, v := range cancel1 {
 		withdrawal, err := k.Withdrawals.Get(ctx, v.Id)
 		if err != nil {
-			return nil, err
+			return err
 		}
 
 		if withdrawal.Status != types.WITHDRAWAL_STATUS_PENDING {
@@ -365,9 +354,11 @@ func (k Keeper) ProcessBridgeRequest(ctx context.Context, withdrawals []*goattyp
 
 		withdrawal.Status = types.WITHDRAWAL_STATUS_CANCELING
 		if err := k.Withdrawals.Set(ctx, v.Id, withdrawal); err != nil {
-			return nil, err
+			return err
 		}
 		events = append(events, types.NewWithdrawalCancellationEvent(v.Id))
 	}
-	return events, nil
+
+	sdktypes.UnwrapSDKContext(ctx).EventManager().EmitEvents(events)
+	return nil
 }
