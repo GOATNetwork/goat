@@ -73,13 +73,13 @@ func (q queryServer) Voters(ctx context.Context, req *types.QueryVotersRequest) 
 	}
 	defer iter.Close()
 
-	var res types.QueryVotersResponse
+	res := types.QueryVotersResponse{Voters: make(map[string]*types.Voter)}
 	for ; iter.Valid(); iter.Next() {
-		kv, err := iter.Value()
+		kv, err := iter.KeyValue()
 		if err != nil {
 			return nil, err
 		}
-		res.Voters = append(res.Voters, &kv)
+		res.Voters[kv.Key] = &kv.Value
 	}
 	return &res, nil
 }

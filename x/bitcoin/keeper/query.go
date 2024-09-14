@@ -136,3 +136,17 @@ func (q queryServer) Withdrawal(ctx context.Context, req *types.QueryWithdrawalR
 
 	return &types.QueryWithdrawalResponse{Withdrawal: &withdrawal}, nil
 }
+
+func (q queryServer) BlockTip(ctx context.Context, req *types.QueryBlockTipRequest) (*types.QueryBlockTipResponse, error) {
+	height, err := q.k.BlockTip.Peek(ctx)
+	if err != nil {
+		return nil, status.Error(codes.Internal, "internal error")
+	}
+
+	hash, err := q.k.BlockHashes.Get(ctx, height)
+	if err != nil {
+		return nil, status.Error(codes.Internal, "internal error")
+	}
+
+	return &types.QueryBlockTipResponse{Height: height, Hash: types.BtcTxid(hash)}, nil
+}

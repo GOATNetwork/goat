@@ -36,6 +36,11 @@ service Query {
   rpc Withdrawal(QueryWithdrawalRequest) returns (QueryWithdrawalResponse) {
     option (google.api.http).get = "/goatnetwork/goat/bitcoin/v1/withdrawal";
   }
+
+  // BlockTip queries current the latest confirmed bitcoin height by relayer
+  rpc BlockTip(QueryBlockTipRequest) returns (QueryBlockTipResponse) {
+    option (google.api.http).get = "/goatnetwork/goat/bitcoin/v1/blockTip";
+  }
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -95,4 +100,13 @@ message QueryWithdrawalRequest {
 // QueryWithdrawalResponse
 message QueryWithdrawalResponse {
   Withdrawal withdrawal = 1;
+}
+
+// QueryBlockTipRequest
+message QueryBlockTipRequest {}
+
+// QueryBlockTipResponse
+message QueryBlockTipResponse {
+  uint64 height = 1;
+  string hash = 2;
 }
