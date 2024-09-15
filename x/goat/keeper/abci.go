@@ -139,7 +139,8 @@ func (k Keeper) createEthBlockProposal(sdkctx sdk.Context, keyProvider cryptotyp
 		return nil, errors.New("got nil payloadId")
 	}
 
-	<-time.After(time.Millisecond * 100)
+	// Note: the waiting duration is for the payload building starting instead of finishing
+	<-time.After(time.Millisecond * 50)
 	envelope, err := k.ethclient.GetPayloadV3(tmctx, *forkChoiceResp.PayloadID)
 	if err != nil {
 		return nil, err
