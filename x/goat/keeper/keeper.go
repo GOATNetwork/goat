@@ -94,11 +94,13 @@ func (k Keeper) Dequeue(ctx context.Context) ([]hexutil.Bytes, error) {
 	if err != nil {
 		return nil, err
 	}
+	k.Logger().Debug("dequeue bitcoin module txs", "len", len(btcTxs))
 
 	lockingTxs, err := k.lockingKeeper.DequeueLockingModuleTx(ctx)
 	if err != nil {
 		return nil, err
 	}
+	k.Logger().Debug("dequeue locking module txs", "len", len(lockingTxs))
 
 	res := make([]hexutil.Bytes, 0, len(btcTxs)+len(lockingTxs))
 	for _, tx := range btcTxs {
@@ -136,9 +138,10 @@ func (k Keeper) VerifyDequeue(ctx context.Context, txRoot []byte, txs [][]byte) 
 	if err != nil {
 		return err
 	}
+	k.Logger().Debug("verifying dequeue bitcoin module txs", "len", len(btcTxs))
 
 	if len(txs) < len(btcTxs) {
-		return errors.New("bridge txs length mismatched")
+		return fmt.Errorf("bitcoin module txs length mismatched: len(txs)=%d len(mod)=%d", len(txs), len(btcTxs))
 	}
 
 	for idx, tx := range btcTxs {
@@ -147,7 +150,7 @@ func (k Keeper) VerifyDequeue(ctx context.Context, txRoot []byte, txs [][]byte) 
 			return err
 		}
 		if !bytes.Equal(raw, txs[idx]) {
-			return errors.New("bridge tx bytes mismatched")
+			return fmt.Errorf("bridge tx %d bytes mismatched", idx)
 		}
 		goatTxLen--
 	}
@@ -157,9 +160,10 @@ func (k Keeper) VerifyDequeue(ctx context.Context, txRoot []byte, txs [][]byte) 
 		return err
 	}
 
+	k.Logger().Debug("verifing dequeue locking module txs", "len", len(lockingTxs))
 	txs = txs[len(btcTxs):]
 	if len(txs) < len(lockingTxs) {
-		return errors.New("locking txs length mismatched")
+		return fmt.Errorf("locking module txs length mismatched: len(txs)=%d len(mod)=%d", len(txs), len(lockingTxs))
 	}
 
 	for idx, tx := range lockingTxs {
@@ -168,7 +172,7 @@ func (k Keeper) VerifyDequeue(ctx context.Context, txRoot []byte, txs [][]byte) 
 			return err
 		}
 		if !bytes.Equal(raw, txs[idx]) {
-			return errors.New("locking tx bytes mismatched")
+			return fmt.Errorf("locking tx %d bytes mismatched", idx)
 		}
 		goatTxLen--
 	}
