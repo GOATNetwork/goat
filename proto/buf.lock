@@ -19,18 +19,23 @@ deps:
   - remote: buf.build
     owner: cosmos
     repository: ics23
-    commit: a9ee7c290ef34ee69d3f141b9b44dcee
-    digest: shake256:255dbee3e92a370723bf4d72b34868b18e7570543f30f79c0c8c10a5a332d230175e0c29cb7ebcb8020706312e3cd37c23974df0bacfb60a4afb968fee4c1afc
+    commit: d2ad30d1af0e4e978fa1f5c143acf63b
+    digest: shake256:000ea62514f7d507c96905d70ef11d16b8f8f32fda5a75def40d4130058af0174142ed3cd6c4a89c5fdb3cbf138277d771d86eeb6992f054d13a82556a2ff079
   - remote: buf.build
     owner: googleapis
     repository: googleapis
-    commit: 8bc2c51e08c447cd8886cdea48a73e14
-    digest: shake256:a969155953a5cedc5b2df5b42c368f2bc66ff8ce1804bc96e0f14ff2ee8a893687963058909df844d1643cdbc98ff099d2daa6bc9f9f5b8886c49afdc60e19af
+    commit: e7f8d366f5264595bcc4cd4139af9973
+    digest: shake256:e5e5f1c12f82e028ea696faa43b4f9dc6258a6d1226282962a8c8b282e10946281d815884f574bd279ebd9cd7588629beb3db17b892af6c33b56f92f8f67f509
+  - remote: buf.build
+    owner: grpc-ecosystem
+    repository: grpc-gateway
+    commit: a48fcebcf8f140dd9d09359b9bb185a4
+    digest: shake256:a926173f0ec3e1a929462c350acda846e546134b5ce2bb83fe44f02f9330a42b1c9b292f64b951b06a4d2c47e2ce4d477d6a2cb31502a15637ada35ecedefcf6
   - remote: buf.build
     owner: protocolbuffers
     repository: wellknowntypes
-    commit: ee20af7d5b6044139bb9051283720274
-    digest: shake256:030e02269b2b3c080f716a133798cdaf2ca847192c63303cae27e996a26a0e433d0845c14063023ef98bf5750d0884987bc07b8babe903163d07ecbc3a30adb7
+    commit: d59b7d45e69d4e129a1b797e2766f067
+    digest: shake256:e4bb315f5a90aace88fe39709c831eda8eb0ce66b4cf947065888100b9867c2eb9a0f61f6b8d73c51b1fcccdfe8611090f55ce5db1aee6901ec9b4e6d8fa8e52
   - remote: buf.build
     owner: tendermint
     repository: tendermint

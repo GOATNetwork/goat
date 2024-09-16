@@ -1,0 +1,35 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Chain github.com/goatnetwork/goat REST API",
+    "title": "HTTP API Console",
+    "contact": { "name": "github.com/goatnetwork/goat" },
+    "version": "0.0.1"
+  },
+  "apis": [
+    {
+      "url": "./tmp-swagger-gen/goat/bitcoin/v1/query.swagger.json",
+      "operationIds": {
+        "rename": {
+          "Params": "BitcoinParams"
+        }
+      }
+    },
+    {
+      "url": "./tmp-swagger-gen/goat/goat/v1/query.swagger.json",
+      "operationIds": {
+        "rename": {
+          "Params": "GoatParams"
+        }
+      }
+    },
+    {
+      "url": "./tmp-swagger-gen/goat/relayer/v1/query.swagger.json",
+      "operationIds": {
+        "rename": {
+          "Params": "RelayerParams"
+        }
+      }
+    }
+  ]
+}

@@ -29,13 +29,15 @@ enum VoterStatus {
   // VOTER_STATUS_UNSPECIFIED defines an invalid status.
   VOTER_STATUS_UNSPECIFIED = 0;
   // VOTER_STATUS_PENDING defines a pending voter which was added on the chain
-  // he still needs to send online proof to proposer to prove readiness and ownership of public keys
+  // he still needs to send online proof to proposer to prove readiness and
+  // ownership of public keys
   VOTER_STATUS_PENDING = 1;
-  // VOTER_STATUS_ON_BOARDING defines a voter that is approved from current proposer
-  // the voter will be added to voter list in the next election
+  // VOTER_STATUS_ON_BOARDING defines a voter that is approved from current
+  // proposer the voter will be added to voter list in the next election
   VOTER_STATUS_ON_BOARDING = 2;
-  // VOTER_STATUS_OFF_BOARDING defines a voter that is removing from relayer group
-  // the voter will be removed from **chain state db** in the next election
+  // VOTER_STATUS_OFF_BOARDING defines a voter that is removing from relayer
+  // group the voter will be removed from **chain state db** in the next
+  // election
   VOTER_STATUS_OFF_BOARDING = 3;
   // VOTER_STATUS_ACTIVATED defines a voter that is working.
   VOTER_STATUS_ACTIVATED = 4;
@@ -46,11 +48,13 @@ enum VoterStatus {
 // Voter the relayer voter
 message Voter {
   // vote key is the bls12-381 G2 compressed pubkey(96 bytes)
-  // the key is a sha256 hash if the voter is pending to join the relayer network
+  // the key is a sha256 hash if the voter is pending to join the relayer
+  // network
   bytes vote_key = 1;
   // status represents the current voter status
   VoterStatus status = 2;
-  // height represents the block number of conensus layer when voter is approved to join on execution layer
+  // height represents the block number of conensus layer when voter is approved
+  // to join on execution layer
   uint64 height = 3;
 }
 

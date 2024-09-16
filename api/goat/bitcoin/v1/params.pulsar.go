@@ -1270,8 +1270,9 @@ type Params struct {
 	unknownFields protoimpl.UnknownFields
 
 	ChainConfig *ChainConfig `protobuf:"bytes,1,opt,name=chain_config,json=chainConfig,proto3" json:"chain_config,omitempty"`
-	// A block has the confirmation number should be considered as a finalized block, and it's very hard to be rollbacked
-	// Using 6 is recommended for the bitcoin mainnet and you can use 1 on the regtest/devnet
+	// A block has the confirmation number should be considered as a finalized
+	// block, and it's very hard to be rollbacked Using 6 is recommended for the
+	// bitcoin mainnet and you can use 1 on the regtest/devnet
 	ConfirmationNumber uint32 `protobuf:"varint,2,opt,name=confirmation_number,json=confirmationNumber,proto3" json:"confirmation_number,omitempty"`
 	MinDepositAmount   uint64 `protobuf:"varint,3,opt,name=min_deposit_amount,json=minDepositAmount,proto3" json:"min_deposit_amount,omitempty"`
 	DepositMagicPrefix []byte `protobuf:"bytes,4,opt,name=deposit_magic_prefix,json=depositMagicPrefix,proto3" json:"deposit_magic_prefix,omitempty"`

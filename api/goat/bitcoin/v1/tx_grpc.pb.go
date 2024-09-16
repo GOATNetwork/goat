@@ -32,10 +32,13 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MsgClient interface {
 	// NewBlockHashs adds new bitcoin block hashes
-	// the block hashes are not only for deposit/withdrawal spv, but also a on-chain oracle for dapps
+	// the block hashes are not only for deposit/withdrawal spv, but also a
+	// on-chain oracle for dapps
 	// ** it requires off-chain vote by relayer group
-	// ** the block should have a hard confirmation number which incosistent with the param.
-	// ** every block after startBlockNumber in the geneis should be submitted on chain
+	// ** the block should have a hard confirmation number which incosistent with
+	// the param.
+	// ** every block after startBlockNumber in the geneis should be submitted on
+	// chain
 	NewBlockHashes(ctx context.Context, in *MsgNewBlockHashes, opts ...grpc.CallOption) (*MsgNewBlockHashesResponse, error)
 	// NewDeposit adds new deposits
 	// ** it doesn't need off-chain vote process since we have spv
@@ -43,18 +46,20 @@ type MsgClient interface {
 	// NewPubkey adds new deposit public key
 	// ** it requires off-chain vote by relayer group
 	NewPubkey(ctx context.Context, in *MsgNewPubkey, opts ...grpc.CallOption) (*MsgNewPubkeyResponse, error)
-	// InitializeWithdrawal submits a non-signed raw tx and its vote for the withdrawal requests
-	// This is the first step to process withdrawals
+	// InitializeWithdrawal submits a non-signed raw tx and its vote for the
+	// withdrawal requests This is the first step to process withdrawals
 	// ** it requires off-chain vote by relayer group
 	// ** the output index and withdrawal id list are in one-to-one correspondence
 	// ** the tx price should not be larger than withdrawal request
 	//
-	// It informs every voter that the proposal has been approved and they can process signing then.
-	// The most relayer member can construct the final signed transaction and submit the transaction to the bitcoin chain when the signing process is finished
-	// Since the signing is an off chain process, so relayer proposer doesn't need to submit the signed transaction to the chain
+	// It informs every voter that the proposal has been approved and they can
+	// process signing then. The most relayer member can construct the final
+	// signed transaction and submit the transaction to the bitcoin chain when the
+	// signing process is finished Since the signing is an off chain process, so
+	// relayer proposer doesn't need to submit the signed transaction to the chain
 	InitializeWithdrawal(ctx context.Context, in *MsgInitializeWithdrawal, opts ...grpc.CallOption) (*MsgInitializeWithdrawalResponse, error)
-	// FinalizeWithdrawal finlizes withdrawals and informs the chain to create the withdrawal receipts
-	// This is the final step to process withdrawals
+	// FinalizeWithdrawal finlizes withdrawals and informs the chain to create the
+	// withdrawal receipts This is the final step to process withdrawals
 	//
 	// ** proposer should provide spv to prove the withdarwal is confirmed
 	// ** it doesn't need off-chain vote process
@@ -130,10 +135,13 @@ func (c *msgClient) ApproveCancellation(ctx context.Context, in *MsgApproveCance
 // for forward compatibility
 type MsgServer interface {
 	// NewBlockHashs adds new bitcoin block hashes
-	// the block hashes are not only for deposit/withdrawal spv, but also a on-chain oracle for dapps
+	// the block hashes are not only for deposit/withdrawal spv, but also a
+	// on-chain oracle for dapps
 	// ** it requires off-chain vote by relayer group
-	// ** the block should have a hard confirmation number which incosistent with the param.
-	// ** every block after startBlockNumber in the geneis should be submitted on chain
+	// ** the block should have a hard confirmation number which incosistent with
+	// the param.
+	// ** every block after startBlockNumber in the geneis should be submitted on
+	// chain
 	NewBlockHashes(context.Context, *MsgNewBlockHashes) (*MsgNewBlockHashesResponse, error)
 	// NewDeposit adds new deposits
 	// ** it doesn't need off-chain vote process since we have spv
@@ -141,18 +149,20 @@ type MsgServer interface {
 	// NewPubkey adds new deposit public key
 	// ** it requires off-chain vote by relayer group
 	NewPubkey(context.Context, *MsgNewPubkey) (*MsgNewPubkeyResponse, error)
-	// InitializeWithdrawal submits a non-signed raw tx and its vote for the withdrawal requests
-	// This is the first step to process withdrawals
+	// InitializeWithdrawal submits a non-signed raw tx and its vote for the
+	// withdrawal requests This is the first step to process withdrawals
 	// ** it requires off-chain vote by relayer group
 	// ** the output index and withdrawal id list are in one-to-one correspondence
 	// ** the tx price should not be larger than withdrawal request
 	//
-	// It informs every voter that the proposal has been approved and they can process signing then.
-	// The most relayer member can construct the final signed transaction and submit the transaction to the bitcoin chain when the signing process is finished
-	// Since the signing is an off chain process, so relayer proposer doesn't need to submit the signed transaction to the chain
+	// It informs every voter that the proposal has been approved and they can
+	// process signing then. The most relayer member can construct the final
+	// signed transaction and submit the transaction to the bitcoin chain when the
+	// signing process is finished Since the signing is an off chain process, so
+	// relayer proposer doesn't need to submit the signed transaction to the chain
 	InitializeWithdrawal(context.Context, *MsgInitializeWithdrawal) (*MsgInitializeWithdrawalResponse, error)
-	// FinalizeWithdrawal finlizes withdrawals and informs the chain to create the withdrawal receipts
-	// This is the final step to process withdrawals
+	// FinalizeWithdrawal finlizes withdrawals and informs the chain to create the
+	// withdrawal receipts This is the final step to process withdrawals
 	//
 	// ** proposer should provide spv to prove the withdarwal is confirmed
 	// ** it doesn't need off-chain vote process

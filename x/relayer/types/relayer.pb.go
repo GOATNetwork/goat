@@ -36,13 +36,15 @@ const (
 	// VOTER_STATUS_UNSPECIFIED defines an invalid status.
 	VOTER_STATUS_UNSPECIFIED VoterStatus = 0
 	// VOTER_STATUS_PENDING defines a pending voter which was added on the chain
-	// he still needs to send online proof to proposer to prove readiness and ownership of public keys
+	// he still needs to send online proof to proposer to prove readiness and
+	// ownership of public keys
 	VOTER_STATUS_PENDING VoterStatus = 1
-	// VOTER_STATUS_ON_BOARDING defines a voter that is approved from current proposer
-	// the voter will be added to voter list in the next election
+	// VOTER_STATUS_ON_BOARDING defines a voter that is approved from current
+	// proposer the voter will be added to voter list in the next election
 	VOTER_STATUS_ON_BOARDING VoterStatus = 2
-	// VOTER_STATUS_OFF_BOARDING defines a voter that is removing from relayer group
-	// the voter will be removed from **chain state db** in the next election
+	// VOTER_STATUS_OFF_BOARDING defines a voter that is removing from relayer
+	// group the voter will be removed from **chain state db** in the next
+	// election
 	VOTER_STATUS_OFF_BOARDING VoterStatus = 3
 	// VOTER_STATUS_ACTIVATED defines a voter that is working.
 	VOTER_STATUS_ACTIVATED VoterStatus = 4
@@ -154,11 +156,13 @@ func (m *Relayer) GetProposerAccepted() bool {
 // Voter the relayer voter
 type Voter struct {
 	// vote key is the bls12-381 G2 compressed pubkey(96 bytes)
-	// the key is a sha256 hash if the voter is pending to join the relayer network
+	// the key is a sha256 hash if the voter is pending to join the relayer
+	// network
 	VoteKey []byte `protobuf:"bytes,1,opt,name=vote_key,json=voteKey,proto3" json:"vote_key,omitempty"`
 	// status represents the current voter status
 	Status VoterStatus `protobuf:"varint,2,opt,name=status,proto3,enum=goat.relayer.v1.VoterStatus" json:"status,omitempty"`
-	// height represents the block number of conensus layer when voter is approved to join on execution layer
+	// height represents the block number of conensus layer when voter is approved
+	// to join on execution layer
 	Height uint64 `protobuf:"varint,3,opt,name=height,proto3" json:"height,omitempty"`
 }
 

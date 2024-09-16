@@ -82,7 +82,8 @@ type Deposit struct {
 	IntermediateProof []byte `protobuf:"bytes,6,opt,name=intermediate_proof,json=intermediateProof,proto3" json:"intermediate_proof,omitempty"`
 	// evm_address is the user wallet address in goat evm
 	EvmAddress []byte `protobuf:"bytes,7,opt,name=evm_address,json=evmAddress,proto3" json:"evm_address,omitempty"`
-	// relayer_pubkey is the compressed secp256k1 public key which managed by the relayer group
+	// relayer_pubkey is the compressed secp256k1 public key which managed by the
+	// relayer group
 	RelayerPubkey *types.PublicKey `protobuf:"bytes,8,opt,name=relayer_pubkey,json=relayerPubkey,proto3" json:"relayer_pubkey,omitempty"`
 }
 

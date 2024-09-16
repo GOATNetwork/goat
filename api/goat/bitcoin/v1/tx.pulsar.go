@@ -6157,7 +6157,8 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// MsgNewBlockHashes represents a solid block header is confirmed by relayer group
+// MsgNewBlockHashes represents a solid block header is confirmed by relayer
+// group
 type MsgNewBlockHashes struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -6253,7 +6254,9 @@ type MsgNewDeposits struct {
 	Proposer string `protobuf:"bytes,1,opt,name=proposer,proto3" json:"proposer,omitempty"`
 	// block_header is a height and raw header pair
 	// a raw block header is always 80 bytes
-	// refer to https://github.com/btcsuite/btcd/blob/master/wire/blockheader.go#L65 for the details
+	// refer to
+	// https://github.com/btcsuite/btcd/blob/master/wire/blockheader.go#L65 for
+	// the details
 	BlockHeaders map[uint64][]byte `protobuf:"bytes,2,rep,name=block_headers,json=blockHeaders,proto3" json:"block_headers,omitempty" protobuf_key:"varint,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	Deposits     []*Deposit        `protobuf:"bytes,3,rep,name=deposits,proto3" json:"deposits,omitempty"`
 }

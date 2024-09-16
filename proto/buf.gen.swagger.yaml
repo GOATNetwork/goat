@@ -5,11 +5,6 @@
 #
 version: v1
 plugins:
-  - name: openapiv2
-    out: .
-    opt:
-      - logtostderr=false
-      - openapi_naming_strategy=fqn
-      - json_names_for_fields=false
-      - generate_unbound_methods=false
-      - allow_merge=true
+  - name: swagger
+    out: ../tmp-swagger-gen
+    opt: logtostderr=true,fqn_for_swagger_name=true,simple_operation_ids=true

@@ -18,6 +18,7 @@ SDK_PACK := $(shell go list -m github.com/cosmos/cosmos-sdk | sed  's/ /\@/g')
 TM_VERSION := $(shell go list -m github.com/cometbft/cometbft | sed 's:.* ::') # grab everything after the space in "github.com/cometbft/cometbft v0.34.7"
 DOCKER := $(shell which docker)
 BUILDDIR ?= $(CURDIR)/build
+TEST_DOCKER_REPO=cosmos/contrib-goattest
 
 GO_SYSTEM_VERSION = $(shell go version | cut -c 14- | cut -d' ' -f1 | cut -d'.' -f1-2)
 REQUIRE_GO_VERSION = 1.22
@@ -90,6 +91,9 @@ endif
 
 #$(info $$BUILD_FLAGS is [$(BUILD_FLAGS)])
 
+# The below include contains the tools target.
+include contrib/devtools/Makefile
+
 ###############################################################################
 ###                              Build                                      ###
 ###############################################################################
@@ -107,10 +111,14 @@ BUILD_TARGETS := build install
 build: BUILD_ARGS=-o $(BUILDDIR)/
 
 $(BUILD_TARGETS): check_version go.sum $(BUILDDIR)/
-	go $@ -mod=readonly $(BUILD_FLAGS) $(BUILD_ARGS) ./cmd/...
+	go $@ -mod=readonly $(BUILD_FLAGS) $(BUILD_ARGS) ./...
 
 $(BUILDDIR)/:
 	mkdir -p $(BUILDDIR)/
+
+vulncheck: $(BUILDDIR)/
+	GOBIN=$(BUILDDIR) go install golang.org/x/vuln/cmd/govulncheck@latest
+	$(BUILDDIR)/govulncheck ./...
 
 build-linux: go.sum
 	LEDGER_ENABLED=false GOOS=linux GOARCH=amd64 $(MAKE) build
@@ -125,5 +133,76 @@ endif
 	@echo "--> Download go modules to local cache"
 	go mod download
 
+draw-deps:
+	@# requires brew install graphviz or apt-get install graphviz
+	go install github.com/RobotsAndPencils/goviz
+	@goviz -i ./cmd/goatd -d 2 | dot -Tpng -o dependency-graph.png
+
 clean:
-	rm -rf $(BUILDDIR)/
+	rm -rf $(BUILDDIR)/ artifacts/
+
+distclean: clean
+	rm -rf vendor/
+
+###############################################################################
+###                                Linting                                  ###
+###############################################################################
+golangci_lint_cmd=golangci-lint
+golangci_version=v1.53.3
+
+lint:
+	@echo "--> Running linter"
+	@go install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
+	@$(golangci_lint_cmd) run --timeout=10m
+
+lint-fix:
+	@echo "--> Running linter"
+	@go install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
+	@$(golangci_lint_cmd) run --fix --out-format=tab --issues-exit-code=0
+
+format:
+	@go install mvdan.cc/gofumpt@latest
+	@go install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
+	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" -not -path "./client/docs/statik/statik.go" -not -path "./tests/mocks/*" -not -name "*.pb.go" -not -name "*.pb.gw.go" -not -name "*.pulsar.go" -not -path "./crypto/keys/secp256k1/*" | xargs gofumpt -w -l
+	$(golangci_lint_cmd) run --fix
+.PHONY: format
+
+###############################################################################
+###                                Docker                                   ###
+###############################################################################
+
+.PHONY: all build-linux install format lint draw-deps clean build \
+	docker-build-debug docker-build-hermes docker-build-all
+
+
+###############################################################################
+###                                Protobuf                                 ###
+###############################################################################
+protoVer=0.13.0
+protoImageName=ghcr.io/cosmos/proto-builder:$(protoVer)
+protoImage=$(DOCKER) run --rm -v $(CURDIR):/workspace --workdir /workspace $(protoImageName)
+
+proto-all: proto-format proto-lint proto-gen
+
+proto-gen:
+	@echo "Generating Protobuf files"
+	ignite generate proto-go -y --clear-cache
+
+proto-swagger-gen:
+	@echo "Generating Protobuf Swagger"
+	@$(protoImage) sh ./contrib/scripts/protoc-swagger-gen.sh
+
+proto-format:
+	@$(protoImage) buf format -w;
+
+proto-lint:
+	@$(protoImage) buf lint --error-format=json
+
+proto-check-breaking:
+	@$(protoImage) buf breaking --against $(HTTPS_GIT)#branch=main
+
+proto-update-deps:
+	@echo "Updating Protobuf dependencies"
+	$(DOCKER) run --rm -v $(CURDIR)/proto:/workspace --workdir /workspace $(protoImageName) buf mod update
+
+.PHONY: proto-all proto-gen proto-swagger-gen proto-format proto-lint proto-check-breaking proto-update-deps

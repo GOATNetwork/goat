@@ -5421,7 +5421,8 @@ func (x *QueryDepositAddress) GetEvmAddress() string {
 	return ""
 }
 
-// QueryDepositAddressResponse is response type for the Query/DepositAddress RPC method
+// QueryDepositAddressResponse is response type for the Query/DepositAddress RPC
+// method
 type QueryDepositAddressResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

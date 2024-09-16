@@ -250,7 +250,8 @@ func (m *QueryDepositAddress) GetEvmAddress() string {
 	return ""
 }
 
-// QueryDepositAddressResponse is response type for the Query/DepositAddress RPC method
+// QueryDepositAddressResponse is response type for the Query/DepositAddress RPC
+// method
 type QueryDepositAddressResponse struct {
 	NetworkName    string           `protobuf:"bytes,1,opt,name=network_name,json=networkName,proto3" json:"network_name,omitempty"`
 	Address        string           `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`

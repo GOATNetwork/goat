@@ -20,7 +20,8 @@ message Deposit {
   bytes intermediate_proof = 6;
   // evm_address is the user wallet address in goat evm
   bytes evm_address = 7;
-  // relayer_pubkey is the compressed secp256k1 public key which managed by the relayer group
+  // relayer_pubkey is the compressed secp256k1 public key which managed by the
+  // relayer group
   goat.relayer.v1.PublicKey relayer_pubkey = 8;
 }
 
