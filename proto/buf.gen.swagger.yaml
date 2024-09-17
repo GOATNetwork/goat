@@ -1,10 +1,5 @@
-# This file is auto-generated from Ignite. You can edit
-# the file content but do not change the file name or path.
-#
-# buf.gen.swagger.yaml
-#
 version: v1
 plugins:
-  - name: swagger
+  - name: openapiv2
     out: ../tmp-swagger-gen
-    opt: logtostderr=true,fqn_for_swagger_name=true,simple_operation_ids=true
+    opt: logtostderr=true,fqn_for_openapi_name=true,simple_operation_ids=true,json_names_for_fields=false

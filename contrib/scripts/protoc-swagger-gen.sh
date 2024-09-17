@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 set -eo pipefail
+set -x
+
 mkdir -p ./tmp-swagger-gen
 cd proto
 proto_dirs=$(find ./ -path -prune -o -name '*.proto' -print0 | xargs -0 -n1 dirname | sort | uniq)
@@ -14,10 +16,14 @@ done
 
 cd ..
 
+OPENAPI_FILE=docs/static/swagger.json
+
 # combine swagger files
 # uses nodejs package `swagger-combine`.
 # all the individual swagger files need to be configured in `config.json` for merging
-swagger-combine proto/swagger.json -o ./docs/static/swagger.json -f json --continueOnConflictingPaths true --includeDefinitions true
+swagger-combine proto/swagger.json -o $OPENAPI_FILE -f json --continueOnConflictingPaths true --includeDefinitions true
 
 # clean swagger files
 rm -rf ./tmp-swagger-gen
+
+jq -c . $OPENAPI_FILE > swagger.tmp.json && mv swagger.tmp.json $OPENAPI_FILE

@@ -1,9 +1,0 @@
-version: 1
-validation: sovereign
-accounts:
-  - name: ignite
-client:
-  openapi:
-    path: docs/static/openapi.yml
-build:
-  main: cmd/goatd

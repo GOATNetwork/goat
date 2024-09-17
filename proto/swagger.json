@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "Chain github.com/goatnetwork/goat REST API",
+    "description": "GOAT NETWORK REST API",
     "title": "HTTP API Console",
     "contact": { "name": "github.com/goatnetwork/goat" },
     "version": "0.0.1"

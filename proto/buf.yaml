@@ -1,8 +1,3 @@
-# This file is auto-generated from Ignite. You can edit
-# the file content but do not change the file name or path.
-#
-# buf.yaml
-#
 version: v1
 deps:
   - buf.build/protocolbuffers/wellknowntypes
@@ -10,8 +5,8 @@ deps:
   - buf.build/cosmos/cosmos-proto
   - buf.build/cosmos/gogo-proto
   - buf.build/googleapis/googleapis
-  - buf.build/cosmos/ics23
-  - buf.build/grpc-ecosystem/grpc-gateway
+  # - buf.build/cosmos/ics23
+  # - buf.build/grpc-ecosystem/grpc-gateway
 breaking:
   use:
     - FILE

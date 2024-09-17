@@ -18,7 +18,6 @@ SDK_PACK := $(shell go list -m github.com/cosmos/cosmos-sdk | sed  's/ /\@/g')
 TM_VERSION := $(shell go list -m github.com/cometbft/cometbft | sed 's:.* ::') # grab everything after the space in "github.com/cometbft/cometbft v0.34.7"
 DOCKER := $(shell which docker)
 BUILDDIR ?= $(CURDIR)/build
-TEST_DOCKER_REPO=cosmos/contrib-goattest
 
 GO_SYSTEM_VERSION = $(shell go version | cut -c 14- | cut -d' ' -f1 | cut -d'.' -f1-2)
 REQUIRE_GO_VERSION = 1.22
@@ -148,7 +147,7 @@ distclean: clean
 ###                                Linting                                  ###
 ###############################################################################
 golangci_lint_cmd=golangci-lint
-golangci_version=v1.53.3
+golangci_version=v1.61.0
 
 lint:
 	@echo "--> Running linter"
@@ -178,7 +177,7 @@ format:
 ###############################################################################
 ###                                Protobuf                                 ###
 ###############################################################################
-protoVer=0.13.0
+protoVer=0.15.1
 protoImageName=ghcr.io/cosmos/proto-builder:$(protoVer)
 protoImage=$(DOCKER) run --rm -v $(CURDIR):/workspace --workdir /workspace $(protoImageName)
 
@@ -186,14 +185,16 @@ proto-all: proto-format proto-lint proto-gen
 
 proto-gen:
 	@echo "Generating Protobuf files"
-	ignite generate proto-go -y --clear-cache
+	# ignite generate proto-go -y --clear-cache
+	@$(protoImage) sh ./contrib/scripts/protocgen.sh
 
 proto-swagger-gen:
 	@echo "Generating Protobuf Swagger"
 	@$(protoImage) sh ./contrib/scripts/protoc-swagger-gen.sh
 
 proto-format:
-	@$(protoImage) buf format -w;
+	@$(protoImage) find ./ -name "*.proto" -exec clang-format -i {} \;
+	@$(protoImage) buf format -w
 
 proto-lint:
 	@$(protoImage) buf lint --error-format=json
@@ -203,6 +204,6 @@ proto-check-breaking:
 
 proto-update-deps:
 	@echo "Updating Protobuf dependencies"
-	$(DOCKER) run --rm -v $(CURDIR)/proto:/workspace --workdir /workspace $(protoImageName) buf mod update
+	$(DOCKER) run --rm -v $(CURDIR)/proto:/workspace --workdir /workspace $(protoImageName) buf dep update
 
 .PHONY: proto-all proto-gen proto-swagger-gen proto-format proto-lint proto-check-breaking proto-update-deps
