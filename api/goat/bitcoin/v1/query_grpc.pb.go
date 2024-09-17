@@ -41,7 +41,7 @@ type QueryClient interface {
 	DepositAddress(ctx context.Context, in *QueryDepositAddress, opts ...grpc.CallOption) (*QueryDepositAddressResponse, error)
 	// HasDeposited checks if a deposit transaction is confirmed on chain
 	HasDeposited(ctx context.Context, in *QueryHasDeposited, opts ...grpc.CallOption) (*QueryHasDepositedResponse, error)
-	// Withdrawal queries all current public keys
+	// Withdrawal queries the withdrawal status and receipt
 	Withdrawal(ctx context.Context, in *QueryWithdrawalRequest, opts ...grpc.CallOption) (*QueryWithdrawalResponse, error)
 	// BlockTip queries current the latest confirmed bitcoin height by relayer
 	BlockTip(ctx context.Context, in *QueryBlockTipRequest, opts ...grpc.CallOption) (*QueryBlockTipResponse, error)
@@ -129,7 +129,7 @@ type QueryServer interface {
 	DepositAddress(context.Context, *QueryDepositAddress) (*QueryDepositAddressResponse, error)
 	// HasDeposited checks if a deposit transaction is confirmed on chain
 	HasDeposited(context.Context, *QueryHasDeposited) (*QueryHasDepositedResponse, error)
-	// Withdrawal queries all current public keys
+	// Withdrawal queries the withdrawal status and receipt
 	Withdrawal(context.Context, *QueryWithdrawalRequest) (*QueryWithdrawalResponse, error)
 	// BlockTip queries current the latest confirmed bitcoin height by relayer
 	BlockTip(context.Context, *QueryBlockTipRequest) (*QueryBlockTipResponse, error)

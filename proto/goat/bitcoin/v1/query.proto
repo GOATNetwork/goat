@@ -32,7 +32,7 @@ service Query {
     option (google.api.http).get = "/goatnetwork/goat/bitcoin/v1/hasDeposited";
   }
 
-  // Withdrawal queries all current public keys
+  // Withdrawal queries the withdrawal status and receipt
   rpc Withdrawal(QueryWithdrawalRequest) returns (QueryWithdrawalResponse) {
     option (google.api.http).get = "/goatnetwork/goat/bitcoin/v1/withdrawal";
   }
