@@ -109,12 +109,6 @@ func (req *MsgNewDeposits) Validate() error {
 		return errors.New("invalid headers size")
 	}
 
-	for _, v := range req.BlockHeaders {
-		if len(v) != RawBtcHeaderSize {
-			return errors.New("invalid raw header bytes size")
-		}
-	}
-
 	for _, v := range req.Deposits {
 		if err := v.Validate(); err != nil {
 			return err

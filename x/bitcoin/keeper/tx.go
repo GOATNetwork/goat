@@ -3,6 +3,7 @@ package keeper
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 
 	"cosmossdk.io/collections"
 	"github.com/btcsuite/btcd/wire"
@@ -29,6 +30,11 @@ func (k msgServer) NewDeposits(ctx context.Context, req *types.MsgNewDeposits) (
 		return nil, types.ErrInvalidRequest.Wrap(err.Error())
 	}
 
+	var headers map[uint64][]byte
+	if err := json.Unmarshal(req.BlockHeaders, &headers); err != nil {
+		return nil, types.ErrInvalidRequest.Wrap("invalid block header json")
+	}
+
 	if _, err := k.relayerKeeper.VerifyNonProposal(ctx, req); err != nil {
 		return nil, err
 	}
@@ -36,7 +42,7 @@ func (k msgServer) NewDeposits(ctx context.Context, req *types.MsgNewDeposits) (
 	events := make(sdktypes.Events, 0, len(req.Deposits))
 	deposits := make([]*types.DepositExecReceipt, 0, len(req.Deposits))
 	for _, v := range req.Deposits {
-		deposit, err := k.VerifyDeposit(ctx, req.BlockHeaders, v)
+		deposit, err := k.VerifyDeposit(ctx, headers, v)
 		if err != nil {
 			return nil, err
 		}
