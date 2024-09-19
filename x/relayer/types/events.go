@@ -10,7 +10,7 @@ const (
 	EventTypeNewEpoch      = "new_epoch"
 	EventFinalizedProposal = "finalized_proposal"
 	EventElectedProposer   = "elected_proposer"
-	EventAceeptedProposer  = "accepted_proposer"
+	EventAcceptedProposer  = "accepted_proposer"
 	EventVoterPending      = "voter_pending"
 	EventVoterOnBoarding   = "voter_on_boarding"
 	EventVoterBoarded      = "voter_boarded"
@@ -87,7 +87,7 @@ func VoterChangedEvent(epoch uint64, added, removed []string) sdktypes.Events {
 
 func AcceptedProposerEvent(proposer string, epoch uint64) sdktypes.Event {
 	return sdktypes.NewEvent(
-		EventAceeptedProposer,
+		EventAcceptedProposer,
 		sdktypes.NewAttribute("epoch", strconv.FormatUint(epoch, 10)),
 		sdktypes.NewAttribute("proposer", proposer),
 	)
