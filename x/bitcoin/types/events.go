@@ -19,6 +19,7 @@ const (
 	EventTypeWithdrawalCancellation = "withdrawal_cancellation_request"
 	EventTypeApproveCancellation    = "approve_cancellation_withdrawal"
 	EventTypeFinalizeWithdrawal     = "finalize_withdrawal"
+	EventTypeNewConsolidation       = "new_consolidation"
 )
 
 func NewKeyEvent(key *relayertypes.PublicKey) sdktypes.Event {
@@ -87,6 +88,13 @@ func NewBlockHashEvent(height uint64, hash []byte) sdktypes.Event {
 func InitializeWithdrawalEvent(hash []byte) sdktypes.Event {
 	return sdktypes.NewEvent(
 		EventTypeInitializeWithdrawal,
+		sdktypes.NewAttribute("txid", BtcTxid(hash)), // we must use big endian
+	)
+}
+
+func NewConsolidationEvent(hash []byte) sdktypes.Event {
+	return sdktypes.NewEvent(
+		EventTypeNewConsolidation,
 		sdktypes.NewAttribute("txid", BtcTxid(hash)), // we must use big endian
 	)
 }

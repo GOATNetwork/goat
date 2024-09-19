@@ -5917,6 +5917,927 @@ func (x *fastReflection_MsgApproveCancellationResponse) ProtoMethods() *protoifa
 	}
 }
 
+var (
+	md_MsgNewConsolidation               protoreflect.MessageDescriptor
+	fd_MsgNewConsolidation_proposer      protoreflect.FieldDescriptor
+	fd_MsgNewConsolidation_no_witness_tx protoreflect.FieldDescriptor
+	fd_MsgNewConsolidation_vote          protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_goat_bitcoin_v1_tx_proto_init()
+	md_MsgNewConsolidation = File_goat_bitcoin_v1_tx_proto.Messages().ByName("MsgNewConsolidation")
+	fd_MsgNewConsolidation_proposer = md_MsgNewConsolidation.Fields().ByName("proposer")
+	fd_MsgNewConsolidation_no_witness_tx = md_MsgNewConsolidation.Fields().ByName("no_witness_tx")
+	fd_MsgNewConsolidation_vote = md_MsgNewConsolidation.Fields().ByName("vote")
+}
+
+var _ protoreflect.Message = (*fastReflection_MsgNewConsolidation)(nil)
+
+type fastReflection_MsgNewConsolidation MsgNewConsolidation
+
+func (x *MsgNewConsolidation) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgNewConsolidation)(x)
+}
+
+func (x *MsgNewConsolidation) slowProtoReflect() protoreflect.Message {
+	mi := &file_goat_bitcoin_v1_tx_proto_msgTypes[12]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_MsgNewConsolidation_messageType fastReflection_MsgNewConsolidation_messageType
+var _ protoreflect.MessageType = fastReflection_MsgNewConsolidation_messageType{}
+
+type fastReflection_MsgNewConsolidation_messageType struct{}
+
+func (x fastReflection_MsgNewConsolidation_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgNewConsolidation)(nil)
+}
+func (x fastReflection_MsgNewConsolidation_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgNewConsolidation)
+}
+func (x fastReflection_MsgNewConsolidation_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgNewConsolidation
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_MsgNewConsolidation) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgNewConsolidation
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_MsgNewConsolidation) Type() protoreflect.MessageType {
+	return _fastReflection_MsgNewConsolidation_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_MsgNewConsolidation) New() protoreflect.Message {
+	return new(fastReflection_MsgNewConsolidation)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_MsgNewConsolidation) Interface() protoreflect.ProtoMessage {
+	return (*MsgNewConsolidation)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_MsgNewConsolidation) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Proposer != "" {
+		value := protoreflect.ValueOfString(x.Proposer)
+		if !f(fd_MsgNewConsolidation_proposer, value) {
+			return
+		}
+	}
+	if len(x.NoWitnessTx) != 0 {
+		value := protoreflect.ValueOfBytes(x.NoWitnessTx)
+		if !f(fd_MsgNewConsolidation_no_witness_tx, value) {
+			return
+		}
+	}
+	if x.Vote != nil {
+		value := protoreflect.ValueOfMessage(x.Vote.ProtoReflect())
+		if !f(fd_MsgNewConsolidation_vote, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_MsgNewConsolidation) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "goat.bitcoin.v1.MsgNewConsolidation.proposer":
+		return x.Proposer != ""
+	case "goat.bitcoin.v1.MsgNewConsolidation.no_witness_tx":
+		return len(x.NoWitnessTx) != 0
+	case "goat.bitcoin.v1.MsgNewConsolidation.vote":
+		return x.Vote != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewConsolidation"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewConsolidation does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgNewConsolidation) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "goat.bitcoin.v1.MsgNewConsolidation.proposer":
+		x.Proposer = ""
+	case "goat.bitcoin.v1.MsgNewConsolidation.no_witness_tx":
+		x.NoWitnessTx = nil
+	case "goat.bitcoin.v1.MsgNewConsolidation.vote":
+		x.Vote = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewConsolidation"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewConsolidation does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_MsgNewConsolidation) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "goat.bitcoin.v1.MsgNewConsolidation.proposer":
+		value := x.Proposer
+		return protoreflect.ValueOfString(value)
+	case "goat.bitcoin.v1.MsgNewConsolidation.no_witness_tx":
+		value := x.NoWitnessTx
+		return protoreflect.ValueOfBytes(value)
+	case "goat.bitcoin.v1.MsgNewConsolidation.vote":
+		value := x.Vote
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewConsolidation"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewConsolidation does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgNewConsolidation) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "goat.bitcoin.v1.MsgNewConsolidation.proposer":
+		x.Proposer = value.Interface().(string)
+	case "goat.bitcoin.v1.MsgNewConsolidation.no_witness_tx":
+		x.NoWitnessTx = value.Bytes()
+	case "goat.bitcoin.v1.MsgNewConsolidation.vote":
+		x.Vote = value.Message().Interface().(*v1.Votes)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewConsolidation"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewConsolidation does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgNewConsolidation) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "goat.bitcoin.v1.MsgNewConsolidation.vote":
+		if x.Vote == nil {
+			x.Vote = new(v1.Votes)
+		}
+		return protoreflect.ValueOfMessage(x.Vote.ProtoReflect())
+	case "goat.bitcoin.v1.MsgNewConsolidation.proposer":
+		panic(fmt.Errorf("field proposer of message goat.bitcoin.v1.MsgNewConsolidation is not mutable"))
+	case "goat.bitcoin.v1.MsgNewConsolidation.no_witness_tx":
+		panic(fmt.Errorf("field no_witness_tx of message goat.bitcoin.v1.MsgNewConsolidation is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewConsolidation"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewConsolidation does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_MsgNewConsolidation) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "goat.bitcoin.v1.MsgNewConsolidation.proposer":
+		return protoreflect.ValueOfString("")
+	case "goat.bitcoin.v1.MsgNewConsolidation.no_witness_tx":
+		return protoreflect.ValueOfBytes(nil)
+	case "goat.bitcoin.v1.MsgNewConsolidation.vote":
+		m := new(v1.Votes)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewConsolidation"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewConsolidation does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_MsgNewConsolidation) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in goat.bitcoin.v1.MsgNewConsolidation", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_MsgNewConsolidation) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgNewConsolidation) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_MsgNewConsolidation) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_MsgNewConsolidation) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*MsgNewConsolidation)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		l = len(x.Proposer)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.NoWitnessTx)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.Vote != nil {
+			l = options.Size(x.Vote)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*MsgNewConsolidation)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Vote != nil {
+			encoded, err := options.Marshal(x.Vote)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x1a
+		}
+		if len(x.NoWitnessTx) > 0 {
+			i -= len(x.NoWitnessTx)
+			copy(dAtA[i:], x.NoWitnessTx)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.NoWitnessTx)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.Proposer) > 0 {
+			i -= len(x.Proposer)
+			copy(dAtA[i:], x.Proposer)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Proposer)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*MsgNewConsolidation)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgNewConsolidation: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgNewConsolidation: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Proposer", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Proposer = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field NoWitnessTx", wireType)
+				}
+				var byteLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					byteLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if byteLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + byteLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.NoWitnessTx = append(x.NoWitnessTx[:0], dAtA[iNdEx:postIndex]...)
+				if x.NoWitnessTx == nil {
+					x.NoWitnessTx = []byte{}
+				}
+				iNdEx = postIndex
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Vote", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Vote == nil {
+					x.Vote = &v1.Votes{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Vote); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_MsgNewConsolidationResponse protoreflect.MessageDescriptor
+)
+
+func init() {
+	file_goat_bitcoin_v1_tx_proto_init()
+	md_MsgNewConsolidationResponse = File_goat_bitcoin_v1_tx_proto.Messages().ByName("MsgNewConsolidationResponse")
+}
+
+var _ protoreflect.Message = (*fastReflection_MsgNewConsolidationResponse)(nil)
+
+type fastReflection_MsgNewConsolidationResponse MsgNewConsolidationResponse
+
+func (x *MsgNewConsolidationResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgNewConsolidationResponse)(x)
+}
+
+func (x *MsgNewConsolidationResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_goat_bitcoin_v1_tx_proto_msgTypes[13]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_MsgNewConsolidationResponse_messageType fastReflection_MsgNewConsolidationResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgNewConsolidationResponse_messageType{}
+
+type fastReflection_MsgNewConsolidationResponse_messageType struct{}
+
+func (x fastReflection_MsgNewConsolidationResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgNewConsolidationResponse)(nil)
+}
+func (x fastReflection_MsgNewConsolidationResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgNewConsolidationResponse)
+}
+func (x fastReflection_MsgNewConsolidationResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgNewConsolidationResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_MsgNewConsolidationResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgNewConsolidationResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_MsgNewConsolidationResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgNewConsolidationResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_MsgNewConsolidationResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgNewConsolidationResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_MsgNewConsolidationResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgNewConsolidationResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_MsgNewConsolidationResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_MsgNewConsolidationResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewConsolidationResponse"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewConsolidationResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgNewConsolidationResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewConsolidationResponse"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewConsolidationResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_MsgNewConsolidationResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewConsolidationResponse"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewConsolidationResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgNewConsolidationResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewConsolidationResponse"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewConsolidationResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgNewConsolidationResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewConsolidationResponse"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewConsolidationResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_MsgNewConsolidationResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.MsgNewConsolidationResponse"))
+		}
+		panic(fmt.Errorf("message goat.bitcoin.v1.MsgNewConsolidationResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_MsgNewConsolidationResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in goat.bitcoin.v1.MsgNewConsolidationResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_MsgNewConsolidationResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgNewConsolidationResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_MsgNewConsolidationResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_MsgNewConsolidationResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*MsgNewConsolidationResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*MsgNewConsolidationResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*MsgNewConsolidationResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgNewConsolidationResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgNewConsolidationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
 // Code generated by protoc-gen-go. DO NOT EDIT.
 // versions:
 // 	protoc-gen-go v1.27.0
@@ -6439,6 +7360,85 @@ func (*MsgApproveCancellationResponse) Descriptor() ([]byte, []int) {
 	return file_goat_bitcoin_v1_tx_proto_rawDescGZIP(), []int{11}
 }
 
+// MsgNewConsolidation
+type MsgNewConsolidation struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Proposer    string    `protobuf:"bytes,1,opt,name=proposer,proto3" json:"proposer,omitempty"`
+	NoWitnessTx []byte    `protobuf:"bytes,2,opt,name=no_witness_tx,json=noWitnessTx,proto3" json:"no_witness_tx,omitempty"`
+	Vote        *v1.Votes `protobuf:"bytes,3,opt,name=vote,proto3" json:"vote,omitempty"`
+}
+
+func (x *MsgNewConsolidation) Reset() {
+	*x = MsgNewConsolidation{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_goat_bitcoin_v1_tx_proto_msgTypes[12]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MsgNewConsolidation) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MsgNewConsolidation) ProtoMessage() {}
+
+// Deprecated: Use MsgNewConsolidation.ProtoReflect.Descriptor instead.
+func (*MsgNewConsolidation) Descriptor() ([]byte, []int) {
+	return file_goat_bitcoin_v1_tx_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *MsgNewConsolidation) GetProposer() string {
+	if x != nil {
+		return x.Proposer
+	}
+	return ""
+}
+
+func (x *MsgNewConsolidation) GetNoWitnessTx() []byte {
+	if x != nil {
+		return x.NoWitnessTx
+	}
+	return nil
+}
+
+func (x *MsgNewConsolidation) GetVote() *v1.Votes {
+	if x != nil {
+		return x.Vote
+	}
+	return nil
+}
+
+// MsgNewConsolidationResponse
+type MsgNewConsolidationResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *MsgNewConsolidationResponse) Reset() {
+	*x = MsgNewConsolidationResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_goat_bitcoin_v1_tx_proto_msgTypes[13]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MsgNewConsolidationResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MsgNewConsolidationResponse) ProtoMessage() {}
+
+// Deprecated: Use MsgNewConsolidationResponse.ProtoReflect.Descriptor instead.
+func (*MsgNewConsolidationResponse) Descriptor() ([]byte, []int) {
+	return file_goat_bitcoin_v1_tx_proto_rawDescGZIP(), []int{13}
+}
+
 var File_goat_bitcoin_v1_tx_proto protoreflect.FileDescriptor
 
 var file_goat_bitcoin_v1_tx_proto_rawDesc = []byte{
@@ -6550,58 +7550,79 @@ var file_goat_bitcoin_v1_tx_proto_rawDesc = []byte{
 	0x6f, 0x76, 0x65, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22,
 	0x20, 0x0a, 0x1e, 0x4d, 0x73, 0x67, 0x41, 0x70, 0x70, 0x72, 0x6f, 0x76, 0x65, 0x43, 0x61, 0x6e,
 	0x63, 0x65, 0x6c, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x32, 0xed, 0x04, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12, 0x60, 0x0a, 0x0e, 0x4e, 0x65, 0x77,
-	0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x61, 0x73, 0x68, 0x65, 0x73, 0x12, 0x22, 0x2e, 0x67, 0x6f,
-	0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73,
-	0x67, 0x4e, 0x65, 0x77, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x61, 0x73, 0x68, 0x65, 0x73, 0x1a,
-	0x2a, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76,
-	0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x61, 0x73,
-	0x68, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x57, 0x0a, 0x0b, 0x4e,
-	0x65, 0x77, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x12, 0x1f, 0x2e, 0x67, 0x6f, 0x61,
-	0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67,
-	0x4e, 0x65, 0x77, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x1a, 0x27, 0x2e, 0x67, 0x6f,
-	0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73,
-	0x67, 0x4e, 0x65, 0x77, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x51, 0x0a, 0x09, 0x4e, 0x65, 0x77, 0x50, 0x75, 0x62, 0x6b, 0x65,
-	0x79, 0x12, 0x1d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e,
-	0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x50, 0x75, 0x62, 0x6b, 0x65, 0x79,
-	0x1a, 0x25, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e,
-	0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x50, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x72, 0x0a, 0x14, 0x49, 0x6e, 0x69, 0x74, 0x69,
-	0x61, 0x6c, 0x69, 0x7a, 0x65, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x12,
-	0x28, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76,
-	0x31, 0x2e, 0x4d, 0x73, 0x67, 0x49, 0x6e, 0x69, 0x74, 0x69, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x57,
-	0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x1a, 0x30, 0x2e, 0x67, 0x6f, 0x61, 0x74,
-	0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x49,
-	0x6e, 0x69, 0x74, 0x69, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61,
-	0x77, 0x61, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6c, 0x0a, 0x12, 0x46,
-	0x69, 0x6e, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61,
-	0x6c, 0x12, 0x26, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e,
-	0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x46, 0x69, 0x6e, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x57,
-	0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x1a, 0x2e, 0x2e, 0x67, 0x6f, 0x61, 0x74,
-	0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x46,
-	0x69, 0x6e, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61,
-	0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6f, 0x0a, 0x13, 0x41, 0x70, 0x70,
-	0x72, 0x6f, 0x76, 0x65, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x12, 0x27, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e,
-	0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x70, 0x70, 0x72, 0x6f, 0x76, 0x65, 0x43, 0x61, 0x6e,
-	0x63, 0x65, 0x6c, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x1a, 0x2f, 0x2e, 0x67, 0x6f, 0x61, 0x74,
-	0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x41,
-	0x70, 0x70, 0x72, 0x6f, 0x76, 0x65, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x6c, 0x61, 0x74, 0x69,
-	0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0, 0x2a,
-	0x01, 0x42, 0xb7, 0x01, 0x0a, 0x13, 0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62,
-	0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x42, 0x07, 0x54, 0x78, 0x50, 0x72, 0x6f,
-	0x74, 0x6f, 0x50, 0x01, 0x5a, 0x39, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d,
-	0x2f, 0x67, 0x6f, 0x61, 0x74, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x67, 0x6f, 0x61,
-	0x74, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x62, 0x69, 0x74, 0x63, 0x6f,
-	0x69, 0x6e, 0x2f, 0x76, 0x31, 0x3b, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x76, 0x31, 0xa2,
-	0x02, 0x03, 0x47, 0x42, 0x58, 0xaa, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x2e, 0x42, 0x69, 0x74,
-	0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x42,
-	0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x1b, 0x47, 0x6f, 0x61, 0x74,
-	0x5c, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d,
-	0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x11, 0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a,
-	0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x33,
+	0x65, 0x22, 0xd1, 0x01, 0x0a, 0x13, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x43, 0x6f, 0x6e, 0x73,
+	0x6f, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x34, 0x0a, 0x08, 0x70, 0x72, 0x6f,
+	0x70, 0x6f, 0x73, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d,
+	0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53,
+	0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x12,
+	0x22, 0x0a, 0x0d, 0x6e, 0x6f, 0x5f, 0x77, 0x69, 0x74, 0x6e, 0x65, 0x73, 0x73, 0x5f, 0x74, 0x78,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0b, 0x6e, 0x6f, 0x57, 0x69, 0x74, 0x6e, 0x65, 0x73,
+	0x73, 0x54, 0x78, 0x12, 0x2a, 0x0a, 0x04, 0x76, 0x6f, 0x74, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x16, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72,
+	0x2e, 0x76, 0x31, 0x2e, 0x56, 0x6f, 0x74, 0x65, 0x73, 0x52, 0x04, 0x76, 0x6f, 0x74, 0x65, 0x3a,
+	0x34, 0x82, 0xe7, 0xb0, 0x2a, 0x08, 0x70, 0x72, 0x6f, 0x70, 0x6f, 0x73, 0x65, 0x72, 0x8a, 0xe7,
+	0xb0, 0x2a, 0x22, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x78, 0x2f, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69,
+	0x6e, 0x2f, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x43, 0x6f, 0x6e, 0x73, 0x6f, 0x6c, 0x69, 0x64,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x1d, 0x0a, 0x1b, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x43,
+	0x6f, 0x6e, 0x73, 0x6f, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x32, 0xd5, 0x05, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12, 0x60, 0x0a, 0x0e,
+	0x4e, 0x65, 0x77, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x61, 0x73, 0x68, 0x65, 0x73, 0x12, 0x22,
+	0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31,
+	0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x61, 0x73, 0x68,
+	0x65, 0x73, 0x1a, 0x2a, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69,
+	0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x42, 0x6c, 0x6f, 0x63, 0x6b,
+	0x48, 0x61, 0x73, 0x68, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x57,
+	0x0a, 0x0b, 0x4e, 0x65, 0x77, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x12, 0x1f, 0x2e,
+	0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e,
+	0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x1a, 0x27,
+	0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31,
+	0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x51, 0x0a, 0x09, 0x4e, 0x65, 0x77, 0x50, 0x75,
+	0x62, 0x6b, 0x65, 0x79, 0x12, 0x1d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63,
+	0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x50, 0x75, 0x62,
+	0x6b, 0x65, 0x79, 0x1a, 0x25, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f,
+	0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x50, 0x75, 0x62, 0x6b,
+	0x65, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x72, 0x0a, 0x14, 0x49, 0x6e,
+	0x69, 0x74, 0x69, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77,
+	0x61, 0x6c, 0x12, 0x28, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69,
+	0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x49, 0x6e, 0x69, 0x74, 0x69, 0x61, 0x6c, 0x69,
+	0x7a, 0x65, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x1a, 0x30, 0x2e, 0x67,
+	0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d,
+	0x73, 0x67, 0x49, 0x6e, 0x69, 0x74, 0x69, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x57, 0x69, 0x74, 0x68,
+	0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6c,
+	0x0a, 0x12, 0x46, 0x69, 0x6e, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72,
+	0x61, 0x77, 0x61, 0x6c, 0x12, 0x26, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63,
+	0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x46, 0x69, 0x6e, 0x61, 0x6c, 0x69,
+	0x7a, 0x65, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x1a, 0x2e, 0x2e, 0x67,
+	0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d,
+	0x73, 0x67, 0x46, 0x69, 0x6e, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72,
+	0x61, 0x77, 0x61, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6f, 0x0a, 0x13,
+	0x41, 0x70, 0x70, 0x72, 0x6f, 0x76, 0x65, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x6c, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x12, 0x27, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f,
+	0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x70, 0x70, 0x72, 0x6f, 0x76, 0x65,
+	0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x1a, 0x2f, 0x2e, 0x67,
+	0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d,
+	0x73, 0x67, 0x41, 0x70, 0x70, 0x72, 0x6f, 0x76, 0x65, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x6c,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x66, 0x0a,
+	0x10, 0x4e, 0x65, 0x77, 0x43, 0x6f, 0x6e, 0x73, 0x6f, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x12, 0x24, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e,
+	0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77, 0x43, 0x6f, 0x6e, 0x73, 0x6f, 0x6c,
+	0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x1a, 0x2c, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62,
+	0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4e, 0x65, 0x77,
+	0x43, 0x6f, 0x6e, 0x73, 0x6f, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0, 0x2a, 0x01, 0x42, 0xb7, 0x01, 0x0a,
+	0x13, 0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69,
+	0x6e, 0x2e, 0x76, 0x31, 0x42, 0x07, 0x54, 0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a,
+	0x39, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x61, 0x74,
+	0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x61, 0x70, 0x69,
+	0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2f, 0x76, 0x31,
+	0x3b, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x47, 0x42, 0x58,
+	0xaa, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x2e, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e,
+	0x56, 0x31, 0xca, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69,
+	0x6e, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x1b, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x42, 0x69, 0x74, 0x63,
+	0x6f, 0x69, 0x6e, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61,
+	0x74, 0x61, 0xea, 0x02, 0x11, 0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x42, 0x69, 0x74, 0x63, 0x6f,
+	0x69, 0x6e, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -6616,7 +7637,7 @@ func file_goat_bitcoin_v1_tx_proto_rawDescGZIP() []byte {
 	return file_goat_bitcoin_v1_tx_proto_rawDescData
 }
 
-var file_goat_bitcoin_v1_tx_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_goat_bitcoin_v1_tx_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_goat_bitcoin_v1_tx_proto_goTypes = []interface{}{
 	(*MsgNewBlockHashes)(nil),               // 0: goat.bitcoin.v1.MsgNewBlockHashes
 	(*MsgNewBlockHashesResponse)(nil),       // 1: goat.bitcoin.v1.MsgNewBlockHashesResponse
@@ -6630,35 +7651,40 @@ var file_goat_bitcoin_v1_tx_proto_goTypes = []interface{}{
 	(*MsgFinalizeWithdrawalResponse)(nil),   // 9: goat.bitcoin.v1.MsgFinalizeWithdrawalResponse
 	(*MsgApproveCancellation)(nil),          // 10: goat.bitcoin.v1.MsgApproveCancellation
 	(*MsgApproveCancellationResponse)(nil),  // 11: goat.bitcoin.v1.MsgApproveCancellationResponse
-	(*v1.Votes)(nil),                        // 12: goat.relayer.v1.Votes
-	(*Deposit)(nil),                         // 13: goat.bitcoin.v1.Deposit
-	(*v1.PublicKey)(nil),                    // 14: goat.relayer.v1.PublicKey
-	(*WithdrawalProposal)(nil),              // 15: goat.bitcoin.v1.WithdrawalProposal
+	(*MsgNewConsolidation)(nil),             // 12: goat.bitcoin.v1.MsgNewConsolidation
+	(*MsgNewConsolidationResponse)(nil),     // 13: goat.bitcoin.v1.MsgNewConsolidationResponse
+	(*v1.Votes)(nil),                        // 14: goat.relayer.v1.Votes
+	(*Deposit)(nil),                         // 15: goat.bitcoin.v1.Deposit
+	(*v1.PublicKey)(nil),                    // 16: goat.relayer.v1.PublicKey
+	(*WithdrawalProposal)(nil),              // 17: goat.bitcoin.v1.WithdrawalProposal
 }
 var file_goat_bitcoin_v1_tx_proto_depIdxs = []int32{
-	12, // 0: goat.bitcoin.v1.MsgNewBlockHashes.vote:type_name -> goat.relayer.v1.Votes
-	13, // 1: goat.bitcoin.v1.MsgNewDeposits.deposits:type_name -> goat.bitcoin.v1.Deposit
-	12, // 2: goat.bitcoin.v1.MsgNewPubkey.vote:type_name -> goat.relayer.v1.Votes
-	14, // 3: goat.bitcoin.v1.MsgNewPubkey.pubkey:type_name -> goat.relayer.v1.PublicKey
-	12, // 4: goat.bitcoin.v1.MsgInitializeWithdrawal.vote:type_name -> goat.relayer.v1.Votes
-	15, // 5: goat.bitcoin.v1.MsgInitializeWithdrawal.proposal:type_name -> goat.bitcoin.v1.WithdrawalProposal
-	0,  // 6: goat.bitcoin.v1.Msg.NewBlockHashes:input_type -> goat.bitcoin.v1.MsgNewBlockHashes
-	2,  // 7: goat.bitcoin.v1.Msg.NewDeposits:input_type -> goat.bitcoin.v1.MsgNewDeposits
-	4,  // 8: goat.bitcoin.v1.Msg.NewPubkey:input_type -> goat.bitcoin.v1.MsgNewPubkey
-	6,  // 9: goat.bitcoin.v1.Msg.InitializeWithdrawal:input_type -> goat.bitcoin.v1.MsgInitializeWithdrawal
-	8,  // 10: goat.bitcoin.v1.Msg.FinalizeWithdrawal:input_type -> goat.bitcoin.v1.MsgFinalizeWithdrawal
-	10, // 11: goat.bitcoin.v1.Msg.ApproveCancellation:input_type -> goat.bitcoin.v1.MsgApproveCancellation
-	1,  // 12: goat.bitcoin.v1.Msg.NewBlockHashes:output_type -> goat.bitcoin.v1.MsgNewBlockHashesResponse
-	3,  // 13: goat.bitcoin.v1.Msg.NewDeposits:output_type -> goat.bitcoin.v1.MsgNewDepositsResponse
-	5,  // 14: goat.bitcoin.v1.Msg.NewPubkey:output_type -> goat.bitcoin.v1.MsgNewPubkeyResponse
-	7,  // 15: goat.bitcoin.v1.Msg.InitializeWithdrawal:output_type -> goat.bitcoin.v1.MsgInitializeWithdrawalResponse
-	9,  // 16: goat.bitcoin.v1.Msg.FinalizeWithdrawal:output_type -> goat.bitcoin.v1.MsgFinalizeWithdrawalResponse
-	11, // 17: goat.bitcoin.v1.Msg.ApproveCancellation:output_type -> goat.bitcoin.v1.MsgApproveCancellationResponse
-	12, // [12:18] is the sub-list for method output_type
-	6,  // [6:12] is the sub-list for method input_type
-	6,  // [6:6] is the sub-list for extension type_name
-	6,  // [6:6] is the sub-list for extension extendee
-	0,  // [0:6] is the sub-list for field type_name
+	14, // 0: goat.bitcoin.v1.MsgNewBlockHashes.vote:type_name -> goat.relayer.v1.Votes
+	15, // 1: goat.bitcoin.v1.MsgNewDeposits.deposits:type_name -> goat.bitcoin.v1.Deposit
+	14, // 2: goat.bitcoin.v1.MsgNewPubkey.vote:type_name -> goat.relayer.v1.Votes
+	16, // 3: goat.bitcoin.v1.MsgNewPubkey.pubkey:type_name -> goat.relayer.v1.PublicKey
+	14, // 4: goat.bitcoin.v1.MsgInitializeWithdrawal.vote:type_name -> goat.relayer.v1.Votes
+	17, // 5: goat.bitcoin.v1.MsgInitializeWithdrawal.proposal:type_name -> goat.bitcoin.v1.WithdrawalProposal
+	14, // 6: goat.bitcoin.v1.MsgNewConsolidation.vote:type_name -> goat.relayer.v1.Votes
+	0,  // 7: goat.bitcoin.v1.Msg.NewBlockHashes:input_type -> goat.bitcoin.v1.MsgNewBlockHashes
+	2,  // 8: goat.bitcoin.v1.Msg.NewDeposits:input_type -> goat.bitcoin.v1.MsgNewDeposits
+	4,  // 9: goat.bitcoin.v1.Msg.NewPubkey:input_type -> goat.bitcoin.v1.MsgNewPubkey
+	6,  // 10: goat.bitcoin.v1.Msg.InitializeWithdrawal:input_type -> goat.bitcoin.v1.MsgInitializeWithdrawal
+	8,  // 11: goat.bitcoin.v1.Msg.FinalizeWithdrawal:input_type -> goat.bitcoin.v1.MsgFinalizeWithdrawal
+	10, // 12: goat.bitcoin.v1.Msg.ApproveCancellation:input_type -> goat.bitcoin.v1.MsgApproveCancellation
+	12, // 13: goat.bitcoin.v1.Msg.NewConsolidation:input_type -> goat.bitcoin.v1.MsgNewConsolidation
+	1,  // 14: goat.bitcoin.v1.Msg.NewBlockHashes:output_type -> goat.bitcoin.v1.MsgNewBlockHashesResponse
+	3,  // 15: goat.bitcoin.v1.Msg.NewDeposits:output_type -> goat.bitcoin.v1.MsgNewDepositsResponse
+	5,  // 16: goat.bitcoin.v1.Msg.NewPubkey:output_type -> goat.bitcoin.v1.MsgNewPubkeyResponse
+	7,  // 17: goat.bitcoin.v1.Msg.InitializeWithdrawal:output_type -> goat.bitcoin.v1.MsgInitializeWithdrawalResponse
+	9,  // 18: goat.bitcoin.v1.Msg.FinalizeWithdrawal:output_type -> goat.bitcoin.v1.MsgFinalizeWithdrawalResponse
+	11, // 19: goat.bitcoin.v1.Msg.ApproveCancellation:output_type -> goat.bitcoin.v1.MsgApproveCancellationResponse
+	13, // 20: goat.bitcoin.v1.Msg.NewConsolidation:output_type -> goat.bitcoin.v1.MsgNewConsolidationResponse
+	14, // [14:21] is the sub-list for method output_type
+	7,  // [7:14] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_goat_bitcoin_v1_tx_proto_init() }
@@ -6812,6 +7838,30 @@ func file_goat_bitcoin_v1_tx_proto_init() {
 				return nil
 			}
 		}
+		file_goat_bitcoin_v1_tx_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgNewConsolidation); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_goat_bitcoin_v1_tx_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgNewConsolidationResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -6819,7 +7869,7 @@ func file_goat_bitcoin_v1_tx_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_goat_bitcoin_v1_tx_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   12,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

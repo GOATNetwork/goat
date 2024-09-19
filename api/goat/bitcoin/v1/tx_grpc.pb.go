@@ -25,6 +25,7 @@ const (
 	Msg_InitializeWithdrawal_FullMethodName = "/goat.bitcoin.v1.Msg/InitializeWithdrawal"
 	Msg_FinalizeWithdrawal_FullMethodName   = "/goat.bitcoin.v1.Msg/FinalizeWithdrawal"
 	Msg_ApproveCancellation_FullMethodName  = "/goat.bitcoin.v1.Msg/ApproveCancellation"
+	Msg_NewConsolidation_FullMethodName     = "/goat.bitcoin.v1.Msg/NewConsolidation"
 )
 
 // MsgClient is the client API for Msg service.
@@ -68,6 +69,9 @@ type MsgClient interface {
 	FinalizeWithdrawal(ctx context.Context, in *MsgFinalizeWithdrawal, opts ...grpc.CallOption) (*MsgFinalizeWithdrawalResponse, error)
 	// ApproveCancellation approves cancelation requests
 	ApproveCancellation(ctx context.Context, in *MsgApproveCancellation, opts ...grpc.CallOption) (*MsgApproveCancellationResponse, error)
+	// NewConsolidation initializes a consolidation request to aggregate utxo set
+	// ** it requires off-chain vote by relayer group
+	NewConsolidation(ctx context.Context, in *MsgNewConsolidation, opts ...grpc.CallOption) (*MsgNewConsolidationResponse, error)
 }
 
 type msgClient struct {
@@ -138,6 +142,16 @@ func (c *msgClient) ApproveCancellation(ctx context.Context, in *MsgApproveCance
 	return out, nil
 }
 
+func (c *msgClient) NewConsolidation(ctx context.Context, in *MsgNewConsolidation, opts ...grpc.CallOption) (*MsgNewConsolidationResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MsgNewConsolidationResponse)
+	err := c.cc.Invoke(ctx, Msg_NewConsolidation_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility.
@@ -179,6 +193,9 @@ type MsgServer interface {
 	FinalizeWithdrawal(context.Context, *MsgFinalizeWithdrawal) (*MsgFinalizeWithdrawalResponse, error)
 	// ApproveCancellation approves cancelation requests
 	ApproveCancellation(context.Context, *MsgApproveCancellation) (*MsgApproveCancellationResponse, error)
+	// NewConsolidation initializes a consolidation request to aggregate utxo set
+	// ** it requires off-chain vote by relayer group
+	NewConsolidation(context.Context, *MsgNewConsolidation) (*MsgNewConsolidationResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -206,6 +223,9 @@ func (UnimplementedMsgServer) FinalizeWithdrawal(context.Context, *MsgFinalizeWi
 }
 func (UnimplementedMsgServer) ApproveCancellation(context.Context, *MsgApproveCancellation) (*MsgApproveCancellationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ApproveCancellation not implemented")
+}
+func (UnimplementedMsgServer) NewConsolidation(context.Context, *MsgNewConsolidation) (*MsgNewConsolidationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method NewConsolidation not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 func (UnimplementedMsgServer) testEmbeddedByValue()             {}
@@ -336,6 +356,24 @@ func _Msg_ApproveCancellation_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_NewConsolidation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgNewConsolidation)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).NewConsolidation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_NewConsolidation_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).NewConsolidation(ctx, req.(*MsgNewConsolidation))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -366,6 +404,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ApproveCancellation",
 			Handler:    _Msg_ApproveCancellation_Handler,
+		},
+		{
+			MethodName: "NewConsolidation",
+			Handler:    _Msg_NewConsolidation_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

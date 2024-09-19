@@ -356,3 +356,45 @@ func (k msgServer) ApproveCancellation(ctx context.Context, req *types.MsgApprov
 	sdktypes.UnwrapSDKContext(ctx).EventManager().EmitEvents(events)
 	return &types.MsgApproveCancellationResponse{}, nil
 }
+
+func (k msgServer) NewConsolidation(ctx context.Context, req *types.MsgNewConsolidation) (*types.MsgNewConsolidationResponse, error) {
+	if err := req.Validate(); err != nil {
+		return nil, types.ErrInvalidRequest.Wrap(err.Error())
+	}
+
+	tx, txrd := new(wire.MsgTx), bytes.NewReader(req.NoWitnessTx)
+	if err := tx.DeserializeNoWitness(txrd); err != nil || txrd.Len() > 0 {
+		return nil, types.ErrInvalidRequest.Wrap("invalid non-witness tx")
+	}
+
+	if len(tx.TxOut) != 1 {
+		return nil, types.ErrInvalidRequest.Wrap("consolidation should have only 1 output")
+	}
+
+	sdkctx := sdktypes.UnwrapSDKContext(ctx)
+	pubkey, err := k.Pubkey.Get(sdkctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if !types.VerifySystemAddressScript(&pubkey, tx.TxOut[0].PkScript) {
+		return nil, types.ErrInvalidRequest.Wrap("not pay to the latest relayer pubkey")
+	}
+
+	sequence, err := k.relayerKeeper.VerifyProposal(sdkctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	txid := goatcrypto.DoubleSHA256Sum(req.NoWitnessTx)
+	if err := k.relayerKeeper.SetProposalSeq(sdkctx, sequence+1); err != nil {
+		return nil, err
+	}
+
+	if err := k.relayerKeeper.UpdateRandao(sdkctx, req); err != nil {
+		return nil, err
+	}
+
+	sdkctx.EventManager().EmitEvent(types.NewConsolidationEvent(txid))
+	return nil, nil
+}
