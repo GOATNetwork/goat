@@ -78,16 +78,6 @@ func (req *MsgNewDeposits) Validate() error {
 		return errors.New("invalid deposit list length")
 	}
 
-	if h := len(req.BlockHeaders); h == 0 || h > depositLen {
-		return errors.New("invalid headers size")
-	}
-
-	for _, v := range req.Deposits {
-		if err := v.Validate(); err != nil {
-			return err
-		}
-	}
-
 	return nil
 }
 

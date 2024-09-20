@@ -35,6 +35,10 @@ func (k msgServer) NewDeposits(ctx context.Context, req *types.MsgNewDeposits) (
 		return nil, types.ErrInvalidRequest.Wrap("invalid block header json")
 	}
 
+	if h := len(headers); h == 0 || h > len(req.Deposits) {
+		return nil, types.ErrInvalidRequest.Wrap("invalid headers size")
+	}
+
 	if _, err := k.relayerKeeper.VerifyNonProposal(ctx, req); err != nil {
 		return nil, err
 	}
@@ -42,6 +46,10 @@ func (k msgServer) NewDeposits(ctx context.Context, req *types.MsgNewDeposits) (
 	events := make(sdktypes.Events, 0, len(req.Deposits))
 	deposits := make([]*types.DepositExecReceipt, 0, len(req.Deposits))
 	for _, v := range req.Deposits {
+		if err := v.Validate(); err != nil {
+			return nil, types.ErrInvalidRequest.Wrap(err.Error())
+		}
+
 		deposit, err := k.VerifyDeposit(ctx, headers, v)
 		if err != nil {
 			return nil, err
