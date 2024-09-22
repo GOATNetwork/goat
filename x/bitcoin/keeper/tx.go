@@ -94,7 +94,7 @@ func (k msgServer) NewBlockHashes(ctx context.Context, req *types.MsgNewBlockHas
 		return nil, err
 	}
 
-	events := make(sdktypes.Events, 0, len(req.BlockHash))
+	events := make(sdktypes.Events, 0, len(req.BlockHash)+1)
 	for _, v := range req.BlockHash {
 		parentHeight++
 		if err := k.BlockHashes.Set(ctx, parentHeight, v); err != nil {
@@ -107,9 +107,11 @@ func (k msgServer) NewBlockHashes(ctx context.Context, req *types.MsgNewBlockHas
 		return nil, err
 	}
 
-	if err := k.relayerKeeper.SetProposalSeq(ctx, sequence+1); err != nil {
+	sequence++
+	if err := k.relayerKeeper.SetProposalSeq(ctx, sequence); err != nil {
 		return nil, err
 	}
+	events = append(events, relayertypes.FinalizedProposalEvent(sequence))
 
 	if err := k.relayerKeeper.UpdateRandao(ctx, req); err != nil {
 		return nil, err
@@ -242,7 +244,8 @@ func (k msgServer) InitializeWithdrawal(ctx context.Context, req *types.MsgIniti
 		return nil, err
 	}
 
-	if err := k.relayerKeeper.SetProposalSeq(sdkctx, sequence+1); err != nil {
+	sequence++
+	if err := k.relayerKeeper.SetProposalSeq(sdkctx, sequence); err != nil {
 		return nil, err
 	}
 
@@ -250,7 +253,9 @@ func (k msgServer) InitializeWithdrawal(ctx context.Context, req *types.MsgIniti
 		return nil, err
 	}
 
-	sdkctx.EventManager().EmitEvent(types.InitializeWithdrawalEvent(txid))
+	sdkctx.EventManager().EmitEvents(
+		sdktypes.Events{types.InitializeWithdrawalEvent(txid), relayertypes.FinalizedProposalEvent(sequence)},
+	)
 
 	return &types.MsgInitializeWithdrawalResponse{}, nil
 }
@@ -395,7 +400,9 @@ func (k msgServer) NewConsolidation(ctx context.Context, req *types.MsgNewConsol
 	}
 
 	txid := goatcrypto.DoubleSHA256Sum(req.NoWitnessTx)
-	if err := k.relayerKeeper.SetProposalSeq(sdkctx, sequence+1); err != nil {
+
+	sequence++
+	if err := k.relayerKeeper.SetProposalSeq(sdkctx, sequence); err != nil {
 		return nil, err
 	}
 
@@ -403,6 +410,8 @@ func (k msgServer) NewConsolidation(ctx context.Context, req *types.MsgNewConsol
 		return nil, err
 	}
 
-	sdkctx.EventManager().EmitEvent(types.NewConsolidationEvent(txid))
+	sdkctx.EventManager().EmitEvents(
+		sdktypes.Events{types.NewConsolidationEvent(txid), relayertypes.FinalizedProposalEvent(sequence)},
+	)
 	return nil, nil
 }
