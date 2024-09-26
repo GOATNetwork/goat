@@ -3,12 +3,14 @@ package types
 import (
 	"bytes"
 	_ "embed"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"os"
 	"reflect"
 	"testing"
 
+	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	relayer "github.com/goatnetwork/goat/x/relayer/types"
@@ -220,6 +222,53 @@ func TestVerifySystemAddressScript(t *testing.T) {
 
 			if VerifySystemAddressScript(nil, nil) {
 				t.Errorf("VerifySystemAddressScript() not false")
+			}
+		})
+	}
+}
+
+func TestDecodeBtcAddress(t *testing.T) {
+	type args struct {
+		address string
+		netwk   *chaincfg.Params
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    string
+		wantErr bool
+	}{
+		{
+			name: "mainnet-TypePubkeyHash",
+			args: args{"17yhJ5DME9Fu3wVjVoVfP4jKxjrc9WRyaB", BitcoinNetworks["mainnet"]},
+			want: "76a9144c89af41c2e28a6abd55835879aa51ce20283aa388ac",
+		},
+		{
+			name: "mainnet-TypeScriptHash",
+			args: args{"3Pbp8YCguJk9dXnTGqSXFnZbXC7EW8qbvy", BitcoinNetworks["mainnet"]},
+			want: "a914f056d7cd3ddd453aaa52ad2cdb0c7b6987c96c9887",
+		},
+		{
+			name:    "mainnet-TypeWitnessPubkeyHash",
+			args:    args{"bc1qmvs208we3jg7hgczhlh7e9ufw034kfm2vwsvge", BitcoinNetworks["testnet3"]},
+			wantErr: true,
+		},
+		{
+			name:    "mainnet-p2pk",
+			args:    args{"02b593271441fc8e37d04c099092816d62169345ed1180c05ab9e960688d6d884d", BitcoinNetworks["mainnet"]},
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := DecodeBtcAddress(tt.args.address, tt.args.netwk)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("DecodeBtcAddress() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			gothex := hex.EncodeToString(got)
+			if !reflect.DeepEqual(gothex, tt.want) {
+				t.Errorf("DecodeBtcAddress() = %v, want %v", gothex, tt.want)
 			}
 		})
 	}

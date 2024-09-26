@@ -214,7 +214,7 @@ func DecodeBtcAddress(address string, netwk *chaincfg.Params) ([]byte, error) {
 
 	// the deprecated address, it takes more fee than others
 	if _, ok := addr.(*btcutil.AddressPubKey); ok {
-		return nil, err
+		return nil, errors.New("deprecated p2pk address")
 	}
 
 	script, err := txscript.PayToAddrScript(addr)
