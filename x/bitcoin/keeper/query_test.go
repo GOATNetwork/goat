@@ -47,7 +47,7 @@ func (suite *KeeperTestSuite) TestDepositAddress() {
 	suite.Require().EqualError(err, status.Error(codes.InvalidArgument, "unknown deposit version").Error())
 
 	params := types.DefaultParams()
-	chaincfg := params.ChainConfig.ToBtcdParam()
+	chaincfg := types.BitcoinNetworks[params.NetworkName]
 
 	{
 		resp, err := qs.DepositAddress(suite.Context, &types.QueryDepositAddress{EvmAddress: address, Version: 0})

@@ -244,6 +244,11 @@ func TestDecodeBtcAddress(t *testing.T) {
 			want: "76a9144c89af41c2e28a6abd55835879aa51ce20283aa388ac",
 		},
 		{
+			name:    "no network",
+			args:    args{"17yhJ5DME9Fu3wVjVoVfP4jKxjrc9WRyaB", nil},
+			wantErr: true,
+		},
+		{
 			name: "mainnet-TypeScriptHash",
 			args: args{"3Pbp8YCguJk9dXnTGqSXFnZbXC7EW8qbvy", BitcoinNetworks["mainnet"]},
 			want: "a914f056d7cd3ddd453aaa52ad2cdb0c7b6987c96c9887",

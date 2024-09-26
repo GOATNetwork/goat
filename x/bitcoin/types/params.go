@@ -8,12 +8,7 @@ import (
 // NewParams creates a new Params instance.
 func NewParams() Params {
 	return Params{
-		ChainConfig: &ChainConfig{
-			NetworkName:          "regtest",
-			PubkeyHashAddrPrefix: 0x6f,
-			ScriptHashAddrPrefix: 0xc4,
-			Bech32Hrp:            "bcrt",
-		},
+		NetworkName:        "regtest",
 		ConfirmationNumber: 1,
 		MinDepositAmount:   1e4,
 		DepositMagicPrefix: []byte("GTT0"),
@@ -27,21 +22,9 @@ func DefaultParams() Params {
 
 // Validate validates the set of params.
 func (p Params) Validate() error {
-	if p.ChainConfig.NetworkName == "" {
-		return errors.New("emtpy network name")
-	}
-
-	if p.ChainConfig.Bech32Hrp == "" {
-		return errors.New("emtpy bech32 hrp")
-	}
-
-	// uint8
-	if p.ChainConfig.PubkeyHashAddrPrefix > 255 {
-		return fmt.Errorf("overflow for PubkeyHashAddrPrefix: %d", p.ChainConfig.PubkeyHashAddrPrefix)
-	}
-
-	if p.ChainConfig.ScriptHashAddrPrefix > 255 {
-		return fmt.Errorf("overflow for ScriptHashAddrPrefix: %d", p.ChainConfig.ScriptHashAddrPrefix)
+	network := BitcoinNetworks[p.NetworkName]
+	if network == nil {
+		return fmt.Errorf("network %s not found", p.NetworkName)
 	}
 
 	if p.MinDepositAmount < DustTxoutAmount {

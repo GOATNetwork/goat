@@ -296,12 +296,10 @@ func (k Keeper) ProcessBridgeRequest(ctx context.Context, withdrawals []*goattyp
 
 	events := make(sdktypes.Events, 0, reqLens)
 
-	netwk := param.ChainConfig.ToBtcdParam()
 	var rejecting []uint64
-
 	for _, v := range withdrawals {
 		// reject if we have an invalid address
-		script, err := types.DecodeBtcAddress(v.Address, netwk)
+		script, err := types.DecodeBtcAddress(v.Address, types.BitcoinNetworks[param.NetworkName])
 		if err != nil {
 			k.Logger().Info("invalid withdrawal address", "id", v.Id, "address", v.Address, "err", err.Error())
 			rejecting = append(rejecting, v.Id)

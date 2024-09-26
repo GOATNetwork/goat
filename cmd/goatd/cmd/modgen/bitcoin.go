@@ -93,12 +93,7 @@ func Bitcoin() *cobra.Command {
 				}
 
 				genesis.Params = types.Params{
-					ChainConfig: &types.ChainConfig{
-						NetworkName:          network.Name,
-						PubkeyHashAddrPrefix: uint32(network.PubKeyHashAddrID),
-						ScriptHashAddrPrefix: uint32(network.ScriptHashAddrID),
-						Bech32Hrp:            network.Bech32HRPSegwit,
-					},
+					NetworkName:        network.Name,
 					ConfirmationNumber: confirmationNumber,
 					DepositMagicPrefix: []byte(types.DepositMagicPreifxs[networkName]),
 					MinDepositAmount:   minDeposit,
@@ -152,7 +147,7 @@ func Bitcoin() *cobra.Command {
 	cmd.Flags().Uint32(FlagConfirmationNumber, param.ConfirmationNumber, "the confirmation number")
 	cmd.Flags().BytesHex(FlagPubkey, nil, "the initial relayer public key")
 	cmd.Flags().String(FlagPubkeyType, "secp256k1", "the public key type [secp256k1,schnorr]")
-	cmd.Flags().String(FlagNetworkName, param.ChainConfig.NetworkName, "the bitcoin network name(mainnet|testnet3|regtest|signet)")
+	cmd.Flags().String(FlagNetworkName, param.NetworkName, "the bitcoin network name(mainnet|testnet3|regtest|signet)")
 	cmd.Flags().Uint64(FlagMinDeposit, param.MinDepositAmount, "minimal allowed deposit amount")
 
 	return cmd

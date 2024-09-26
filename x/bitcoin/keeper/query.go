@@ -77,7 +77,11 @@ func (q queryServer) DepositAddress(ctx context.Context, req *types.QueryDeposit
 		return nil, status.Error(codes.Internal, "internal error")
 	}
 
-	chainConfig := param.ChainConfig.ToBtcdParam()
+	chainConfig := types.BitcoinNetworks[param.NetworkName]
+	if chainConfig == nil {
+		return nil, status.Error(codes.Internal, "no network config found")
+	}
+
 	switch req.Version {
 	case 0:
 		address, err := types.DepositAddressV0(&pubkey, evmAddress, chainConfig)
@@ -85,7 +89,7 @@ func (q queryServer) DepositAddress(ctx context.Context, req *types.QueryDeposit
 			return nil, status.Errorf(codes.InvalidArgument, "invalid request: %s", err.Error())
 		}
 		return &types.QueryDepositAddressResponse{
-			NetworkName: param.ChainConfig.NetworkName,
+			NetworkName: param.NetworkName,
 			PublicKey:   &pubkey,
 			Address:     address.EncodeAddress(),
 		}, nil
@@ -95,7 +99,7 @@ func (q queryServer) DepositAddress(ctx context.Context, req *types.QueryDeposit
 			return nil, status.Errorf(codes.InvalidArgument, "invalid request: %s", err.Error())
 		}
 		return &types.QueryDepositAddressResponse{
-			NetworkName:    param.ChainConfig.NetworkName,
+			NetworkName:    param.NetworkName,
 			PublicKey:      &pubkey,
 			Address:        address.EncodeAddress(),
 			OpReturnScript: script,

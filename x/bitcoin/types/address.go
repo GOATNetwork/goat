@@ -203,6 +203,10 @@ func DecodeEthAddress(address string) ([]byte, error) {
 
 // DecodeBtcAddress verifies if the address is valid and returns its payment script for later verification
 func DecodeBtcAddress(address string, netwk *chaincfg.Params) ([]byte, error) {
+	if netwk == nil {
+		return nil, errors.New("no network provided")
+	}
+
 	addr, err := btcutil.DecodeAddress(address, netwk)
 	if err != nil {
 		return nil, err
