@@ -8,15 +8,12 @@ import (
 	consensusmodulev1 "cosmossdk.io/api/cosmos/consensus/module/v1"
 	txconfigv1 "cosmossdk.io/api/cosmos/tx/config/v1"
 	"cosmossdk.io/core/appconfig"
-	upgradetypes "cosmossdk.io/x/upgrade/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	consensustypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 
-	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	bitcoinmodulev1 "github.com/goatnetwork/goat/api/goat/bitcoin/module/v1"
 	relayermodulev1 "github.com/goatnetwork/goat/api/goat/relayer/module/v1"
 	_ "github.com/goatnetwork/goat/x/relayer/module"
@@ -35,14 +32,12 @@ import (
 
 var (
 	genesisModuleOrder = []string{
-
 		authtypes.ModuleName,
 		banktypes.ModuleName,
 		relayermoduletypes.ModuleName,
 		bitcoinmoduletypes.ModuleName,
 		lockingmoduletypes.ModuleName,
 		goatmoduletypes.ModuleName,
-		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
 	beginBlockers = []string{}
@@ -52,18 +47,11 @@ var (
 		goatmoduletypes.ModuleName,
 	}
 
-	preBlockers = []string{
-		upgradetypes.ModuleName,
-	}
+	preBlockers = []string{}
 
 	// module account permissions
 	moduleAccPerms = []*authmodulev1.ModuleAccountPermission{
-		{Account: authtypes.FeeCollectorName},
-		{Account: distrtypes.ModuleName},
-		{Account: minttypes.ModuleName, Permissions: []string{authtypes.Minter}},
-		{Account: stakingtypes.BondedPoolName, Permissions: []string{authtypes.Burner, stakingtypes.ModuleName}},
-		{Account: stakingtypes.NotBondedPoolName, Permissions: []string{authtypes.Burner, stakingtypes.ModuleName}},
-		{Account: goatmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner, stakingtypes.ModuleName}},
+		{Account: goatmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 
@@ -71,8 +59,6 @@ var (
 	blockAccAddrs = []string{
 		authtypes.FeeCollectorName,
 		distrtypes.ModuleName,
-		stakingtypes.BondedPoolName,
-		stakingtypes.NotBondedPoolName,
 	}
 
 	// appConfig application configuration (used by depinject)
