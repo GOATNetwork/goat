@@ -30,6 +30,14 @@
           "Params": "RelayerParams"
         }
       }
+    },
+    {
+      "url": "./tmp-swagger-gen/goat/locking/v1/query.swagger.json",
+      "operationIds": {
+        "rename": {
+          "Params": "LockingParams"
+        }
+      }
     }
   ]
 }

@@ -33,6 +33,7 @@ message ExecutionPayload {
   repeated WithdrawalReq withdrawal_req = 21;
   repeated ReplaceByFeeReq rbf_req = 22;
   repeated Cancel1Req cancel1_req = 23;
+  repeated bytes requests = 24;
 }
 
 // GasRevenueReq
@@ -74,12 +75,3 @@ message ReplaceByFeeReq {
 message Cancel1Req {
   uint64 id = 1;
 }
-
-/*
-   locking:
-      create
-      delegate
-      redelegate
-      undelegate
-      claim
-*/

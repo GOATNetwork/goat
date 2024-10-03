@@ -54,7 +54,7 @@ func ExecutableDataToPayload(data *engine.ExecutableData, beaconRoot []byte) *Ex
 		res.RmVoterReq = append(res.RmVoterReq, &RemoveVoterReq{Voter: v.Voter.Bytes()})
 	}
 
-	for _, v := range data.BridgeWithdrawals {
+	for _, v := range data.GoatWithdrawals {
 		res.WithdrawalReq = append(res.WithdrawalReq, &WithdrawalReq{
 			Id:         v.Id,
 			Amount:     v.Amount,
@@ -116,7 +116,7 @@ func PayloadToExecutableData(data *ExecutionPayload) *engine.ExecutableData {
 	}
 
 	for _, v := range data.WithdrawalReq {
-		res.BridgeWithdrawals = append(res.BridgeWithdrawals, &ethtypes.BridgeWithdrawal{
+		res.GoatWithdrawals = append(res.GoatWithdrawals, &ethtypes.GoatWithdrawal{
 			Id:         v.Id,
 			Amount:     v.Amount,
 			MaxTxPrice: v.MaxTxPrice,

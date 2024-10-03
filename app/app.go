@@ -27,9 +27,6 @@ import (
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	_ "github.com/cosmos/cosmos-sdk/x/consensus" // import for side-effects
 	consensuskeeper "github.com/cosmos/cosmos-sdk/x/consensus/keeper"
-	_ "github.com/cosmos/cosmos-sdk/x/distribution" // import for side-effects
-	_ "github.com/cosmos/cosmos-sdk/x/mint"         // import for side-effects
-	_ "github.com/cosmos/cosmos-sdk/x/staking"      // import for side-effects
 	"go.uber.org/automaxprocs/maxprocs"
 
 	"github.com/goatnetwork/goat/docs"

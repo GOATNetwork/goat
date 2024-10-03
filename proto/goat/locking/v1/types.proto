@@ -1,0 +1,80 @@
+syntax = "proto3";
+package goat.locking.v1;
+
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/goatnetwork/goat/x/locking/types";
+
+// Token config
+message Token {
+  uint64 weight = 1;
+  string threshold = 2 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// RewardPool
+message RewardPool {
+  // the goat reward for the last block
+  string goat = 1 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+
+  // the gas fee for the last block
+  string gas = 2 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+
+  // the remain goat reward in the pool
+  string remain = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// Reward
+message Reward {
+  uint64 id = 1;
+  bytes recipient = 2;
+  string goat = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+  string gas = 4 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// Unlock
+message Unlock {
+  uint64 id = 1;
+  bytes token = 2;
+  bytes recipient = 3;
+  string amount = 4 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// ExecuableQueue
+message ExecuableQueue {
+  repeated Reward rewards = 1;
+  repeated Unlock unlocks = 2;
+}
+
+// UnlockQueue
+message UnlockQueue {
+  repeated Unlock unlocks = 1;
+}

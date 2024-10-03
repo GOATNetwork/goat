@@ -1,14 +1,76 @@
 syntax = "proto3";
 package goat.locking.v1;
 
-// import "amino/amino.proto";
-// import "goat/locking/v1/params.proto";
-// import "gogoproto/gogo.proto";
+import "amino/amino.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/goatnetwork/goat/x/locking/types";
+
+// ValidatorStatus is the status of a validator.
+enum ValidatorStatus {
+  // UNSPECIFIED defines an invalid validator status.
+  VALIDATOR_STATUS_UNSPECIFIED = 0 [(gogoproto.enumvalue_customname) = "Unspecified"];
+  // Pending means the validator is waitting for
+  VALIDATOR_STATUS_PENDING = 1 [(gogoproto.enumvalue_customname) = "Pending"];
+  // Active means the validator is producing and voting new blocks
+  VALIDATOR_STATUS_ACTIVE = 2 [(gogoproto.enumvalue_customname) = "Active"];
+  // Jailed means the validator did malicious behaviors like double sign and killed out
+  VALIDATOR_STATUS_JAILED = 3 [(gogoproto.enumvalue_customname) = "Jailed"];
+  // Downgrade means the validator is offline
+  VALIDATOR_STATUS_DOWNGRADE = 4 [(gogoproto.enumvalue_customname) = "Downgrade"];
+  // Inactive means the validator is exiting in progress or exited
+  VALIDATOR_STATUS_INACTIVE = 5 [(gogoproto.enumvalue_customname) = "Inactive"];
+}
 
 // Validator
 message Validator {
   bytes pubkey = 1;
-  int64 power = 2;
+  uint64 power = 2;
+
+  // the total locking
+  repeated cosmos.base.v1beta1.Coin locking = 3 [
+    (amino.dont_omitempty) = true,
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+
+  // unclaimed goat reward
+  string goat_reward = 4 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+
+  // unclaimed gas fee rewrad
+  string gas_reward = 5 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+
+  ValidatorStatus status = 6;
+}
+
+// SigningInfo
+message SigningInfo {
+  option (gogoproto.equal) = true;
+
+  // Height at which validator was first a candidate OR was un-jailed
+  int64 start_height = 2;
+  // Timestamp until which the validator is jailed due to liveness downtime.
+  google.protobuf.Timestamp jailed_until = 4 [
+    (gogoproto.stdtime) = true,
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  // Whether or not a validator has been tombstoned (killed out of validator
+  // set). It is set once the validator commits an equivocation or for any other
+  // configured misbehavior.
+  bool tombstoned = 5;
+  // A counter of missed (unsigned) blocks. It is used to avoid unnecessary
+  // reads in the missed block bitmap.
+  int64 missed_blocks_counter = 6;
 }

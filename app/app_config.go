@@ -12,14 +12,12 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	consensustypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
-	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 
 	bitcoinmodulev1 "github.com/goatnetwork/goat/api/goat/bitcoin/module/v1"
 	relayermodulev1 "github.com/goatnetwork/goat/api/goat/relayer/module/v1"
 	_ "github.com/goatnetwork/goat/x/relayer/module"
 	relayermoduletypes "github.com/goatnetwork/goat/x/relayer/types"
 
-	// cosmos-sdk modules
 	goatmodulev1 "github.com/goatnetwork/goat/api/goat/goat/module/v1"
 	lockingmodulev1 "github.com/goatnetwork/goat/api/goat/locking/module/v1"
 	_ "github.com/goatnetwork/goat/x/bitcoin/module"
@@ -58,7 +56,6 @@ var (
 	// blocked account addresses
 	blockAccAddrs = []string{
 		authtypes.FeeCollectorName,
-		distrtypes.ModuleName,
 	}
 
 	// appConfig application configuration (used by depinject)

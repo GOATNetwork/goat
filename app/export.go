@@ -27,7 +27,6 @@ func (app *App) ExportAppStateAndValidators(forZeroHeight bool, jailAllowedAddrs
 		return servertypes.ExportedApp{}, err
 	}
 
-	// validators, err := staking.WriteValidators(ctx, nil)
 	return servertypes.ExportedApp{
 		AppState:        appState,
 		Validators:      nil, // todo

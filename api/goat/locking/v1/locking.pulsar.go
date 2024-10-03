@@ -2,8 +2,12 @@
 package lockingv1
 
 import (
+	_ "cosmossdk.io/api/amino"
+	v1beta1 "cosmossdk.io/api/cosmos/base/v1beta1"
 	fmt "fmt"
+	_ "github.com/cosmos/cosmos-proto"
 	runtime "github.com/cosmos/cosmos-proto/runtime"
+	_ "github.com/cosmos/gogoproto/gogoproto"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -12,10 +16,65 @@ import (
 	sync "sync"
 )
 
+var _ protoreflect.List = (*_Validator_3_list)(nil)
+
+type _Validator_3_list struct {
+	list *[]*v1beta1.Coin
+}
+
+func (x *_Validator_3_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_Validator_3_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_Validator_3_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*v1beta1.Coin)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_Validator_3_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*v1beta1.Coin)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_Validator_3_list) AppendMutable() protoreflect.Value {
+	v := new(v1beta1.Coin)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_Validator_3_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_Validator_3_list) NewElement() protoreflect.Value {
+	v := new(v1beta1.Coin)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_Validator_3_list) IsValid() bool {
+	return x.list != nil
+}
+
 var (
-	md_Validator        protoreflect.MessageDescriptor
-	fd_Validator_pubkey protoreflect.FieldDescriptor
-	fd_Validator_power  protoreflect.FieldDescriptor
+	md_Validator             protoreflect.MessageDescriptor
+	fd_Validator_pubkey      protoreflect.FieldDescriptor
+	fd_Validator_power       protoreflect.FieldDescriptor
+	fd_Validator_locking     protoreflect.FieldDescriptor
+	fd_Validator_goat_reward protoreflect.FieldDescriptor
+	fd_Validator_gas_reward  protoreflect.FieldDescriptor
+	fd_Validator_status      protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -23,6 +82,10 @@ func init() {
 	md_Validator = File_goat_locking_v1_locking_proto.Messages().ByName("Validator")
 	fd_Validator_pubkey = md_Validator.Fields().ByName("pubkey")
 	fd_Validator_power = md_Validator.Fields().ByName("power")
+	fd_Validator_locking = md_Validator.Fields().ByName("locking")
+	fd_Validator_goat_reward = md_Validator.Fields().ByName("goat_reward")
+	fd_Validator_gas_reward = md_Validator.Fields().ByName("gas_reward")
+	fd_Validator_status = md_Validator.Fields().ByName("status")
 }
 
 var _ protoreflect.Message = (*fastReflection_Validator)(nil)
@@ -96,9 +159,33 @@ func (x *fastReflection_Validator) Range(f func(protoreflect.FieldDescriptor, pr
 			return
 		}
 	}
-	if x.Power != int64(0) {
-		value := protoreflect.ValueOfInt64(x.Power)
+	if x.Power != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Power)
 		if !f(fd_Validator_power, value) {
+			return
+		}
+	}
+	if len(x.Locking) != 0 {
+		value := protoreflect.ValueOfList(&_Validator_3_list{list: &x.Locking})
+		if !f(fd_Validator_locking, value) {
+			return
+		}
+	}
+	if x.GoatReward != "" {
+		value := protoreflect.ValueOfString(x.GoatReward)
+		if !f(fd_Validator_goat_reward, value) {
+			return
+		}
+	}
+	if x.GasReward != "" {
+		value := protoreflect.ValueOfString(x.GasReward)
+		if !f(fd_Validator_gas_reward, value) {
+			return
+		}
+	}
+	if x.Status != 0 {
+		value := protoreflect.ValueOfEnum((protoreflect.EnumNumber)(x.Status))
+		if !f(fd_Validator_status, value) {
 			return
 		}
 	}
@@ -120,7 +207,15 @@ func (x *fastReflection_Validator) Has(fd protoreflect.FieldDescriptor) bool {
 	case "goat.locking.v1.Validator.pubkey":
 		return len(x.Pubkey) != 0
 	case "goat.locking.v1.Validator.power":
-		return x.Power != int64(0)
+		return x.Power != uint64(0)
+	case "goat.locking.v1.Validator.locking":
+		return len(x.Locking) != 0
+	case "goat.locking.v1.Validator.goat_reward":
+		return x.GoatReward != ""
+	case "goat.locking.v1.Validator.gas_reward":
+		return x.GasReward != ""
+	case "goat.locking.v1.Validator.status":
+		return x.Status != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.Validator"))
@@ -140,7 +235,15 @@ func (x *fastReflection_Validator) Clear(fd protoreflect.FieldDescriptor) {
 	case "goat.locking.v1.Validator.pubkey":
 		x.Pubkey = nil
 	case "goat.locking.v1.Validator.power":
-		x.Power = int64(0)
+		x.Power = uint64(0)
+	case "goat.locking.v1.Validator.locking":
+		x.Locking = nil
+	case "goat.locking.v1.Validator.goat_reward":
+		x.GoatReward = ""
+	case "goat.locking.v1.Validator.gas_reward":
+		x.GasReward = ""
+	case "goat.locking.v1.Validator.status":
+		x.Status = 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.Validator"))
@@ -162,7 +265,22 @@ func (x *fastReflection_Validator) Get(descriptor protoreflect.FieldDescriptor) 
 		return protoreflect.ValueOfBytes(value)
 	case "goat.locking.v1.Validator.power":
 		value := x.Power
-		return protoreflect.ValueOfInt64(value)
+		return protoreflect.ValueOfUint64(value)
+	case "goat.locking.v1.Validator.locking":
+		if len(x.Locking) == 0 {
+			return protoreflect.ValueOfList(&_Validator_3_list{})
+		}
+		listValue := &_Validator_3_list{list: &x.Locking}
+		return protoreflect.ValueOfList(listValue)
+	case "goat.locking.v1.Validator.goat_reward":
+		value := x.GoatReward
+		return protoreflect.ValueOfString(value)
+	case "goat.locking.v1.Validator.gas_reward":
+		value := x.GasReward
+		return protoreflect.ValueOfString(value)
+	case "goat.locking.v1.Validator.status":
+		value := x.Status
+		return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(value))
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.Validator"))
@@ -186,7 +304,17 @@ func (x *fastReflection_Validator) Set(fd protoreflect.FieldDescriptor, value pr
 	case "goat.locking.v1.Validator.pubkey":
 		x.Pubkey = value.Bytes()
 	case "goat.locking.v1.Validator.power":
-		x.Power = value.Int()
+		x.Power = value.Uint()
+	case "goat.locking.v1.Validator.locking":
+		lv := value.List()
+		clv := lv.(*_Validator_3_list)
+		x.Locking = *clv.list
+	case "goat.locking.v1.Validator.goat_reward":
+		x.GoatReward = value.Interface().(string)
+	case "goat.locking.v1.Validator.gas_reward":
+		x.GasReward = value.Interface().(string)
+	case "goat.locking.v1.Validator.status":
+		x.Status = (ValidatorStatus)(value.Enum())
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.Validator"))
@@ -207,10 +335,22 @@ func (x *fastReflection_Validator) Set(fd protoreflect.FieldDescriptor, value pr
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Validator) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "goat.locking.v1.Validator.locking":
+		if x.Locking == nil {
+			x.Locking = []*v1beta1.Coin{}
+		}
+		value := &_Validator_3_list{list: &x.Locking}
+		return protoreflect.ValueOfList(value)
 	case "goat.locking.v1.Validator.pubkey":
 		panic(fmt.Errorf("field pubkey of message goat.locking.v1.Validator is not mutable"))
 	case "goat.locking.v1.Validator.power":
 		panic(fmt.Errorf("field power of message goat.locking.v1.Validator is not mutable"))
+	case "goat.locking.v1.Validator.goat_reward":
+		panic(fmt.Errorf("field goat_reward of message goat.locking.v1.Validator is not mutable"))
+	case "goat.locking.v1.Validator.gas_reward":
+		panic(fmt.Errorf("field gas_reward of message goat.locking.v1.Validator is not mutable"))
+	case "goat.locking.v1.Validator.status":
+		panic(fmt.Errorf("field status of message goat.locking.v1.Validator is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.Validator"))
@@ -227,7 +367,16 @@ func (x *fastReflection_Validator) NewField(fd protoreflect.FieldDescriptor) pro
 	case "goat.locking.v1.Validator.pubkey":
 		return protoreflect.ValueOfBytes(nil)
 	case "goat.locking.v1.Validator.power":
-		return protoreflect.ValueOfInt64(int64(0))
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "goat.locking.v1.Validator.locking":
+		list := []*v1beta1.Coin{}
+		return protoreflect.ValueOfList(&_Validator_3_list{list: &list})
+	case "goat.locking.v1.Validator.goat_reward":
+		return protoreflect.ValueOfString("")
+	case "goat.locking.v1.Validator.gas_reward":
+		return protoreflect.ValueOfString("")
+	case "goat.locking.v1.Validator.status":
+		return protoreflect.ValueOfEnum(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.Validator"))
@@ -304,6 +453,23 @@ func (x *fastReflection_Validator) ProtoMethods() *protoiface.Methods {
 		if x.Power != 0 {
 			n += 1 + runtime.Sov(uint64(x.Power))
 		}
+		if len(x.Locking) > 0 {
+			for _, e := range x.Locking {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		l = len(x.GoatReward)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.GasReward)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.Status != 0 {
+			n += 1 + runtime.Sov(uint64(x.Status))
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -332,6 +498,41 @@ func (x *fastReflection_Validator) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Status != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Status))
+			i--
+			dAtA[i] = 0x30
+		}
+		if len(x.GasReward) > 0 {
+			i -= len(x.GasReward)
+			copy(dAtA[i:], x.GasReward)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.GasReward)))
+			i--
+			dAtA[i] = 0x2a
+		}
+		if len(x.GoatReward) > 0 {
+			i -= len(x.GoatReward)
+			copy(dAtA[i:], x.GoatReward)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.GoatReward)))
+			i--
+			dAtA[i] = 0x22
+		}
+		if len(x.Locking) > 0 {
+			for iNdEx := len(x.Locking) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.Locking[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0x1a
+			}
 		}
 		if x.Power != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.Power))
@@ -442,7 +643,124 @@ func (x *fastReflection_Validator) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.Power |= int64(b&0x7F) << shift
+					x.Power |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Locking", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Locking = append(x.Locking, &v1beta1.Coin{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Locking[len(x.Locking)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field GoatReward", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.GoatReward = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 5:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field GasReward", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.GasReward = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 6:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+				}
+				x.Status = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Status |= ValidatorStatus(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -495,6 +813,71 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// ValidatorStatus is the status of a validator.
+type ValidatorStatus int32
+
+const (
+	// UNSPECIFIED defines an invalid validator status.
+	ValidatorStatus_VALIDATOR_STATUS_UNSPECIFIED ValidatorStatus = 0
+	// Pending means the validator is waitting for
+	ValidatorStatus_VALIDATOR_STATUS_PENDING ValidatorStatus = 1
+	// Active means the validator is producing and voting new blocks
+	ValidatorStatus_VALIDATOR_STATUS_ACTIVE ValidatorStatus = 2
+	// Jailed means the validator did malicious behaviors like double sign
+	ValidatorStatus_VALIDATOR_STATUS_JAILED ValidatorStatus = 3
+	// Downgrade means the validator is offline
+	ValidatorStatus_VALIDATOR_STATUS_DOWNGRADE ValidatorStatus = 4
+	// Inactive means the validator is exiting in progress or exited
+	ValidatorStatus_VALIDATOR_STATUS_INACTIVE ValidatorStatus = 5
+)
+
+// Enum value maps for ValidatorStatus.
+var (
+	ValidatorStatus_name = map[int32]string{
+		0: "VALIDATOR_STATUS_UNSPECIFIED",
+		1: "VALIDATOR_STATUS_PENDING",
+		2: "VALIDATOR_STATUS_ACTIVE",
+		3: "VALIDATOR_STATUS_JAILED",
+		4: "VALIDATOR_STATUS_DOWNGRADE",
+		5: "VALIDATOR_STATUS_INACTIVE",
+	}
+	ValidatorStatus_value = map[string]int32{
+		"VALIDATOR_STATUS_UNSPECIFIED": 0,
+		"VALIDATOR_STATUS_PENDING":     1,
+		"VALIDATOR_STATUS_ACTIVE":      2,
+		"VALIDATOR_STATUS_JAILED":      3,
+		"VALIDATOR_STATUS_DOWNGRADE":   4,
+		"VALIDATOR_STATUS_INACTIVE":    5,
+	}
+)
+
+func (x ValidatorStatus) Enum() *ValidatorStatus {
+	p := new(ValidatorStatus)
+	*p = x
+	return p
+}
+
+func (x ValidatorStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ValidatorStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_goat_locking_v1_locking_proto_enumTypes[0].Descriptor()
+}
+
+func (ValidatorStatus) Type() protoreflect.EnumType {
+	return &file_goat_locking_v1_locking_proto_enumTypes[0]
+}
+
+func (x ValidatorStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use ValidatorStatus.Descriptor instead.
+func (ValidatorStatus) EnumDescriptor() ([]byte, []int) {
+	return file_goat_locking_v1_locking_proto_rawDescGZIP(), []int{0}
+}
+
 // Validator
 type Validator struct {
 	state         protoimpl.MessageState
@@ -502,7 +885,14 @@ type Validator struct {
 	unknownFields protoimpl.UnknownFields
 
 	Pubkey []byte `protobuf:"bytes,1,opt,name=pubkey,proto3" json:"pubkey,omitempty"`
-	Power  int64  `protobuf:"varint,2,opt,name=power,proto3" json:"power,omitempty"`
+	Power  uint64 `protobuf:"varint,2,opt,name=power,proto3" json:"power,omitempty"`
+	// the total locking
+	Locking []*v1beta1.Coin `protobuf:"bytes,3,rep,name=locking,proto3" json:"locking,omitempty"`
+	// unclaimed goat reward
+	GoatReward string `protobuf:"bytes,4,opt,name=goat_reward,json=goatReward,proto3" json:"goat_reward,omitempty"`
+	// unclaimed gas fee rewrad
+	GasReward string          `protobuf:"bytes,5,opt,name=gas_reward,json=gasReward,proto3" json:"gas_reward,omitempty"`
+	Status    ValidatorStatus `protobuf:"varint,6,opt,name=status,proto3,enum=goat.locking.v1.ValidatorStatus" json:"status,omitempty"`
 }
 
 func (x *Validator) Reset() {
@@ -532,11 +922,39 @@ func (x *Validator) GetPubkey() []byte {
 	return nil
 }
 
-func (x *Validator) GetPower() int64 {
+func (x *Validator) GetPower() uint64 {
 	if x != nil {
 		return x.Power
 	}
 	return 0
+}
+
+func (x *Validator) GetLocking() []*v1beta1.Coin {
+	if x != nil {
+		return x.Locking
+	}
+	return nil
+}
+
+func (x *Validator) GetGoatReward() string {
+	if x != nil {
+		return x.GoatReward
+	}
+	return ""
+}
+
+func (x *Validator) GetGasReward() string {
+	if x != nil {
+		return x.GasReward
+	}
+	return ""
+}
+
+func (x *Validator) GetStatus() ValidatorStatus {
+	if x != nil {
+		return x.Status
+	}
+	return ValidatorStatus_VALIDATOR_STATUS_UNSPECIFIED
 }
 
 var File_goat_locking_v1_locking_proto protoreflect.FileDescriptor
@@ -545,23 +963,67 @@ var file_goat_locking_v1_locking_proto_rawDesc = []byte{
 	0x0a, 0x1d, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76,
 	0x31, 0x2f, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12,
 	0x0f, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31,
-	0x22, 0x39, 0x0a, 0x09, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x6f, 0x72, 0x12, 0x16, 0x0a,
-	0x06, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x06, 0x70,
-	0x75, 0x62, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x70, 0x6f, 0x77, 0x65, 0x72, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x03, 0x52, 0x05, 0x70, 0x6f, 0x77, 0x65, 0x72, 0x42, 0xbc, 0x01, 0x0a, 0x13,
-	0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67,
-	0x2e, 0x76, 0x31, 0x42, 0x0c, 0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x50, 0x72, 0x6f, 0x74,
-	0x6f, 0x50, 0x01, 0x5a, 0x39, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f,
-	0x67, 0x6f, 0x61, 0x74, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x67, 0x6f, 0x61, 0x74,
-	0x2f, 0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e,
-	0x67, 0x2f, 0x76, 0x31, 0x3b, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x76, 0x31, 0xa2, 0x02,
-	0x03, 0x47, 0x4c, 0x58, 0xaa, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x2e, 0x4c, 0x6f, 0x63, 0x6b,
-	0x69, 0x6e, 0x67, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x4c, 0x6f,
-	0x63, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x1b, 0x47, 0x6f, 0x61, 0x74, 0x5c,
-	0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65,
-	0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x11, 0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x4c,
-	0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x33,
+	0x1a, 0x11, 0x61, 0x6d, 0x69, 0x6e, 0x6f, 0x2f, 0x61, 0x6d, 0x69, 0x6e, 0x6f, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x1a, 0x1e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x62, 0x61, 0x73, 0x65,
+	0x2f, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2f, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x1a, 0x19, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x5f, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x14,
+	0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x22, 0xf9, 0x02, 0x0a, 0x09, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74,
+	0x6f, 0x72, 0x12, 0x16, 0x0a, 0x06, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x0c, 0x52, 0x06, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x70, 0x6f,
+	0x77, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x05, 0x70, 0x6f, 0x77, 0x65, 0x72,
+	0x12, 0x6a, 0x0a, 0x07, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x18, 0x03, 0x20, 0x03, 0x28,
+	0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e,
+	0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x35, 0xc8, 0xde,
+	0x1f, 0x00, 0xaa, 0xdf, 0x1f, 0x28, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d,
+	0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73,
+	0x64, 0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0xa8, 0xe7,
+	0xb0, 0x2a, 0x01, 0x52, 0x07, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x12, 0x4c, 0x0a, 0x0b,
+	0x67, 0x6f, 0x61, 0x74, 0x5f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28,
+	0x09, 0x42, 0x2b, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
+	0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74,
+	0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0x52, 0x0a,
+	0x67, 0x6f, 0x61, 0x74, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x12, 0x4a, 0x0a, 0x0a, 0x67, 0x61,
+	0x73, 0x5f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x42, 0x2b,
+	0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64,
+	0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d,
+	0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0x52, 0x09, 0x67, 0x61, 0x73,
+	0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x12, 0x38, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73,
+	0x18, 0x06, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x20, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x6c, 0x6f,
+	0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74,
+	0x6f, 0x72, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73,
+	0x2a, 0x9d, 0x02, 0x0a, 0x0f, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x74,
+	0x61, 0x74, 0x75, 0x73, 0x12, 0x31, 0x0a, 0x1c, 0x56, 0x41, 0x4c, 0x49, 0x44, 0x41, 0x54, 0x4f,
+	0x52, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49,
+	0x46, 0x49, 0x45, 0x44, 0x10, 0x00, 0x1a, 0x0f, 0x8a, 0x9d, 0x20, 0x0b, 0x55, 0x6e, 0x73, 0x70,
+	0x65, 0x63, 0x69, 0x66, 0x69, 0x65, 0x64, 0x12, 0x29, 0x0a, 0x18, 0x56, 0x41, 0x4c, 0x49, 0x44,
+	0x41, 0x54, 0x4f, 0x52, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x50, 0x45, 0x4e, 0x44,
+	0x49, 0x4e, 0x47, 0x10, 0x01, 0x1a, 0x0b, 0x8a, 0x9d, 0x20, 0x07, 0x50, 0x65, 0x6e, 0x64, 0x69,
+	0x6e, 0x67, 0x12, 0x27, 0x0a, 0x17, 0x56, 0x41, 0x4c, 0x49, 0x44, 0x41, 0x54, 0x4f, 0x52, 0x5f,
+	0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x41, 0x43, 0x54, 0x49, 0x56, 0x45, 0x10, 0x02, 0x1a,
+	0x0a, 0x8a, 0x9d, 0x20, 0x06, 0x41, 0x63, 0x74, 0x69, 0x76, 0x65, 0x12, 0x27, 0x0a, 0x17, 0x56,
+	0x41, 0x4c, 0x49, 0x44, 0x41, 0x54, 0x4f, 0x52, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f,
+	0x4a, 0x41, 0x49, 0x4c, 0x45, 0x44, 0x10, 0x03, 0x1a, 0x0a, 0x8a, 0x9d, 0x20, 0x06, 0x4a, 0x61,
+	0x69, 0x6c, 0x65, 0x64, 0x12, 0x2d, 0x0a, 0x1a, 0x56, 0x41, 0x4c, 0x49, 0x44, 0x41, 0x54, 0x4f,
+	0x52, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x44, 0x4f, 0x57, 0x4e, 0x47, 0x52, 0x41,
+	0x44, 0x45, 0x10, 0x04, 0x1a, 0x0d, 0x8a, 0x9d, 0x20, 0x09, 0x44, 0x6f, 0x77, 0x6e, 0x67, 0x72,
+	0x61, 0x64, 0x65, 0x12, 0x2b, 0x0a, 0x19, 0x56, 0x41, 0x4c, 0x49, 0x44, 0x41, 0x54, 0x4f, 0x52,
+	0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x49, 0x4e, 0x41, 0x43, 0x54, 0x49, 0x56, 0x45,
+	0x10, 0x05, 0x1a, 0x0c, 0x8a, 0x9d, 0x20, 0x08, 0x49, 0x6e, 0x61, 0x63, 0x74, 0x69, 0x76, 0x65,
+	0x42, 0xbc, 0x01, 0x0a, 0x13, 0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x6c, 0x6f,
+	0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x42, 0x0c, 0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e,
+	0x67, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x39, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62,
+	0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b,
+	0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x6c,
+	0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x3b, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e,
+	0x67, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x47, 0x4c, 0x58, 0xaa, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74,
+	0x2e, 0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x0f, 0x47, 0x6f,
+	0x61, 0x74, 0x5c, 0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x1b,
+	0x47, 0x6f, 0x61, 0x74, 0x5c, 0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0x5c,
+	0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x11, 0x47, 0x6f,
+	0x61, 0x74, 0x3a, 0x3a, 0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x3a, 0x3a, 0x56, 0x31, 0x62,
+	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -576,16 +1038,21 @@ func file_goat_locking_v1_locking_proto_rawDescGZIP() []byte {
 	return file_goat_locking_v1_locking_proto_rawDescData
 }
 
+var file_goat_locking_v1_locking_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_goat_locking_v1_locking_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_goat_locking_v1_locking_proto_goTypes = []interface{}{
-	(*Validator)(nil), // 0: goat.locking.v1.Validator
+	(ValidatorStatus)(0), // 0: goat.locking.v1.ValidatorStatus
+	(*Validator)(nil),    // 1: goat.locking.v1.Validator
+	(*v1beta1.Coin)(nil), // 2: cosmos.base.v1beta1.Coin
 }
 var file_goat_locking_v1_locking_proto_depIdxs = []int32{
-	0, // [0:0] is the sub-list for method output_type
-	0, // [0:0] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	2, // 0: goat.locking.v1.Validator.locking:type_name -> cosmos.base.v1beta1.Coin
+	0, // 1: goat.locking.v1.Validator.status:type_name -> goat.locking.v1.ValidatorStatus
+	2, // [2:2] is the sub-list for method output_type
+	2, // [2:2] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_goat_locking_v1_locking_proto_init() }
@@ -612,13 +1079,14 @@ func file_goat_locking_v1_locking_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_goat_locking_v1_locking_proto_rawDesc,
-			NumEnums:      0,
+			NumEnums:      1,
 			NumMessages:   1,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_goat_locking_v1_locking_proto_goTypes,
 		DependencyIndexes: file_goat_locking_v1_locking_proto_depIdxs,
+		EnumInfos:         file_goat_locking_v1_locking_proto_enumTypes,
 		MessageInfos:      file_goat_locking_v1_locking_proto_msgTypes,
 	}.Build()
 	File_goat_locking_v1_locking_proto = out.File

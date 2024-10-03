@@ -37,6 +37,7 @@ func LockingKeeper(t testing.TB) (keeper.Keeper, sdk.Context, address.Codec) {
 		cdc,
 		addressCodec,
 		runtime.NewKVStoreService(storeKey),
+		nil,
 		log.NewNopLogger(),
 	)
 

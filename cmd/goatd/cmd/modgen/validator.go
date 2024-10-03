@@ -3,6 +3,7 @@ package modgen
 import (
 	"bytes"
 
+	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/client"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
@@ -28,7 +29,7 @@ func Validator() *cobra.Command {
 			config := serverCtx.Config.SetRoot(clientCtx.HomeDir)
 			genesisFile := config.GenesisFile()
 
-			votePower, err := cmd.Flags().GetInt64(FlagValidatorPower)
+			votePower, err := cmd.Flags().GetUint64(FlagValidatorPower)
 			if err != nil {
 				return err
 			}
@@ -50,13 +51,16 @@ func Validator() *cobra.Command {
 			serverCtx.Logger.Info("update genesis", "module", types.ModuleName, "geneis", genesisFile)
 			if err := UpdateModuleGenesis(genesisFile, types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
 				for _, v := range genesis.GetValidators() {
-					if bytes.Equal(v.GetPubkey(), pubkeyRaw) {
+					if bytes.Equal(v.Pubkey, pubkeyRaw) {
 						return nil
 					}
 				}
 				genesis.Validators = append(genesis.Validators, &types.Validator{
-					Pubkey: pubkeyRaw,
-					Power:  votePower,
+					Pubkey:     pubkeyRaw,
+					Power:      votePower,
+					GoatReward: math.ZeroInt(),
+					GasReward:  math.ZeroInt(),
+					Status:     types.ValidatorStatus_Active,
 				})
 				return nil
 			}); err != nil {
@@ -102,7 +106,7 @@ func Validator() *cobra.Command {
 	}
 
 	cmd.Flags().String(FlagValidatorPubkey, "", "validator pubkey(compressed secp256k1)")
-	cmd.Flags().Int64(FlagValidatorPower, 1, "validator vote power")
+	cmd.Flags().Uint64(FlagValidatorPower, 1, "validator vote power")
 
 	return cmd
 }

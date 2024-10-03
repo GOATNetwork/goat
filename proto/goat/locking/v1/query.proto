@@ -2,7 +2,7 @@ syntax = "proto3";
 package goat.locking.v1;
 
 import "amino/amino.proto";
-// import "cosmos/base/query/v1beta1/pagination.proto";
+import "goat/locking/v1/locking.proto";
 import "goat/locking/v1/params.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
@@ -14,6 +14,11 @@ service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/goatnetwork/goat/locking/v1/params";
+  }
+
+  // Validator queries the parameters of the module.
+  rpc Validator(QueryValidatorRequest) returns (QueryValidatorResponse) {
+    option (google.api.http).get = "/goatnetwork/goat/locking/v1/validator";
   }
 }
 
@@ -27,4 +32,14 @@ message QueryParamsResponse {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
+}
+
+// QueryValidatorRequest
+message QueryValidatorRequest {
+  string address = 1;
+}
+
+// QueryValidatorResponse
+message QueryValidatorResponse {
+  Validator validator = 1;
 }

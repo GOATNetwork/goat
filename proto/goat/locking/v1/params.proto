@@ -2,12 +2,34 @@ syntax = "proto3";
 package goat.locking.v1;
 
 import "amino/amino.proto";
+// import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+// import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/goatnetwork/goat/x/locking/types";
 
 // Params defines the parameters for the module.
 message Params {
-  option (amino.name) = "goat/x/locking/Params";
-  option (gogoproto.equal) = true;
+  // the partial unlock waitting duation
+  google.protobuf.Duration unlock_waitting_duration = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true,
+    (gogoproto.stdduration) = true
+  ];
+
+  // if the token amount is less then threshold, the validator will be the
+  // inactive status the validator operator should wait for long then paritial
+  // unlock duation
+  google.protobuf.Duration exit_waitting_duration = 2 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true,
+    (gogoproto.stdduration) = true
+  ];
+
+  google.protobuf.Duration downgrade_waitting_duration = 3 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true,
+    (gogoproto.stdduration) = true
+  ];
 }
