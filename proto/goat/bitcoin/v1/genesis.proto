@@ -31,7 +31,7 @@ message GenesisState {
     (amino.dont_omitempty) = true
   ];
   uint64 block_tip = 2;
-  map<uint64, bytes> block_hashes = 3;
+  repeated bytes block_hashes = 3;
   uint64 eth_tx_nonce = 4;
   goat.relayer.v1.PublicKey pubkey = 5;
   ExecuableQueue queue = 6;

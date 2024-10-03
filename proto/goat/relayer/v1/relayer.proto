@@ -47,15 +47,17 @@ enum VoterStatus {
 
 // Voter the relayer voter
 message Voter {
+  // the address bytes
+  bytes address = 1;
   // vote key is the bls12-381 G2 compressed pubkey(96 bytes)
   // the key is a sha256 hash if the voter is pending to join the relayer
   // network
-  bytes vote_key = 1;
+  bytes vote_key = 2;
   // status represents the current voter status
-  VoterStatus status = 2;
+  VoterStatus status = 3;
   // height represents the block number of conensus layer when voter is approved
   // to join on execution layer
-  uint64 height = 3;
+  uint64 height = 4;
 }
 
 // PublicKey defines the keys available for use with relayer

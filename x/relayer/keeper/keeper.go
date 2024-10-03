@@ -359,6 +359,7 @@ func (k Keeper) ProcessRelayerRequest(ctx context.Context, adds []*goattypes.Add
 			continue
 		}
 		if err := k.Voters.Set(sdkctx, addr, types.Voter{
+			Address: add.Voter,
 			VoteKey: add.PubkeyHash,
 			Height:  height,
 			Status:  types.VOTER_STATUS_PENDING,

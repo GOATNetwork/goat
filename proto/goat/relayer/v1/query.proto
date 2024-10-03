@@ -52,7 +52,10 @@ message QueryVotersRequest {
 
 // QueryVotersRequest is response type for the Query/Voters RPC method
 message QueryVotersResponse {
-  map<string, Voter> voters = 1;
+  repeated Voter voters = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
 }
 
 // QueryRelayerRequest is request type for the Query/Relayer RPC method

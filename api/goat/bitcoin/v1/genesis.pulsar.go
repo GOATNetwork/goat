@@ -12,7 +12,6 @@ import (
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	io "io"
 	reflect "reflect"
-	sort "sort"
 	sync "sync"
 )
 
@@ -1017,86 +1016,50 @@ func (x *fastReflection_DepositGenesis) ProtoMethods() *protoiface.Methods {
 	}
 }
 
-var _ protoreflect.Map = (*_GenesisState_3_map)(nil)
+var _ protoreflect.List = (*_GenesisState_3_list)(nil)
 
-type _GenesisState_3_map struct {
-	m *map[uint64][]byte
+type _GenesisState_3_list struct {
+	list *[][]byte
 }
 
-func (x *_GenesisState_3_map) Len() int {
-	if x.m == nil {
+func (x *_GenesisState_3_list) Len() int {
+	if x.list == nil {
 		return 0
 	}
-	return len(*x.m)
+	return len(*x.list)
 }
 
-func (x *_GenesisState_3_map) Range(f func(protoreflect.MapKey, protoreflect.Value) bool) {
-	if x.m == nil {
-		return
-	}
-	for k, v := range *x.m {
-		mapKey := (protoreflect.MapKey)(protoreflect.ValueOfUint64(k))
-		mapValue := protoreflect.ValueOfBytes(v)
-		if !f(mapKey, mapValue) {
-			break
-		}
-	}
+func (x *_GenesisState_3_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfBytes((*x.list)[i])
 }
 
-func (x *_GenesisState_3_map) Has(key protoreflect.MapKey) bool {
-	if x.m == nil {
-		return false
-	}
-	keyUnwrapped := key.Uint()
-	concreteValue := keyUnwrapped
-	_, ok := (*x.m)[concreteValue]
-	return ok
-}
-
-func (x *_GenesisState_3_map) Clear(key protoreflect.MapKey) {
-	if x.m == nil {
-		return
-	}
-	keyUnwrapped := key.Uint()
-	concreteKey := keyUnwrapped
-	delete(*x.m, concreteKey)
-}
-
-func (x *_GenesisState_3_map) Get(key protoreflect.MapKey) protoreflect.Value {
-	if x.m == nil {
-		return protoreflect.Value{}
-	}
-	keyUnwrapped := key.Uint()
-	concreteKey := keyUnwrapped
-	v, ok := (*x.m)[concreteKey]
-	if !ok {
-		return protoreflect.Value{}
-	}
-	return protoreflect.ValueOfBytes(v)
-}
-
-func (x *_GenesisState_3_map) Set(key protoreflect.MapKey, value protoreflect.Value) {
-	if !key.IsValid() || !value.IsValid() {
-		panic("invalid key or value provided")
-	}
-	keyUnwrapped := key.Uint()
-	concreteKey := keyUnwrapped
+func (x *_GenesisState_3_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Bytes()
 	concreteValue := valueUnwrapped
-	(*x.m)[concreteKey] = concreteValue
+	(*x.list)[i] = concreteValue
 }
 
-func (x *_GenesisState_3_map) Mutable(key protoreflect.MapKey) protoreflect.Value {
-	panic("should not call Mutable on protoreflect.Map whose value is not of type protoreflect.Message")
+func (x *_GenesisState_3_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Bytes()
+	concreteValue := valueUnwrapped
+	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_GenesisState_3_map) NewValue() protoreflect.Value {
+func (x *_GenesisState_3_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message GenesisState at list field BlockHashes as it is not of Message kind"))
+}
+
+func (x *_GenesisState_3_list) Truncate(n int) {
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_GenesisState_3_list) NewElement() protoreflect.Value {
 	var v []byte
 	return protoreflect.ValueOfBytes(v)
 }
 
-func (x *_GenesisState_3_map) IsValid() bool {
-	return x.m != nil
+func (x *_GenesisState_3_list) IsValid() bool {
+	return x.list != nil
 }
 
 var _ protoreflect.List = (*_GenesisState_7_list)(nil)
@@ -1304,7 +1267,7 @@ func (x *fastReflection_GenesisState) Range(f func(protoreflect.FieldDescriptor,
 		}
 	}
 	if len(x.BlockHashes) != 0 {
-		value := protoreflect.ValueOfMap(&_GenesisState_3_map{m: &x.BlockHashes})
+		value := protoreflect.ValueOfList(&_GenesisState_3_list{list: &x.BlockHashes})
 		if !f(fd_GenesisState_block_hashes, value) {
 			return
 		}
@@ -1426,10 +1389,10 @@ func (x *fastReflection_GenesisState) Get(descriptor protoreflect.FieldDescripto
 		return protoreflect.ValueOfUint64(value)
 	case "goat.bitcoin.v1.GenesisState.block_hashes":
 		if len(x.BlockHashes) == 0 {
-			return protoreflect.ValueOfMap(&_GenesisState_3_map{})
+			return protoreflect.ValueOfList(&_GenesisState_3_list{})
 		}
-		mapValue := &_GenesisState_3_map{m: &x.BlockHashes}
-		return protoreflect.ValueOfMap(mapValue)
+		listValue := &_GenesisState_3_list{list: &x.BlockHashes}
+		return protoreflect.ValueOfList(listValue)
 	case "goat.bitcoin.v1.GenesisState.eth_tx_nonce":
 		value := x.EthTxNonce
 		return protoreflect.ValueOfUint64(value)
@@ -1476,9 +1439,9 @@ func (x *fastReflection_GenesisState) Set(fd protoreflect.FieldDescriptor, value
 	case "goat.bitcoin.v1.GenesisState.block_tip":
 		x.BlockTip = value.Uint()
 	case "goat.bitcoin.v1.GenesisState.block_hashes":
-		mv := value.Map()
-		cmv := mv.(*_GenesisState_3_map)
-		x.BlockHashes = *cmv.m
+		lv := value.List()
+		clv := lv.(*_GenesisState_3_list)
+		x.BlockHashes = *clv.list
 	case "goat.bitcoin.v1.GenesisState.eth_tx_nonce":
 		x.EthTxNonce = value.Uint()
 	case "goat.bitcoin.v1.GenesisState.pubkey":
@@ -1520,10 +1483,10 @@ func (x *fastReflection_GenesisState) Mutable(fd protoreflect.FieldDescriptor) p
 		return protoreflect.ValueOfMessage(x.Params.ProtoReflect())
 	case "goat.bitcoin.v1.GenesisState.block_hashes":
 		if x.BlockHashes == nil {
-			x.BlockHashes = make(map[uint64][]byte)
+			x.BlockHashes = [][]byte{}
 		}
-		value := &_GenesisState_3_map{m: &x.BlockHashes}
-		return protoreflect.ValueOfMap(value)
+		value := &_GenesisState_3_list{list: &x.BlockHashes}
+		return protoreflect.ValueOfList(value)
 	case "goat.bitcoin.v1.GenesisState.pubkey":
 		if x.Pubkey == nil {
 			x.Pubkey = new(v1.PublicKey)
@@ -1569,8 +1532,8 @@ func (x *fastReflection_GenesisState) NewField(fd protoreflect.FieldDescriptor) 
 	case "goat.bitcoin.v1.GenesisState.block_tip":
 		return protoreflect.ValueOfUint64(uint64(0))
 	case "goat.bitcoin.v1.GenesisState.block_hashes":
-		m := make(map[uint64][]byte)
-		return protoreflect.ValueOfMap(&_GenesisState_3_map{m: &m})
+		list := [][]byte{}
+		return protoreflect.ValueOfList(&_GenesisState_3_list{list: &list})
 	case "goat.bitcoin.v1.GenesisState.eth_tx_nonce":
 		return protoreflect.ValueOfUint64(uint64(0))
 	case "goat.bitcoin.v1.GenesisState.pubkey":
@@ -1662,27 +1625,9 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 			n += 1 + runtime.Sov(uint64(x.BlockTip))
 		}
 		if len(x.BlockHashes) > 0 {
-			SiZeMaP := func(k uint64, v []byte) {
-				l = 1 + len(v) + runtime.Sov(uint64(len(v)))
-				mapEntrySize := 1 + runtime.Sov(uint64(k)) + l
-				n += mapEntrySize + 1 + runtime.Sov(uint64(mapEntrySize))
-			}
-			if options.Deterministic {
-				sortme := make([]uint64, 0, len(x.BlockHashes))
-				for k := range x.BlockHashes {
-					sortme = append(sortme, k)
-				}
-				sort.Slice(sortme, func(i, j int) bool {
-					return sortme[i] < sortme[j]
-				})
-				for _, k := range sortme {
-					v := x.BlockHashes[k]
-					SiZeMaP(k, v)
-				}
-			} else {
-				for k, v := range x.BlockHashes {
-					SiZeMaP(k, v)
-				}
+			for _, b := range x.BlockHashes {
+				l = len(b)
+				n += 1 + l + runtime.Sov(uint64(l))
 			}
 		}
 		if x.EthTxNonce != 0 {
@@ -1803,44 +1748,12 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 			dAtA[i] = 0x20
 		}
 		if len(x.BlockHashes) > 0 {
-			MaRsHaLmAp := func(k uint64, v []byte) (protoiface.MarshalOutput, error) {
-				baseI := i
-				i -= len(v)
-				copy(dAtA[i:], v)
-				i = runtime.EncodeVarint(dAtA, i, uint64(len(v)))
-				i--
-				dAtA[i] = 0x12
-				i = runtime.EncodeVarint(dAtA, i, uint64(k))
-				i--
-				dAtA[i] = 0x8
-				i = runtime.EncodeVarint(dAtA, i, uint64(baseI-i))
+			for iNdEx := len(x.BlockHashes) - 1; iNdEx >= 0; iNdEx-- {
+				i -= len(x.BlockHashes[iNdEx])
+				copy(dAtA[i:], x.BlockHashes[iNdEx])
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.BlockHashes[iNdEx])))
 				i--
 				dAtA[i] = 0x1a
-				return protoiface.MarshalOutput{}, nil
-			}
-			if options.Deterministic {
-				keysForBlockHashes := make([]uint64, 0, len(x.BlockHashes))
-				for k := range x.BlockHashes {
-					keysForBlockHashes = append(keysForBlockHashes, uint64(k))
-				}
-				sort.Slice(keysForBlockHashes, func(i, j int) bool {
-					return keysForBlockHashes[i] < keysForBlockHashes[j]
-				})
-				for iNdEx := len(keysForBlockHashes) - 1; iNdEx >= 0; iNdEx-- {
-					v := x.BlockHashes[uint64(keysForBlockHashes[iNdEx])]
-					out, err := MaRsHaLmAp(keysForBlockHashes[iNdEx], v)
-					if err != nil {
-						return out, err
-					}
-				}
-			} else {
-				for k := range x.BlockHashes {
-					v := x.BlockHashes[k]
-					out, err := MaRsHaLmAp(k, v)
-					if err != nil {
-						return out, err
-					}
-				}
 			}
 		}
 		if x.BlockTip != 0 {
@@ -1970,7 +1883,7 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field BlockHashes", wireType)
 				}
-				var msglen int
+				var byteLen int
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -1980,105 +1893,23 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					msglen |= int(b&0x7F) << shift
+					byteLen |= int(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
-				if msglen < 0 {
+				if byteLen < 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
-				postIndex := iNdEx + msglen
+				postIndex := iNdEx + byteLen
 				if postIndex < 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				if x.BlockHashes == nil {
-					x.BlockHashes = make(map[uint64][]byte)
-				}
-				var mapkey uint64
-				var mapvalue []byte
-				for iNdEx < postIndex {
-					entryPreIndex := iNdEx
-					var wire uint64
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-						}
-						if iNdEx >= l {
-							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						wire |= uint64(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					fieldNum := int32(wire >> 3)
-					if fieldNum == 1 {
-						for shift := uint(0); ; shift += 7 {
-							if shift >= 64 {
-								return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-							}
-							if iNdEx >= l {
-								return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-							}
-							b := dAtA[iNdEx]
-							iNdEx++
-							mapkey |= uint64(b&0x7F) << shift
-							if b < 0x80 {
-								break
-							}
-						}
-					} else if fieldNum == 2 {
-						var mapbyteLen uint64
-						for shift := uint(0); ; shift += 7 {
-							if shift >= 64 {
-								return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-							}
-							if iNdEx >= l {
-								return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-							}
-							b := dAtA[iNdEx]
-							iNdEx++
-							mapbyteLen |= uint64(b&0x7F) << shift
-							if b < 0x80 {
-								break
-							}
-						}
-						intMapbyteLen := int(mapbyteLen)
-						if intMapbyteLen < 0 {
-							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-						}
-						postbytesIndex := iNdEx + intMapbyteLen
-						if postbytesIndex < 0 {
-							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-						}
-						if postbytesIndex > l {
-							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-						}
-						mapvalue = make([]byte, mapbyteLen)
-						copy(mapvalue, dAtA[iNdEx:postbytesIndex])
-						iNdEx = postbytesIndex
-					} else {
-						iNdEx = entryPreIndex
-						skippy, err := runtime.Skip(dAtA[iNdEx:])
-						if err != nil {
-							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-						}
-						if (skippy < 0) || (iNdEx+skippy) < 0 {
-							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-						}
-						if (iNdEx + skippy) > postIndex {
-							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-						}
-						iNdEx += skippy
-					}
-				}
-				x.BlockHashes[mapkey] = mapvalue
+				x.BlockHashes = append(x.BlockHashes, make([]byte, postIndex-iNdEx))
+				copy(x.BlockHashes[len(x.BlockHashes)-1], dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 4:
 				if wireType != 0 {
@@ -2392,7 +2223,7 @@ type GenesisState struct {
 	// params defines all the parameters of the module.
 	Params      *Params              `protobuf:"bytes,1,opt,name=params,proto3" json:"params,omitempty"`
 	BlockTip    uint64               `protobuf:"varint,2,opt,name=block_tip,json=blockTip,proto3" json:"block_tip,omitempty"`
-	BlockHashes map[uint64][]byte    `protobuf:"bytes,3,rep,name=block_hashes,json=blockHashes,proto3" json:"block_hashes,omitempty" protobuf_key:"varint,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	BlockHashes [][]byte             `protobuf:"bytes,3,rep,name=block_hashes,json=blockHashes,proto3" json:"block_hashes,omitempty"`
 	EthTxNonce  uint64               `protobuf:"varint,4,opt,name=eth_tx_nonce,json=ethTxNonce,proto3" json:"eth_tx_nonce,omitempty"`
 	Pubkey      *v1.PublicKey        `protobuf:"bytes,5,opt,name=pubkey,proto3" json:"pubkey,omitempty"`
 	Queue       *ExecuableQueue      `protobuf:"bytes,6,opt,name=queue,proto3" json:"queue,omitempty"`
@@ -2434,7 +2265,7 @@ func (x *GenesisState) GetBlockTip() uint64 {
 	return 0
 }
 
-func (x *GenesisState) GetBlockHashes() map[uint64][]byte {
+func (x *GenesisState) GetBlockHashes() [][]byte {
 	if x != nil {
 		return x.BlockHashes
 	}
@@ -2503,18 +2334,15 @@ var file_goat_bitcoin_v1_genesis_proto_rawDesc = []byte{
 	0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x74, 0x78, 0x69, 0x64, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x78,
 	0x6f, 0x75, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x05, 0x74, 0x78, 0x6f, 0x75, 0x74,
 	0x12, 0x16, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04,
-	0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0x8a, 0x04, 0x0a, 0x0c, 0x47, 0x65, 0x6e,
+	0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0x9a, 0x03, 0x0a, 0x0c, 0x47, 0x65, 0x6e,
 	0x65, 0x73, 0x69, 0x73, 0x53, 0x74, 0x61, 0x74, 0x65, 0x12, 0x3a, 0x0a, 0x06, 0x70, 0x61, 0x72,
 	0x61, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x17, 0x2e, 0x67, 0x6f, 0x61, 0x74,
 	0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x61, 0x72, 0x61,
 	0x6d, 0x73, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06, 0x70,
 	0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x1b, 0x0a, 0x09, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x74,
 	0x69, 0x70, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x08, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x54,
-	0x69, 0x70, 0x12, 0x51, 0x0a, 0x0c, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x68, 0x61, 0x73, 0x68,
-	0x65, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x2e, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e,
-	0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x6e, 0x65, 0x73,
-	0x69, 0x73, 0x53, 0x74, 0x61, 0x74, 0x65, 0x2e, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x61, 0x73,
-	0x68, 0x65, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x52, 0x0b, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x48,
+	0x69, 0x70, 0x12, 0x21, 0x0a, 0x0c, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x68, 0x61, 0x73, 0x68,
+	0x65, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0c, 0x52, 0x0b, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x48,
 	0x61, 0x73, 0x68, 0x65, 0x73, 0x12, 0x20, 0x0a, 0x0c, 0x65, 0x74, 0x68, 0x5f, 0x74, 0x78, 0x5f,
 	0x6e, 0x6f, 0x6e, 0x63, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0a, 0x65, 0x74, 0x68,
 	0x54, 0x78, 0x4e, 0x6f, 0x6e, 0x63, 0x65, 0x12, 0x32, 0x0a, 0x06, 0x70, 0x75, 0x62, 0x6b, 0x65,
@@ -2532,11 +2360,7 @@ var file_goat_bitcoin_v1_genesis_proto_rawDesc = []byte{
 	0x20, 0x03, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63,
 	0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61,
 	0x6c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x52, 0x0b, 0x77, 0x69, 0x74, 0x68, 0x64, 0x72,
-	0x61, 0x77, 0x61, 0x6c, 0x73, 0x1a, 0x3e, 0x0a, 0x10, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x61,
-	0x73, 0x68, 0x65, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76,
-	0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75,
-	0x65, 0x3a, 0x02, 0x38, 0x01, 0x42, 0xbc, 0x01, 0x0a, 0x13, 0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x6f,
+	0x61, 0x77, 0x61, 0x6c, 0x73, 0x42, 0xbc, 0x01, 0x0a, 0x13, 0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x6f,
 	0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x42, 0x0c, 0x47,
 	0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x39, 0x67,
 	0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x6e, 0x65,
@@ -2563,30 +2387,28 @@ func file_goat_bitcoin_v1_genesis_proto_rawDescGZIP() []byte {
 	return file_goat_bitcoin_v1_genesis_proto_rawDescData
 }
 
-var file_goat_bitcoin_v1_genesis_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_goat_bitcoin_v1_genesis_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_goat_bitcoin_v1_genesis_proto_goTypes = []interface{}{
 	(*WithdrawalGenesis)(nil), // 0: goat.bitcoin.v1.WithdrawalGenesis
 	(*DepositGenesis)(nil),    // 1: goat.bitcoin.v1.DepositGenesis
 	(*GenesisState)(nil),      // 2: goat.bitcoin.v1.GenesisState
-	nil,                       // 3: goat.bitcoin.v1.GenesisState.BlockHashesEntry
-	(*Withdrawal)(nil),        // 4: goat.bitcoin.v1.Withdrawal
-	(*Params)(nil),            // 5: goat.bitcoin.v1.Params
-	(*v1.PublicKey)(nil),      // 6: goat.relayer.v1.PublicKey
-	(*ExecuableQueue)(nil),    // 7: goat.bitcoin.v1.ExecuableQueue
+	(*Withdrawal)(nil),        // 3: goat.bitcoin.v1.Withdrawal
+	(*Params)(nil),            // 4: goat.bitcoin.v1.Params
+	(*v1.PublicKey)(nil),      // 5: goat.relayer.v1.PublicKey
+	(*ExecuableQueue)(nil),    // 6: goat.bitcoin.v1.ExecuableQueue
 }
 var file_goat_bitcoin_v1_genesis_proto_depIdxs = []int32{
-	4, // 0: goat.bitcoin.v1.WithdrawalGenesis.withdrawal:type_name -> goat.bitcoin.v1.Withdrawal
-	5, // 1: goat.bitcoin.v1.GenesisState.params:type_name -> goat.bitcoin.v1.Params
-	3, // 2: goat.bitcoin.v1.GenesisState.block_hashes:type_name -> goat.bitcoin.v1.GenesisState.BlockHashesEntry
-	6, // 3: goat.bitcoin.v1.GenesisState.pubkey:type_name -> goat.relayer.v1.PublicKey
-	7, // 4: goat.bitcoin.v1.GenesisState.queue:type_name -> goat.bitcoin.v1.ExecuableQueue
-	1, // 5: goat.bitcoin.v1.GenesisState.deposits:type_name -> goat.bitcoin.v1.DepositGenesis
-	0, // 6: goat.bitcoin.v1.GenesisState.withdrawals:type_name -> goat.bitcoin.v1.WithdrawalGenesis
-	7, // [7:7] is the sub-list for method output_type
-	7, // [7:7] is the sub-list for method input_type
-	7, // [7:7] is the sub-list for extension type_name
-	7, // [7:7] is the sub-list for extension extendee
-	0, // [0:7] is the sub-list for field type_name
+	3, // 0: goat.bitcoin.v1.WithdrawalGenesis.withdrawal:type_name -> goat.bitcoin.v1.Withdrawal
+	4, // 1: goat.bitcoin.v1.GenesisState.params:type_name -> goat.bitcoin.v1.Params
+	5, // 2: goat.bitcoin.v1.GenesisState.pubkey:type_name -> goat.relayer.v1.PublicKey
+	6, // 3: goat.bitcoin.v1.GenesisState.queue:type_name -> goat.bitcoin.v1.ExecuableQueue
+	1, // 4: goat.bitcoin.v1.GenesisState.deposits:type_name -> goat.bitcoin.v1.DepositGenesis
+	0, // 5: goat.bitcoin.v1.GenesisState.withdrawals:type_name -> goat.bitcoin.v1.WithdrawalGenesis
+	6, // [6:6] is the sub-list for method output_type
+	6, // [6:6] is the sub-list for method input_type
+	6, // [6:6] is the sub-list for extension type_name
+	6, // [6:6] is the sub-list for extension extendee
+	0, // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_goat_bitcoin_v1_genesis_proto_init() }
@@ -2641,7 +2463,7 @@ func file_goat_bitcoin_v1_genesis_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_goat_bitcoin_v1_genesis_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

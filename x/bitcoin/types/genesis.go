@@ -1,7 +1,6 @@
 package types
 
 import (
-	"crypto/sha256"
 	"encoding/hex"
 	"errors"
 	"fmt"
@@ -26,7 +25,7 @@ func DefaultGenesis() *GenesisState {
 		// this line is used by starport scaffolding # genesis/types/default
 		Params:      DefaultParams(),
 		BlockTip:    0,
-		BlockHashes: map[uint64][]byte{0: geneis},
+		BlockHashes: [][]byte{geneis},
 		EthTxNonce:  0,
 		Queue: &ExecuableQueue{
 			BlockNumber: 0,
@@ -51,16 +50,6 @@ func (gs GenesisState) Validate() error {
 
 	if len(gs.BlockHashes) == 0 {
 		return errors.New("No block hash provided in the genesis state")
-	}
-
-	for _, v := range gs.BlockHashes {
-		if len(v) != sha256.Size {
-			return fmt.Errorf("invalid block hash: %x", v)
-		}
-	}
-
-	if _, ok := gs.BlockHashes[gs.BlockTip]; !ok {
-		return fmt.Errorf("no block hash for the tip: %d", gs.BlockTip)
 	}
 
 	if gs.Queue == nil {

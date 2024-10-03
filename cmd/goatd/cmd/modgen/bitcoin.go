@@ -3,6 +3,7 @@ package modgen
 import (
 	"errors"
 	"fmt"
+	"slices"
 	"strings"
 
 	"github.com/btcsuite/btcd/chaincfg"
@@ -111,7 +112,7 @@ func Bitcoin() *cobra.Command {
 						genesis.Queue = &types.ExecuableQueue{}
 					}
 
-					genesis.BlockHashes = make(map[uint64][]byte)
+					genesis.BlockHashes = make([][]byte, 0)
 					for idx, hash := range args[1:] {
 						if idx != 0 {
 							start++
@@ -120,8 +121,9 @@ func Bitcoin() *cobra.Command {
 						if err != nil {
 							return fmt.Errorf("invalid block hash: %s", hash)
 						}
-						genesis.BlockHashes[start] = r[:]
+						genesis.BlockHashes = append(genesis.BlockHashes, r.CloneBytes())
 					}
+					slices.Reverse(genesis.BlockHashes) // tip is first
 					genesis.BlockTip = start
 					genesis.Queue.BlockNumber = start
 				}

@@ -96,13 +96,25 @@ func Relayer() *cobra.Command {
 
 			txKey := &secp256k1.PubKey{Key: txRawKey}
 			if txKeyAddr := txKey.Address().Bytes(); !bytes.Equal(txKeyAddr, addrByte) {
-				addr, _ := addrcodec.BytesToString(txKeyAddr)
-				return fmt.Errorf("address and public key not matched, expected address %s", addr)
+				addrStr, _ := addrcodec.BytesToString(txKeyAddr)
+				return fmt.Errorf("address and public key not matched, expected address %s", addrStr)
 			}
 
 			serverCtx.Logger.Info("update genesis", "module", types.ModuleName)
 			if err := UpdateModuleGenesis(genesisFile, types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
-				if _, ok := genesis.Voters[addr]; ok {
+				votersSet := make(map[string]struct{})
+				for _, voter := range genesis.Voters {
+					addrStr, err := addrcodec.BytesToString(voter.Address)
+					if err != nil {
+						return err
+					}
+					if _, ok := votersSet[addrStr]; ok {
+						return fmt.Errorf("voter %x is duplicated in the genesis", voter.Address)
+					}
+					votersSet[addrStr] = struct{}{}
+				}
+
+				if _, ok := votersSet[addr]; ok {
 					serverCtx.Logger.Error("relayer already added", "addr", addr)
 					return nil
 				}
@@ -121,7 +133,11 @@ func Relayer() *cobra.Command {
 					genesis.Relayer.Voters = voters[1:]
 				}
 
-				genesis.Voters[addr] = &types.Voter{VoteKey: voteKey, Status: types.VOTER_STATUS_ACTIVATED}
+				genesis.Voters = append(genesis.Voters, &types.Voter{
+					Address: addrByte,
+					VoteKey: voteKey,
+					Status:  types.VOTER_STATUS_ACTIVATED,
+				})
 				return genesis.Validate()
 			}); err != nil {
 				return err

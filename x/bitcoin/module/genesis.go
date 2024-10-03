@@ -1,6 +1,8 @@
 package bitcoin
 
 import (
+	"crypto/sha256"
+	"errors"
 	"fmt"
 
 	"cosmossdk.io/collections"
@@ -24,8 +26,14 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 		panic(err)
 	}
 
-	for height, hash := range genState.BlockHashes {
-		if err := k.BlockHashes.Set(ctx, height, hash); err != nil {
+	for idx, hash := range genState.BlockHashes {
+		if len(hash) != sha256.Size {
+			panic(fmt.Sprintf("invalid block hash length: %x", hash))
+		}
+		if genState.BlockTip < uint64(idx) {
+			panic("invalid block hash length for block tip")
+		}
+		if err := k.BlockHashes.Set(ctx, genState.BlockTip-uint64(idx), hash); err != nil {
 			panic(err)
 		}
 	}
@@ -98,19 +106,15 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 
 	// BlockHashes
 	{
-		iter, err := k.BlockHashes.Iterate(ctx, nil)
-		if err != nil {
-			panic(err)
-		}
-		defer iter.Close()
-
-		for ; iter.Valid(); iter.Next() {
-			kv, err := iter.KeyValue()
+		for i := genesis.BlockTip + 1; i > 0; i-- {
+			hash, err := k.BlockHashes.Get(ctx, i-1)
 			if err != nil {
+				if errors.Is(err, collections.ErrNotFound) {
+					break
+				}
 				panic(err)
 			}
-
-			genesis.BlockHashes[kv.Key] = kv.Value
+			genesis.BlockHashes = append(genesis.BlockHashes, hash)
 		}
 	}
 

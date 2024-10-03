@@ -17,7 +17,7 @@ message GenesisState {
   ];
   Relayer relayer = 2;
   uint64 sequence = 3;
-  map<string, Voter> voters = 4;
+  repeated Voter voters = 4;
   repeated PublicKey pubkeys = 5;
   bytes randao = 6;
 }

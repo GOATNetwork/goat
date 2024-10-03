@@ -27,7 +27,19 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 		panic("no relayer")
 	}
 
-	if _, ok := genState.Voters[genState.Relayer.Proposer]; !ok {
+	votersSet := make(map[string]struct{})
+	for _, voter := range genState.Voters {
+		addr, err := k.AddrCodec.BytesToString(voter.Address)
+		if err != nil {
+			panic(err)
+		}
+		if _, ok := votersSet[addr]; ok {
+			panic(fmt.Sprintf("voter %x is duplicated", voter.Address))
+		}
+		votersSet[addr] = struct{}{}
+	}
+
+	if _, ok := votersSet[genState.Relayer.Proposer]; !ok {
 		panic(fmt.Sprintf("missing proposer %s in the voter state", genState.Relayer.Proposer))
 	}
 
@@ -50,7 +62,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 			panic(err)
 		}
 
-		if _, ok := genState.Voters[voter]; !ok {
+		if _, ok := votersSet[voter]; !ok {
 			panic(fmt.Sprintf("missing proposer %s in the voter state", genState.Relayer.Proposer))
 		}
 	}
@@ -79,8 +91,9 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	}
 
 	clear(keySet)
-	for addr, v := range genState.Voters {
-		if _, err := k.AddrCodec.StringToBytes(addr); err != nil {
+	for _, v := range genState.Voters {
+		addr, err := k.AddrCodec.BytesToString(v.Address)
+		if err != nil {
 			panic(err)
 		}
 
@@ -149,7 +162,7 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 			if err != nil {
 				panic(err)
 			}
-			genesis.Voters[kv.Key] = &kv.Value
+			genesis.Voters = append(genesis.Voters, &kv.Value)
 		}
 	}
 
