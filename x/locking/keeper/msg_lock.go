@@ -130,7 +130,7 @@ func (k Keeper) lock(ctx context.Context, target common.Address, coins sdktypes.
 		if err := k.Validators.Set(sdkctx, valdtAddr, validator); err != nil {
 			return err
 		}
-	case types.ValidatorStatus_Jailed, types.ValidatorStatus_Inactive:
+	case types.ValidatorStatus_Tombstoned, types.ValidatorStatus_Inactive:
 		if err := k.Validators.Set(sdkctx, valdtAddr, validator); err != nil {
 			return err
 		}

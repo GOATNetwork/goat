@@ -139,3 +139,42 @@ func (k Keeper) unlock(ctx context.Context, req *ethtypes.GoatUnlock, param *typ
 
 	return nil
 }
+
+func (k Keeper) dequeueMatureUnlocks(ctx context.Context) error {
+	sdkctx := sdktypes.UnwrapSDKContext(ctx)
+
+	var keys []time.Time
+	var values []*types.Unlock
+
+	rng := (&collections.Range[time.Time]{}).EndInclusive(sdkctx.BlockTime())
+	if err := k.UnlockQueue.Walk(ctx, rng, func(key time.Time, value types.UnlockQueue) (bool, error) {
+		keys = append(keys, key)
+		values = append(values, value.Unlocks...)
+		return false, nil
+	}); err != nil {
+		return err
+	}
+
+	for _, key := range keys {
+		err := k.UnlockQueue.Remove(ctx, key)
+		if err != nil {
+			return err
+		}
+	}
+
+	if len(values) == 0 {
+		return nil
+	}
+
+	execQueue, err := k.ExecuableQueue.Get(sdkctx)
+	if err != nil {
+		return err
+	}
+
+	execQueue.Unlocks = append(execQueue.Unlocks, values...)
+	if err := k.ExecuableQueue.Set(sdkctx, execQueue); err != nil {
+		panic(err)
+	}
+
+	return nil
+}

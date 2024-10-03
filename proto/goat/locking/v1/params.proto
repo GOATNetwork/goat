@@ -32,4 +32,7 @@ message Params {
     (amino.dont_omitempty) = true,
     (gogoproto.stdduration) = true
   ];
+
+  // max_validators is the maximum number of validators.
+  int64 max_validators = 4;
 }

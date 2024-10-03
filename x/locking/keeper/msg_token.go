@@ -56,28 +56,6 @@ func (k Keeper) UpdateTokens(ctx context.Context, weights []*ethtypes.UpdateToke
 	return nil
 }
 
-func (k Keeper) Grant(ctx context.Context, grants []*ethtypes.GoatGrant) error {
-	if len(grants) == 0 {
-		return nil
-	}
-
-	sdkctx := sdktypes.UnwrapSDKContext(ctx)
-	pool, err := k.RewardPool.Get(sdkctx)
-	if err != nil {
-		return err
-	}
-
-	for _, grant := range grants {
-		pool.Remain = pool.Remain.Add(math.NewIntFromBigInt(grant.Amount))
-	}
-
-	if err := k.RewardPool.Set(sdkctx, pool); err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func (k Keeper) onWeightChanged(ctx context.Context, token string, previous, current uint64) error {
 	if previous == current {
 		return nil
@@ -129,11 +107,13 @@ func (k Keeper) onWeightChanged(ctx context.Context, token string, previous, cur
 		if err := k.Validators.Set(sdkctx, valdtAddr, validator); err != nil {
 			return err
 		}
-		if err := k.PowerRanking.Set(sdkctx,
-			collections.Join(validator.Power, valdtAddr)); err != nil {
-			return err
+
+		if validator.Power > 0 {
+			if err := k.PowerRanking.Set(sdkctx,
+				collections.Join(validator.Power, valdtAddr)); err != nil {
+				return err
+			}
 		}
 	}
-
 	return nil
 }

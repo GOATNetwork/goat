@@ -17,8 +17,9 @@ enum ValidatorStatus {
   VALIDATOR_STATUS_PENDING = 1 [(gogoproto.enumvalue_customname) = "Pending"];
   // Active means the validator is producing and voting new blocks
   VALIDATOR_STATUS_ACTIVE = 2 [(gogoproto.enumvalue_customname) = "Active"];
-  // Jailed means the validator did malicious behaviors like double sign and killed out
-  VALIDATOR_STATUS_JAILED = 3 [(gogoproto.enumvalue_customname) = "Jailed"];
+  // Tombstoned means the validator did malicious behaviors like double sign and
+  // killed out
+  VALIDATOR_STATUS_TOMBSTONED = 3 [(gogoproto.enumvalue_customname) = "Tombstoned"];
   // Downgrade means the validator is offline
   VALIDATOR_STATUS_DOWNGRADE = 4 [(gogoproto.enumvalue_customname) = "Downgrade"];
   // Inactive means the validator is exiting in progress or exited
