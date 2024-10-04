@@ -35,9 +35,10 @@ func (k Keeper) UpdateRewardPool(ctx context.Context, gas []*ethtypes.GasRevenue
 	}
 
 	// block gas is not zero, which means the block has transactions
-	if !pool.Gas.IsZero() {
+	// we only give out the reward if there are transactions in the block
+	if !pool.Gas.IsZero() { // todo: how about system txs like deposits?
 		reward := big.NewInt(types.InitialBlockReward)
-		if halvings := sdkctx.BlockHeight() / types.HalvingInterval; halvings > 0 {
+		if halvings := pool.Index / types.HalvingInterval; halvings > 0 {
 			count := big.NewInt(2)
 			count.Exp(count, big.NewInt(halvings), nil)
 			reward.Div(reward, count)
@@ -51,6 +52,7 @@ func (k Keeper) UpdateRewardPool(ctx context.Context, gas []*ethtypes.GasRevenue
 			r := math.NewIntFromBigInt(reward)
 			pool.Goat = pool.Goat.Add(r)
 			pool.Remain = pool.Remain.Sub(r)
+			pool.Index++
 		}
 
 		sdkctx.EventManager().EmitEvent(types.AddRewardEvent(sdkctx.BlockHeight(), reward))
