@@ -62,13 +62,13 @@ func (k msgServer) NewDeposits(ctx context.Context, req *types.MsgNewDeposits) (
 		deposits = append(deposits, deposit)
 	}
 
-	queue, err := k.ExecuableQueue.Get(ctx)
+	queue, err := k.EthTxQueue.Get(ctx)
 	if err != nil {
 		return nil, err
 	}
 
 	queue.Deposits = append(queue.Deposits, deposits...)
-	if err := k.ExecuableQueue.Set(ctx, queue); err != nil {
+	if err := k.EthTxQueue.Set(ctx, queue); err != nil {
 		return nil, err
 	}
 
@@ -289,7 +289,7 @@ func (k msgServer) FinalizeWithdrawal(ctx context.Context, req *types.MsgFinaliz
 		return nil, types.ErrInvalidRequest.Wrap("invalid spv")
 	}
 
-	queue, err := k.ExecuableQueue.Get(sdkctx)
+	queue, err := k.EthTxQueue.Get(sdkctx)
 	if err != nil {
 		return nil, err
 	}
@@ -317,7 +317,7 @@ func (k msgServer) FinalizeWithdrawal(ctx context.Context, req *types.MsgFinaliz
 		})
 	}
 
-	if err := k.ExecuableQueue.Set(sdkctx, queue); err != nil {
+	if err := k.EthTxQueue.Set(sdkctx, queue); err != nil {
 		return nil, err
 	}
 
@@ -339,7 +339,7 @@ func (k msgServer) ApproveCancellation(ctx context.Context, req *types.MsgApprov
 		return nil, err
 	}
 
-	queue, err := k.ExecuableQueue.Get(ctx)
+	queue, err := k.EthTxQueue.Get(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -361,7 +361,7 @@ func (k msgServer) ApproveCancellation(ctx context.Context, req *types.MsgApprov
 	}
 
 	queue.RejectedWithdrawals = append(queue.RejectedWithdrawals, req.Id...)
-	if err := k.ExecuableQueue.Set(ctx, queue); err != nil {
+	if err := k.EthTxQueue.Set(ctx, queue); err != nil {
 		return nil, err
 	}
 

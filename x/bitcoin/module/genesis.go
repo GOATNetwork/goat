@@ -47,7 +47,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 		panic(err)
 	}
 
-	if err := k.ExecuableQueue.Set(ctx, *genState.GetQueue()); err != nil {
+	if err := k.EthTxQueue.Set(ctx, genState.GetEthTxQueue()); err != nil {
 		panic(err)
 	}
 
@@ -59,7 +59,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 
 	processing := make(map[string][]uint64)
 	for _, item := range genState.Withdrawals {
-		if err := k.Withdrawals.Set(ctx, item.Id, *item.Withdrawal); err != nil {
+		if err := k.Withdrawals.Set(ctx, item.Id, item.Withdrawal); err != nil {
 			panic(err)
 		}
 
@@ -118,16 +118,17 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 		}
 	}
 
-	genesis.EthTxNonce, err = k.EthTxNonce.Peek(ctx)
-	if err != nil {
-		panic(err)
-	}
+	{
+		genesis.EthTxNonce, err = k.EthTxNonce.Peek(ctx)
+		if err != nil {
+			panic(err)
+		}
 
-	queue, err := k.ExecuableQueue.Get(ctx)
-	if err != nil {
-		panic(err)
+		genesis.EthTxQueue, err = k.EthTxQueue.Get(ctx)
+		if err != nil {
+			panic(err)
+		}
 	}
-	genesis.Queue = &queue
 
 	// deposited
 	{
@@ -143,7 +144,7 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 				panic(err)
 			}
 
-			genesis.Deposits = append(genesis.Deposits, &types.DepositGenesis{
+			genesis.Deposits = append(genesis.Deposits, types.DepositGenesis{
 				Txid:   kv.Key.K1(),
 				Txout:  kv.Key.K2(),
 				Amount: kv.Value,
@@ -165,9 +166,9 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 				panic(err)
 			}
 
-			genesis.Withdrawals = append(genesis.Withdrawals, &types.WithdrawalGenesis{
+			genesis.Withdrawals = append(genesis.Withdrawals, types.WithdrawalGenesis{
 				Id:         kv.Key,
-				Withdrawal: &kv.Value,
+				Withdrawal: kv.Value,
 			})
 		}
 	}

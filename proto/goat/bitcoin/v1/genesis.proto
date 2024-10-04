@@ -13,7 +13,10 @@ option go_package = "github.com/goatnetwork/goat/x/bitcoin/types";
 // WithdrawalGeneis
 message WithdrawalGenesis {
   uint64 id = 1;
-  Withdrawal withdrawal = 2;
+  Withdrawal withdrawal = 2 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
 }
 
 // DepositGenesis
@@ -33,8 +36,17 @@ message GenesisState {
   uint64 block_tip = 2;
   repeated bytes block_hashes = 3;
   uint64 eth_tx_nonce = 4;
-  goat.relayer.v1.PublicKey pubkey = 5;
-  ExecuableQueue queue = 6;
-  repeated DepositGenesis deposits = 7;
-  repeated WithdrawalGenesis withdrawals = 8;
+  EthTxQueue eth_tx_queue = 5 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  goat.relayer.v1.PublicKey pubkey = 6;
+  repeated DepositGenesis deposits = 7 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  repeated WithdrawalGenesis withdrawals = 8 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
 }

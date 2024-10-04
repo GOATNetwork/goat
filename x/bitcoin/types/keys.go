@@ -14,15 +14,15 @@ const (
 )
 
 var (
-	ParamsKey         = collections.NewPrefix(0)
-	LatestPubkeyKey   = collections.NewPrefix(1)
-	LatestHeightKey   = collections.NewPrefix(2)
-	BlockHashsKey     = collections.NewPrefix(3)
-	DepositedKey      = collections.NewPrefix(4)
-	ExecuableQueueKey = collections.NewPrefix(5)
-	EthTxNonceKey     = collections.NewPrefix(6)
-	WithdrawalKey     = collections.NewPrefix(7)
-	ProcessingKey     = collections.NewPrefix(8)
+	ParamsKey       = collections.NewPrefix(0)
+	LatestPubkeyKey = collections.NewPrefix(1)
+	LatestHeightKey = collections.NewPrefix(2)
+	BlockHashsKey   = collections.NewPrefix(3)
+	DepositedKey    = collections.NewPrefix(4)
+	EthTxQueueKey   = collections.NewPrefix(5)
+	EthTxNonceKey   = collections.NewPrefix(6)
+	WithdrawalKey   = collections.NewPrefix(7)
+	ProcessingKey   = collections.NewPrefix(8)
 )
 
 func KeyPrefix(p string) []byte {

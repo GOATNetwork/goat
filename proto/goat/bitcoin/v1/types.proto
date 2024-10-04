@@ -24,8 +24,8 @@ message WithdrawalExecReceipt {
   WithdrawalReceipt receipt = 2;
 }
 
-// ExecuableQueue
-message ExecuableQueue {
+// EthTxQueue
+message EthTxQueue {
   uint64 block_number = 1;
   repeated DepositExecReceipt deposits = 2;
   repeated WithdrawalExecReceipt paid_withdrawals = 3;

@@ -1615,180 +1615,180 @@ func (x *fastReflection_WithdrawalExecReceipt) ProtoMethods() *protoiface.Method
 	}
 }
 
-var _ protoreflect.List = (*_ExecuableQueue_2_list)(nil)
+var _ protoreflect.List = (*_EthTxQueue_2_list)(nil)
 
-type _ExecuableQueue_2_list struct {
+type _EthTxQueue_2_list struct {
 	list *[]*DepositExecReceipt
 }
 
-func (x *_ExecuableQueue_2_list) Len() int {
+func (x *_EthTxQueue_2_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_ExecuableQueue_2_list) Get(i int) protoreflect.Value {
+func (x *_EthTxQueue_2_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
 }
 
-func (x *_ExecuableQueue_2_list) Set(i int, value protoreflect.Value) {
+func (x *_EthTxQueue_2_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*DepositExecReceipt)
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_ExecuableQueue_2_list) Append(value protoreflect.Value) {
+func (x *_EthTxQueue_2_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*DepositExecReceipt)
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_ExecuableQueue_2_list) AppendMutable() protoreflect.Value {
+func (x *_EthTxQueue_2_list) AppendMutable() protoreflect.Value {
 	v := new(DepositExecReceipt)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_ExecuableQueue_2_list) Truncate(n int) {
+func (x *_EthTxQueue_2_list) Truncate(n int) {
 	for i := n; i < len(*x.list); i++ {
 		(*x.list)[i] = nil
 	}
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_ExecuableQueue_2_list) NewElement() protoreflect.Value {
+func (x *_EthTxQueue_2_list) NewElement() protoreflect.Value {
 	v := new(DepositExecReceipt)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_ExecuableQueue_2_list) IsValid() bool {
+func (x *_EthTxQueue_2_list) IsValid() bool {
 	return x.list != nil
 }
 
-var _ protoreflect.List = (*_ExecuableQueue_3_list)(nil)
+var _ protoreflect.List = (*_EthTxQueue_3_list)(nil)
 
-type _ExecuableQueue_3_list struct {
+type _EthTxQueue_3_list struct {
 	list *[]*WithdrawalExecReceipt
 }
 
-func (x *_ExecuableQueue_3_list) Len() int {
+func (x *_EthTxQueue_3_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_ExecuableQueue_3_list) Get(i int) protoreflect.Value {
+func (x *_EthTxQueue_3_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
 }
 
-func (x *_ExecuableQueue_3_list) Set(i int, value protoreflect.Value) {
+func (x *_EthTxQueue_3_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*WithdrawalExecReceipt)
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_ExecuableQueue_3_list) Append(value protoreflect.Value) {
+func (x *_EthTxQueue_3_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*WithdrawalExecReceipt)
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_ExecuableQueue_3_list) AppendMutable() protoreflect.Value {
+func (x *_EthTxQueue_3_list) AppendMutable() protoreflect.Value {
 	v := new(WithdrawalExecReceipt)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_ExecuableQueue_3_list) Truncate(n int) {
+func (x *_EthTxQueue_3_list) Truncate(n int) {
 	for i := n; i < len(*x.list); i++ {
 		(*x.list)[i] = nil
 	}
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_ExecuableQueue_3_list) NewElement() protoreflect.Value {
+func (x *_EthTxQueue_3_list) NewElement() protoreflect.Value {
 	v := new(WithdrawalExecReceipt)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_ExecuableQueue_3_list) IsValid() bool {
+func (x *_EthTxQueue_3_list) IsValid() bool {
 	return x.list != nil
 }
 
-var _ protoreflect.List = (*_ExecuableQueue_4_list)(nil)
+var _ protoreflect.List = (*_EthTxQueue_4_list)(nil)
 
-type _ExecuableQueue_4_list struct {
+type _EthTxQueue_4_list struct {
 	list *[]uint64
 }
 
-func (x *_ExecuableQueue_4_list) Len() int {
+func (x *_EthTxQueue_4_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_ExecuableQueue_4_list) Get(i int) protoreflect.Value {
+func (x *_EthTxQueue_4_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfUint64((*x.list)[i])
 }
 
-func (x *_ExecuableQueue_4_list) Set(i int, value protoreflect.Value) {
+func (x *_EthTxQueue_4_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Uint()
 	concreteValue := valueUnwrapped
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_ExecuableQueue_4_list) Append(value protoreflect.Value) {
+func (x *_EthTxQueue_4_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Uint()
 	concreteValue := valueUnwrapped
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_ExecuableQueue_4_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message ExecuableQueue at list field RejectedWithdrawals as it is not of Message kind"))
+func (x *_EthTxQueue_4_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message EthTxQueue at list field RejectedWithdrawals as it is not of Message kind"))
 }
 
-func (x *_ExecuableQueue_4_list) Truncate(n int) {
+func (x *_EthTxQueue_4_list) Truncate(n int) {
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_ExecuableQueue_4_list) NewElement() protoreflect.Value {
+func (x *_EthTxQueue_4_list) NewElement() protoreflect.Value {
 	v := uint64(0)
 	return protoreflect.ValueOfUint64(v)
 }
 
-func (x *_ExecuableQueue_4_list) IsValid() bool {
+func (x *_EthTxQueue_4_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
-	md_ExecuableQueue                      protoreflect.MessageDescriptor
-	fd_ExecuableQueue_block_number         protoreflect.FieldDescriptor
-	fd_ExecuableQueue_deposits             protoreflect.FieldDescriptor
-	fd_ExecuableQueue_paid_withdrawals     protoreflect.FieldDescriptor
-	fd_ExecuableQueue_rejected_withdrawals protoreflect.FieldDescriptor
+	md_EthTxQueue                      protoreflect.MessageDescriptor
+	fd_EthTxQueue_block_number         protoreflect.FieldDescriptor
+	fd_EthTxQueue_deposits             protoreflect.FieldDescriptor
+	fd_EthTxQueue_paid_withdrawals     protoreflect.FieldDescriptor
+	fd_EthTxQueue_rejected_withdrawals protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_goat_bitcoin_v1_types_proto_init()
-	md_ExecuableQueue = File_goat_bitcoin_v1_types_proto.Messages().ByName("ExecuableQueue")
-	fd_ExecuableQueue_block_number = md_ExecuableQueue.Fields().ByName("block_number")
-	fd_ExecuableQueue_deposits = md_ExecuableQueue.Fields().ByName("deposits")
-	fd_ExecuableQueue_paid_withdrawals = md_ExecuableQueue.Fields().ByName("paid_withdrawals")
-	fd_ExecuableQueue_rejected_withdrawals = md_ExecuableQueue.Fields().ByName("rejected_withdrawals")
+	md_EthTxQueue = File_goat_bitcoin_v1_types_proto.Messages().ByName("EthTxQueue")
+	fd_EthTxQueue_block_number = md_EthTxQueue.Fields().ByName("block_number")
+	fd_EthTxQueue_deposits = md_EthTxQueue.Fields().ByName("deposits")
+	fd_EthTxQueue_paid_withdrawals = md_EthTxQueue.Fields().ByName("paid_withdrawals")
+	fd_EthTxQueue_rejected_withdrawals = md_EthTxQueue.Fields().ByName("rejected_withdrawals")
 }
 
-var _ protoreflect.Message = (*fastReflection_ExecuableQueue)(nil)
+var _ protoreflect.Message = (*fastReflection_EthTxQueue)(nil)
 
-type fastReflection_ExecuableQueue ExecuableQueue
+type fastReflection_EthTxQueue EthTxQueue
 
-func (x *ExecuableQueue) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_ExecuableQueue)(x)
+func (x *EthTxQueue) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_EthTxQueue)(x)
 }
 
-func (x *ExecuableQueue) slowProtoReflect() protoreflect.Message {
+func (x *EthTxQueue) slowProtoReflect() protoreflect.Message {
 	mi := &file_goat_bitcoin_v1_types_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1800,43 +1800,43 @@ func (x *ExecuableQueue) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_ExecuableQueue_messageType fastReflection_ExecuableQueue_messageType
-var _ protoreflect.MessageType = fastReflection_ExecuableQueue_messageType{}
+var _fastReflection_EthTxQueue_messageType fastReflection_EthTxQueue_messageType
+var _ protoreflect.MessageType = fastReflection_EthTxQueue_messageType{}
 
-type fastReflection_ExecuableQueue_messageType struct{}
+type fastReflection_EthTxQueue_messageType struct{}
 
-func (x fastReflection_ExecuableQueue_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_ExecuableQueue)(nil)
+func (x fastReflection_EthTxQueue_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_EthTxQueue)(nil)
 }
-func (x fastReflection_ExecuableQueue_messageType) New() protoreflect.Message {
-	return new(fastReflection_ExecuableQueue)
+func (x fastReflection_EthTxQueue_messageType) New() protoreflect.Message {
+	return new(fastReflection_EthTxQueue)
 }
-func (x fastReflection_ExecuableQueue_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_ExecuableQueue
+func (x fastReflection_EthTxQueue_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_EthTxQueue
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_ExecuableQueue) Descriptor() protoreflect.MessageDescriptor {
-	return md_ExecuableQueue
+func (x *fastReflection_EthTxQueue) Descriptor() protoreflect.MessageDescriptor {
+	return md_EthTxQueue
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_ExecuableQueue) Type() protoreflect.MessageType {
-	return _fastReflection_ExecuableQueue_messageType
+func (x *fastReflection_EthTxQueue) Type() protoreflect.MessageType {
+	return _fastReflection_EthTxQueue_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_ExecuableQueue) New() protoreflect.Message {
-	return new(fastReflection_ExecuableQueue)
+func (x *fastReflection_EthTxQueue) New() protoreflect.Message {
+	return new(fastReflection_EthTxQueue)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_ExecuableQueue) Interface() protoreflect.ProtoMessage {
-	return (*ExecuableQueue)(x)
+func (x *fastReflection_EthTxQueue) Interface() protoreflect.ProtoMessage {
+	return (*EthTxQueue)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -1844,28 +1844,28 @@ func (x *fastReflection_ExecuableQueue) Interface() protoreflect.ProtoMessage {
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_ExecuableQueue) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_EthTxQueue) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.BlockNumber != uint64(0) {
 		value := protoreflect.ValueOfUint64(x.BlockNumber)
-		if !f(fd_ExecuableQueue_block_number, value) {
+		if !f(fd_EthTxQueue_block_number, value) {
 			return
 		}
 	}
 	if len(x.Deposits) != 0 {
-		value := protoreflect.ValueOfList(&_ExecuableQueue_2_list{list: &x.Deposits})
-		if !f(fd_ExecuableQueue_deposits, value) {
+		value := protoreflect.ValueOfList(&_EthTxQueue_2_list{list: &x.Deposits})
+		if !f(fd_EthTxQueue_deposits, value) {
 			return
 		}
 	}
 	if len(x.PaidWithdrawals) != 0 {
-		value := protoreflect.ValueOfList(&_ExecuableQueue_3_list{list: &x.PaidWithdrawals})
-		if !f(fd_ExecuableQueue_paid_withdrawals, value) {
+		value := protoreflect.ValueOfList(&_EthTxQueue_3_list{list: &x.PaidWithdrawals})
+		if !f(fd_EthTxQueue_paid_withdrawals, value) {
 			return
 		}
 	}
 	if len(x.RejectedWithdrawals) != 0 {
-		value := protoreflect.ValueOfList(&_ExecuableQueue_4_list{list: &x.RejectedWithdrawals})
-		if !f(fd_ExecuableQueue_rejected_withdrawals, value) {
+		value := protoreflect.ValueOfList(&_EthTxQueue_4_list{list: &x.RejectedWithdrawals})
+		if !f(fd_EthTxQueue_rejected_withdrawals, value) {
 			return
 		}
 	}
@@ -1882,21 +1882,21 @@ func (x *fastReflection_ExecuableQueue) Range(f func(protoreflect.FieldDescripto
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_ExecuableQueue) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_EthTxQueue) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "goat.bitcoin.v1.ExecuableQueue.block_number":
+	case "goat.bitcoin.v1.EthTxQueue.block_number":
 		return x.BlockNumber != uint64(0)
-	case "goat.bitcoin.v1.ExecuableQueue.deposits":
+	case "goat.bitcoin.v1.EthTxQueue.deposits":
 		return len(x.Deposits) != 0
-	case "goat.bitcoin.v1.ExecuableQueue.paid_withdrawals":
+	case "goat.bitcoin.v1.EthTxQueue.paid_withdrawals":
 		return len(x.PaidWithdrawals) != 0
-	case "goat.bitcoin.v1.ExecuableQueue.rejected_withdrawals":
+	case "goat.bitcoin.v1.EthTxQueue.rejected_withdrawals":
 		return len(x.RejectedWithdrawals) != 0
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.ExecuableQueue"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.EthTxQueue"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.ExecuableQueue does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.EthTxQueue does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1906,21 +1906,21 @@ func (x *fastReflection_ExecuableQueue) Has(fd protoreflect.FieldDescriptor) boo
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ExecuableQueue) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_EthTxQueue) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "goat.bitcoin.v1.ExecuableQueue.block_number":
+	case "goat.bitcoin.v1.EthTxQueue.block_number":
 		x.BlockNumber = uint64(0)
-	case "goat.bitcoin.v1.ExecuableQueue.deposits":
+	case "goat.bitcoin.v1.EthTxQueue.deposits":
 		x.Deposits = nil
-	case "goat.bitcoin.v1.ExecuableQueue.paid_withdrawals":
+	case "goat.bitcoin.v1.EthTxQueue.paid_withdrawals":
 		x.PaidWithdrawals = nil
-	case "goat.bitcoin.v1.ExecuableQueue.rejected_withdrawals":
+	case "goat.bitcoin.v1.EthTxQueue.rejected_withdrawals":
 		x.RejectedWithdrawals = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.ExecuableQueue"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.EthTxQueue"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.ExecuableQueue does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.EthTxQueue does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1930,34 +1930,34 @@ func (x *fastReflection_ExecuableQueue) Clear(fd protoreflect.FieldDescriptor) {
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_ExecuableQueue) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EthTxQueue) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "goat.bitcoin.v1.ExecuableQueue.block_number":
+	case "goat.bitcoin.v1.EthTxQueue.block_number":
 		value := x.BlockNumber
 		return protoreflect.ValueOfUint64(value)
-	case "goat.bitcoin.v1.ExecuableQueue.deposits":
+	case "goat.bitcoin.v1.EthTxQueue.deposits":
 		if len(x.Deposits) == 0 {
-			return protoreflect.ValueOfList(&_ExecuableQueue_2_list{})
+			return protoreflect.ValueOfList(&_EthTxQueue_2_list{})
 		}
-		listValue := &_ExecuableQueue_2_list{list: &x.Deposits}
+		listValue := &_EthTxQueue_2_list{list: &x.Deposits}
 		return protoreflect.ValueOfList(listValue)
-	case "goat.bitcoin.v1.ExecuableQueue.paid_withdrawals":
+	case "goat.bitcoin.v1.EthTxQueue.paid_withdrawals":
 		if len(x.PaidWithdrawals) == 0 {
-			return protoreflect.ValueOfList(&_ExecuableQueue_3_list{})
+			return protoreflect.ValueOfList(&_EthTxQueue_3_list{})
 		}
-		listValue := &_ExecuableQueue_3_list{list: &x.PaidWithdrawals}
+		listValue := &_EthTxQueue_3_list{list: &x.PaidWithdrawals}
 		return protoreflect.ValueOfList(listValue)
-	case "goat.bitcoin.v1.ExecuableQueue.rejected_withdrawals":
+	case "goat.bitcoin.v1.EthTxQueue.rejected_withdrawals":
 		if len(x.RejectedWithdrawals) == 0 {
-			return protoreflect.ValueOfList(&_ExecuableQueue_4_list{})
+			return protoreflect.ValueOfList(&_EthTxQueue_4_list{})
 		}
-		listValue := &_ExecuableQueue_4_list{list: &x.RejectedWithdrawals}
+		listValue := &_EthTxQueue_4_list{list: &x.RejectedWithdrawals}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.ExecuableQueue"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.EthTxQueue"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.ExecuableQueue does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.EthTxQueue does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -1971,27 +1971,27 @@ func (x *fastReflection_ExecuableQueue) Get(descriptor protoreflect.FieldDescrip
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ExecuableQueue) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_EthTxQueue) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "goat.bitcoin.v1.ExecuableQueue.block_number":
+	case "goat.bitcoin.v1.EthTxQueue.block_number":
 		x.BlockNumber = value.Uint()
-	case "goat.bitcoin.v1.ExecuableQueue.deposits":
+	case "goat.bitcoin.v1.EthTxQueue.deposits":
 		lv := value.List()
-		clv := lv.(*_ExecuableQueue_2_list)
+		clv := lv.(*_EthTxQueue_2_list)
 		x.Deposits = *clv.list
-	case "goat.bitcoin.v1.ExecuableQueue.paid_withdrawals":
+	case "goat.bitcoin.v1.EthTxQueue.paid_withdrawals":
 		lv := value.List()
-		clv := lv.(*_ExecuableQueue_3_list)
+		clv := lv.(*_EthTxQueue_3_list)
 		x.PaidWithdrawals = *clv.list
-	case "goat.bitcoin.v1.ExecuableQueue.rejected_withdrawals":
+	case "goat.bitcoin.v1.EthTxQueue.rejected_withdrawals":
 		lv := value.List()
-		clv := lv.(*_ExecuableQueue_4_list)
+		clv := lv.(*_EthTxQueue_4_list)
 		x.RejectedWithdrawals = *clv.list
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.ExecuableQueue"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.EthTxQueue"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.ExecuableQueue does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.EthTxQueue does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2005,67 +2005,67 @@ func (x *fastReflection_ExecuableQueue) Set(fd protoreflect.FieldDescriptor, val
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ExecuableQueue) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EthTxQueue) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "goat.bitcoin.v1.ExecuableQueue.deposits":
+	case "goat.bitcoin.v1.EthTxQueue.deposits":
 		if x.Deposits == nil {
 			x.Deposits = []*DepositExecReceipt{}
 		}
-		value := &_ExecuableQueue_2_list{list: &x.Deposits}
+		value := &_EthTxQueue_2_list{list: &x.Deposits}
 		return protoreflect.ValueOfList(value)
-	case "goat.bitcoin.v1.ExecuableQueue.paid_withdrawals":
+	case "goat.bitcoin.v1.EthTxQueue.paid_withdrawals":
 		if x.PaidWithdrawals == nil {
 			x.PaidWithdrawals = []*WithdrawalExecReceipt{}
 		}
-		value := &_ExecuableQueue_3_list{list: &x.PaidWithdrawals}
+		value := &_EthTxQueue_3_list{list: &x.PaidWithdrawals}
 		return protoreflect.ValueOfList(value)
-	case "goat.bitcoin.v1.ExecuableQueue.rejected_withdrawals":
+	case "goat.bitcoin.v1.EthTxQueue.rejected_withdrawals":
 		if x.RejectedWithdrawals == nil {
 			x.RejectedWithdrawals = []uint64{}
 		}
-		value := &_ExecuableQueue_4_list{list: &x.RejectedWithdrawals}
+		value := &_EthTxQueue_4_list{list: &x.RejectedWithdrawals}
 		return protoreflect.ValueOfList(value)
-	case "goat.bitcoin.v1.ExecuableQueue.block_number":
-		panic(fmt.Errorf("field block_number of message goat.bitcoin.v1.ExecuableQueue is not mutable"))
+	case "goat.bitcoin.v1.EthTxQueue.block_number":
+		panic(fmt.Errorf("field block_number of message goat.bitcoin.v1.EthTxQueue is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.ExecuableQueue"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.EthTxQueue"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.ExecuableQueue does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.EthTxQueue does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_ExecuableQueue) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EthTxQueue) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "goat.bitcoin.v1.ExecuableQueue.block_number":
+	case "goat.bitcoin.v1.EthTxQueue.block_number":
 		return protoreflect.ValueOfUint64(uint64(0))
-	case "goat.bitcoin.v1.ExecuableQueue.deposits":
+	case "goat.bitcoin.v1.EthTxQueue.deposits":
 		list := []*DepositExecReceipt{}
-		return protoreflect.ValueOfList(&_ExecuableQueue_2_list{list: &list})
-	case "goat.bitcoin.v1.ExecuableQueue.paid_withdrawals":
+		return protoreflect.ValueOfList(&_EthTxQueue_2_list{list: &list})
+	case "goat.bitcoin.v1.EthTxQueue.paid_withdrawals":
 		list := []*WithdrawalExecReceipt{}
-		return protoreflect.ValueOfList(&_ExecuableQueue_3_list{list: &list})
-	case "goat.bitcoin.v1.ExecuableQueue.rejected_withdrawals":
+		return protoreflect.ValueOfList(&_EthTxQueue_3_list{list: &list})
+	case "goat.bitcoin.v1.EthTxQueue.rejected_withdrawals":
 		list := []uint64{}
-		return protoreflect.ValueOfList(&_ExecuableQueue_4_list{list: &list})
+		return protoreflect.ValueOfList(&_EthTxQueue_4_list{list: &list})
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.ExecuableQueue"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.EthTxQueue"))
 		}
-		panic(fmt.Errorf("message goat.bitcoin.v1.ExecuableQueue does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.bitcoin.v1.EthTxQueue does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_ExecuableQueue) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_EthTxQueue) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in goat.bitcoin.v1.ExecuableQueue", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in goat.bitcoin.v1.EthTxQueue", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -2073,7 +2073,7 @@ func (x *fastReflection_ExecuableQueue) WhichOneof(d protoreflect.OneofDescripto
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_ExecuableQueue) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_EthTxQueue) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -2084,7 +2084,7 @@ func (x *fastReflection_ExecuableQueue) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ExecuableQueue) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_EthTxQueue) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -2096,7 +2096,7 @@ func (x *fastReflection_ExecuableQueue) SetUnknown(fields protoreflect.RawFields
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_ExecuableQueue) IsValid() bool {
+func (x *fastReflection_EthTxQueue) IsValid() bool {
 	return x != nil
 }
 
@@ -2106,9 +2106,9 @@ func (x *fastReflection_ExecuableQueue) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_ExecuableQueue) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_EthTxQueue) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*ExecuableQueue)
+		x := input.Message.Interface().(*EthTxQueue)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2152,7 +2152,7 @@ func (x *fastReflection_ExecuableQueue) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*ExecuableQueue)
+		x := input.Message.Interface().(*EthTxQueue)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2239,7 +2239,7 @@ func (x *fastReflection_ExecuableQueue) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*ExecuableQueue)
+		x := input.Message.Interface().(*EthTxQueue)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2271,10 +2271,10 @@ func (x *fastReflection_ExecuableQueue) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ExecuableQueue: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EthTxQueue: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ExecuableQueue: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EthTxQueue: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -2628,8 +2628,8 @@ func (x *WithdrawalExecReceipt) GetReceipt() *WithdrawalReceipt {
 	return nil
 }
 
-// ExecuableQueue
-type ExecuableQueue struct {
+// EthTxQueue
+type EthTxQueue struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -2640,8 +2640,8 @@ type ExecuableQueue struct {
 	RejectedWithdrawals []uint64                 `protobuf:"varint,4,rep,packed,name=rejected_withdrawals,json=rejectedWithdrawals,proto3" json:"rejected_withdrawals,omitempty"`
 }
 
-func (x *ExecuableQueue) Reset() {
-	*x = ExecuableQueue{}
+func (x *EthTxQueue) Reset() {
+	*x = EthTxQueue{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_goat_bitcoin_v1_types_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2649,39 +2649,39 @@ func (x *ExecuableQueue) Reset() {
 	}
 }
 
-func (x *ExecuableQueue) String() string {
+func (x *EthTxQueue) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ExecuableQueue) ProtoMessage() {}
+func (*EthTxQueue) ProtoMessage() {}
 
-// Deprecated: Use ExecuableQueue.ProtoReflect.Descriptor instead.
-func (*ExecuableQueue) Descriptor() ([]byte, []int) {
+// Deprecated: Use EthTxQueue.ProtoReflect.Descriptor instead.
+func (*EthTxQueue) Descriptor() ([]byte, []int) {
 	return file_goat_bitcoin_v1_types_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *ExecuableQueue) GetBlockNumber() uint64 {
+func (x *EthTxQueue) GetBlockNumber() uint64 {
 	if x != nil {
 		return x.BlockNumber
 	}
 	return 0
 }
 
-func (x *ExecuableQueue) GetDeposits() []*DepositExecReceipt {
+func (x *EthTxQueue) GetDeposits() []*DepositExecReceipt {
 	if x != nil {
 		return x.Deposits
 	}
 	return nil
 }
 
-func (x *ExecuableQueue) GetPaidWithdrawals() []*WithdrawalExecReceipt {
+func (x *EthTxQueue) GetPaidWithdrawals() []*WithdrawalExecReceipt {
 	if x != nil {
 		return x.PaidWithdrawals
 	}
 	return nil
 }
 
-func (x *ExecuableQueue) GetRejectedWithdrawals() []uint64 {
+func (x *EthTxQueue) GetRejectedWithdrawals() []uint64 {
 	if x != nil {
 		return x.RejectedWithdrawals
 	}
@@ -2711,35 +2711,35 @@ var file_goat_bitcoin_v1_types_proto_rawDesc = []byte{
 	0x65, 0x69, 0x70, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x67, 0x6f, 0x61,
 	0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x57, 0x69, 0x74,
 	0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x52, 0x65, 0x63, 0x65, 0x69, 0x70, 0x74, 0x52, 0x07,
-	0x72, 0x65, 0x63, 0x65, 0x69, 0x70, 0x74, 0x22, 0xfa, 0x01, 0x0a, 0x0e, 0x45, 0x78, 0x65, 0x63,
-	0x75, 0x61, 0x62, 0x6c, 0x65, 0x51, 0x75, 0x65, 0x75, 0x65, 0x12, 0x21, 0x0a, 0x0c, 0x62, 0x6c,
-	0x6f, 0x63, 0x6b, 0x5f, 0x6e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04,
-	0x52, 0x0b, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x4e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x12, 0x3f, 0x0a,
-	0x08, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32,
-	0x23, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76,
-	0x31, 0x2e, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x45, 0x78, 0x65, 0x63, 0x52, 0x65, 0x63,
-	0x65, 0x69, 0x70, 0x74, 0x52, 0x08, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x12, 0x51,
-	0x0a, 0x10, 0x70, 0x61, 0x69, 0x64, 0x5f, 0x77, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61,
-	0x6c, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e,
-	0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x57, 0x69, 0x74, 0x68, 0x64,
-	0x72, 0x61, 0x77, 0x61, 0x6c, 0x45, 0x78, 0x65, 0x63, 0x52, 0x65, 0x63, 0x65, 0x69, 0x70, 0x74,
-	0x52, 0x0f, 0x70, 0x61, 0x69, 0x64, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c,
-	0x73, 0x12, 0x31, 0x0a, 0x14, 0x72, 0x65, 0x6a, 0x65, 0x63, 0x74, 0x65, 0x64, 0x5f, 0x77, 0x69,
-	0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x04, 0x52,
-	0x13, 0x72, 0x65, 0x6a, 0x65, 0x63, 0x74, 0x65, 0x64, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61,
-	0x77, 0x61, 0x6c, 0x73, 0x42, 0xba, 0x01, 0x0a, 0x13, 0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x6f, 0x61,
-	0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x42, 0x0a, 0x54, 0x79,
-	0x70, 0x65, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x39, 0x67, 0x69, 0x74, 0x68,
-	0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x6e, 0x65, 0x74, 0x77, 0x6f,
-	0x72, 0x6b, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x61, 0x74,
-	0x2f, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2f, 0x76, 0x31, 0x3b, 0x62, 0x69, 0x74, 0x63,
-	0x6f, 0x69, 0x6e, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x47, 0x42, 0x58, 0xaa, 0x02, 0x0f, 0x47, 0x6f,
-	0x61, 0x74, 0x2e, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x0f,
-	0x47, 0x6f, 0x61, 0x74, 0x5c, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x5c, 0x56, 0x31, 0xe2,
-	0x02, 0x1b, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x5c, 0x56,
-	0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x11,
-	0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x3a, 0x3a, 0x56,
-	0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x72, 0x65, 0x63, 0x65, 0x69, 0x70, 0x74, 0x22, 0xf6, 0x01, 0x0a, 0x0a, 0x45, 0x74, 0x68, 0x54,
+	0x78, 0x51, 0x75, 0x65, 0x75, 0x65, 0x12, 0x21, 0x0a, 0x0c, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f,
+	0x6e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0b, 0x62, 0x6c,
+	0x6f, 0x63, 0x6b, 0x4e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x12, 0x3f, 0x0a, 0x08, 0x64, 0x65, 0x70,
+	0x6f, 0x73, 0x69, 0x74, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x67, 0x6f,
+	0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65,
+	0x70, 0x6f, 0x73, 0x69, 0x74, 0x45, 0x78, 0x65, 0x63, 0x52, 0x65, 0x63, 0x65, 0x69, 0x70, 0x74,
+	0x52, 0x08, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x12, 0x51, 0x0a, 0x10, 0x70, 0x61,
+	0x69, 0x64, 0x5f, 0x77, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x73, 0x18, 0x03,
+	0x20, 0x03, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63,
+	0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61,
+	0x6c, 0x45, 0x78, 0x65, 0x63, 0x52, 0x65, 0x63, 0x65, 0x69, 0x70, 0x74, 0x52, 0x0f, 0x70, 0x61,
+	0x69, 0x64, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x73, 0x12, 0x31, 0x0a,
+	0x14, 0x72, 0x65, 0x6a, 0x65, 0x63, 0x74, 0x65, 0x64, 0x5f, 0x77, 0x69, 0x74, 0x68, 0x64, 0x72,
+	0x61, 0x77, 0x61, 0x6c, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x04, 0x52, 0x13, 0x72, 0x65, 0x6a,
+	0x65, 0x63, 0x74, 0x65, 0x64, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x73,
+	0x42, 0xba, 0x01, 0x0a, 0x13, 0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69,
+	0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x42, 0x0a, 0x54, 0x79, 0x70, 0x65, 0x73, 0x50,
+	0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x39, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63,
+	0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x67,
+	0x6f, 0x61, 0x74, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x62, 0x69, 0x74,
+	0x63, 0x6f, 0x69, 0x6e, 0x2f, 0x76, 0x31, 0x3b, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x76,
+	0x31, 0xa2, 0x02, 0x03, 0x47, 0x42, 0x58, 0xaa, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x2e, 0x42,
+	0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74,
+	0x5c, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x1b, 0x47, 0x6f,
+	0x61, 0x74, 0x5c, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50,
+	0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x11, 0x47, 0x6f, 0x61, 0x74,
+	0x3a, 0x3a, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -2759,13 +2759,13 @@ var file_goat_bitcoin_v1_types_proto_goTypes = []interface{}{
 	(*WithdrawalIds)(nil),         // 0: goat.bitcoin.v1.WithdrawalIds
 	(*DepositExecReceipt)(nil),    // 1: goat.bitcoin.v1.DepositExecReceipt
 	(*WithdrawalExecReceipt)(nil), // 2: goat.bitcoin.v1.WithdrawalExecReceipt
-	(*ExecuableQueue)(nil),        // 3: goat.bitcoin.v1.ExecuableQueue
+	(*EthTxQueue)(nil),            // 3: goat.bitcoin.v1.EthTxQueue
 	(*WithdrawalReceipt)(nil),     // 4: goat.bitcoin.v1.WithdrawalReceipt
 }
 var file_goat_bitcoin_v1_types_proto_depIdxs = []int32{
 	4, // 0: goat.bitcoin.v1.WithdrawalExecReceipt.receipt:type_name -> goat.bitcoin.v1.WithdrawalReceipt
-	1, // 1: goat.bitcoin.v1.ExecuableQueue.deposits:type_name -> goat.bitcoin.v1.DepositExecReceipt
-	2, // 2: goat.bitcoin.v1.ExecuableQueue.paid_withdrawals:type_name -> goat.bitcoin.v1.WithdrawalExecReceipt
+	1, // 1: goat.bitcoin.v1.EthTxQueue.deposits:type_name -> goat.bitcoin.v1.DepositExecReceipt
+	2, // 2: goat.bitcoin.v1.EthTxQueue.paid_withdrawals:type_name -> goat.bitcoin.v1.WithdrawalExecReceipt
 	3, // [3:3] is the sub-list for method output_type
 	3, // [3:3] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name
@@ -2817,7 +2817,7 @@ func file_goat_bitcoin_v1_types_proto_init() {
 			}
 		}
 		file_goat_bitcoin_v1_types_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ExecuableQueue); i {
+			switch v := v.(*EthTxQueue); i {
 			case 0:
 				return &v.state
 			case 1:

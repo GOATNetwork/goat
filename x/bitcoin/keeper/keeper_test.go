@@ -194,7 +194,7 @@ func (suite *KeeperTestSuite) TestDequeueBitcoinModuleTx() {
 
 	suite.Require().NoError(suite.Keeper.BlockTip.Set(suite.Context, height))
 
-	err := suite.Keeper.ExecuableQueue.Set(suite.Context, types.ExecuableQueue{
+	err := suite.Keeper.EthTxQueue.Set(suite.Context, types.EthTxQueue{
 		BlockNumber:         0,
 		Deposits:            deposits,
 		PaidWithdrawals:     paid,
@@ -240,10 +240,10 @@ func (suite *KeeperTestSuite) TestDequeueBitcoinModuleTx() {
 		suite.Require().NoError(err)
 		suite.Require().Equal(newNonce, uint64(17))
 
-		newQueue, err := suite.Keeper.ExecuableQueue.Get(suite.Context)
+		newQueue, err := suite.Keeper.EthTxQueue.Get(suite.Context)
 		suite.Require().NoError(err)
 
-		suite.Require().Equal(newQueue, types.ExecuableQueue{
+		suite.Require().Equal(newQueue, types.EthTxQueue{
 			BlockNumber:         1,
 			Deposits:            deposits[8:],
 			PaidWithdrawals:     nil,
@@ -275,10 +275,10 @@ func (suite *KeeperTestSuite) TestDequeueBitcoinModuleTx() {
 		suite.Require().NoError(err)
 		suite.Require().Equal(newNonce, uint64(21))
 
-		newQueue, err := suite.Keeper.ExecuableQueue.Get(suite.Context)
+		newQueue, err := suite.Keeper.EthTxQueue.Get(suite.Context)
 		suite.Require().NoError(err)
 
-		suite.Require().Equal(newQueue, types.ExecuableQueue{
+		suite.Require().Equal(newQueue, types.EthTxQueue{
 			BlockNumber:         2,
 			Deposits:            nil,
 			PaidWithdrawals:     nil,
@@ -307,10 +307,10 @@ func (suite *KeeperTestSuite) TestDequeueBitcoinModuleTx() {
 		suite.Require().NoError(err)
 		suite.Require().Equal(newNonce, uint64(22))
 
-		newQueue, err := suite.Keeper.ExecuableQueue.Get(suite.Context)
+		newQueue, err := suite.Keeper.EthTxQueue.Get(suite.Context)
 		suite.Require().NoError(err)
 
-		suite.Require().Equal(newQueue, types.ExecuableQueue{
+		suite.Require().Equal(newQueue, types.EthTxQueue{
 			BlockNumber:         3,
 			Deposits:            nil,
 			PaidWithdrawals:     nil,
@@ -356,10 +356,10 @@ func (suite *KeeperTestSuite) TestDequeueBitcoinModuleTx() {
 		suite.Require().NoError(err)
 		suite.Require().Equal(newNonce, uint64(22))
 
-		newQueue, err := suite.Keeper.ExecuableQueue.Get(suite.Context)
+		newQueue, err := suite.Keeper.EthTxQueue.Get(suite.Context)
 		suite.Require().NoError(err)
 
-		suite.Require().Equal(newQueue, types.ExecuableQueue{
+		suite.Require().Equal(newQueue, types.EthTxQueue{
 			BlockNumber:         3,
 			Deposits:            nil,
 			PaidWithdrawals:     nil,
@@ -368,7 +368,7 @@ func (suite *KeeperTestSuite) TestDequeueBitcoinModuleTx() {
 
 		newQueue.PaidWithdrawals = paid2
 		newQueue.RejectedWithdrawals = rejected2
-		suite.Require().NoError(suite.Keeper.ExecuableQueue.Set(suite.Context, newQueue))
+		suite.Require().NoError(suite.Keeper.EthTxQueue.Set(suite.Context, newQueue))
 	}
 
 	{
@@ -397,10 +397,10 @@ func (suite *KeeperTestSuite) TestDequeueBitcoinModuleTx() {
 		suite.Require().NoError(err)
 		suite.Require().Equal(newNonce, uint64(27))
 
-		newQueue, err := suite.Keeper.ExecuableQueue.Get(suite.Context)
+		newQueue, err := suite.Keeper.EthTxQueue.Get(suite.Context)
 		suite.Require().NoError(err)
 
-		suite.Require().Equal(newQueue, types.ExecuableQueue{
+		suite.Require().Equal(newQueue, types.EthTxQueue{
 			BlockNumber:         3,
 			Deposits:            nil,
 			PaidWithdrawals:     nil,
@@ -431,7 +431,7 @@ func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
 		},
 	}
 
-	suite.Require().NoError(suite.Keeper.ExecuableQueue.Set(suite.Context, types.ExecuableQueue{}))
+	suite.Require().NoError(suite.Keeper.EthTxQueue.Set(suite.Context, types.EthTxQueue{}))
 	err := suite.Keeper.ProcessBridgeRequest(suite.Context, withdrawals1, nil, nil)
 	suite.Require().NoError(err)
 	suite.Require().Equal(len(suite.Context.EventManager().Events()), 1)
@@ -443,9 +443,9 @@ func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
 	suite.Require().NoError(err)
 	suite.Require().False(has1)
 
-	queue, err := suite.Keeper.ExecuableQueue.Get(suite.Context)
+	queue, err := suite.Keeper.EthTxQueue.Get(suite.Context)
 	suite.Require().NoError(err)
-	suite.Require().Equal(queue, types.ExecuableQueue{
+	suite.Require().Equal(queue, types.EthTxQueue{
 		RejectedWithdrawals: []uint64{0, 1},
 	})
 

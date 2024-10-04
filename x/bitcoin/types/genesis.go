@@ -3,7 +3,6 @@ package types
 import (
 	"encoding/hex"
 	"errors"
-	"fmt"
 	"slices"
 )
 
@@ -27,9 +26,7 @@ func DefaultGenesis() *GenesisState {
 		BlockTip:    0,
 		BlockHashes: [][]byte{geneis},
 		EthTxNonce:  0,
-		Queue: &ExecuableQueue{
-			BlockNumber: 0,
-		},
+		EthTxQueue:  EthTxQueue{BlockNumber: 0},
 	}
 }
 
@@ -50,10 +47,6 @@ func (gs GenesisState) Validate() error {
 
 	if len(gs.BlockHashes) == 0 {
 		return errors.New("No block hash provided in the genesis state")
-	}
-
-	if gs.Queue == nil {
-		return fmt.Errorf("execution queue is empty")
 	}
 
 	return nil

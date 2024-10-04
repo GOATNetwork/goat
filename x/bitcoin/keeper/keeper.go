@@ -28,15 +28,16 @@ type (
 		logger       log.Logger
 		schema       collections.Schema
 
-		Params         collections.Item[types.Params]
-		Pubkey         collections.Item[relayertypes.PublicKey]
-		BlockTip       collections.Sequence
-		BlockHashes    collections.Map[uint64, []byte]
-		Deposited      collections.Map[collections.Pair[[]byte, uint32], uint64]
-		EthTxNonce     collections.Sequence
-		Withdrawals    collections.Map[uint64, types.Withdrawal]
-		Processing     collections.Map[[]byte, types.WithdrawalIds] // processing withdrawal(a pair of txid and withdrawal id list)
-		ExecuableQueue collections.Item[types.ExecuableQueue]
+		Params      collections.Item[types.Params]
+		Pubkey      collections.Item[relayertypes.PublicKey]
+		BlockTip    collections.Sequence
+		BlockHashes collections.Map[uint64, []byte]
+		Deposited   collections.Map[collections.Pair[[]byte, uint32], uint64]
+		EthTxNonce  collections.Sequence
+		Withdrawals collections.Map[uint64, types.Withdrawal]
+		// processing withdrawal(a pair of txid and withdrawal id list)
+		Processing collections.Map[[]byte, types.WithdrawalIds]
+		EthTxQueue collections.Item[types.EthTxQueue]
 
 		relayerKeeper types.RelayerKeeper
 	}
@@ -58,18 +59,16 @@ func NewKeeper(
 		storeService: storeService,
 		logger:       logger,
 
-		relayerKeeper:  relayerKeeper,
-		Params:         collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
-		Pubkey:         collections.NewItem(sb, types.LatestPubkeyKey, "latest_pubkey", codec.CollValue[relayertypes.PublicKey](cdc)),
-		BlockTip:       collections.NewSequence(sb, types.LatestHeightKey, "latest_height"),
-		BlockHashes:    collections.NewMap(sb, types.BlockHashsKey, "block_hashs", collections.Uint64Key, collections.BytesValue),
-		Deposited:      collections.NewMap(sb, types.DepositedKey, "deposited", collections.PairKeyCodec(collections.BytesKey, collections.Uint32Key), collections.Uint64Value),
-		EthTxNonce:     collections.NewSequence(sb, types.EthTxNonceKey, "eth_tx_nonce"),
-		ExecuableQueue: collections.NewItem(sb, types.ExecuableQueueKey, "queue", codec.CollValue[types.ExecuableQueue](cdc)),
-
-		Withdrawals: collections.NewMap(sb, types.WithdrawalKey, "withdrawals", collections.Uint64Key, codec.CollValue[types.Withdrawal](cdc)),
-		Processing:  collections.NewMap(sb, types.ProcessingKey, "processings", collections.BytesKey, codec.CollValue[types.WithdrawalIds](cdc)),
-		// this line is used by starport scaffolding # collection/instantiate
+		relayerKeeper: relayerKeeper,
+		Params:        collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		Pubkey:        collections.NewItem(sb, types.LatestPubkeyKey, "latest_pubkey", codec.CollValue[relayertypes.PublicKey](cdc)),
+		BlockTip:      collections.NewSequence(sb, types.LatestHeightKey, "latest_height"),
+		BlockHashes:   collections.NewMap(sb, types.BlockHashsKey, "block_hashs", collections.Uint64Key, collections.BytesValue),
+		Deposited:     collections.NewMap(sb, types.DepositedKey, "deposited", collections.PairKeyCodec(collections.BytesKey, collections.Uint32Key), collections.Uint64Value),
+		EthTxNonce:    collections.NewSequence(sb, types.EthTxNonceKey, "eth_tx_nonce"),
+		EthTxQueue:    collections.NewItem(sb, types.EthTxQueueKey, "eth_tx_queue", codec.CollValue[types.EthTxQueue](cdc)),
+		Withdrawals:   collections.NewMap(sb, types.WithdrawalKey, "withdrawals", collections.Uint64Key, codec.CollValue[types.Withdrawal](cdc)),
+		Processing:    collections.NewMap(sb, types.ProcessingKey, "processings", collections.BytesKey, codec.CollValue[types.WithdrawalIds](cdc)),
 	}
 
 	schema, err := sb.Build()
@@ -210,7 +209,7 @@ func (k Keeper) DequeueBitcoinModuleTx(ctx context.Context) (txs []*ethtypes.Tra
 		MaxWithdrawal = 8
 	)
 
-	queue, err := k.ExecuableQueue.Get(ctx)
+	queue, err := k.EthTxQueue.Get(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -273,7 +272,7 @@ func (k Keeper) DequeueBitcoinModuleTx(ctx context.Context) (txs []*ethtypes.Tra
 	}
 
 	if len(txs) > 0 {
-		if err := k.ExecuableQueue.Set(ctx, queue); err != nil {
+		if err := k.EthTxQueue.Set(ctx, queue); err != nil {
 			return nil, err
 		}
 		if err := k.EthTxNonce.Set(ctx, txNonce); err != nil {
@@ -319,12 +318,12 @@ func (k Keeper) ProcessBridgeRequest(ctx context.Context, withdrawals []*goattyp
 	}
 
 	if len(rejecting) > 0 {
-		queue, err := k.ExecuableQueue.Get(ctx)
+		queue, err := k.EthTxQueue.Get(ctx)
 		if err != nil {
 			return err
 		}
 		queue.RejectedWithdrawals = append(queue.RejectedWithdrawals, rejecting...)
-		if err := k.ExecuableQueue.Set(ctx, queue); err != nil {
+		if err := k.EthTxQueue.Set(ctx, queue); err != nil {
 			return err
 		}
 	}
