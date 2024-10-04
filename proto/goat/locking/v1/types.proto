@@ -71,13 +71,13 @@ message Unlock {
   ];
 }
 
-// ExecuableQueue
-message ExecuableQueue {
+// EthTxQueue
+message EthTxQueue {
   repeated Reward rewards = 1;
   repeated Unlock unlocks = 2;
 }
 
-// UnlockQueue
-message UnlockQueue {
+// Unlocks
+message Unlocks {
   repeated Unlock unlocks = 1;
 }

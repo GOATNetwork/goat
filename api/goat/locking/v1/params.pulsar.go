@@ -4,6 +4,7 @@ package lockingv1
 import (
 	_ "cosmossdk.io/api/amino"
 	fmt "fmt"
+	_ "github.com/cosmos/cosmos-proto"
 	runtime "github.com/cosmos/cosmos-proto/runtime"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -16,20 +17,24 @@ import (
 )
 
 var (
-	md_Params                             protoreflect.MessageDescriptor
-	fd_Params_unlock_waitting_duration    protoreflect.FieldDescriptor
-	fd_Params_exit_waitting_duration      protoreflect.FieldDescriptor
-	fd_Params_downgrade_waitting_duration protoreflect.FieldDescriptor
-	fd_Params_max_validators              protoreflect.FieldDescriptor
+	md_Params                            protoreflect.MessageDescriptor
+	fd_Params_unlock_duration            protoreflect.FieldDescriptor
+	fd_Params_exiting_duration           protoreflect.FieldDescriptor
+	fd_Params_downgrade_jail_duration    protoreflect.FieldDescriptor
+	fd_Params_max_validators             protoreflect.FieldDescriptor
+	fd_Params_slash_fraction_double_sign protoreflect.FieldDescriptor
+	fd_Params_slash_fraction_downtime    protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_goat_locking_v1_params_proto_init()
 	md_Params = File_goat_locking_v1_params_proto.Messages().ByName("Params")
-	fd_Params_unlock_waitting_duration = md_Params.Fields().ByName("unlock_waitting_duration")
-	fd_Params_exit_waitting_duration = md_Params.Fields().ByName("exit_waitting_duration")
-	fd_Params_downgrade_waitting_duration = md_Params.Fields().ByName("downgrade_waitting_duration")
+	fd_Params_unlock_duration = md_Params.Fields().ByName("unlock_duration")
+	fd_Params_exiting_duration = md_Params.Fields().ByName("exiting_duration")
+	fd_Params_downgrade_jail_duration = md_Params.Fields().ByName("downgrade_jail_duration")
 	fd_Params_max_validators = md_Params.Fields().ByName("max_validators")
+	fd_Params_slash_fraction_double_sign = md_Params.Fields().ByName("slash_fraction_double_sign")
+	fd_Params_slash_fraction_downtime = md_Params.Fields().ByName("slash_fraction_downtime")
 }
 
 var _ protoreflect.Message = (*fastReflection_Params)(nil)
@@ -97,27 +102,39 @@ func (x *fastReflection_Params) Interface() protoreflect.ProtoMessage {
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.UnlockWaittingDuration != nil {
-		value := protoreflect.ValueOfMessage(x.UnlockWaittingDuration.ProtoReflect())
-		if !f(fd_Params_unlock_waitting_duration, value) {
+	if x.UnlockDuration != nil {
+		value := protoreflect.ValueOfMessage(x.UnlockDuration.ProtoReflect())
+		if !f(fd_Params_unlock_duration, value) {
 			return
 		}
 	}
-	if x.ExitWaittingDuration != nil {
-		value := protoreflect.ValueOfMessage(x.ExitWaittingDuration.ProtoReflect())
-		if !f(fd_Params_exit_waitting_duration, value) {
+	if x.ExitingDuration != nil {
+		value := protoreflect.ValueOfMessage(x.ExitingDuration.ProtoReflect())
+		if !f(fd_Params_exiting_duration, value) {
 			return
 		}
 	}
-	if x.DowngradeWaittingDuration != nil {
-		value := protoreflect.ValueOfMessage(x.DowngradeWaittingDuration.ProtoReflect())
-		if !f(fd_Params_downgrade_waitting_duration, value) {
+	if x.DowngradeJailDuration != nil {
+		value := protoreflect.ValueOfMessage(x.DowngradeJailDuration.ProtoReflect())
+		if !f(fd_Params_downgrade_jail_duration, value) {
 			return
 		}
 	}
 	if x.MaxValidators != int64(0) {
 		value := protoreflect.ValueOfInt64(x.MaxValidators)
 		if !f(fd_Params_max_validators, value) {
+			return
+		}
+	}
+	if len(x.SlashFractionDoubleSign) != 0 {
+		value := protoreflect.ValueOfBytes(x.SlashFractionDoubleSign)
+		if !f(fd_Params_slash_fraction_double_sign, value) {
+			return
+		}
+	}
+	if len(x.SlashFractionDowntime) != 0 {
+		value := protoreflect.ValueOfBytes(x.SlashFractionDowntime)
+		if !f(fd_Params_slash_fraction_downtime, value) {
 			return
 		}
 	}
@@ -136,14 +153,18 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "goat.locking.v1.Params.unlock_waitting_duration":
-		return x.UnlockWaittingDuration != nil
-	case "goat.locking.v1.Params.exit_waitting_duration":
-		return x.ExitWaittingDuration != nil
-	case "goat.locking.v1.Params.downgrade_waitting_duration":
-		return x.DowngradeWaittingDuration != nil
+	case "goat.locking.v1.Params.unlock_duration":
+		return x.UnlockDuration != nil
+	case "goat.locking.v1.Params.exiting_duration":
+		return x.ExitingDuration != nil
+	case "goat.locking.v1.Params.downgrade_jail_duration":
+		return x.DowngradeJailDuration != nil
 	case "goat.locking.v1.Params.max_validators":
 		return x.MaxValidators != int64(0)
+	case "goat.locking.v1.Params.slash_fraction_double_sign":
+		return len(x.SlashFractionDoubleSign) != 0
+	case "goat.locking.v1.Params.slash_fraction_downtime":
+		return len(x.SlashFractionDowntime) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.Params"))
@@ -160,14 +181,18 @@ func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "goat.locking.v1.Params.unlock_waitting_duration":
-		x.UnlockWaittingDuration = nil
-	case "goat.locking.v1.Params.exit_waitting_duration":
-		x.ExitWaittingDuration = nil
-	case "goat.locking.v1.Params.downgrade_waitting_duration":
-		x.DowngradeWaittingDuration = nil
+	case "goat.locking.v1.Params.unlock_duration":
+		x.UnlockDuration = nil
+	case "goat.locking.v1.Params.exiting_duration":
+		x.ExitingDuration = nil
+	case "goat.locking.v1.Params.downgrade_jail_duration":
+		x.DowngradeJailDuration = nil
 	case "goat.locking.v1.Params.max_validators":
 		x.MaxValidators = int64(0)
+	case "goat.locking.v1.Params.slash_fraction_double_sign":
+		x.SlashFractionDoubleSign = nil
+	case "goat.locking.v1.Params.slash_fraction_downtime":
+		x.SlashFractionDowntime = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.Params"))
@@ -184,18 +209,24 @@ func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "goat.locking.v1.Params.unlock_waitting_duration":
-		value := x.UnlockWaittingDuration
+	case "goat.locking.v1.Params.unlock_duration":
+		value := x.UnlockDuration
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "goat.locking.v1.Params.exit_waitting_duration":
-		value := x.ExitWaittingDuration
+	case "goat.locking.v1.Params.exiting_duration":
+		value := x.ExitingDuration
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "goat.locking.v1.Params.downgrade_waitting_duration":
-		value := x.DowngradeWaittingDuration
+	case "goat.locking.v1.Params.downgrade_jail_duration":
+		value := x.DowngradeJailDuration
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "goat.locking.v1.Params.max_validators":
 		value := x.MaxValidators
 		return protoreflect.ValueOfInt64(value)
+	case "goat.locking.v1.Params.slash_fraction_double_sign":
+		value := x.SlashFractionDoubleSign
+		return protoreflect.ValueOfBytes(value)
+	case "goat.locking.v1.Params.slash_fraction_downtime":
+		value := x.SlashFractionDowntime
+		return protoreflect.ValueOfBytes(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.Params"))
@@ -216,14 +247,18 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "goat.locking.v1.Params.unlock_waitting_duration":
-		x.UnlockWaittingDuration = value.Message().Interface().(*durationpb.Duration)
-	case "goat.locking.v1.Params.exit_waitting_duration":
-		x.ExitWaittingDuration = value.Message().Interface().(*durationpb.Duration)
-	case "goat.locking.v1.Params.downgrade_waitting_duration":
-		x.DowngradeWaittingDuration = value.Message().Interface().(*durationpb.Duration)
+	case "goat.locking.v1.Params.unlock_duration":
+		x.UnlockDuration = value.Message().Interface().(*durationpb.Duration)
+	case "goat.locking.v1.Params.exiting_duration":
+		x.ExitingDuration = value.Message().Interface().(*durationpb.Duration)
+	case "goat.locking.v1.Params.downgrade_jail_duration":
+		x.DowngradeJailDuration = value.Message().Interface().(*durationpb.Duration)
 	case "goat.locking.v1.Params.max_validators":
 		x.MaxValidators = value.Int()
+	case "goat.locking.v1.Params.slash_fraction_double_sign":
+		x.SlashFractionDoubleSign = value.Bytes()
+	case "goat.locking.v1.Params.slash_fraction_downtime":
+		x.SlashFractionDowntime = value.Bytes()
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.Params"))
@@ -244,23 +279,27 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "goat.locking.v1.Params.unlock_waitting_duration":
-		if x.UnlockWaittingDuration == nil {
-			x.UnlockWaittingDuration = new(durationpb.Duration)
+	case "goat.locking.v1.Params.unlock_duration":
+		if x.UnlockDuration == nil {
+			x.UnlockDuration = new(durationpb.Duration)
 		}
-		return protoreflect.ValueOfMessage(x.UnlockWaittingDuration.ProtoReflect())
-	case "goat.locking.v1.Params.exit_waitting_duration":
-		if x.ExitWaittingDuration == nil {
-			x.ExitWaittingDuration = new(durationpb.Duration)
+		return protoreflect.ValueOfMessage(x.UnlockDuration.ProtoReflect())
+	case "goat.locking.v1.Params.exiting_duration":
+		if x.ExitingDuration == nil {
+			x.ExitingDuration = new(durationpb.Duration)
 		}
-		return protoreflect.ValueOfMessage(x.ExitWaittingDuration.ProtoReflect())
-	case "goat.locking.v1.Params.downgrade_waitting_duration":
-		if x.DowngradeWaittingDuration == nil {
-			x.DowngradeWaittingDuration = new(durationpb.Duration)
+		return protoreflect.ValueOfMessage(x.ExitingDuration.ProtoReflect())
+	case "goat.locking.v1.Params.downgrade_jail_duration":
+		if x.DowngradeJailDuration == nil {
+			x.DowngradeJailDuration = new(durationpb.Duration)
 		}
-		return protoreflect.ValueOfMessage(x.DowngradeWaittingDuration.ProtoReflect())
+		return protoreflect.ValueOfMessage(x.DowngradeJailDuration.ProtoReflect())
 	case "goat.locking.v1.Params.max_validators":
 		panic(fmt.Errorf("field max_validators of message goat.locking.v1.Params is not mutable"))
+	case "goat.locking.v1.Params.slash_fraction_double_sign":
+		panic(fmt.Errorf("field slash_fraction_double_sign of message goat.locking.v1.Params is not mutable"))
+	case "goat.locking.v1.Params.slash_fraction_downtime":
+		panic(fmt.Errorf("field slash_fraction_downtime of message goat.locking.v1.Params is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.Params"))
@@ -274,17 +313,21 @@ func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protore
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "goat.locking.v1.Params.unlock_waitting_duration":
+	case "goat.locking.v1.Params.unlock_duration":
 		m := new(durationpb.Duration)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "goat.locking.v1.Params.exit_waitting_duration":
+	case "goat.locking.v1.Params.exiting_duration":
 		m := new(durationpb.Duration)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "goat.locking.v1.Params.downgrade_waitting_duration":
+	case "goat.locking.v1.Params.downgrade_jail_duration":
 		m := new(durationpb.Duration)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "goat.locking.v1.Params.max_validators":
 		return protoreflect.ValueOfInt64(int64(0))
+	case "goat.locking.v1.Params.slash_fraction_double_sign":
+		return protoreflect.ValueOfBytes(nil)
+	case "goat.locking.v1.Params.slash_fraction_downtime":
+		return protoreflect.ValueOfBytes(nil)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.Params"))
@@ -354,20 +397,28 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
-		if x.UnlockWaittingDuration != nil {
-			l = options.Size(x.UnlockWaittingDuration)
+		if x.UnlockDuration != nil {
+			l = options.Size(x.UnlockDuration)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.ExitWaittingDuration != nil {
-			l = options.Size(x.ExitWaittingDuration)
+		if x.ExitingDuration != nil {
+			l = options.Size(x.ExitingDuration)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.DowngradeWaittingDuration != nil {
-			l = options.Size(x.DowngradeWaittingDuration)
+		if x.DowngradeJailDuration != nil {
+			l = options.Size(x.DowngradeJailDuration)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if x.MaxValidators != 0 {
 			n += 1 + runtime.Sov(uint64(x.MaxValidators))
+		}
+		l = len(x.SlashFractionDoubleSign)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.SlashFractionDowntime)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -398,13 +449,27 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
+		if len(x.SlashFractionDowntime) > 0 {
+			i -= len(x.SlashFractionDowntime)
+			copy(dAtA[i:], x.SlashFractionDowntime)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.SlashFractionDowntime)))
+			i--
+			dAtA[i] = 0x3a
+		}
+		if len(x.SlashFractionDoubleSign) > 0 {
+			i -= len(x.SlashFractionDoubleSign)
+			copy(dAtA[i:], x.SlashFractionDoubleSign)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.SlashFractionDoubleSign)))
+			i--
+			dAtA[i] = 0x32
+		}
 		if x.MaxValidators != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.MaxValidators))
 			i--
 			dAtA[i] = 0x20
 		}
-		if x.DowngradeWaittingDuration != nil {
-			encoded, err := options.Marshal(x.DowngradeWaittingDuration)
+		if x.DowngradeJailDuration != nil {
+			encoded, err := options.Marshal(x.DowngradeJailDuration)
 			if err != nil {
 				return protoiface.MarshalOutput{
 					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -417,8 +482,8 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x1a
 		}
-		if x.ExitWaittingDuration != nil {
-			encoded, err := options.Marshal(x.ExitWaittingDuration)
+		if x.ExitingDuration != nil {
+			encoded, err := options.Marshal(x.ExitingDuration)
 			if err != nil {
 				return protoiface.MarshalOutput{
 					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -431,8 +496,8 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x12
 		}
-		if x.UnlockWaittingDuration != nil {
-			encoded, err := options.Marshal(x.UnlockWaittingDuration)
+		if x.UnlockDuration != nil {
+			encoded, err := options.Marshal(x.UnlockDuration)
 			if err != nil {
 				return protoiface.MarshalOutput{
 					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -496,7 +561,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			switch fieldNum {
 			case 1:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field UnlockWaittingDuration", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field UnlockDuration", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -523,16 +588,16 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				if x.UnlockWaittingDuration == nil {
-					x.UnlockWaittingDuration = &durationpb.Duration{}
+				if x.UnlockDuration == nil {
+					x.UnlockDuration = &durationpb.Duration{}
 				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.UnlockWaittingDuration); err != nil {
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.UnlockDuration); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
 			case 2:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ExitWaittingDuration", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ExitingDuration", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -559,16 +624,16 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				if x.ExitWaittingDuration == nil {
-					x.ExitWaittingDuration = &durationpb.Duration{}
+				if x.ExitingDuration == nil {
+					x.ExitingDuration = &durationpb.Duration{}
 				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.ExitWaittingDuration); err != nil {
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.ExitingDuration); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
 			case 3:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DowngradeWaittingDuration", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DowngradeJailDuration", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -595,10 +660,10 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				if x.DowngradeWaittingDuration == nil {
-					x.DowngradeWaittingDuration = &durationpb.Duration{}
+				if x.DowngradeJailDuration == nil {
+					x.DowngradeJailDuration = &durationpb.Duration{}
 				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.DowngradeWaittingDuration); err != nil {
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.DowngradeJailDuration); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
@@ -621,6 +686,74 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 						break
 					}
 				}
+			case 6:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SlashFractionDoubleSign", wireType)
+				}
+				var byteLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					byteLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if byteLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + byteLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.SlashFractionDoubleSign = append(x.SlashFractionDoubleSign[:0], dAtA[iNdEx:postIndex]...)
+				if x.SlashFractionDoubleSign == nil {
+					x.SlashFractionDoubleSign = []byte{}
+				}
+				iNdEx = postIndex
+			case 7:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SlashFractionDowntime", wireType)
+				}
+				var byteLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					byteLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if byteLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + byteLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.SlashFractionDowntime = append(x.SlashFractionDowntime[:0], dAtA[iNdEx:postIndex]...)
+				if x.SlashFractionDowntime == nil {
+					x.SlashFractionDowntime = []byte{}
+				}
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -675,15 +808,17 @@ type Params struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// the partial unlock waitting duation
-	UnlockWaittingDuration *durationpb.Duration `protobuf:"bytes,1,opt,name=unlock_waitting_duration,json=unlockWaittingDuration,proto3" json:"unlock_waitting_duration,omitempty"`
+	// the partial unlock duation
+	UnlockDuration *durationpb.Duration `protobuf:"bytes,1,opt,name=unlock_duration,json=unlockDuration,proto3" json:"unlock_duration,omitempty"`
 	// if the token amount is less then threshold, the validator will be the
 	// inactive status the validator operator should wait for long then paritial
 	// unlock duation
-	ExitWaittingDuration      *durationpb.Duration `protobuf:"bytes,2,opt,name=exit_waitting_duration,json=exitWaittingDuration,proto3" json:"exit_waitting_duration,omitempty"`
-	DowngradeWaittingDuration *durationpb.Duration `protobuf:"bytes,3,opt,name=downgrade_waitting_duration,json=downgradeWaittingDuration,proto3" json:"downgrade_waitting_duration,omitempty"`
+	ExitingDuration       *durationpb.Duration `protobuf:"bytes,2,opt,name=exiting_duration,json=exitingDuration,proto3" json:"exiting_duration,omitempty"`
+	DowngradeJailDuration *durationpb.Duration `protobuf:"bytes,3,opt,name=downgrade_jail_duration,json=downgradeJailDuration,proto3" json:"downgrade_jail_duration,omitempty"`
 	// max_validators is the maximum number of validators.
-	MaxValidators int64 `protobuf:"varint,4,opt,name=max_validators,json=maxValidators,proto3" json:"max_validators,omitempty"`
+	MaxValidators           int64  `protobuf:"varint,4,opt,name=max_validators,json=maxValidators,proto3" json:"max_validators,omitempty"`
+	SlashFractionDoubleSign []byte `protobuf:"bytes,6,opt,name=slash_fraction_double_sign,json=slashFractionDoubleSign,proto3" json:"slash_fraction_double_sign,omitempty"`
+	SlashFractionDowntime   []byte `protobuf:"bytes,7,opt,name=slash_fraction_downtime,json=slashFractionDowntime,proto3" json:"slash_fraction_downtime,omitempty"`
 }
 
 func (x *Params) Reset() {
@@ -706,23 +841,23 @@ func (*Params) Descriptor() ([]byte, []int) {
 	return file_goat_locking_v1_params_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Params) GetUnlockWaittingDuration() *durationpb.Duration {
+func (x *Params) GetUnlockDuration() *durationpb.Duration {
 	if x != nil {
-		return x.UnlockWaittingDuration
+		return x.UnlockDuration
 	}
 	return nil
 }
 
-func (x *Params) GetExitWaittingDuration() *durationpb.Duration {
+func (x *Params) GetExitingDuration() *durationpb.Duration {
 	if x != nil {
-		return x.ExitWaittingDuration
+		return x.ExitingDuration
 	}
 	return nil
 }
 
-func (x *Params) GetDowngradeWaittingDuration() *durationpb.Duration {
+func (x *Params) GetDowngradeJailDuration() *durationpb.Duration {
 	if x != nil {
-		return x.DowngradeWaittingDuration
+		return x.DowngradeJailDuration
 	}
 	return nil
 }
@@ -734,6 +869,20 @@ func (x *Params) GetMaxValidators() int64 {
 	return 0
 }
 
+func (x *Params) GetSlashFractionDoubleSign() []byte {
+	if x != nil {
+		return x.SlashFractionDoubleSign
+	}
+	return nil
+}
+
+func (x *Params) GetSlashFractionDowntime() []byte {
+	if x != nil {
+		return x.SlashFractionDowntime
+	}
+	return nil
+}
+
 var File_goat_locking_v1_params_proto protoreflect.FileDescriptor
 
 var file_goat_locking_v1_params_proto_rawDesc = []byte{
@@ -741,44 +890,58 @@ var file_goat_locking_v1_params_proto_rawDesc = []byte{
 	0x31, 0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x0f,
 	0x67, 0x6f, 0x61, 0x74, 0x2e, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x1a,
 	0x11, 0x61, 0x6d, 0x69, 0x6e, 0x6f, 0x2f, 0x61, 0x6d, 0x69, 0x6e, 0x6f, 0x2e, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f,
-	0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x1e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65,
-	0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x64, 0x75, 0x72, 0x61, 0x74, 0x69,
-	0x6f, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xdd, 0x02, 0x0a, 0x06, 0x50, 0x61, 0x72,
-	0x61, 0x6d, 0x73, 0x12, 0x62, 0x0a, 0x18, 0x75, 0x6e, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x77, 0x61,
-	0x69, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x5f, 0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x42, 0x0d, 0xc8, 0xde, 0x1f, 0x00, 0x98, 0xdf, 0x1f, 0x01, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52,
-	0x16, 0x75, 0x6e, 0x6c, 0x6f, 0x63, 0x6b, 0x57, 0x61, 0x69, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x44,
-	0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x5e, 0x0a, 0x16, 0x65, 0x78, 0x69, 0x74, 0x5f,
-	0x77, 0x61, 0x69, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x5f, 0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65,
+	0x74, 0x6f, 0x1a, 0x19, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x14, 0x67,
+	0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x1a, 0x1e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x62, 0x75, 0x66, 0x2f, 0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x22, 0x9e, 0x04, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x51,
+	0x0a, 0x0f, 0x75, 0x6e, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65,
 	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69,
 	0x6f, 0x6e, 0x42, 0x0d, 0xc8, 0xde, 0x1f, 0x00, 0x98, 0xdf, 0x1f, 0x01, 0xa8, 0xe7, 0xb0, 0x2a,
-	0x01, 0x52, 0x14, 0x65, 0x78, 0x69, 0x74, 0x57, 0x61, 0x69, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x44,
-	0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x68, 0x0a, 0x1b, 0x64, 0x6f, 0x77, 0x6e, 0x67,
-	0x72, 0x61, 0x64, 0x65, 0x5f, 0x77, 0x61, 0x69, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x5f, 0x64, 0x75,
-	0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67,
-	0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44,
-	0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x0d, 0xc8, 0xde, 0x1f, 0x00, 0x98, 0xdf, 0x1f,
-	0x01, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x19, 0x64, 0x6f, 0x77, 0x6e, 0x67, 0x72, 0x61, 0x64,
-	0x65, 0x57, 0x61, 0x69, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x12, 0x25, 0x0a, 0x0e, 0x6d, 0x61, 0x78, 0x5f, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74,
-	0x6f, 0x72, 0x73, 0x18, 0x04, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0d, 0x6d, 0x61, 0x78, 0x56, 0x61,
-	0x6c, 0x69, 0x64, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x42, 0xbb, 0x01, 0x0a, 0x13, 0x63, 0x6f, 0x6d,
-	0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31,
-	0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a,
-	0x39, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x61, 0x74,
-	0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x61, 0x70, 0x69,
-	0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31,
-	0x3b, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x47, 0x4c, 0x58,
-	0xaa, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x2e, 0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2e,
-	0x56, 0x31, 0xca, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e,
-	0x67, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x1b, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x4c, 0x6f, 0x63, 0x6b,
-	0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61,
-	0x74, 0x61, 0xea, 0x02, 0x11, 0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x4c, 0x6f, 0x63, 0x6b, 0x69,
-	0x6e, 0x67, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x01, 0x52, 0x0e, 0x75, 0x6e, 0x6c, 0x6f, 0x63, 0x6b, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x12, 0x53, 0x0a, 0x10, 0x65, 0x78, 0x69, 0x74, 0x69, 0x6e, 0x67, 0x5f, 0x64, 0x75, 0x72,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f,
+	0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75,
+	0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x0d, 0xc8, 0xde, 0x1f, 0x00, 0x98, 0xdf, 0x1f, 0x01,
+	0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x0f, 0x65, 0x78, 0x69, 0x74, 0x69, 0x6e, 0x67, 0x44, 0x75,
+	0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x60, 0x0a, 0x17, 0x64, 0x6f, 0x77, 0x6e, 0x67, 0x72,
+	0x61, 0x64, 0x65, 0x5f, 0x6a, 0x61, 0x69, 0x6c, 0x5f, 0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65,
+	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x42, 0x0d, 0xc8, 0xde, 0x1f, 0x00, 0x98, 0xdf, 0x1f, 0x01, 0xa8, 0xe7, 0xb0, 0x2a,
+	0x01, 0x52, 0x15, 0x64, 0x6f, 0x77, 0x6e, 0x67, 0x72, 0x61, 0x64, 0x65, 0x4a, 0x61, 0x69, 0x6c,
+	0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x25, 0x0a, 0x0e, 0x6d, 0x61, 0x78, 0x5f,
+	0x76, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x18, 0x04, 0x20, 0x01, 0x28, 0x03,
+	0x52, 0x0d, 0x6d, 0x61, 0x78, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x12,
+	0x73, 0x0a, 0x1a, 0x73, 0x6c, 0x61, 0x73, 0x68, 0x5f, 0x66, 0x72, 0x61, 0x63, 0x74, 0x69, 0x6f,
+	0x6e, 0x5f, 0x64, 0x6f, 0x75, 0x62, 0x6c, 0x65, 0x5f, 0x73, 0x69, 0x67, 0x6e, 0x18, 0x06, 0x20,
+	0x01, 0x28, 0x0c, 0x42, 0x36, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x1b, 0x63, 0x6f, 0x73,
+	0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x4c,
+	0x65, 0x67, 0x61, 0x63, 0x79, 0x44, 0x65, 0x63, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d,
+	0x6f, 0x73, 0x2e, 0x44, 0x65, 0x63, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x17, 0x73, 0x6c, 0x61,
+	0x73, 0x68, 0x46, 0x72, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x44, 0x6f, 0x75, 0x62, 0x6c, 0x65,
+	0x53, 0x69, 0x67, 0x6e, 0x12, 0x6e, 0x0a, 0x17, 0x73, 0x6c, 0x61, 0x73, 0x68, 0x5f, 0x66, 0x72,
+	0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x64, 0x6f, 0x77, 0x6e, 0x74, 0x69, 0x6d, 0x65, 0x18,
+	0x07, 0x20, 0x01, 0x28, 0x0c, 0x42, 0x36, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x1b, 0x63,
+	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68,
+	0x2e, 0x4c, 0x65, 0x67, 0x61, 0x63, 0x79, 0x44, 0x65, 0x63, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f,
+	0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x44, 0x65, 0x63, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x15, 0x73,
+	0x6c, 0x61, 0x73, 0x68, 0x46, 0x72, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x44, 0x6f, 0x77, 0x6e,
+	0x74, 0x69, 0x6d, 0x65, 0x42, 0xbb, 0x01, 0x0a, 0x13, 0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x6f, 0x61,
+	0x74, 0x2e, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x42, 0x0b, 0x50, 0x61,
+	0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x39, 0x67, 0x69, 0x74,
+	0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x6e, 0x65, 0x74, 0x77,
+	0x6f, 0x72, 0x6b, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x61,
+	0x74, 0x2f, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x3b, 0x6c, 0x6f, 0x63,
+	0x6b, 0x69, 0x6e, 0x67, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x47, 0x4c, 0x58, 0xaa, 0x02, 0x0f, 0x47,
+	0x6f, 0x61, 0x74, 0x2e, 0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x56, 0x31, 0xca, 0x02,
+	0x0f, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31,
+	0xe2, 0x02, 0x1b, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x5c,
+	0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02,
+	0x11, 0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x3a, 0x3a,
+	0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -799,9 +962,9 @@ var file_goat_locking_v1_params_proto_goTypes = []interface{}{
 	(*durationpb.Duration)(nil), // 1: google.protobuf.Duration
 }
 var file_goat_locking_v1_params_proto_depIdxs = []int32{
-	1, // 0: goat.locking.v1.Params.unlock_waitting_duration:type_name -> google.protobuf.Duration
-	1, // 1: goat.locking.v1.Params.exit_waitting_duration:type_name -> google.protobuf.Duration
-	1, // 2: goat.locking.v1.Params.downgrade_waitting_duration:type_name -> google.protobuf.Duration
+	1, // 0: goat.locking.v1.Params.unlock_duration:type_name -> google.protobuf.Duration
+	1, // 1: goat.locking.v1.Params.exiting_duration:type_name -> google.protobuf.Duration
+	1, // 2: goat.locking.v1.Params.downgrade_jail_duration:type_name -> google.protobuf.Duration
 	3, // [3:3] is the sub-list for method output_type
 	3, // [3:3] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name

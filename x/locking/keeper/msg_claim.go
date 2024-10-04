@@ -16,7 +16,7 @@ func (k Keeper) Claim(ctx context.Context, reqs []*ethtypes.GoatClaimReward) err
 
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
 
-	queue, err := k.ExecuableQueue.Get(sdkctx)
+	queue, err := k.EthTxQueue.Get(sdkctx)
 	if err != nil {
 		return err
 	}
@@ -43,7 +43,7 @@ func (k Keeper) Claim(ctx context.Context, reqs []*ethtypes.GoatClaimReward) err
 		}
 	}
 
-	if err := k.ExecuableQueue.Set(sdkctx, queue); err != nil {
+	if err := k.EthTxQueue.Set(sdkctx, queue); err != nil {
 		return err
 	}
 

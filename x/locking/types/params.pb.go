@@ -4,7 +4,9 @@
 package types
 
 import (
+	cosmossdk_io_math "cosmossdk.io/math"
 	fmt "fmt"
+	_ "github.com/cosmos/cosmos-proto"
 	_ "github.com/cosmos/cosmos-sdk/types/tx/amino"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	proto "github.com/cosmos/gogoproto/proto"
@@ -30,15 +32,17 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Params defines the parameters for the module.
 type Params struct {
-	// the partial unlock waitting duation
-	UnlockWaittingDuration time.Duration `protobuf:"bytes,1,opt,name=unlock_waitting_duration,json=unlockWaittingDuration,proto3,stdduration" json:"unlock_waitting_duration"`
+	// the partial unlock duation
+	UnlockDuration time.Duration `protobuf:"bytes,1,opt,name=unlock_duration,json=unlockDuration,proto3,stdduration" json:"unlock_duration"`
 	// if the token amount is less then threshold, the validator will be the
 	// inactive status the validator operator should wait for long then paritial
 	// unlock duation
-	ExitWaittingDuration      time.Duration `protobuf:"bytes,2,opt,name=exit_waitting_duration,json=exitWaittingDuration,proto3,stdduration" json:"exit_waitting_duration"`
-	DowngradeWaittingDuration time.Duration `protobuf:"bytes,3,opt,name=downgrade_waitting_duration,json=downgradeWaittingDuration,proto3,stdduration" json:"downgrade_waitting_duration"`
+	ExitingDuration       time.Duration `protobuf:"bytes,2,opt,name=exiting_duration,json=exitingDuration,proto3,stdduration" json:"exiting_duration"`
+	DowngradeJailDuration time.Duration `protobuf:"bytes,3,opt,name=downgrade_jail_duration,json=downgradeJailDuration,proto3,stdduration" json:"downgrade_jail_duration"`
 	// max_validators is the maximum number of validators.
-	MaxValidators int64 `protobuf:"varint,4,opt,name=max_validators,json=maxValidators,proto3" json:"max_validators,omitempty"`
+	MaxValidators           int64                       `protobuf:"varint,4,opt,name=max_validators,json=maxValidators,proto3" json:"max_validators,omitempty"`
+	SlashFractionDoubleSign cosmossdk_io_math.LegacyDec `protobuf:"bytes,6,opt,name=slash_fraction_double_sign,json=slashFractionDoubleSign,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"slash_fraction_double_sign"`
+	SlashFractionDowntime   cosmossdk_io_math.LegacyDec `protobuf:"bytes,7,opt,name=slash_fraction_downtime,json=slashFractionDowntime,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"slash_fraction_downtime"`
 }
 
 func (m *Params) Reset()         { *m = Params{} }
@@ -74,23 +78,23 @@ func (m *Params) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Params proto.InternalMessageInfo
 
-func (m *Params) GetUnlockWaittingDuration() time.Duration {
+func (m *Params) GetUnlockDuration() time.Duration {
 	if m != nil {
-		return m.UnlockWaittingDuration
+		return m.UnlockDuration
 	}
 	return 0
 }
 
-func (m *Params) GetExitWaittingDuration() time.Duration {
+func (m *Params) GetExitingDuration() time.Duration {
 	if m != nil {
-		return m.ExitWaittingDuration
+		return m.ExitingDuration
 	}
 	return 0
 }
 
-func (m *Params) GetDowngradeWaittingDuration() time.Duration {
+func (m *Params) GetDowngradeJailDuration() time.Duration {
 	if m != nil {
-		return m.DowngradeWaittingDuration
+		return m.DowngradeJailDuration
 	}
 	return 0
 }
@@ -109,28 +113,35 @@ func init() {
 func init() { proto.RegisterFile("goat/locking/v1/params.proto", fileDescriptor_a94ad1e7519f5b55) }
 
 var fileDescriptor_a94ad1e7519f5b55 = []byte{
-	// 323 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0x49, 0xcf, 0x4f, 0x2c,
-	0xd1, 0xcf, 0xc9, 0x4f, 0xce, 0xce, 0xcc, 0x4b, 0xd7, 0x2f, 0x33, 0xd4, 0x2f, 0x48, 0x2c, 0x4a,
-	0xcc, 0x2d, 0xd6, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x07, 0xc9, 0xea, 0x41, 0x65, 0xf5,
-	0xca, 0x0c, 0xa5, 0x04, 0x13, 0x73, 0x33, 0xf3, 0xf2, 0xf5, 0xc1, 0x24, 0x44, 0x8d, 0x94, 0x48,
-	0x7a, 0x7e, 0x7a, 0x3e, 0x98, 0xa9, 0x0f, 0x62, 0x41, 0x45, 0xe5, 0xd2, 0xf3, 0xf3, 0xd3, 0x73,
-	0x52, 0xf5, 0xc1, 0xbc, 0xa4, 0xd2, 0x34, 0xfd, 0x94, 0xd2, 0xa2, 0xc4, 0x92, 0xcc, 0xfc, 0x3c,
-	0x88, 0xbc, 0xd2, 0x5d, 0x26, 0x2e, 0xb6, 0x00, 0xb0, 0x55, 0x42, 0x49, 0x5c, 0x12, 0xa5, 0x79,
-	0x20, 0x3b, 0xe2, 0xcb, 0x13, 0x33, 0x4b, 0x4a, 0x32, 0xf3, 0xd2, 0xe3, 0x61, 0x8a, 0x25, 0x18,
-	0x15, 0x18, 0x35, 0xb8, 0x8d, 0x24, 0xf5, 0x20, 0xa6, 0xe9, 0xc1, 0x4c, 0xd3, 0x73, 0x81, 0x2a,
-	0x70, 0xe2, 0x3d, 0x71, 0x4f, 0x9e, 0x61, 0xc6, 0x7d, 0x79, 0xc6, 0x15, 0xcf, 0x37, 0x68, 0x31,
-	0x06, 0x89, 0x41, 0x4c, 0x0a, 0x87, 0x1a, 0x04, 0x53, 0x26, 0x14, 0xc7, 0x25, 0x96, 0x5a, 0x91,
-	0x59, 0x82, 0xc5, 0x06, 0x26, 0x12, 0x6d, 0x10, 0x01, 0x99, 0x83, 0x61, 0x7e, 0x06, 0x97, 0x74,
-	0x4a, 0x7e, 0x79, 0x5e, 0x7a, 0x51, 0x62, 0x4a, 0x2a, 0x16, 0x4b, 0x98, 0x49, 0xb4, 0x44, 0x12,
-	0x6e, 0x18, 0x86, 0x4d, 0xaa, 0x5c, 0x7c, 0xb9, 0x89, 0x15, 0xf1, 0x65, 0x89, 0x39, 0x99, 0x29,
-	0x89, 0x25, 0xf9, 0x45, 0xc5, 0x12, 0x2c, 0x0a, 0x8c, 0x1a, 0xcc, 0x41, 0xbc, 0xb9, 0x89, 0x15,
-	0x61, 0x70, 0x41, 0x27, 0xd7, 0x13, 0x8f, 0xe4, 0x18, 0x2f, 0x3c, 0x92, 0x63, 0x7c, 0xf0, 0x48,
-	0x8e, 0x71, 0xc2, 0x63, 0x39, 0x86, 0x0b, 0x8f, 0xe5, 0x18, 0x6e, 0x3c, 0x96, 0x63, 0x88, 0xd2,
-	0x4e, 0xcf, 0x2c, 0xc9, 0x28, 0x4d, 0xd2, 0x4b, 0xce, 0xcf, 0xd5, 0x07, 0x45, 0x6f, 0x5e, 0x6a,
-	0x49, 0x79, 0x7e, 0x51, 0x36, 0x98, 0xad, 0x5f, 0x01, 0x4f, 0x0a, 0x25, 0x95, 0x05, 0xa9, 0xc5,
-	0x49, 0x6c, 0x60, 0xa7, 0x1a, 0x03, 0x02, 0x00, 0x00, 0xff, 0xff, 0xba, 0xfc, 0xc2, 0xbf, 0x27,
-	0x02, 0x00, 0x00,
+	// 438 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x92, 0x41, 0x6b, 0x13, 0x41,
+	0x14, 0xc7, 0x33, 0xb6, 0x44, 0x18, 0x6d, 0xa3, 0x8b, 0x25, 0x69, 0x94, 0x4d, 0x10, 0x84, 0xa0,
+	0x38, 0x43, 0x15, 0xfc, 0x00, 0x21, 0x7a, 0x10, 0x0f, 0xda, 0x82, 0x07, 0x2f, 0xeb, 0xcb, 0xee,
+	0x74, 0x32, 0x66, 0x77, 0x5e, 0xd8, 0x99, 0x4d, 0xd2, 0x6f, 0xe1, 0xd1, 0x93, 0x67, 0x8f, 0x1e,
+	0xfc, 0x10, 0x3d, 0x16, 0x4f, 0xe2, 0xa1, 0x4a, 0x72, 0xf0, 0x6b, 0xc8, 0xce, 0x6c, 0xb6, 0xa0,
+	0xa7, 0xd2, 0xcb, 0xf0, 0xde, 0xfb, 0xbf, 0xf9, 0xfd, 0x1f, 0xbc, 0x47, 0xef, 0x49, 0x04, 0xcb,
+	0x53, 0x8c, 0xa7, 0x4a, 0x4b, 0x3e, 0x3f, 0xe0, 0x33, 0xc8, 0x21, 0x33, 0x6c, 0x96, 0xa3, 0xc5,
+	0xa0, 0x55, 0xaa, 0xac, 0x52, 0xd9, 0xfc, 0xa0, 0x7b, 0x1b, 0x32, 0xa5, 0x91, 0xbb, 0xd7, 0xf7,
+	0x74, 0xf7, 0x63, 0x34, 0x19, 0x9a, 0xc8, 0x65, 0xdc, 0x27, 0x95, 0x74, 0x47, 0xa2, 0x44, 0x5f,
+	0x2f, 0xa3, 0xaa, 0x1a, 0x4a, 0x44, 0x99, 0x0a, 0xee, 0xb2, 0x71, 0x71, 0xcc, 0x93, 0x22, 0x07,
+	0xab, 0x50, 0x7b, 0xfd, 0xfe, 0xe7, 0x6d, 0xda, 0x7c, 0xed, 0xa6, 0x08, 0xde, 0xd0, 0x56, 0xa1,
+	0x4b, 0xfb, 0x68, 0xd3, 0xd3, 0x21, 0x7d, 0x32, 0xb8, 0xf1, 0x64, 0x9f, 0x79, 0x08, 0xdb, 0x40,
+	0xd8, 0xa8, 0x6a, 0x18, 0xee, 0x9c, 0x9e, 0xf7, 0x1a, 0x9f, 0x7e, 0xf5, 0xc8, 0x97, 0x3f, 0x5f,
+	0x1f, 0x92, 0xc3, 0x5d, 0x0f, 0xd8, 0xc8, 0xc1, 0x11, 0xbd, 0x25, 0x96, 0xca, 0x2a, 0x2d, 0x2f,
+	0x98, 0xd7, 0x2e, 0xc9, 0x6c, 0x55, 0x84, 0x1a, 0xfa, 0x9e, 0xb6, 0x13, 0x5c, 0x68, 0x99, 0x43,
+	0x22, 0xa2, 0x0f, 0xa0, 0xd2, 0x0b, 0xf6, 0xd6, 0x25, 0xd9, 0x7b, 0x35, 0xe8, 0x25, 0xa8, 0xb4,
+	0x76, 0x78, 0x40, 0x77, 0x33, 0x58, 0x46, 0x73, 0x48, 0x55, 0x02, 0x16, 0x73, 0xd3, 0xd9, 0xee,
+	0x93, 0xc1, 0xd6, 0xe1, 0x4e, 0x06, 0xcb, 0xb7, 0x75, 0x31, 0x30, 0xb4, 0x6b, 0x52, 0x30, 0x93,
+	0xe8, 0x38, 0x87, 0xb8, 0xfc, 0x18, 0x25, 0x58, 0x8c, 0x53, 0x11, 0x19, 0x25, 0x75, 0xa7, 0xd9,
+	0x27, 0x83, 0x9b, 0xc3, 0x67, 0xa5, 0xe1, 0xcf, 0xf3, 0xde, 0x5d, 0xbf, 0x2b, 0x93, 0x4c, 0x99,
+	0x42, 0x9e, 0x81, 0x9d, 0xb0, 0x57, 0x42, 0x42, 0x7c, 0x32, 0x12, 0xf1, 0xf7, 0x6f, 0x8f, 0x69,
+	0xb5, 0xca, 0x91, 0x88, 0xfd, 0x64, 0x6d, 0x47, 0x7e, 0x51, 0x81, 0x47, 0x8e, 0x7b, 0xa4, 0xa4,
+	0x0e, 0x34, 0x6d, 0xff, 0x67, 0xba, 0xd0, 0x56, 0x65, 0xa2, 0x73, 0xfd, 0x4a, 0x8e, 0x7b, 0xff,
+	0x38, 0x7a, 0xe8, 0xf0, 0xf9, 0xe9, 0x2a, 0x24, 0x67, 0xab, 0x90, 0xfc, 0x5e, 0x85, 0xe4, 0xe3,
+	0x3a, 0x6c, 0x9c, 0xad, 0xc3, 0xc6, 0x8f, 0x75, 0xd8, 0x78, 0xf7, 0x48, 0x2a, 0x3b, 0x29, 0xc6,
+	0x2c, 0xc6, 0x8c, 0x97, 0xa7, 0xab, 0x85, 0x5d, 0x60, 0x3e, 0x75, 0x31, 0x5f, 0xd6, 0x67, 0x6e,
+	0x4f, 0x66, 0xc2, 0x8c, 0x9b, 0x6e, 0x17, 0x4f, 0xff, 0x06, 0x00, 0x00, 0xff, 0xff, 0x49, 0x6b,
+	0x94, 0xce, 0x03, 0x03, 0x00, 0x00,
 }
 
 func (m *Params) Marshal() (dAtA []byte, err error) {
@@ -153,12 +164,32 @@ func (m *Params) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	{
+		size := m.SlashFractionDowntime.Size()
+		i -= size
+		if _, err := m.SlashFractionDowntime.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintParams(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x3a
+	{
+		size := m.SlashFractionDoubleSign.Size()
+		i -= size
+		if _, err := m.SlashFractionDoubleSign.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintParams(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x32
 	if m.MaxValidators != 0 {
 		i = encodeVarintParams(dAtA, i, uint64(m.MaxValidators))
 		i--
 		dAtA[i] = 0x20
 	}
-	n1, err1 := github_com_cosmos_gogoproto_types.StdDurationMarshalTo(m.DowngradeWaittingDuration, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.DowngradeWaittingDuration):])
+	n1, err1 := github_com_cosmos_gogoproto_types.StdDurationMarshalTo(m.DowngradeJailDuration, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.DowngradeJailDuration):])
 	if err1 != nil {
 		return 0, err1
 	}
@@ -166,7 +197,7 @@ func (m *Params) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i = encodeVarintParams(dAtA, i, uint64(n1))
 	i--
 	dAtA[i] = 0x1a
-	n2, err2 := github_com_cosmos_gogoproto_types.StdDurationMarshalTo(m.ExitWaittingDuration, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.ExitWaittingDuration):])
+	n2, err2 := github_com_cosmos_gogoproto_types.StdDurationMarshalTo(m.ExitingDuration, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.ExitingDuration):])
 	if err2 != nil {
 		return 0, err2
 	}
@@ -174,7 +205,7 @@ func (m *Params) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i = encodeVarintParams(dAtA, i, uint64(n2))
 	i--
 	dAtA[i] = 0x12
-	n3, err3 := github_com_cosmos_gogoproto_types.StdDurationMarshalTo(m.UnlockWaittingDuration, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.UnlockWaittingDuration):])
+	n3, err3 := github_com_cosmos_gogoproto_types.StdDurationMarshalTo(m.UnlockDuration, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.UnlockDuration):])
 	if err3 != nil {
 		return 0, err3
 	}
@@ -202,15 +233,19 @@ func (m *Params) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.UnlockWaittingDuration)
+	l = github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.UnlockDuration)
 	n += 1 + l + sovParams(uint64(l))
-	l = github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.ExitWaittingDuration)
+	l = github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.ExitingDuration)
 	n += 1 + l + sovParams(uint64(l))
-	l = github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.DowngradeWaittingDuration)
+	l = github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.DowngradeJailDuration)
 	n += 1 + l + sovParams(uint64(l))
 	if m.MaxValidators != 0 {
 		n += 1 + sovParams(uint64(m.MaxValidators))
 	}
+	l = m.SlashFractionDoubleSign.Size()
+	n += 1 + l + sovParams(uint64(l))
+	l = m.SlashFractionDowntime.Size()
+	n += 1 + l + sovParams(uint64(l))
 	return n
 }
 
@@ -251,7 +286,7 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UnlockWaittingDuration", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field UnlockDuration", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -278,13 +313,13 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := github_com_cosmos_gogoproto_types.StdDurationUnmarshal(&m.UnlockWaittingDuration, dAtA[iNdEx:postIndex]); err != nil {
+			if err := github_com_cosmos_gogoproto_types.StdDurationUnmarshal(&m.UnlockDuration, dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ExitWaittingDuration", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field ExitingDuration", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -311,13 +346,13 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := github_com_cosmos_gogoproto_types.StdDurationUnmarshal(&m.ExitWaittingDuration, dAtA[iNdEx:postIndex]); err != nil {
+			if err := github_com_cosmos_gogoproto_types.StdDurationUnmarshal(&m.ExitingDuration, dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DowngradeWaittingDuration", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DowngradeJailDuration", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -344,7 +379,7 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := github_com_cosmos_gogoproto_types.StdDurationUnmarshal(&m.DowngradeWaittingDuration, dAtA[iNdEx:postIndex]); err != nil {
+			if err := github_com_cosmos_gogoproto_types.StdDurationUnmarshal(&m.DowngradeJailDuration, dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -367,6 +402,72 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SlashFractionDoubleSign", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.SlashFractionDoubleSign.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SlashFractionDowntime", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.SlashFractionDowntime.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipParams(dAtA[iNdEx:])

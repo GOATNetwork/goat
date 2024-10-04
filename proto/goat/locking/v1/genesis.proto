@@ -2,11 +2,33 @@ syntax = "proto3";
 package goat.locking.v1;
 
 import "amino/amino.proto";
+import "cosmos/base/v1beta1/coin.proto";
 import "goat/locking/v1/locking.proto";
 import "goat/locking/v1/params.proto";
+import "goat/locking/v1/types.proto";
 import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/goatnetwork/goat/x/locking/types";
+
+// UnlockQueueGenesis
+message UnlockQueueGenesis {
+  google.protobuf.Timestamp timestamp = 1 [
+    (gogoproto.stdtime) = true,
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  repeated Unlock unlocks = 2;
+}
+
+// TokenGenesis
+message TokenGenesis {
+  string denom = 1;
+  Token token = 2 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
 
 // GenesisState defines the locking module's genesis state.
 message GenesisState {
@@ -15,5 +37,24 @@ message GenesisState {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
-  repeated Validator validators = 2;
+  repeated Validator validators = 2 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  repeated TokenGenesis tokens = 3;
+  repeated cosmos.base.v1beta1.Coin slashed = 4 [
+    (amino.dont_omitempty) = true,
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  uint64 eth_tx_nonce = 5;
+  EthTxQueue eth_tx_queue = 6 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  RewardPool reward_pool = 7 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  repeated UnlockQueueGenesis unlock_queue = 8;
 }

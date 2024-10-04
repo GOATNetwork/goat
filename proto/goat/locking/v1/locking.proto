@@ -60,18 +60,14 @@ message SigningInfo {
   option (gogoproto.equal) = true;
 
   // Height at which validator was first a candidate OR was un-jailed
-  int64 start_height = 2;
+  int64 start_height = 1;
   // Timestamp until which the validator is jailed due to liveness downtime.
-  google.protobuf.Timestamp jailed_until = 4 [
+  google.protobuf.Timestamp jailed_until = 2 [
     (gogoproto.stdtime) = true,
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
-  // Whether or not a validator has been tombstoned (killed out of validator
-  // set). It is set once the validator commits an equivocation or for any other
-  // configured misbehavior.
-  bool tombstoned = 5;
   // A counter of missed (unsigned) blocks. It is used to avoid unnecessary
   // reads in the missed block bitmap.
-  int64 missed_blocks_counter = 6;
+  int64 missed_blocks_counter = 3;
 }

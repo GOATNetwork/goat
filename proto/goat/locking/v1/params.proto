@@ -2,7 +2,7 @@ syntax = "proto3";
 package goat.locking.v1;
 
 import "amino/amino.proto";
-// import "cosmos_proto/cosmos.proto";
+import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
 // import "google/protobuf/timestamp.proto";
@@ -11,8 +11,8 @@ option go_package = "github.com/goatnetwork/goat/x/locking/types";
 
 // Params defines the parameters for the module.
 message Params {
-  // the partial unlock waitting duation
-  google.protobuf.Duration unlock_waitting_duration = 1 [
+  // the partial unlock duation
+  google.protobuf.Duration unlock_duration = 1 [
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true,
     (gogoproto.stdduration) = true
@@ -21,13 +21,13 @@ message Params {
   // if the token amount is less then threshold, the validator will be the
   // inactive status the validator operator should wait for long then paritial
   // unlock duation
-  google.protobuf.Duration exit_waitting_duration = 2 [
+  google.protobuf.Duration exiting_duration = 2 [
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true,
     (gogoproto.stdduration) = true
   ];
 
-  google.protobuf.Duration downgrade_waitting_duration = 3 [
+  google.protobuf.Duration downgrade_jail_duration = 3 [
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true,
     (gogoproto.stdduration) = true
@@ -35,4 +35,18 @@ message Params {
 
   // max_validators is the maximum number of validators.
   int64 max_validators = 4;
+
+  bytes slash_fraction_double_sign = 6 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+
+  bytes slash_fraction_downtime = 7 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
 }

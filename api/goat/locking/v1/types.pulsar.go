@@ -2276,130 +2276,130 @@ func (x *fastReflection_Unlock) ProtoMethods() *protoiface.Methods {
 	}
 }
 
-var _ protoreflect.List = (*_ExecuableQueue_1_list)(nil)
+var _ protoreflect.List = (*_EthTxQueue_1_list)(nil)
 
-type _ExecuableQueue_1_list struct {
+type _EthTxQueue_1_list struct {
 	list *[]*Reward
 }
 
-func (x *_ExecuableQueue_1_list) Len() int {
+func (x *_EthTxQueue_1_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_ExecuableQueue_1_list) Get(i int) protoreflect.Value {
+func (x *_EthTxQueue_1_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
 }
 
-func (x *_ExecuableQueue_1_list) Set(i int, value protoreflect.Value) {
+func (x *_EthTxQueue_1_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*Reward)
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_ExecuableQueue_1_list) Append(value protoreflect.Value) {
+func (x *_EthTxQueue_1_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*Reward)
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_ExecuableQueue_1_list) AppendMutable() protoreflect.Value {
+func (x *_EthTxQueue_1_list) AppendMutable() protoreflect.Value {
 	v := new(Reward)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_ExecuableQueue_1_list) Truncate(n int) {
+func (x *_EthTxQueue_1_list) Truncate(n int) {
 	for i := n; i < len(*x.list); i++ {
 		(*x.list)[i] = nil
 	}
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_ExecuableQueue_1_list) NewElement() protoreflect.Value {
+func (x *_EthTxQueue_1_list) NewElement() protoreflect.Value {
 	v := new(Reward)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_ExecuableQueue_1_list) IsValid() bool {
+func (x *_EthTxQueue_1_list) IsValid() bool {
 	return x.list != nil
 }
 
-var _ protoreflect.List = (*_ExecuableQueue_2_list)(nil)
+var _ protoreflect.List = (*_EthTxQueue_2_list)(nil)
 
-type _ExecuableQueue_2_list struct {
+type _EthTxQueue_2_list struct {
 	list *[]*Unlock
 }
 
-func (x *_ExecuableQueue_2_list) Len() int {
+func (x *_EthTxQueue_2_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_ExecuableQueue_2_list) Get(i int) protoreflect.Value {
+func (x *_EthTxQueue_2_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
 }
 
-func (x *_ExecuableQueue_2_list) Set(i int, value protoreflect.Value) {
+func (x *_EthTxQueue_2_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*Unlock)
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_ExecuableQueue_2_list) Append(value protoreflect.Value) {
+func (x *_EthTxQueue_2_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*Unlock)
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_ExecuableQueue_2_list) AppendMutable() protoreflect.Value {
+func (x *_EthTxQueue_2_list) AppendMutable() protoreflect.Value {
 	v := new(Unlock)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_ExecuableQueue_2_list) Truncate(n int) {
+func (x *_EthTxQueue_2_list) Truncate(n int) {
 	for i := n; i < len(*x.list); i++ {
 		(*x.list)[i] = nil
 	}
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_ExecuableQueue_2_list) NewElement() protoreflect.Value {
+func (x *_EthTxQueue_2_list) NewElement() protoreflect.Value {
 	v := new(Unlock)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_ExecuableQueue_2_list) IsValid() bool {
+func (x *_EthTxQueue_2_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
-	md_ExecuableQueue         protoreflect.MessageDescriptor
-	fd_ExecuableQueue_rewards protoreflect.FieldDescriptor
-	fd_ExecuableQueue_unlocks protoreflect.FieldDescriptor
+	md_EthTxQueue         protoreflect.MessageDescriptor
+	fd_EthTxQueue_rewards protoreflect.FieldDescriptor
+	fd_EthTxQueue_unlocks protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_goat_locking_v1_types_proto_init()
-	md_ExecuableQueue = File_goat_locking_v1_types_proto.Messages().ByName("ExecuableQueue")
-	fd_ExecuableQueue_rewards = md_ExecuableQueue.Fields().ByName("rewards")
-	fd_ExecuableQueue_unlocks = md_ExecuableQueue.Fields().ByName("unlocks")
+	md_EthTxQueue = File_goat_locking_v1_types_proto.Messages().ByName("EthTxQueue")
+	fd_EthTxQueue_rewards = md_EthTxQueue.Fields().ByName("rewards")
+	fd_EthTxQueue_unlocks = md_EthTxQueue.Fields().ByName("unlocks")
 }
 
-var _ protoreflect.Message = (*fastReflection_ExecuableQueue)(nil)
+var _ protoreflect.Message = (*fastReflection_EthTxQueue)(nil)
 
-type fastReflection_ExecuableQueue ExecuableQueue
+type fastReflection_EthTxQueue EthTxQueue
 
-func (x *ExecuableQueue) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_ExecuableQueue)(x)
+func (x *EthTxQueue) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_EthTxQueue)(x)
 }
 
-func (x *ExecuableQueue) slowProtoReflect() protoreflect.Message {
+func (x *EthTxQueue) slowProtoReflect() protoreflect.Message {
 	mi := &file_goat_locking_v1_types_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2411,43 +2411,43 @@ func (x *ExecuableQueue) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_ExecuableQueue_messageType fastReflection_ExecuableQueue_messageType
-var _ protoreflect.MessageType = fastReflection_ExecuableQueue_messageType{}
+var _fastReflection_EthTxQueue_messageType fastReflection_EthTxQueue_messageType
+var _ protoreflect.MessageType = fastReflection_EthTxQueue_messageType{}
 
-type fastReflection_ExecuableQueue_messageType struct{}
+type fastReflection_EthTxQueue_messageType struct{}
 
-func (x fastReflection_ExecuableQueue_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_ExecuableQueue)(nil)
+func (x fastReflection_EthTxQueue_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_EthTxQueue)(nil)
 }
-func (x fastReflection_ExecuableQueue_messageType) New() protoreflect.Message {
-	return new(fastReflection_ExecuableQueue)
+func (x fastReflection_EthTxQueue_messageType) New() protoreflect.Message {
+	return new(fastReflection_EthTxQueue)
 }
-func (x fastReflection_ExecuableQueue_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_ExecuableQueue
+func (x fastReflection_EthTxQueue_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_EthTxQueue
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_ExecuableQueue) Descriptor() protoreflect.MessageDescriptor {
-	return md_ExecuableQueue
+func (x *fastReflection_EthTxQueue) Descriptor() protoreflect.MessageDescriptor {
+	return md_EthTxQueue
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_ExecuableQueue) Type() protoreflect.MessageType {
-	return _fastReflection_ExecuableQueue_messageType
+func (x *fastReflection_EthTxQueue) Type() protoreflect.MessageType {
+	return _fastReflection_EthTxQueue_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_ExecuableQueue) New() protoreflect.Message {
-	return new(fastReflection_ExecuableQueue)
+func (x *fastReflection_EthTxQueue) New() protoreflect.Message {
+	return new(fastReflection_EthTxQueue)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_ExecuableQueue) Interface() protoreflect.ProtoMessage {
-	return (*ExecuableQueue)(x)
+func (x *fastReflection_EthTxQueue) Interface() protoreflect.ProtoMessage {
+	return (*EthTxQueue)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -2455,16 +2455,16 @@ func (x *fastReflection_ExecuableQueue) Interface() protoreflect.ProtoMessage {
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_ExecuableQueue) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_EthTxQueue) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if len(x.Rewards) != 0 {
-		value := protoreflect.ValueOfList(&_ExecuableQueue_1_list{list: &x.Rewards})
-		if !f(fd_ExecuableQueue_rewards, value) {
+		value := protoreflect.ValueOfList(&_EthTxQueue_1_list{list: &x.Rewards})
+		if !f(fd_EthTxQueue_rewards, value) {
 			return
 		}
 	}
 	if len(x.Unlocks) != 0 {
-		value := protoreflect.ValueOfList(&_ExecuableQueue_2_list{list: &x.Unlocks})
-		if !f(fd_ExecuableQueue_unlocks, value) {
+		value := protoreflect.ValueOfList(&_EthTxQueue_2_list{list: &x.Unlocks})
+		if !f(fd_EthTxQueue_unlocks, value) {
 			return
 		}
 	}
@@ -2481,17 +2481,17 @@ func (x *fastReflection_ExecuableQueue) Range(f func(protoreflect.FieldDescripto
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_ExecuableQueue) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_EthTxQueue) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "goat.locking.v1.ExecuableQueue.rewards":
+	case "goat.locking.v1.EthTxQueue.rewards":
 		return len(x.Rewards) != 0
-	case "goat.locking.v1.ExecuableQueue.unlocks":
+	case "goat.locking.v1.EthTxQueue.unlocks":
 		return len(x.Unlocks) != 0
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.ExecuableQueue"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.EthTxQueue"))
 		}
-		panic(fmt.Errorf("message goat.locking.v1.ExecuableQueue does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.locking.v1.EthTxQueue does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2501,17 +2501,17 @@ func (x *fastReflection_ExecuableQueue) Has(fd protoreflect.FieldDescriptor) boo
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ExecuableQueue) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_EthTxQueue) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "goat.locking.v1.ExecuableQueue.rewards":
+	case "goat.locking.v1.EthTxQueue.rewards":
 		x.Rewards = nil
-	case "goat.locking.v1.ExecuableQueue.unlocks":
+	case "goat.locking.v1.EthTxQueue.unlocks":
 		x.Unlocks = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.ExecuableQueue"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.EthTxQueue"))
 		}
-		panic(fmt.Errorf("message goat.locking.v1.ExecuableQueue does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.locking.v1.EthTxQueue does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2521,25 +2521,25 @@ func (x *fastReflection_ExecuableQueue) Clear(fd protoreflect.FieldDescriptor) {
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_ExecuableQueue) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EthTxQueue) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "goat.locking.v1.ExecuableQueue.rewards":
+	case "goat.locking.v1.EthTxQueue.rewards":
 		if len(x.Rewards) == 0 {
-			return protoreflect.ValueOfList(&_ExecuableQueue_1_list{})
+			return protoreflect.ValueOfList(&_EthTxQueue_1_list{})
 		}
-		listValue := &_ExecuableQueue_1_list{list: &x.Rewards}
+		listValue := &_EthTxQueue_1_list{list: &x.Rewards}
 		return protoreflect.ValueOfList(listValue)
-	case "goat.locking.v1.ExecuableQueue.unlocks":
+	case "goat.locking.v1.EthTxQueue.unlocks":
 		if len(x.Unlocks) == 0 {
-			return protoreflect.ValueOfList(&_ExecuableQueue_2_list{})
+			return protoreflect.ValueOfList(&_EthTxQueue_2_list{})
 		}
-		listValue := &_ExecuableQueue_2_list{list: &x.Unlocks}
+		listValue := &_EthTxQueue_2_list{list: &x.Unlocks}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.ExecuableQueue"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.EthTxQueue"))
 		}
-		panic(fmt.Errorf("message goat.locking.v1.ExecuableQueue does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message goat.locking.v1.EthTxQueue does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -2553,21 +2553,21 @@ func (x *fastReflection_ExecuableQueue) Get(descriptor protoreflect.FieldDescrip
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ExecuableQueue) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_EthTxQueue) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "goat.locking.v1.ExecuableQueue.rewards":
+	case "goat.locking.v1.EthTxQueue.rewards":
 		lv := value.List()
-		clv := lv.(*_ExecuableQueue_1_list)
+		clv := lv.(*_EthTxQueue_1_list)
 		x.Rewards = *clv.list
-	case "goat.locking.v1.ExecuableQueue.unlocks":
+	case "goat.locking.v1.EthTxQueue.unlocks":
 		lv := value.List()
-		clv := lv.(*_ExecuableQueue_2_list)
+		clv := lv.(*_EthTxQueue_2_list)
 		x.Unlocks = *clv.list
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.ExecuableQueue"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.EthTxQueue"))
 		}
-		panic(fmt.Errorf("message goat.locking.v1.ExecuableQueue does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.locking.v1.EthTxQueue does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2581,54 +2581,54 @@ func (x *fastReflection_ExecuableQueue) Set(fd protoreflect.FieldDescriptor, val
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ExecuableQueue) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EthTxQueue) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "goat.locking.v1.ExecuableQueue.rewards":
+	case "goat.locking.v1.EthTxQueue.rewards":
 		if x.Rewards == nil {
 			x.Rewards = []*Reward{}
 		}
-		value := &_ExecuableQueue_1_list{list: &x.Rewards}
+		value := &_EthTxQueue_1_list{list: &x.Rewards}
 		return protoreflect.ValueOfList(value)
-	case "goat.locking.v1.ExecuableQueue.unlocks":
+	case "goat.locking.v1.EthTxQueue.unlocks":
 		if x.Unlocks == nil {
 			x.Unlocks = []*Unlock{}
 		}
-		value := &_ExecuableQueue_2_list{list: &x.Unlocks}
+		value := &_EthTxQueue_2_list{list: &x.Unlocks}
 		return protoreflect.ValueOfList(value)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.ExecuableQueue"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.EthTxQueue"))
 		}
-		panic(fmt.Errorf("message goat.locking.v1.ExecuableQueue does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.locking.v1.EthTxQueue does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_ExecuableQueue) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EthTxQueue) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "goat.locking.v1.ExecuableQueue.rewards":
+	case "goat.locking.v1.EthTxQueue.rewards":
 		list := []*Reward{}
-		return protoreflect.ValueOfList(&_ExecuableQueue_1_list{list: &list})
-	case "goat.locking.v1.ExecuableQueue.unlocks":
+		return protoreflect.ValueOfList(&_EthTxQueue_1_list{list: &list})
+	case "goat.locking.v1.EthTxQueue.unlocks":
 		list := []*Unlock{}
-		return protoreflect.ValueOfList(&_ExecuableQueue_2_list{list: &list})
+		return protoreflect.ValueOfList(&_EthTxQueue_2_list{list: &list})
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.ExecuableQueue"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.EthTxQueue"))
 		}
-		panic(fmt.Errorf("message goat.locking.v1.ExecuableQueue does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.locking.v1.EthTxQueue does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_ExecuableQueue) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_EthTxQueue) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in goat.locking.v1.ExecuableQueue", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in goat.locking.v1.EthTxQueue", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -2636,7 +2636,7 @@ func (x *fastReflection_ExecuableQueue) WhichOneof(d protoreflect.OneofDescripto
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_ExecuableQueue) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_EthTxQueue) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -2647,7 +2647,7 @@ func (x *fastReflection_ExecuableQueue) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ExecuableQueue) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_EthTxQueue) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -2659,7 +2659,7 @@ func (x *fastReflection_ExecuableQueue) SetUnknown(fields protoreflect.RawFields
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_ExecuableQueue) IsValid() bool {
+func (x *fastReflection_EthTxQueue) IsValid() bool {
 	return x != nil
 }
 
@@ -2669,9 +2669,9 @@ func (x *fastReflection_ExecuableQueue) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_ExecuableQueue) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_EthTxQueue) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*ExecuableQueue)
+		x := input.Message.Interface().(*EthTxQueue)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2705,7 +2705,7 @@ func (x *fastReflection_ExecuableQueue) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*ExecuableQueue)
+		x := input.Message.Interface().(*EthTxQueue)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2767,7 +2767,7 @@ func (x *fastReflection_ExecuableQueue) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*ExecuableQueue)
+		x := input.Message.Interface().(*EthTxQueue)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2799,10 +2799,10 @@ func (x *fastReflection_ExecuableQueue) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ExecuableQueue: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EthTxQueue: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ExecuableQueue: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EthTxQueue: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -2908,77 +2908,77 @@ func (x *fastReflection_ExecuableQueue) ProtoMethods() *protoiface.Methods {
 	}
 }
 
-var _ protoreflect.List = (*_UnlockQueue_1_list)(nil)
+var _ protoreflect.List = (*_Unlocks_1_list)(nil)
 
-type _UnlockQueue_1_list struct {
+type _Unlocks_1_list struct {
 	list *[]*Unlock
 }
 
-func (x *_UnlockQueue_1_list) Len() int {
+func (x *_Unlocks_1_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_UnlockQueue_1_list) Get(i int) protoreflect.Value {
+func (x *_Unlocks_1_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
 }
 
-func (x *_UnlockQueue_1_list) Set(i int, value protoreflect.Value) {
+func (x *_Unlocks_1_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*Unlock)
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_UnlockQueue_1_list) Append(value protoreflect.Value) {
+func (x *_Unlocks_1_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*Unlock)
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_UnlockQueue_1_list) AppendMutable() protoreflect.Value {
+func (x *_Unlocks_1_list) AppendMutable() protoreflect.Value {
 	v := new(Unlock)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_UnlockQueue_1_list) Truncate(n int) {
+func (x *_Unlocks_1_list) Truncate(n int) {
 	for i := n; i < len(*x.list); i++ {
 		(*x.list)[i] = nil
 	}
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_UnlockQueue_1_list) NewElement() protoreflect.Value {
+func (x *_Unlocks_1_list) NewElement() protoreflect.Value {
 	v := new(Unlock)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_UnlockQueue_1_list) IsValid() bool {
+func (x *_Unlocks_1_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
-	md_UnlockQueue         protoreflect.MessageDescriptor
-	fd_UnlockQueue_unlocks protoreflect.FieldDescriptor
+	md_Unlocks         protoreflect.MessageDescriptor
+	fd_Unlocks_unlocks protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_goat_locking_v1_types_proto_init()
-	md_UnlockQueue = File_goat_locking_v1_types_proto.Messages().ByName("UnlockQueue")
-	fd_UnlockQueue_unlocks = md_UnlockQueue.Fields().ByName("unlocks")
+	md_Unlocks = File_goat_locking_v1_types_proto.Messages().ByName("Unlocks")
+	fd_Unlocks_unlocks = md_Unlocks.Fields().ByName("unlocks")
 }
 
-var _ protoreflect.Message = (*fastReflection_UnlockQueue)(nil)
+var _ protoreflect.Message = (*fastReflection_Unlocks)(nil)
 
-type fastReflection_UnlockQueue UnlockQueue
+type fastReflection_Unlocks Unlocks
 
-func (x *UnlockQueue) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_UnlockQueue)(x)
+func (x *Unlocks) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_Unlocks)(x)
 }
 
-func (x *UnlockQueue) slowProtoReflect() protoreflect.Message {
+func (x *Unlocks) slowProtoReflect() protoreflect.Message {
 	mi := &file_goat_locking_v1_types_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2990,43 +2990,43 @@ func (x *UnlockQueue) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_UnlockQueue_messageType fastReflection_UnlockQueue_messageType
-var _ protoreflect.MessageType = fastReflection_UnlockQueue_messageType{}
+var _fastReflection_Unlocks_messageType fastReflection_Unlocks_messageType
+var _ protoreflect.MessageType = fastReflection_Unlocks_messageType{}
 
-type fastReflection_UnlockQueue_messageType struct{}
+type fastReflection_Unlocks_messageType struct{}
 
-func (x fastReflection_UnlockQueue_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_UnlockQueue)(nil)
+func (x fastReflection_Unlocks_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_Unlocks)(nil)
 }
-func (x fastReflection_UnlockQueue_messageType) New() protoreflect.Message {
-	return new(fastReflection_UnlockQueue)
+func (x fastReflection_Unlocks_messageType) New() protoreflect.Message {
+	return new(fastReflection_Unlocks)
 }
-func (x fastReflection_UnlockQueue_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_UnlockQueue
+func (x fastReflection_Unlocks_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_Unlocks
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_UnlockQueue) Descriptor() protoreflect.MessageDescriptor {
-	return md_UnlockQueue
+func (x *fastReflection_Unlocks) Descriptor() protoreflect.MessageDescriptor {
+	return md_Unlocks
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_UnlockQueue) Type() protoreflect.MessageType {
-	return _fastReflection_UnlockQueue_messageType
+func (x *fastReflection_Unlocks) Type() protoreflect.MessageType {
+	return _fastReflection_Unlocks_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_UnlockQueue) New() protoreflect.Message {
-	return new(fastReflection_UnlockQueue)
+func (x *fastReflection_Unlocks) New() protoreflect.Message {
+	return new(fastReflection_Unlocks)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_UnlockQueue) Interface() protoreflect.ProtoMessage {
-	return (*UnlockQueue)(x)
+func (x *fastReflection_Unlocks) Interface() protoreflect.ProtoMessage {
+	return (*Unlocks)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -3034,10 +3034,10 @@ func (x *fastReflection_UnlockQueue) Interface() protoreflect.ProtoMessage {
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_UnlockQueue) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_Unlocks) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if len(x.Unlocks) != 0 {
-		value := protoreflect.ValueOfList(&_UnlockQueue_1_list{list: &x.Unlocks})
-		if !f(fd_UnlockQueue_unlocks, value) {
+		value := protoreflect.ValueOfList(&_Unlocks_1_list{list: &x.Unlocks})
+		if !f(fd_Unlocks_unlocks, value) {
 			return
 		}
 	}
@@ -3054,15 +3054,15 @@ func (x *fastReflection_UnlockQueue) Range(f func(protoreflect.FieldDescriptor, 
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_UnlockQueue) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_Unlocks) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "goat.locking.v1.UnlockQueue.unlocks":
+	case "goat.locking.v1.Unlocks.unlocks":
 		return len(x.Unlocks) != 0
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.UnlockQueue"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.Unlocks"))
 		}
-		panic(fmt.Errorf("message goat.locking.v1.UnlockQueue does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.locking.v1.Unlocks does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -3072,15 +3072,15 @@ func (x *fastReflection_UnlockQueue) Has(fd protoreflect.FieldDescriptor) bool {
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_UnlockQueue) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_Unlocks) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "goat.locking.v1.UnlockQueue.unlocks":
+	case "goat.locking.v1.Unlocks.unlocks":
 		x.Unlocks = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.UnlockQueue"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.Unlocks"))
 		}
-		panic(fmt.Errorf("message goat.locking.v1.UnlockQueue does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.locking.v1.Unlocks does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -3090,19 +3090,19 @@ func (x *fastReflection_UnlockQueue) Clear(fd protoreflect.FieldDescriptor) {
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_UnlockQueue) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_Unlocks) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "goat.locking.v1.UnlockQueue.unlocks":
+	case "goat.locking.v1.Unlocks.unlocks":
 		if len(x.Unlocks) == 0 {
-			return protoreflect.ValueOfList(&_UnlockQueue_1_list{})
+			return protoreflect.ValueOfList(&_Unlocks_1_list{})
 		}
-		listValue := &_UnlockQueue_1_list{list: &x.Unlocks}
+		listValue := &_Unlocks_1_list{list: &x.Unlocks}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.UnlockQueue"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.Unlocks"))
 		}
-		panic(fmt.Errorf("message goat.locking.v1.UnlockQueue does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message goat.locking.v1.Unlocks does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -3116,17 +3116,17 @@ func (x *fastReflection_UnlockQueue) Get(descriptor protoreflect.FieldDescriptor
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_UnlockQueue) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_Unlocks) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "goat.locking.v1.UnlockQueue.unlocks":
+	case "goat.locking.v1.Unlocks.unlocks":
 		lv := value.List()
-		clv := lv.(*_UnlockQueue_1_list)
+		clv := lv.(*_Unlocks_1_list)
 		x.Unlocks = *clv.list
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.UnlockQueue"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.Unlocks"))
 		}
-		panic(fmt.Errorf("message goat.locking.v1.UnlockQueue does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.locking.v1.Unlocks does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -3140,45 +3140,45 @@ func (x *fastReflection_UnlockQueue) Set(fd protoreflect.FieldDescriptor, value 
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_UnlockQueue) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_Unlocks) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "goat.locking.v1.UnlockQueue.unlocks":
+	case "goat.locking.v1.Unlocks.unlocks":
 		if x.Unlocks == nil {
 			x.Unlocks = []*Unlock{}
 		}
-		value := &_UnlockQueue_1_list{list: &x.Unlocks}
+		value := &_Unlocks_1_list{list: &x.Unlocks}
 		return protoreflect.ValueOfList(value)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.UnlockQueue"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.Unlocks"))
 		}
-		panic(fmt.Errorf("message goat.locking.v1.UnlockQueue does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.locking.v1.Unlocks does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_UnlockQueue) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_Unlocks) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "goat.locking.v1.UnlockQueue.unlocks":
+	case "goat.locking.v1.Unlocks.unlocks":
 		list := []*Unlock{}
-		return protoreflect.ValueOfList(&_UnlockQueue_1_list{list: &list})
+		return protoreflect.ValueOfList(&_Unlocks_1_list{list: &list})
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.UnlockQueue"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.Unlocks"))
 		}
-		panic(fmt.Errorf("message goat.locking.v1.UnlockQueue does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.locking.v1.Unlocks does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_UnlockQueue) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_Unlocks) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in goat.locking.v1.UnlockQueue", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in goat.locking.v1.Unlocks", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -3186,7 +3186,7 @@ func (x *fastReflection_UnlockQueue) WhichOneof(d protoreflect.OneofDescriptor) 
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_UnlockQueue) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_Unlocks) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -3197,7 +3197,7 @@ func (x *fastReflection_UnlockQueue) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_UnlockQueue) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_Unlocks) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -3209,7 +3209,7 @@ func (x *fastReflection_UnlockQueue) SetUnknown(fields protoreflect.RawFields) {
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_UnlockQueue) IsValid() bool {
+func (x *fastReflection_Unlocks) IsValid() bool {
 	return x != nil
 }
 
@@ -3219,9 +3219,9 @@ func (x *fastReflection_UnlockQueue) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_UnlockQueue) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_Unlocks) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*UnlockQueue)
+		x := input.Message.Interface().(*Unlocks)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -3249,7 +3249,7 @@ func (x *fastReflection_UnlockQueue) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*UnlockQueue)
+		x := input.Message.Interface().(*Unlocks)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -3295,7 +3295,7 @@ func (x *fastReflection_UnlockQueue) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*UnlockQueue)
+		x := input.Message.Interface().(*Unlocks)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -3327,10 +3327,10 @@ func (x *fastReflection_UnlockQueue) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: UnlockQueue: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: Unlocks: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: UnlockQueue: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: Unlocks: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -3643,8 +3643,8 @@ func (x *Unlock) GetAmount() string {
 	return ""
 }
 
-// ExecuableQueue
-type ExecuableQueue struct {
+// EthTxQueue
+type EthTxQueue struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -3653,8 +3653,8 @@ type ExecuableQueue struct {
 	Unlocks []*Unlock `protobuf:"bytes,2,rep,name=unlocks,proto3" json:"unlocks,omitempty"`
 }
 
-func (x *ExecuableQueue) Reset() {
-	*x = ExecuableQueue{}
+func (x *EthTxQueue) Reset() {
+	*x = EthTxQueue{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_goat_locking_v1_types_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3662,33 +3662,33 @@ func (x *ExecuableQueue) Reset() {
 	}
 }
 
-func (x *ExecuableQueue) String() string {
+func (x *EthTxQueue) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ExecuableQueue) ProtoMessage() {}
+func (*EthTxQueue) ProtoMessage() {}
 
-// Deprecated: Use ExecuableQueue.ProtoReflect.Descriptor instead.
-func (*ExecuableQueue) Descriptor() ([]byte, []int) {
+// Deprecated: Use EthTxQueue.ProtoReflect.Descriptor instead.
+func (*EthTxQueue) Descriptor() ([]byte, []int) {
 	return file_goat_locking_v1_types_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *ExecuableQueue) GetRewards() []*Reward {
+func (x *EthTxQueue) GetRewards() []*Reward {
 	if x != nil {
 		return x.Rewards
 	}
 	return nil
 }
 
-func (x *ExecuableQueue) GetUnlocks() []*Unlock {
+func (x *EthTxQueue) GetUnlocks() []*Unlock {
 	if x != nil {
 		return x.Unlocks
 	}
 	return nil
 }
 
-// UnlockQueue
-type UnlockQueue struct {
+// Unlocks
+type Unlocks struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -3696,8 +3696,8 @@ type UnlockQueue struct {
 	Unlocks []*Unlock `protobuf:"bytes,1,rep,name=unlocks,proto3" json:"unlocks,omitempty"`
 }
 
-func (x *UnlockQueue) Reset() {
-	*x = UnlockQueue{}
+func (x *Unlocks) Reset() {
+	*x = Unlocks{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_goat_locking_v1_types_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3705,18 +3705,18 @@ func (x *UnlockQueue) Reset() {
 	}
 }
 
-func (x *UnlockQueue) String() string {
+func (x *Unlocks) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*UnlockQueue) ProtoMessage() {}
+func (*Unlocks) ProtoMessage() {}
 
-// Deprecated: Use UnlockQueue.ProtoReflect.Descriptor instead.
-func (*UnlockQueue) Descriptor() ([]byte, []int) {
+// Deprecated: Use Unlocks.ProtoReflect.Descriptor instead.
+func (*Unlocks) Descriptor() ([]byte, []int) {
 	return file_goat_locking_v1_types_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *UnlockQueue) GetUnlocks() []*Unlock {
+func (x *Unlocks) GetUnlocks() []*Unlock {
 	if x != nil {
 		return x.Unlocks
 	}
@@ -3774,31 +3774,30 @@ var file_goat_locking_v1_types_proto_rawDesc = []byte{
 	0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b,
 	0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a,
 	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75,
-	0x6e, 0x74, 0x22, 0x76, 0x0a, 0x0e, 0x45, 0x78, 0x65, 0x63, 0x75, 0x61, 0x62, 0x6c, 0x65, 0x51,
-	0x75, 0x65, 0x75, 0x65, 0x12, 0x31, 0x0a, 0x07, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x18,
-	0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x17, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x6c, 0x6f, 0x63,
-	0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x52, 0x07,
-	0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x12, 0x31, 0x0a, 0x07, 0x75, 0x6e, 0x6c, 0x6f, 0x63,
-	0x6b, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x17, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e,
-	0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x6e, 0x6c, 0x6f, 0x63,
-	0x6b, 0x52, 0x07, 0x75, 0x6e, 0x6c, 0x6f, 0x63, 0x6b, 0x73, 0x22, 0x40, 0x0a, 0x0b, 0x55, 0x6e,
-	0x6c, 0x6f, 0x63, 0x6b, 0x51, 0x75, 0x65, 0x75, 0x65, 0x12, 0x31, 0x0a, 0x07, 0x75, 0x6e, 0x6c,
-	0x6f, 0x63, 0x6b, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x17, 0x2e, 0x67, 0x6f, 0x61,
-	0x74, 0x2e, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x6e, 0x6c,
-	0x6f, 0x63, 0x6b, 0x52, 0x07, 0x75, 0x6e, 0x6c, 0x6f, 0x63, 0x6b, 0x73, 0x42, 0xba, 0x01, 0x0a,
-	0x13, 0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e,
-	0x67, 0x2e, 0x76, 0x31, 0x42, 0x0a, 0x54, 0x79, 0x70, 0x65, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f,
-	0x50, 0x01, 0x5a, 0x39, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67,
-	0x6f, 0x61, 0x74, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f,
-	0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67,
-	0x2f, 0x76, 0x31, 0x3b, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x76, 0x31, 0xa2, 0x02, 0x03,
-	0x47, 0x4c, 0x58, 0xaa, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x2e, 0x4c, 0x6f, 0x63, 0x6b, 0x69,
-	0x6e, 0x67, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x4c, 0x6f, 0x63,
-	0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x1b, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x4c,
-	0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74,
-	0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x11, 0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x4c, 0x6f,
-	0x63, 0x6b, 0x69, 0x6e, 0x67, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x33,
+	0x6e, 0x74, 0x22, 0x72, 0x0a, 0x0a, 0x45, 0x74, 0x68, 0x54, 0x78, 0x51, 0x75, 0x65, 0x75, 0x65,
+	0x12, 0x31, 0x0a, 0x07, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28,
+	0x0b, 0x32, 0x17, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67,
+	0x2e, 0x76, 0x31, 0x2e, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x52, 0x07, 0x72, 0x65, 0x77, 0x61,
+	0x72, 0x64, 0x73, 0x12, 0x31, 0x0a, 0x07, 0x75, 0x6e, 0x6c, 0x6f, 0x63, 0x6b, 0x73, 0x18, 0x02,
+	0x20, 0x03, 0x28, 0x0b, 0x32, 0x17, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x6c, 0x6f, 0x63, 0x6b,
+	0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x6e, 0x6c, 0x6f, 0x63, 0x6b, 0x52, 0x07, 0x75,
+	0x6e, 0x6c, 0x6f, 0x63, 0x6b, 0x73, 0x22, 0x3c, 0x0a, 0x07, 0x55, 0x6e, 0x6c, 0x6f, 0x63, 0x6b,
+	0x73, 0x12, 0x31, 0x0a, 0x07, 0x75, 0x6e, 0x6c, 0x6f, 0x63, 0x6b, 0x73, 0x18, 0x01, 0x20, 0x03,
+	0x28, 0x0b, 0x32, 0x17, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e,
+	0x67, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x6e, 0x6c, 0x6f, 0x63, 0x6b, 0x52, 0x07, 0x75, 0x6e, 0x6c,
+	0x6f, 0x63, 0x6b, 0x73, 0x42, 0xba, 0x01, 0x0a, 0x13, 0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x6f, 0x61,
+	0x74, 0x2e, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x42, 0x0a, 0x54, 0x79,
+	0x70, 0x65, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x39, 0x67, 0x69, 0x74, 0x68,
+	0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x6e, 0x65, 0x74, 0x77, 0x6f,
+	0x72, 0x6b, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x61, 0x74,
+	0x2f, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x3b, 0x6c, 0x6f, 0x63, 0x6b,
+	0x69, 0x6e, 0x67, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x47, 0x4c, 0x58, 0xaa, 0x02, 0x0f, 0x47, 0x6f,
+	0x61, 0x74, 0x2e, 0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x0f,
+	0x47, 0x6f, 0x61, 0x74, 0x5c, 0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0xe2,
+	0x02, 0x1b, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56,
+	0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x11,
+	0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x3a, 0x3a, 0x56,
+	0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -3815,17 +3814,17 @@ func file_goat_locking_v1_types_proto_rawDescGZIP() []byte {
 
 var file_goat_locking_v1_types_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_goat_locking_v1_types_proto_goTypes = []interface{}{
-	(*Token)(nil),          // 0: goat.locking.v1.Token
-	(*RewardPool)(nil),     // 1: goat.locking.v1.RewardPool
-	(*Reward)(nil),         // 2: goat.locking.v1.Reward
-	(*Unlock)(nil),         // 3: goat.locking.v1.Unlock
-	(*ExecuableQueue)(nil), // 4: goat.locking.v1.ExecuableQueue
-	(*UnlockQueue)(nil),    // 5: goat.locking.v1.UnlockQueue
+	(*Token)(nil),      // 0: goat.locking.v1.Token
+	(*RewardPool)(nil), // 1: goat.locking.v1.RewardPool
+	(*Reward)(nil),     // 2: goat.locking.v1.Reward
+	(*Unlock)(nil),     // 3: goat.locking.v1.Unlock
+	(*EthTxQueue)(nil), // 4: goat.locking.v1.EthTxQueue
+	(*Unlocks)(nil),    // 5: goat.locking.v1.Unlocks
 }
 var file_goat_locking_v1_types_proto_depIdxs = []int32{
-	2, // 0: goat.locking.v1.ExecuableQueue.rewards:type_name -> goat.locking.v1.Reward
-	3, // 1: goat.locking.v1.ExecuableQueue.unlocks:type_name -> goat.locking.v1.Unlock
-	3, // 2: goat.locking.v1.UnlockQueue.unlocks:type_name -> goat.locking.v1.Unlock
+	2, // 0: goat.locking.v1.EthTxQueue.rewards:type_name -> goat.locking.v1.Reward
+	3, // 1: goat.locking.v1.EthTxQueue.unlocks:type_name -> goat.locking.v1.Unlock
+	3, // 2: goat.locking.v1.Unlocks.unlocks:type_name -> goat.locking.v1.Unlock
 	3, // [3:3] is the sub-list for method output_type
 	3, // [3:3] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name
@@ -3888,7 +3887,7 @@ func file_goat_locking_v1_types_proto_init() {
 			}
 		}
 		file_goat_locking_v1_types_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ExecuableQueue); i {
+			switch v := v.(*EthTxQueue); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3900,7 +3899,7 @@ func file_goat_locking_v1_types_proto_init() {
 			}
 		}
 		file_goat_locking_v1_types_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UnlockQueue); i {
+			switch v := v.(*Unlocks); i {
 			case 0:
 				return &v.state
 			case 1:

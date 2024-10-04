@@ -1,7 +1,6 @@
 package keeper
 
 import (
-	"context"
 	"fmt"
 	"time"
 
@@ -29,15 +28,15 @@ type (
 		// (token,validator) => locking, it's used for updating power when the token weight is updated
 		Locking collections.Map[collections.Pair[string, sdktypes.ConsAddress], math.Int]
 		// (power,validator) => int64(power), it's used for getting validators of top-k power
-		PowerRanking   collections.KeySet[collections.Pair[uint64, sdktypes.ConsAddress]]
-		ValidatorSet   collections.KeySet[sdktypes.ConsAddress]
-		Validators     collections.Map[sdktypes.ConsAddress, types.Validator]
-		Tokens         collections.Map[string, types.Token]
-		Slashed        collections.Map[string, math.Int]
-		EthTxNonce     collections.Sequence
-		RewardPool     collections.Item[types.RewardPool]
-		ExecuableQueue collections.Item[types.ExecuableQueue]
-		UnlockQueue    collections.Map[time.Time, types.UnlockQueue]
+		PowerRanking collections.KeySet[collections.Pair[uint64, sdktypes.ConsAddress]]
+		ValidatorSet collections.KeySet[sdktypes.ConsAddress]
+		Validators   collections.Map[sdktypes.ConsAddress, types.Validator]
+		Tokens       collections.Map[string, types.Token]
+		Slashed      collections.Map[string, math.Int]
+		EthTxNonce   collections.Sequence
+		RewardPool   collections.Item[types.RewardPool]
+		EthTxQueue   collections.Item[types.EthTxQueue]
+		UnlockQueue  collections.Map[time.Time, types.Unlocks]
 	}
 )
 
@@ -57,17 +56,17 @@ func NewKeeper(
 		logger:        logger,
 		accountKeeper: accountKeeper,
 
-		Params:         collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
-		Locking:        collections.NewMap(sb, types.LockingKey, "locking", collections.PairKeyCodec(collections.StringKey, sdktypes.ConsAddressKey), sdktypes.IntValue),
-		PowerRanking:   collections.NewKeySet(sb, types.PowerRankingKey, "power_ranking", collections.PairKeyCodec(collections.Uint64Key, sdktypes.ConsAddressKey)),
-		ValidatorSet:   collections.NewKeySet(sb, types.ValidatorSetKey, "validator_set", sdktypes.ConsAddressKey),
-		Validators:     collections.NewMap(sb, types.ValidatorsKey, "validator", sdktypes.ConsAddressKey, codec.CollValue[types.Validator](cdc)),
-		Tokens:         collections.NewMap(sb, types.TokensKey, "token", collections.StringKey, codec.CollValue[types.Token](cdc)),
-		Slashed:        collections.NewMap(sb, types.SlashedKey, "slashed", collections.StringKey, sdktypes.IntValue),
-		EthTxNonce:     collections.NewSequence(sb, types.EthTxNonceKey, "eth_tx_nonce"),
-		RewardPool:     collections.NewItem(sb, types.RewardPoolKey, "reward_pool", codec.CollValue[types.RewardPool](cdc)),
-		ExecuableQueue: collections.NewItem(sb, types.ExecuableQueueKey, "execuable_queue", codec.CollValue[types.ExecuableQueue](cdc)),
-		UnlockQueue:    collections.NewMap(sb, types.UnlockQueueKey, "unlock_queue", sdktypes.TimeKey, codec.CollValue[types.UnlockQueue](cdc)),
+		Params:       collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		Locking:      collections.NewMap(sb, types.LockingKey, "locking", collections.PairKeyCodec(collections.StringKey, sdktypes.ConsAddressKey), sdktypes.IntValue),
+		PowerRanking: collections.NewKeySet(sb, types.PowerRankingKey, "power_ranking", collections.PairKeyCodec(collections.Uint64Key, sdktypes.ConsAddressKey)),
+		ValidatorSet: collections.NewKeySet(sb, types.ValidatorSetKey, "validator_set", sdktypes.ConsAddressKey),
+		Validators:   collections.NewMap(sb, types.ValidatorsKey, "validator", sdktypes.ConsAddressKey, codec.CollValue[types.Validator](cdc)),
+		Tokens:       collections.NewMap(sb, types.TokensKey, "token", collections.StringKey, codec.CollValue[types.Token](cdc)),
+		Slashed:      collections.NewMap(sb, types.SlashedKey, "slashed", collections.StringKey, sdktypes.IntValue),
+		EthTxNonce:   collections.NewSequence(sb, types.EthTxNonceKey, "eth_tx_nonce"),
+		EthTxQueue:   collections.NewItem(sb, types.EthTxQueueKey, "eth_tx_queue", codec.CollValue[types.EthTxQueue](cdc)),
+		RewardPool:   collections.NewItem(sb, types.RewardPoolKey, "reward_pool", codec.CollValue[types.RewardPool](cdc)),
+		UnlockQueue:  collections.NewMap(sb, types.UnlockQueueKey, "unlock_queue", sdktypes.TimeKey, codec.CollValue[types.Unlocks](cdc)),
 	}
 
 	schema, err := sb.Build()
@@ -82,25 +81,4 @@ func NewKeeper(
 // Logger returns a module-specific logger.
 func (k Keeper) Logger() log.Logger {
 	return k.logger.With("module", fmt.Sprintf("x/%s", types.ModuleName))
-}
-
-func (k Keeper) ThresholdList(ctx context.Context) (sdktypes.Coins, error) {
-	iter, err := k.Tokens.Iterate(sdktypes.UnwrapSDKContext(ctx), nil)
-	if err != nil {
-		return nil, err
-	}
-	defer iter.Close()
-
-	res := sdktypes.Coins{}
-	for ; iter.Valid(); iter.Next() {
-		kv, err := iter.KeyValue()
-		if err != nil {
-			return nil, err
-		}
-		if !kv.Value.Threshold.IsZero() {
-			res = append(res, sdktypes.NewCoin(kv.Key, kv.Value.Threshold))
-		}
-	}
-
-	return res.Sort(), nil
 }

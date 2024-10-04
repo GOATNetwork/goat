@@ -18,8 +18,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 
-	// this line is used by starport scaffolding # 1
-
 	modulev1 "github.com/goatnetwork/goat/api/goat/locking/module/v1"
 	"github.com/goatnetwork/goat/x/locking/keeper"
 	"github.com/goatnetwork/goat/x/locking/types"
@@ -31,8 +29,9 @@ var (
 	_ module.HasABCIGenesis      = (*AppModule)(nil)
 	_ module.HasInvariants       = (*AppModule)(nil)
 	_ module.HasConsensusVersion = (*AppModule)(nil)
-
-	_ appmodule.AppModule = (*AppModule)(nil)
+	_ module.HasABCIEndBlock     = (*AppModule)(nil)
+	_ appmodule.HasBeginBlocker  = (*AppModule)(nil)
+	_ appmodule.AppModule        = (*AppModule)(nil)
 )
 
 // ----------------------------------------------------------------------------
@@ -118,13 +117,10 @@ func (am AppModule) RegisterServices(cfg module.Configurator) {
 func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
 
 // InitGenesis performs the module's genesis initialization. It returns no validator updates.
-func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, gs json.RawMessage) (vs []abci.ValidatorUpdate) {
+func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, gs json.RawMessage) []abci.ValidatorUpdate {
 	var genState types.GenesisState
-	// Initialize global index to index in genesis state
 	cdc.MustUnmarshalJSON(gs, &genState)
-
-	InitGenesis(ctx, am.keeper, genState)
-	return
+	return InitGenesis(ctx, am.keeper, genState)
 }
 
 // ExportGenesis returns the module's exported genesis state as raw JSON bytes.
@@ -139,16 +135,14 @@ func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.Raw
 func (AppModule) ConsensusVersion() uint64 { return 1 }
 
 // BeginBlock contains the logic that is automatically triggered at the beginning of each block.
-// The begin block implementation is optional.
-// func (am AppModule) BeginBlock(_ context.Context) error {
-// 	return nil
-// }
+func (am AppModule) BeginBlock(ctx context.Context) error {
+	return am.keeper.BeginBlocker(ctx)
+}
 
 // EndBlock contains the logic that is automatically triggered at the end of each block.
-// The end block implementation is optional.
-// func (am AppModule) EndBlock(_ context.Context) error {
-// 	return nil
-// }
+func (am AppModule) EndBlock(ctx context.Context) ([]abci.ValidatorUpdate, error) {
+	return am.keeper.EndBlocker(ctx)
+}
 
 // IsOnePerModuleType implements the depinject.OnePerModuleType interface.
 func (am AppModule) IsOnePerModuleType() {}

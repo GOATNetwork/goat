@@ -93,9 +93,11 @@ func (k Keeper) blockValidatorUpdates(ctx context.Context) ([]abci.ValidatorUpda
 		if err != nil {
 			return nil, err
 		}
-		validator.Status = types.ValidatorStatus_Pending
-		if err := k.Validators.Set(sdkctx, valAddr, validator); err != nil {
-			return nil, err
+		if validator.Status == types.ValidatorStatus_Active {
+			validator.Status = types.ValidatorStatus_Pending
+			if err := k.Validators.Set(sdkctx, valAddr, validator); err != nil {
+				return nil, err
+			}
 		}
 		if err := k.ValidatorSet.Remove(sdkctx, valAddr); err != nil {
 			return nil, err

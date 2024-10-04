@@ -14,17 +14,17 @@ const (
 )
 
 var (
-	ParamsKey         = collections.NewPrefix(0)
-	LockingKey        = collections.NewPrefix(1)
-	PowerRankingKey   = collections.NewPrefix(2)
-	ValidatorSetKey   = collections.NewPrefix(3)
-	ValidatorsKey     = collections.NewPrefix(4)
-	TokensKey         = collections.NewPrefix(5)
-	SlashedKey        = collections.NewPrefix(6)
-	EthTxNonceKey     = collections.NewPrefix(7)
-	RewardPoolKey     = collections.NewPrefix(8)
-	ExecuableQueueKey = collections.NewPrefix(9)
-	UnlockQueueKey    = collections.NewPrefix(10)
+	ParamsKey       = collections.NewPrefix(0)
+	LockingKey      = collections.NewPrefix(1)
+	PowerRankingKey = collections.NewPrefix(2)
+	ValidatorSetKey = collections.NewPrefix(3)
+	ValidatorsKey   = collections.NewPrefix(4)
+	TokensKey       = collections.NewPrefix(5)
+	SlashedKey      = collections.NewPrefix(6)
+	EthTxNonceKey   = collections.NewPrefix(7)
+	EthTxQueueKey   = collections.NewPrefix(8)
+	RewardPoolKey   = collections.NewPrefix(9)
+	UnlockQueueKey  = collections.NewPrefix(10)
 )
 
 func KeyPrefix(p string) []byte {

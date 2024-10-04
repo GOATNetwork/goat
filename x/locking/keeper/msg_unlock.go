@@ -55,13 +55,13 @@ func (k Keeper) unlock(ctx context.Context, req *ethtypes.GoatUnlock, param *typ
 	amount := math.NewIntFromBigInt(req.Amount) // max amount to send back
 	lockingAmount := validator.Locking.AmountOf(tokenAddr)
 	if lockingAmount.LT(amount) { // the validator was slashed
-		amount = math.NewIntFromBigInt(lockingAmount.BigInt())
+		amount = math.NewIntFromBigIntMut(lockingAmount.BigInt())
 	}
 	validator.Locking = validator.Locking.Sub(sdktypes.NewCoin(tokenAddr, amount))
 	lockingAmount = lockingAmount.Sub(amount)
 
 	var powerU64 uint64
-	if !amount.IsZero() {
+	if !amount.IsZero() && token.Weight > 0 && validator.Status != types.ValidatorStatus_Tombstoned {
 		p := math.NewIntFromUint64(token.Weight).Mul(amount).Quo(types.PowerReduction)
 		if !p.IsUint64() {
 			return types.ErrInvalid.Wrapf("power too large: %s", p)
@@ -69,7 +69,8 @@ func (k Keeper) unlock(ctx context.Context, req *ethtypes.GoatUnlock, param *typ
 		powerU64 = p.Uint64()
 	}
 
-	exiting := validator.Status == types.ValidatorStatus_Inactive || lockingAmount.LT(token.Threshold)
+	exiting := validator.Status == types.ValidatorStatus_Inactive ||
+		validator.Status == types.ValidatorStatus_Tombstoned || lockingAmount.LT(token.Threshold)
 
 	if validator.Power > powerU64 {
 		validator.Power -= powerU64
@@ -84,7 +85,7 @@ func (k Keeper) unlock(ctx context.Context, req *ethtypes.GoatUnlock, param *typ
 		case types.ValidatorStatus_Active, types.ValidatorStatus_Pending:
 			validator.Status = types.ValidatorStatus_Inactive
 		}
-		unlockTime = sdkctx.BlockTime().Add(param.ExitWaittingDuration)
+		unlockTime = sdkctx.BlockTime().Add(param.ExitingDuration)
 
 		// remove all from locking state
 		for _, coin := range validator.Locking {
@@ -93,10 +94,7 @@ func (k Keeper) unlock(ctx context.Context, req *ethtypes.GoatUnlock, param *typ
 			}
 		}
 	} else {
-		if validator.Status == types.ValidatorStatus_Active {
-			validator.Status = types.ValidatorStatus_Pending
-		}
-		unlockTime = sdkctx.BlockTime().Add(param.UnlockWaittingDuration)
+		unlockTime = sdkctx.BlockTime().Add(param.UnlockDuration)
 
 		// remove if there is no locking
 		if lockingAmount.IsZero() {
@@ -147,7 +145,7 @@ func (k Keeper) dequeueMatureUnlocks(ctx context.Context) error {
 	var values []*types.Unlock
 
 	rng := (&collections.Range[time.Time]{}).EndInclusive(sdkctx.BlockTime())
-	if err := k.UnlockQueue.Walk(ctx, rng, func(key time.Time, value types.UnlockQueue) (bool, error) {
+	if err := k.UnlockQueue.Walk(ctx, rng, func(key time.Time, value types.Unlocks) (bool, error) {
 		keys = append(keys, key)
 		values = append(values, value.Unlocks...)
 		return false, nil
@@ -166,13 +164,13 @@ func (k Keeper) dequeueMatureUnlocks(ctx context.Context) error {
 		return nil
 	}
 
-	execQueue, err := k.ExecuableQueue.Get(sdkctx)
+	execQueue, err := k.EthTxQueue.Get(sdkctx)
 	if err != nil {
 		return err
 	}
 
 	execQueue.Unlocks = append(execQueue.Unlocks, values...)
-	if err := k.ExecuableQueue.Set(sdkctx, execQueue); err != nil {
+	if err := k.EthTxQueue.Set(sdkctx, execQueue); err != nil {
 		panic(err)
 	}
 

@@ -55,7 +55,7 @@ func Validator() *cobra.Command {
 						return nil
 					}
 				}
-				genesis.Validators = append(genesis.Validators, &types.Validator{
+				genesis.Validators = append(genesis.Validators, types.Validator{
 					Pubkey:     pubkeyRaw,
 					Power:      votePower,
 					GoatReward: math.ZeroInt(),

@@ -3,16 +3,1090 @@ package lockingv1
 
 import (
 	_ "cosmossdk.io/api/amino"
+	v1beta1 "cosmossdk.io/api/cosmos/base/v1beta1"
 	fmt "fmt"
 	runtime "github.com/cosmos/cosmos-proto/runtime"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	io "io"
 	reflect "reflect"
 	sync "sync"
 )
+
+var _ protoreflect.List = (*_UnlockQueueGenesis_2_list)(nil)
+
+type _UnlockQueueGenesis_2_list struct {
+	list *[]*Unlock
+}
+
+func (x *_UnlockQueueGenesis_2_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_UnlockQueueGenesis_2_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_UnlockQueueGenesis_2_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*Unlock)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_UnlockQueueGenesis_2_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*Unlock)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_UnlockQueueGenesis_2_list) AppendMutable() protoreflect.Value {
+	v := new(Unlock)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_UnlockQueueGenesis_2_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_UnlockQueueGenesis_2_list) NewElement() protoreflect.Value {
+	v := new(Unlock)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_UnlockQueueGenesis_2_list) IsValid() bool {
+	return x.list != nil
+}
+
+var (
+	md_UnlockQueueGenesis           protoreflect.MessageDescriptor
+	fd_UnlockQueueGenesis_timestamp protoreflect.FieldDescriptor
+	fd_UnlockQueueGenesis_unlocks   protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_goat_locking_v1_genesis_proto_init()
+	md_UnlockQueueGenesis = File_goat_locking_v1_genesis_proto.Messages().ByName("UnlockQueueGenesis")
+	fd_UnlockQueueGenesis_timestamp = md_UnlockQueueGenesis.Fields().ByName("timestamp")
+	fd_UnlockQueueGenesis_unlocks = md_UnlockQueueGenesis.Fields().ByName("unlocks")
+}
+
+var _ protoreflect.Message = (*fastReflection_UnlockQueueGenesis)(nil)
+
+type fastReflection_UnlockQueueGenesis UnlockQueueGenesis
+
+func (x *UnlockQueueGenesis) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_UnlockQueueGenesis)(x)
+}
+
+func (x *UnlockQueueGenesis) slowProtoReflect() protoreflect.Message {
+	mi := &file_goat_locking_v1_genesis_proto_msgTypes[0]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_UnlockQueueGenesis_messageType fastReflection_UnlockQueueGenesis_messageType
+var _ protoreflect.MessageType = fastReflection_UnlockQueueGenesis_messageType{}
+
+type fastReflection_UnlockQueueGenesis_messageType struct{}
+
+func (x fastReflection_UnlockQueueGenesis_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_UnlockQueueGenesis)(nil)
+}
+func (x fastReflection_UnlockQueueGenesis_messageType) New() protoreflect.Message {
+	return new(fastReflection_UnlockQueueGenesis)
+}
+func (x fastReflection_UnlockQueueGenesis_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_UnlockQueueGenesis
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_UnlockQueueGenesis) Descriptor() protoreflect.MessageDescriptor {
+	return md_UnlockQueueGenesis
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_UnlockQueueGenesis) Type() protoreflect.MessageType {
+	return _fastReflection_UnlockQueueGenesis_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_UnlockQueueGenesis) New() protoreflect.Message {
+	return new(fastReflection_UnlockQueueGenesis)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_UnlockQueueGenesis) Interface() protoreflect.ProtoMessage {
+	return (*UnlockQueueGenesis)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_UnlockQueueGenesis) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Timestamp != nil {
+		value := protoreflect.ValueOfMessage(x.Timestamp.ProtoReflect())
+		if !f(fd_UnlockQueueGenesis_timestamp, value) {
+			return
+		}
+	}
+	if len(x.Unlocks) != 0 {
+		value := protoreflect.ValueOfList(&_UnlockQueueGenesis_2_list{list: &x.Unlocks})
+		if !f(fd_UnlockQueueGenesis_unlocks, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_UnlockQueueGenesis) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "goat.locking.v1.UnlockQueueGenesis.timestamp":
+		return x.Timestamp != nil
+	case "goat.locking.v1.UnlockQueueGenesis.unlocks":
+		return len(x.Unlocks) != 0
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.UnlockQueueGenesis"))
+		}
+		panic(fmt.Errorf("message goat.locking.v1.UnlockQueueGenesis does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_UnlockQueueGenesis) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "goat.locking.v1.UnlockQueueGenesis.timestamp":
+		x.Timestamp = nil
+	case "goat.locking.v1.UnlockQueueGenesis.unlocks":
+		x.Unlocks = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.UnlockQueueGenesis"))
+		}
+		panic(fmt.Errorf("message goat.locking.v1.UnlockQueueGenesis does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_UnlockQueueGenesis) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "goat.locking.v1.UnlockQueueGenesis.timestamp":
+		value := x.Timestamp
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "goat.locking.v1.UnlockQueueGenesis.unlocks":
+		if len(x.Unlocks) == 0 {
+			return protoreflect.ValueOfList(&_UnlockQueueGenesis_2_list{})
+		}
+		listValue := &_UnlockQueueGenesis_2_list{list: &x.Unlocks}
+		return protoreflect.ValueOfList(listValue)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.UnlockQueueGenesis"))
+		}
+		panic(fmt.Errorf("message goat.locking.v1.UnlockQueueGenesis does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_UnlockQueueGenesis) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "goat.locking.v1.UnlockQueueGenesis.timestamp":
+		x.Timestamp = value.Message().Interface().(*timestamppb.Timestamp)
+	case "goat.locking.v1.UnlockQueueGenesis.unlocks":
+		lv := value.List()
+		clv := lv.(*_UnlockQueueGenesis_2_list)
+		x.Unlocks = *clv.list
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.UnlockQueueGenesis"))
+		}
+		panic(fmt.Errorf("message goat.locking.v1.UnlockQueueGenesis does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_UnlockQueueGenesis) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "goat.locking.v1.UnlockQueueGenesis.timestamp":
+		if x.Timestamp == nil {
+			x.Timestamp = new(timestamppb.Timestamp)
+		}
+		return protoreflect.ValueOfMessage(x.Timestamp.ProtoReflect())
+	case "goat.locking.v1.UnlockQueueGenesis.unlocks":
+		if x.Unlocks == nil {
+			x.Unlocks = []*Unlock{}
+		}
+		value := &_UnlockQueueGenesis_2_list{list: &x.Unlocks}
+		return protoreflect.ValueOfList(value)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.UnlockQueueGenesis"))
+		}
+		panic(fmt.Errorf("message goat.locking.v1.UnlockQueueGenesis does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_UnlockQueueGenesis) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "goat.locking.v1.UnlockQueueGenesis.timestamp":
+		m := new(timestamppb.Timestamp)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "goat.locking.v1.UnlockQueueGenesis.unlocks":
+		list := []*Unlock{}
+		return protoreflect.ValueOfList(&_UnlockQueueGenesis_2_list{list: &list})
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.UnlockQueueGenesis"))
+		}
+		panic(fmt.Errorf("message goat.locking.v1.UnlockQueueGenesis does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_UnlockQueueGenesis) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in goat.locking.v1.UnlockQueueGenesis", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_UnlockQueueGenesis) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_UnlockQueueGenesis) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_UnlockQueueGenesis) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_UnlockQueueGenesis) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*UnlockQueueGenesis)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.Timestamp != nil {
+			l = options.Size(x.Timestamp)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if len(x.Unlocks) > 0 {
+			for _, e := range x.Unlocks {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*UnlockQueueGenesis)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.Unlocks) > 0 {
+			for iNdEx := len(x.Unlocks) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.Unlocks[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0x12
+			}
+		}
+		if x.Timestamp != nil {
+			encoded, err := options.Marshal(x.Timestamp)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*UnlockQueueGenesis)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: UnlockQueueGenesis: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: UnlockQueueGenesis: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Timestamp", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Timestamp == nil {
+					x.Timestamp = &timestamppb.Timestamp{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Timestamp); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Unlocks", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Unlocks = append(x.Unlocks, &Unlock{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Unlocks[len(x.Unlocks)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_TokenGenesis       protoreflect.MessageDescriptor
+	fd_TokenGenesis_denom protoreflect.FieldDescriptor
+	fd_TokenGenesis_token protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_goat_locking_v1_genesis_proto_init()
+	md_TokenGenesis = File_goat_locking_v1_genesis_proto.Messages().ByName("TokenGenesis")
+	fd_TokenGenesis_denom = md_TokenGenesis.Fields().ByName("denom")
+	fd_TokenGenesis_token = md_TokenGenesis.Fields().ByName("token")
+}
+
+var _ protoreflect.Message = (*fastReflection_TokenGenesis)(nil)
+
+type fastReflection_TokenGenesis TokenGenesis
+
+func (x *TokenGenesis) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_TokenGenesis)(x)
+}
+
+func (x *TokenGenesis) slowProtoReflect() protoreflect.Message {
+	mi := &file_goat_locking_v1_genesis_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_TokenGenesis_messageType fastReflection_TokenGenesis_messageType
+var _ protoreflect.MessageType = fastReflection_TokenGenesis_messageType{}
+
+type fastReflection_TokenGenesis_messageType struct{}
+
+func (x fastReflection_TokenGenesis_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_TokenGenesis)(nil)
+}
+func (x fastReflection_TokenGenesis_messageType) New() protoreflect.Message {
+	return new(fastReflection_TokenGenesis)
+}
+func (x fastReflection_TokenGenesis_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_TokenGenesis
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_TokenGenesis) Descriptor() protoreflect.MessageDescriptor {
+	return md_TokenGenesis
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_TokenGenesis) Type() protoreflect.MessageType {
+	return _fastReflection_TokenGenesis_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_TokenGenesis) New() protoreflect.Message {
+	return new(fastReflection_TokenGenesis)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_TokenGenesis) Interface() protoreflect.ProtoMessage {
+	return (*TokenGenesis)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_TokenGenesis) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Denom != "" {
+		value := protoreflect.ValueOfString(x.Denom)
+		if !f(fd_TokenGenesis_denom, value) {
+			return
+		}
+	}
+	if x.Token != nil {
+		value := protoreflect.ValueOfMessage(x.Token.ProtoReflect())
+		if !f(fd_TokenGenesis_token, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_TokenGenesis) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "goat.locking.v1.TokenGenesis.denom":
+		return x.Denom != ""
+	case "goat.locking.v1.TokenGenesis.token":
+		return x.Token != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.TokenGenesis"))
+		}
+		panic(fmt.Errorf("message goat.locking.v1.TokenGenesis does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_TokenGenesis) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "goat.locking.v1.TokenGenesis.denom":
+		x.Denom = ""
+	case "goat.locking.v1.TokenGenesis.token":
+		x.Token = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.TokenGenesis"))
+		}
+		panic(fmt.Errorf("message goat.locking.v1.TokenGenesis does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_TokenGenesis) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "goat.locking.v1.TokenGenesis.denom":
+		value := x.Denom
+		return protoreflect.ValueOfString(value)
+	case "goat.locking.v1.TokenGenesis.token":
+		value := x.Token
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.TokenGenesis"))
+		}
+		panic(fmt.Errorf("message goat.locking.v1.TokenGenesis does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_TokenGenesis) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "goat.locking.v1.TokenGenesis.denom":
+		x.Denom = value.Interface().(string)
+	case "goat.locking.v1.TokenGenesis.token":
+		x.Token = value.Message().Interface().(*Token)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.TokenGenesis"))
+		}
+		panic(fmt.Errorf("message goat.locking.v1.TokenGenesis does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_TokenGenesis) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "goat.locking.v1.TokenGenesis.token":
+		if x.Token == nil {
+			x.Token = new(Token)
+		}
+		return protoreflect.ValueOfMessage(x.Token.ProtoReflect())
+	case "goat.locking.v1.TokenGenesis.denom":
+		panic(fmt.Errorf("field denom of message goat.locking.v1.TokenGenesis is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.TokenGenesis"))
+		}
+		panic(fmt.Errorf("message goat.locking.v1.TokenGenesis does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_TokenGenesis) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "goat.locking.v1.TokenGenesis.denom":
+		return protoreflect.ValueOfString("")
+	case "goat.locking.v1.TokenGenesis.token":
+		m := new(Token)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.TokenGenesis"))
+		}
+		panic(fmt.Errorf("message goat.locking.v1.TokenGenesis does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_TokenGenesis) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in goat.locking.v1.TokenGenesis", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_TokenGenesis) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_TokenGenesis) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_TokenGenesis) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_TokenGenesis) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*TokenGenesis)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		l = len(x.Denom)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.Token != nil {
+			l = options.Size(x.Token)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*TokenGenesis)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Token != nil {
+			encoded, err := options.Marshal(x.Token)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.Denom) > 0 {
+			i -= len(x.Denom)
+			copy(dAtA[i:], x.Denom)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Denom)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*TokenGenesis)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: TokenGenesis: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: TokenGenesis: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Denom", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Denom = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Token", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Token == nil {
+					x.Token = &Token{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Token); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
 
 var _ protoreflect.List = (*_GenesisState_2_list)(nil)
 
@@ -65,10 +1139,169 @@ func (x *_GenesisState_2_list) IsValid() bool {
 	return x.list != nil
 }
 
+var _ protoreflect.List = (*_GenesisState_3_list)(nil)
+
+type _GenesisState_3_list struct {
+	list *[]*TokenGenesis
+}
+
+func (x *_GenesisState_3_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_GenesisState_3_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_GenesisState_3_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*TokenGenesis)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_GenesisState_3_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*TokenGenesis)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_GenesisState_3_list) AppendMutable() protoreflect.Value {
+	v := new(TokenGenesis)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_3_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_GenesisState_3_list) NewElement() protoreflect.Value {
+	v := new(TokenGenesis)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_3_list) IsValid() bool {
+	return x.list != nil
+}
+
+var _ protoreflect.List = (*_GenesisState_4_list)(nil)
+
+type _GenesisState_4_list struct {
+	list *[]*v1beta1.Coin
+}
+
+func (x *_GenesisState_4_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_GenesisState_4_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_GenesisState_4_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*v1beta1.Coin)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_GenesisState_4_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*v1beta1.Coin)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_GenesisState_4_list) AppendMutable() protoreflect.Value {
+	v := new(v1beta1.Coin)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_4_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_GenesisState_4_list) NewElement() protoreflect.Value {
+	v := new(v1beta1.Coin)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_4_list) IsValid() bool {
+	return x.list != nil
+}
+
+var _ protoreflect.List = (*_GenesisState_8_list)(nil)
+
+type _GenesisState_8_list struct {
+	list *[]*UnlockQueueGenesis
+}
+
+func (x *_GenesisState_8_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_GenesisState_8_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_GenesisState_8_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*UnlockQueueGenesis)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_GenesisState_8_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*UnlockQueueGenesis)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_GenesisState_8_list) AppendMutable() protoreflect.Value {
+	v := new(UnlockQueueGenesis)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_8_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_GenesisState_8_list) NewElement() protoreflect.Value {
+	v := new(UnlockQueueGenesis)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_8_list) IsValid() bool {
+	return x.list != nil
+}
+
 var (
-	md_GenesisState            protoreflect.MessageDescriptor
-	fd_GenesisState_params     protoreflect.FieldDescriptor
-	fd_GenesisState_validators protoreflect.FieldDescriptor
+	md_GenesisState              protoreflect.MessageDescriptor
+	fd_GenesisState_params       protoreflect.FieldDescriptor
+	fd_GenesisState_validators   protoreflect.FieldDescriptor
+	fd_GenesisState_tokens       protoreflect.FieldDescriptor
+	fd_GenesisState_slashed      protoreflect.FieldDescriptor
+	fd_GenesisState_eth_tx_nonce protoreflect.FieldDescriptor
+	fd_GenesisState_eth_tx_queue protoreflect.FieldDescriptor
+	fd_GenesisState_reward_pool  protoreflect.FieldDescriptor
+	fd_GenesisState_unlock_queue protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -76,6 +1309,12 @@ func init() {
 	md_GenesisState = File_goat_locking_v1_genesis_proto.Messages().ByName("GenesisState")
 	fd_GenesisState_params = md_GenesisState.Fields().ByName("params")
 	fd_GenesisState_validators = md_GenesisState.Fields().ByName("validators")
+	fd_GenesisState_tokens = md_GenesisState.Fields().ByName("tokens")
+	fd_GenesisState_slashed = md_GenesisState.Fields().ByName("slashed")
+	fd_GenesisState_eth_tx_nonce = md_GenesisState.Fields().ByName("eth_tx_nonce")
+	fd_GenesisState_eth_tx_queue = md_GenesisState.Fields().ByName("eth_tx_queue")
+	fd_GenesisState_reward_pool = md_GenesisState.Fields().ByName("reward_pool")
+	fd_GenesisState_unlock_queue = md_GenesisState.Fields().ByName("unlock_queue")
 }
 
 var _ protoreflect.Message = (*fastReflection_GenesisState)(nil)
@@ -87,7 +1326,7 @@ func (x *GenesisState) ProtoReflect() protoreflect.Message {
 }
 
 func (x *GenesisState) slowProtoReflect() protoreflect.Message {
-	mi := &file_goat_locking_v1_genesis_proto_msgTypes[0]
+	mi := &file_goat_locking_v1_genesis_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -155,6 +1394,42 @@ func (x *fastReflection_GenesisState) Range(f func(protoreflect.FieldDescriptor,
 			return
 		}
 	}
+	if len(x.Tokens) != 0 {
+		value := protoreflect.ValueOfList(&_GenesisState_3_list{list: &x.Tokens})
+		if !f(fd_GenesisState_tokens, value) {
+			return
+		}
+	}
+	if len(x.Slashed) != 0 {
+		value := protoreflect.ValueOfList(&_GenesisState_4_list{list: &x.Slashed})
+		if !f(fd_GenesisState_slashed, value) {
+			return
+		}
+	}
+	if x.EthTxNonce != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.EthTxNonce)
+		if !f(fd_GenesisState_eth_tx_nonce, value) {
+			return
+		}
+	}
+	if x.EthTxQueue != nil {
+		value := protoreflect.ValueOfMessage(x.EthTxQueue.ProtoReflect())
+		if !f(fd_GenesisState_eth_tx_queue, value) {
+			return
+		}
+	}
+	if x.RewardPool != nil {
+		value := protoreflect.ValueOfMessage(x.RewardPool.ProtoReflect())
+		if !f(fd_GenesisState_reward_pool, value) {
+			return
+		}
+	}
+	if len(x.UnlockQueue) != 0 {
+		value := protoreflect.ValueOfList(&_GenesisState_8_list{list: &x.UnlockQueue})
+		if !f(fd_GenesisState_unlock_queue, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -174,6 +1449,18 @@ func (x *fastReflection_GenesisState) Has(fd protoreflect.FieldDescriptor) bool 
 		return x.Params != nil
 	case "goat.locking.v1.GenesisState.validators":
 		return len(x.Validators) != 0
+	case "goat.locking.v1.GenesisState.tokens":
+		return len(x.Tokens) != 0
+	case "goat.locking.v1.GenesisState.slashed":
+		return len(x.Slashed) != 0
+	case "goat.locking.v1.GenesisState.eth_tx_nonce":
+		return x.EthTxNonce != uint64(0)
+	case "goat.locking.v1.GenesisState.eth_tx_queue":
+		return x.EthTxQueue != nil
+	case "goat.locking.v1.GenesisState.reward_pool":
+		return x.RewardPool != nil
+	case "goat.locking.v1.GenesisState.unlock_queue":
+		return len(x.UnlockQueue) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.GenesisState"))
@@ -194,6 +1481,18 @@ func (x *fastReflection_GenesisState) Clear(fd protoreflect.FieldDescriptor) {
 		x.Params = nil
 	case "goat.locking.v1.GenesisState.validators":
 		x.Validators = nil
+	case "goat.locking.v1.GenesisState.tokens":
+		x.Tokens = nil
+	case "goat.locking.v1.GenesisState.slashed":
+		x.Slashed = nil
+	case "goat.locking.v1.GenesisState.eth_tx_nonce":
+		x.EthTxNonce = uint64(0)
+	case "goat.locking.v1.GenesisState.eth_tx_queue":
+		x.EthTxQueue = nil
+	case "goat.locking.v1.GenesisState.reward_pool":
+		x.RewardPool = nil
+	case "goat.locking.v1.GenesisState.unlock_queue":
+		x.UnlockQueue = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.GenesisState"))
@@ -218,6 +1517,33 @@ func (x *fastReflection_GenesisState) Get(descriptor protoreflect.FieldDescripto
 			return protoreflect.ValueOfList(&_GenesisState_2_list{})
 		}
 		listValue := &_GenesisState_2_list{list: &x.Validators}
+		return protoreflect.ValueOfList(listValue)
+	case "goat.locking.v1.GenesisState.tokens":
+		if len(x.Tokens) == 0 {
+			return protoreflect.ValueOfList(&_GenesisState_3_list{})
+		}
+		listValue := &_GenesisState_3_list{list: &x.Tokens}
+		return protoreflect.ValueOfList(listValue)
+	case "goat.locking.v1.GenesisState.slashed":
+		if len(x.Slashed) == 0 {
+			return protoreflect.ValueOfList(&_GenesisState_4_list{})
+		}
+		listValue := &_GenesisState_4_list{list: &x.Slashed}
+		return protoreflect.ValueOfList(listValue)
+	case "goat.locking.v1.GenesisState.eth_tx_nonce":
+		value := x.EthTxNonce
+		return protoreflect.ValueOfUint64(value)
+	case "goat.locking.v1.GenesisState.eth_tx_queue":
+		value := x.EthTxQueue
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "goat.locking.v1.GenesisState.reward_pool":
+		value := x.RewardPool
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "goat.locking.v1.GenesisState.unlock_queue":
+		if len(x.UnlockQueue) == 0 {
+			return protoreflect.ValueOfList(&_GenesisState_8_list{})
+		}
+		listValue := &_GenesisState_8_list{list: &x.UnlockQueue}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
@@ -245,6 +1571,24 @@ func (x *fastReflection_GenesisState) Set(fd protoreflect.FieldDescriptor, value
 		lv := value.List()
 		clv := lv.(*_GenesisState_2_list)
 		x.Validators = *clv.list
+	case "goat.locking.v1.GenesisState.tokens":
+		lv := value.List()
+		clv := lv.(*_GenesisState_3_list)
+		x.Tokens = *clv.list
+	case "goat.locking.v1.GenesisState.slashed":
+		lv := value.List()
+		clv := lv.(*_GenesisState_4_list)
+		x.Slashed = *clv.list
+	case "goat.locking.v1.GenesisState.eth_tx_nonce":
+		x.EthTxNonce = value.Uint()
+	case "goat.locking.v1.GenesisState.eth_tx_queue":
+		x.EthTxQueue = value.Message().Interface().(*EthTxQueue)
+	case "goat.locking.v1.GenesisState.reward_pool":
+		x.RewardPool = value.Message().Interface().(*RewardPool)
+	case "goat.locking.v1.GenesisState.unlock_queue":
+		lv := value.List()
+		clv := lv.(*_GenesisState_8_list)
+		x.UnlockQueue = *clv.list
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.GenesisState"))
@@ -276,6 +1620,36 @@ func (x *fastReflection_GenesisState) Mutable(fd protoreflect.FieldDescriptor) p
 		}
 		value := &_GenesisState_2_list{list: &x.Validators}
 		return protoreflect.ValueOfList(value)
+	case "goat.locking.v1.GenesisState.tokens":
+		if x.Tokens == nil {
+			x.Tokens = []*TokenGenesis{}
+		}
+		value := &_GenesisState_3_list{list: &x.Tokens}
+		return protoreflect.ValueOfList(value)
+	case "goat.locking.v1.GenesisState.slashed":
+		if x.Slashed == nil {
+			x.Slashed = []*v1beta1.Coin{}
+		}
+		value := &_GenesisState_4_list{list: &x.Slashed}
+		return protoreflect.ValueOfList(value)
+	case "goat.locking.v1.GenesisState.eth_tx_queue":
+		if x.EthTxQueue == nil {
+			x.EthTxQueue = new(EthTxQueue)
+		}
+		return protoreflect.ValueOfMessage(x.EthTxQueue.ProtoReflect())
+	case "goat.locking.v1.GenesisState.reward_pool":
+		if x.RewardPool == nil {
+			x.RewardPool = new(RewardPool)
+		}
+		return protoreflect.ValueOfMessage(x.RewardPool.ProtoReflect())
+	case "goat.locking.v1.GenesisState.unlock_queue":
+		if x.UnlockQueue == nil {
+			x.UnlockQueue = []*UnlockQueueGenesis{}
+		}
+		value := &_GenesisState_8_list{list: &x.UnlockQueue}
+		return protoreflect.ValueOfList(value)
+	case "goat.locking.v1.GenesisState.eth_tx_nonce":
+		panic(fmt.Errorf("field eth_tx_nonce of message goat.locking.v1.GenesisState is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.GenesisState"))
@@ -295,6 +1669,23 @@ func (x *fastReflection_GenesisState) NewField(fd protoreflect.FieldDescriptor) 
 	case "goat.locking.v1.GenesisState.validators":
 		list := []*Validator{}
 		return protoreflect.ValueOfList(&_GenesisState_2_list{list: &list})
+	case "goat.locking.v1.GenesisState.tokens":
+		list := []*TokenGenesis{}
+		return protoreflect.ValueOfList(&_GenesisState_3_list{list: &list})
+	case "goat.locking.v1.GenesisState.slashed":
+		list := []*v1beta1.Coin{}
+		return protoreflect.ValueOfList(&_GenesisState_4_list{list: &list})
+	case "goat.locking.v1.GenesisState.eth_tx_nonce":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "goat.locking.v1.GenesisState.eth_tx_queue":
+		m := new(EthTxQueue)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "goat.locking.v1.GenesisState.reward_pool":
+		m := new(RewardPool)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "goat.locking.v1.GenesisState.unlock_queue":
+		list := []*UnlockQueueGenesis{}
+		return protoreflect.ValueOfList(&_GenesisState_8_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.GenesisState"))
@@ -374,6 +1765,35 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
 		}
+		if len(x.Tokens) > 0 {
+			for _, e := range x.Tokens {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if len(x.Slashed) > 0 {
+			for _, e := range x.Slashed {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if x.EthTxNonce != 0 {
+			n += 1 + runtime.Sov(uint64(x.EthTxNonce))
+		}
+		if x.EthTxQueue != nil {
+			l = options.Size(x.EthTxQueue)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.RewardPool != nil {
+			l = options.Size(x.RewardPool)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if len(x.UnlockQueue) > 0 {
+			for _, e := range x.UnlockQueue {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -402,6 +1822,87 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.UnlockQueue) > 0 {
+			for iNdEx := len(x.UnlockQueue) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.UnlockQueue[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0x42
+			}
+		}
+		if x.RewardPool != nil {
+			encoded, err := options.Marshal(x.RewardPool)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x3a
+		}
+		if x.EthTxQueue != nil {
+			encoded, err := options.Marshal(x.EthTxQueue)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x32
+		}
+		if x.EthTxNonce != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.EthTxNonce))
+			i--
+			dAtA[i] = 0x28
+		}
+		if len(x.Slashed) > 0 {
+			for iNdEx := len(x.Slashed) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.Slashed[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0x22
+			}
+		}
+		if len(x.Tokens) > 0 {
+			for iNdEx := len(x.Tokens) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.Tokens[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0x1a
+			}
 		}
 		if len(x.Validators) > 0 {
 			for iNdEx := len(x.Validators) - 1; iNdEx >= 0; iNdEx-- {
@@ -552,6 +2053,199 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Tokens", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Tokens = append(x.Tokens, &TokenGenesis{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Tokens[len(x.Tokens)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Slashed", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Slashed = append(x.Slashed, &v1beta1.Coin{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Slashed[len(x.Slashed)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 5:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field EthTxNonce", wireType)
+				}
+				x.EthTxNonce = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.EthTxNonce |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 6:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field EthTxQueue", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.EthTxQueue == nil {
+					x.EthTxQueue = &EthTxQueue{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.EthTxQueue); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 7:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RewardPool", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.RewardPool == nil {
+					x.RewardPool = &RewardPool{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.RewardPool); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 8:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field UnlockQueue", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.UnlockQueue = append(x.UnlockQueue, &UnlockQueueGenesis{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.UnlockQueue[len(x.UnlockQueue)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -600,6 +2294,94 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// UnlockQueueGenesis
+type UnlockQueueGenesis struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Timestamp *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	Unlocks   []*Unlock              `protobuf:"bytes,2,rep,name=unlocks,proto3" json:"unlocks,omitempty"`
+}
+
+func (x *UnlockQueueGenesis) Reset() {
+	*x = UnlockQueueGenesis{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_goat_locking_v1_genesis_proto_msgTypes[0]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UnlockQueueGenesis) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UnlockQueueGenesis) ProtoMessage() {}
+
+// Deprecated: Use UnlockQueueGenesis.ProtoReflect.Descriptor instead.
+func (*UnlockQueueGenesis) Descriptor() ([]byte, []int) {
+	return file_goat_locking_v1_genesis_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *UnlockQueueGenesis) GetTimestamp() *timestamppb.Timestamp {
+	if x != nil {
+		return x.Timestamp
+	}
+	return nil
+}
+
+func (x *UnlockQueueGenesis) GetUnlocks() []*Unlock {
+	if x != nil {
+		return x.Unlocks
+	}
+	return nil
+}
+
+// TokenGenesis
+type TokenGenesis struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Denom string `protobuf:"bytes,1,opt,name=denom,proto3" json:"denom,omitempty"`
+	Token *Token `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
+}
+
+func (x *TokenGenesis) Reset() {
+	*x = TokenGenesis{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_goat_locking_v1_genesis_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *TokenGenesis) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TokenGenesis) ProtoMessage() {}
+
+// Deprecated: Use TokenGenesis.ProtoReflect.Descriptor instead.
+func (*TokenGenesis) Descriptor() ([]byte, []int) {
+	return file_goat_locking_v1_genesis_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *TokenGenesis) GetDenom() string {
+	if x != nil {
+		return x.Denom
+	}
+	return ""
+}
+
+func (x *TokenGenesis) GetToken() *Token {
+	if x != nil {
+		return x.Token
+	}
+	return nil
+}
+
 // GenesisState defines the locking module's genesis state.
 type GenesisState struct {
 	state         protoimpl.MessageState
@@ -607,14 +2389,20 @@ type GenesisState struct {
 	unknownFields protoimpl.UnknownFields
 
 	// params defines all the parameters of the module.
-	Params     *Params      `protobuf:"bytes,1,opt,name=params,proto3" json:"params,omitempty"`
-	Validators []*Validator `protobuf:"bytes,2,rep,name=validators,proto3" json:"validators,omitempty"`
+	Params      *Params               `protobuf:"bytes,1,opt,name=params,proto3" json:"params,omitempty"`
+	Validators  []*Validator          `protobuf:"bytes,2,rep,name=validators,proto3" json:"validators,omitempty"`
+	Tokens      []*TokenGenesis       `protobuf:"bytes,3,rep,name=tokens,proto3" json:"tokens,omitempty"`
+	Slashed     []*v1beta1.Coin       `protobuf:"bytes,4,rep,name=slashed,proto3" json:"slashed,omitempty"`
+	EthTxNonce  uint64                `protobuf:"varint,5,opt,name=eth_tx_nonce,json=ethTxNonce,proto3" json:"eth_tx_nonce,omitempty"`
+	EthTxQueue  *EthTxQueue           `protobuf:"bytes,6,opt,name=eth_tx_queue,json=ethTxQueue,proto3" json:"eth_tx_queue,omitempty"`
+	RewardPool  *RewardPool           `protobuf:"bytes,7,opt,name=reward_pool,json=rewardPool,proto3" json:"reward_pool,omitempty"`
+	UnlockQueue []*UnlockQueueGenesis `protobuf:"bytes,8,rep,name=unlock_queue,json=unlockQueue,proto3" json:"unlock_queue,omitempty"`
 }
 
 func (x *GenesisState) Reset() {
 	*x = GenesisState{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_goat_locking_v1_genesis_proto_msgTypes[0]
+		mi := &file_goat_locking_v1_genesis_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -628,7 +2416,7 @@ func (*GenesisState) ProtoMessage() {}
 
 // Deprecated: Use GenesisState.ProtoReflect.Descriptor instead.
 func (*GenesisState) Descriptor() ([]byte, []int) {
-	return file_goat_locking_v1_genesis_proto_rawDescGZIP(), []int{0}
+	return file_goat_locking_v1_genesis_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *GenesisState) GetParams() *Params {
@@ -645,6 +2433,48 @@ func (x *GenesisState) GetValidators() []*Validator {
 	return nil
 }
 
+func (x *GenesisState) GetTokens() []*TokenGenesis {
+	if x != nil {
+		return x.Tokens
+	}
+	return nil
+}
+
+func (x *GenesisState) GetSlashed() []*v1beta1.Coin {
+	if x != nil {
+		return x.Slashed
+	}
+	return nil
+}
+
+func (x *GenesisState) GetEthTxNonce() uint64 {
+	if x != nil {
+		return x.EthTxNonce
+	}
+	return 0
+}
+
+func (x *GenesisState) GetEthTxQueue() *EthTxQueue {
+	if x != nil {
+		return x.EthTxQueue
+	}
+	return nil
+}
+
+func (x *GenesisState) GetRewardPool() *RewardPool {
+	if x != nil {
+		return x.RewardPool
+	}
+	return nil
+}
+
+func (x *GenesisState) GetUnlockQueue() []*UnlockQueueGenesis {
+	if x != nil {
+		return x.UnlockQueue
+	}
+	return nil
+}
+
 var File_goat_locking_v1_genesis_proto protoreflect.FileDescriptor
 
 var file_goat_locking_v1_genesis_proto_rawDesc = []byte{
@@ -652,33 +2482,81 @@ var file_goat_locking_v1_genesis_proto_rawDesc = []byte{
 	0x31, 0x2f, 0x67, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12,
 	0x0f, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31,
 	0x1a, 0x11, 0x61, 0x6d, 0x69, 0x6e, 0x6f, 0x2f, 0x61, 0x6d, 0x69, 0x6e, 0x6f, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x1a, 0x1e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x62, 0x61, 0x73, 0x65,
+	0x2f, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2f, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x70, 0x72,
 	0x6f, 0x74, 0x6f, 0x1a, 0x1d, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e,
 	0x67, 0x2f, 0x76, 0x31, 0x2f, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x70, 0x72, 0x6f,
 	0x74, 0x6f, 0x1a, 0x1c, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67,
 	0x2f, 0x76, 0x31, 0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f,
-	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x86, 0x01, 0x0a, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73,
+	0x1a, 0x1b, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76,
+	0x31, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x14, 0x67,
+	0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x1a, 0x1f, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x62, 0x75, 0x66, 0x2f, 0x74, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x2e, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x22, 0x90, 0x01, 0x0a, 0x12, 0x55, 0x6e, 0x6c, 0x6f, 0x63, 0x6b, 0x51,
+	0x75, 0x65, 0x75, 0x65, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x12, 0x47, 0x0a, 0x09, 0x74,
+	0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a,
+	0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
+	0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x42, 0x0d, 0xc8, 0xde, 0x1f, 0x00,
+	0x90, 0xdf, 0x1f, 0x01, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x09, 0x74, 0x69, 0x6d, 0x65, 0x73,
+	0x74, 0x61, 0x6d, 0x70, 0x12, 0x31, 0x0a, 0x07, 0x75, 0x6e, 0x6c, 0x6f, 0x63, 0x6b, 0x73, 0x18,
+	0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x17, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x6c, 0x6f, 0x63,
+	0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x6e, 0x6c, 0x6f, 0x63, 0x6b, 0x52, 0x07,
+	0x75, 0x6e, 0x6c, 0x6f, 0x63, 0x6b, 0x73, 0x22, 0x5d, 0x0a, 0x0c, 0x54, 0x6f, 0x6b, 0x65, 0x6e,
+	0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x12, 0x14, 0x0a, 0x05, 0x64, 0x65, 0x6e, 0x6f, 0x6d,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x12, 0x37, 0x0a,
+	0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x16, 0x2e, 0x67,
+	0x6f, 0x61, 0x74, 0x2e, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x54,
+	0x6f, 0x6b, 0x65, 0x6e, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52,
+	0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x22, 0xb1, 0x04, 0x0a, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73,
 	0x69, 0x73, 0x53, 0x74, 0x61, 0x74, 0x65, 0x12, 0x3a, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d,
 	0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x17, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x6c,
 	0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73,
 	0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06, 0x70, 0x61, 0x72,
-	0x61, 0x6d, 0x73, 0x12, 0x3a, 0x0a, 0x0a, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x6f, 0x72,
+	0x61, 0x6d, 0x73, 0x12, 0x45, 0x0a, 0x0a, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x6f, 0x72,
 	0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x6c,
 	0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61,
-	0x74, 0x6f, 0x72, 0x52, 0x0a, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x42,
-	0xbc, 0x01, 0x0a, 0x13, 0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x6c, 0x6f, 0x63,
-	0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x42, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73,
-	0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x39, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e,
-	0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f,
-	0x67, 0x6f, 0x61, 0x74, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x6c, 0x6f,
-	0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x3b, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67,
-	0x76, 0x31, 0xa2, 0x02, 0x03, 0x47, 0x4c, 0x58, 0xaa, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x2e,
-	0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x0f, 0x47, 0x6f, 0x61,
-	0x74, 0x5c, 0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x1b, 0x47,
-	0x6f, 0x61, 0x74, 0x5c, 0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0x5c, 0x47,
-	0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x11, 0x47, 0x6f, 0x61,
-	0x74, 0x3a, 0x3a, 0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x74, 0x6f, 0x72, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x0a,
+	0x76, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x12, 0x35, 0x0a, 0x06, 0x74, 0x6f,
+	0x6b, 0x65, 0x6e, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x67, 0x6f, 0x61,
+	0x74, 0x2e, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x54, 0x6f, 0x6b,
+	0x65, 0x6e, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x52, 0x06, 0x74, 0x6f, 0x6b, 0x65, 0x6e,
+	0x73, 0x12, 0x6a, 0x0a, 0x07, 0x73, 0x6c, 0x61, 0x73, 0x68, 0x65, 0x64, 0x18, 0x04, 0x20, 0x03,
+	0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65,
+	0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x35, 0xc8,
+	0xde, 0x1f, 0x00, 0xaa, 0xdf, 0x1f, 0x28, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f,
+	0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d,
+	0x73, 0x64, 0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0xa8,
+	0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x07, 0x73, 0x6c, 0x61, 0x73, 0x68, 0x65, 0x64, 0x12, 0x20, 0x0a,
+	0x0c, 0x65, 0x74, 0x68, 0x5f, 0x74, 0x78, 0x5f, 0x6e, 0x6f, 0x6e, 0x63, 0x65, 0x18, 0x05, 0x20,
+	0x01, 0x28, 0x04, 0x52, 0x0a, 0x65, 0x74, 0x68, 0x54, 0x78, 0x4e, 0x6f, 0x6e, 0x63, 0x65, 0x12,
+	0x48, 0x0a, 0x0c, 0x65, 0x74, 0x68, 0x5f, 0x74, 0x78, 0x5f, 0x71, 0x75, 0x65, 0x75, 0x65, 0x18,
+	0x06, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1b, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x6c, 0x6f, 0x63,
+	0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x45, 0x74, 0x68, 0x54, 0x78, 0x51, 0x75, 0x65,
+	0x75, 0x65, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x0a, 0x65,
+	0x74, 0x68, 0x54, 0x78, 0x51, 0x75, 0x65, 0x75, 0x65, 0x12, 0x47, 0x0a, 0x0b, 0x72, 0x65, 0x77,
+	0x61, 0x72, 0x64, 0x5f, 0x70, 0x6f, 0x6f, 0x6c, 0x18, 0x07, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1b,
+	0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31,
+	0x2e, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x50, 0x6f, 0x6f, 0x6c, 0x42, 0x09, 0xc8, 0xde, 0x1f,
+	0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x0a, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x50, 0x6f,
+	0x6f, 0x6c, 0x12, 0x46, 0x0a, 0x0c, 0x75, 0x6e, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x71, 0x75, 0x65,
+	0x75, 0x65, 0x18, 0x08, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e,
+	0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x6e, 0x6c, 0x6f, 0x63,
+	0x6b, 0x51, 0x75, 0x65, 0x75, 0x65, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x52, 0x0b, 0x75,
+	0x6e, 0x6c, 0x6f, 0x63, 0x6b, 0x51, 0x75, 0x65, 0x75, 0x65, 0x42, 0xbc, 0x01, 0x0a, 0x13, 0x63,
+	0x6f, 0x6d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2e,
+	0x76, 0x31, 0x42, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f,
+	0x50, 0x01, 0x5a, 0x39, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67,
+	0x6f, 0x61, 0x74, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f,
+	0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67,
+	0x2f, 0x76, 0x31, 0x3b, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x76, 0x31, 0xa2, 0x02, 0x03,
+	0x47, 0x4c, 0x58, 0xaa, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x2e, 0x4c, 0x6f, 0x63, 0x6b, 0x69,
+	0x6e, 0x67, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x4c, 0x6f, 0x63,
+	0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x1b, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x4c,
+	0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74,
+	0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x11, 0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x4c, 0x6f,
+	0x63, 0x6b, 0x69, 0x6e, 0x67, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x33,
 }
 
 var (
@@ -693,20 +2571,36 @@ func file_goat_locking_v1_genesis_proto_rawDescGZIP() []byte {
 	return file_goat_locking_v1_genesis_proto_rawDescData
 }
 
-var file_goat_locking_v1_genesis_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_goat_locking_v1_genesis_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_goat_locking_v1_genesis_proto_goTypes = []interface{}{
-	(*GenesisState)(nil), // 0: goat.locking.v1.GenesisState
-	(*Params)(nil),       // 1: goat.locking.v1.Params
-	(*Validator)(nil),    // 2: goat.locking.v1.Validator
+	(*UnlockQueueGenesis)(nil),    // 0: goat.locking.v1.UnlockQueueGenesis
+	(*TokenGenesis)(nil),          // 1: goat.locking.v1.TokenGenesis
+	(*GenesisState)(nil),          // 2: goat.locking.v1.GenesisState
+	(*timestamppb.Timestamp)(nil), // 3: google.protobuf.Timestamp
+	(*Unlock)(nil),                // 4: goat.locking.v1.Unlock
+	(*Token)(nil),                 // 5: goat.locking.v1.Token
+	(*Params)(nil),                // 6: goat.locking.v1.Params
+	(*Validator)(nil),             // 7: goat.locking.v1.Validator
+	(*v1beta1.Coin)(nil),          // 8: cosmos.base.v1beta1.Coin
+	(*EthTxQueue)(nil),            // 9: goat.locking.v1.EthTxQueue
+	(*RewardPool)(nil),            // 10: goat.locking.v1.RewardPool
 }
 var file_goat_locking_v1_genesis_proto_depIdxs = []int32{
-	1, // 0: goat.locking.v1.GenesisState.params:type_name -> goat.locking.v1.Params
-	2, // 1: goat.locking.v1.GenesisState.validators:type_name -> goat.locking.v1.Validator
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	3,  // 0: goat.locking.v1.UnlockQueueGenesis.timestamp:type_name -> google.protobuf.Timestamp
+	4,  // 1: goat.locking.v1.UnlockQueueGenesis.unlocks:type_name -> goat.locking.v1.Unlock
+	5,  // 2: goat.locking.v1.TokenGenesis.token:type_name -> goat.locking.v1.Token
+	6,  // 3: goat.locking.v1.GenesisState.params:type_name -> goat.locking.v1.Params
+	7,  // 4: goat.locking.v1.GenesisState.validators:type_name -> goat.locking.v1.Validator
+	1,  // 5: goat.locking.v1.GenesisState.tokens:type_name -> goat.locking.v1.TokenGenesis
+	8,  // 6: goat.locking.v1.GenesisState.slashed:type_name -> cosmos.base.v1beta1.Coin
+	9,  // 7: goat.locking.v1.GenesisState.eth_tx_queue:type_name -> goat.locking.v1.EthTxQueue
+	10, // 8: goat.locking.v1.GenesisState.reward_pool:type_name -> goat.locking.v1.RewardPool
+	0,  // 9: goat.locking.v1.GenesisState.unlock_queue:type_name -> goat.locking.v1.UnlockQueueGenesis
+	10, // [10:10] is the sub-list for method output_type
+	10, // [10:10] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
 func init() { file_goat_locking_v1_genesis_proto_init() }
@@ -716,8 +2610,33 @@ func file_goat_locking_v1_genesis_proto_init() {
 	}
 	file_goat_locking_v1_locking_proto_init()
 	file_goat_locking_v1_params_proto_init()
+	file_goat_locking_v1_types_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_goat_locking_v1_genesis_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UnlockQueueGenesis); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_goat_locking_v1_genesis_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*TokenGenesis); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_goat_locking_v1_genesis_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GenesisState); i {
 			case 0:
 				return &v.state
@@ -736,7 +2655,7 @@ func file_goat_locking_v1_genesis_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_goat_locking_v1_genesis_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   1,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

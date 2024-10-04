@@ -805,7 +805,6 @@ var (
 	md_SigningInfo                       protoreflect.MessageDescriptor
 	fd_SigningInfo_start_height          protoreflect.FieldDescriptor
 	fd_SigningInfo_jailed_until          protoreflect.FieldDescriptor
-	fd_SigningInfo_tombstoned            protoreflect.FieldDescriptor
 	fd_SigningInfo_missed_blocks_counter protoreflect.FieldDescriptor
 )
 
@@ -814,7 +813,6 @@ func init() {
 	md_SigningInfo = File_goat_locking_v1_locking_proto.Messages().ByName("SigningInfo")
 	fd_SigningInfo_start_height = md_SigningInfo.Fields().ByName("start_height")
 	fd_SigningInfo_jailed_until = md_SigningInfo.Fields().ByName("jailed_until")
-	fd_SigningInfo_tombstoned = md_SigningInfo.Fields().ByName("tombstoned")
 	fd_SigningInfo_missed_blocks_counter = md_SigningInfo.Fields().ByName("missed_blocks_counter")
 }
 
@@ -895,12 +893,6 @@ func (x *fastReflection_SigningInfo) Range(f func(protoreflect.FieldDescriptor, 
 			return
 		}
 	}
-	if x.Tombstoned != false {
-		value := protoreflect.ValueOfBool(x.Tombstoned)
-		if !f(fd_SigningInfo_tombstoned, value) {
-			return
-		}
-	}
 	if x.MissedBlocksCounter != int64(0) {
 		value := protoreflect.ValueOfInt64(x.MissedBlocksCounter)
 		if !f(fd_SigningInfo_missed_blocks_counter, value) {
@@ -926,8 +918,6 @@ func (x *fastReflection_SigningInfo) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.StartHeight != int64(0)
 	case "goat.locking.v1.SigningInfo.jailed_until":
 		return x.JailedUntil != nil
-	case "goat.locking.v1.SigningInfo.tombstoned":
-		return x.Tombstoned != false
 	case "goat.locking.v1.SigningInfo.missed_blocks_counter":
 		return x.MissedBlocksCounter != int64(0)
 	default:
@@ -950,8 +940,6 @@ func (x *fastReflection_SigningInfo) Clear(fd protoreflect.FieldDescriptor) {
 		x.StartHeight = int64(0)
 	case "goat.locking.v1.SigningInfo.jailed_until":
 		x.JailedUntil = nil
-	case "goat.locking.v1.SigningInfo.tombstoned":
-		x.Tombstoned = false
 	case "goat.locking.v1.SigningInfo.missed_blocks_counter":
 		x.MissedBlocksCounter = int64(0)
 	default:
@@ -976,9 +964,6 @@ func (x *fastReflection_SigningInfo) Get(descriptor protoreflect.FieldDescriptor
 	case "goat.locking.v1.SigningInfo.jailed_until":
 		value := x.JailedUntil
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "goat.locking.v1.SigningInfo.tombstoned":
-		value := x.Tombstoned
-		return protoreflect.ValueOfBool(value)
 	case "goat.locking.v1.SigningInfo.missed_blocks_counter":
 		value := x.MissedBlocksCounter
 		return protoreflect.ValueOfInt64(value)
@@ -1006,8 +991,6 @@ func (x *fastReflection_SigningInfo) Set(fd protoreflect.FieldDescriptor, value 
 		x.StartHeight = value.Int()
 	case "goat.locking.v1.SigningInfo.jailed_until":
 		x.JailedUntil = value.Message().Interface().(*timestamppb.Timestamp)
-	case "goat.locking.v1.SigningInfo.tombstoned":
-		x.Tombstoned = value.Bool()
 	case "goat.locking.v1.SigningInfo.missed_blocks_counter":
 		x.MissedBlocksCounter = value.Int()
 	default:
@@ -1037,8 +1020,6 @@ func (x *fastReflection_SigningInfo) Mutable(fd protoreflect.FieldDescriptor) pr
 		return protoreflect.ValueOfMessage(x.JailedUntil.ProtoReflect())
 	case "goat.locking.v1.SigningInfo.start_height":
 		panic(fmt.Errorf("field start_height of message goat.locking.v1.SigningInfo is not mutable"))
-	case "goat.locking.v1.SigningInfo.tombstoned":
-		panic(fmt.Errorf("field tombstoned of message goat.locking.v1.SigningInfo is not mutable"))
 	case "goat.locking.v1.SigningInfo.missed_blocks_counter":
 		panic(fmt.Errorf("field missed_blocks_counter of message goat.locking.v1.SigningInfo is not mutable"))
 	default:
@@ -1059,8 +1040,6 @@ func (x *fastReflection_SigningInfo) NewField(fd protoreflect.FieldDescriptor) p
 	case "goat.locking.v1.SigningInfo.jailed_until":
 		m := new(timestamppb.Timestamp)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "goat.locking.v1.SigningInfo.tombstoned":
-		return protoreflect.ValueOfBool(false)
 	case "goat.locking.v1.SigningInfo.missed_blocks_counter":
 		return protoreflect.ValueOfInt64(int64(0))
 	default:
@@ -1139,9 +1118,6 @@ func (x *fastReflection_SigningInfo) ProtoMethods() *protoiface.Methods {
 			l = options.Size(x.JailedUntil)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.Tombstoned {
-			n += 2
-		}
 		if x.MissedBlocksCounter != 0 {
 			n += 1 + runtime.Sov(uint64(x.MissedBlocksCounter))
 		}
@@ -1177,17 +1153,7 @@ func (x *fastReflection_SigningInfo) ProtoMethods() *protoiface.Methods {
 		if x.MissedBlocksCounter != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.MissedBlocksCounter))
 			i--
-			dAtA[i] = 0x30
-		}
-		if x.Tombstoned {
-			i--
-			if x.Tombstoned {
-				dAtA[i] = 1
-			} else {
-				dAtA[i] = 0
-			}
-			i--
-			dAtA[i] = 0x28
+			dAtA[i] = 0x18
 		}
 		if x.JailedUntil != nil {
 			encoded, err := options.Marshal(x.JailedUntil)
@@ -1201,12 +1167,12 @@ func (x *fastReflection_SigningInfo) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], encoded)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
-			dAtA[i] = 0x22
+			dAtA[i] = 0x12
 		}
 		if x.StartHeight != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.StartHeight))
 			i--
-			dAtA[i] = 0x10
+			dAtA[i] = 0x8
 		}
 		if input.Buf != nil {
 			input.Buf = append(input.Buf, dAtA...)
@@ -1257,7 +1223,7 @@ func (x *fastReflection_SigningInfo) ProtoMethods() *protoiface.Methods {
 				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: SigningInfo: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
-			case 2:
+			case 1:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field StartHeight", wireType)
 				}
@@ -1276,7 +1242,7 @@ func (x *fastReflection_SigningInfo) ProtoMethods() *protoiface.Methods {
 						break
 					}
 				}
-			case 4:
+			case 2:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field JailedUntil", wireType)
 				}
@@ -1312,27 +1278,7 @@ func (x *fastReflection_SigningInfo) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
-			case 5:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Tombstoned", wireType)
-				}
-				var v int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					v |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				x.Tombstoned = bool(v != 0)
-			case 6:
+			case 3:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field MissedBlocksCounter", wireType)
 				}
@@ -1551,16 +1497,12 @@ type SigningInfo struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Height at which validator was first a candidate OR was un-jailed
-	StartHeight int64 `protobuf:"varint,2,opt,name=start_height,json=startHeight,proto3" json:"start_height,omitempty"`
+	StartHeight int64 `protobuf:"varint,1,opt,name=start_height,json=startHeight,proto3" json:"start_height,omitempty"`
 	// Timestamp until which the validator is jailed due to liveness downtime.
-	JailedUntil *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=jailed_until,json=jailedUntil,proto3" json:"jailed_until,omitempty"`
-	// Whether or not a validator has been tombstoned (killed out of validator
-	// set). It is set once the validator commits an equivocation or for any other
-	// configured misbehavior.
-	Tombstoned bool `protobuf:"varint,5,opt,name=tombstoned,proto3" json:"tombstoned,omitempty"`
+	JailedUntil *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=jailed_until,json=jailedUntil,proto3" json:"jailed_until,omitempty"`
 	// A counter of missed (unsigned) blocks. It is used to avoid unnecessary
 	// reads in the missed block bitmap.
-	MissedBlocksCounter int64 `protobuf:"varint,6,opt,name=missed_blocks_counter,json=missedBlocksCounter,proto3" json:"missed_blocks_counter,omitempty"`
+	MissedBlocksCounter int64 `protobuf:"varint,3,opt,name=missed_blocks_counter,json=missedBlocksCounter,proto3" json:"missed_blocks_counter,omitempty"`
 }
 
 func (x *SigningInfo) Reset() {
@@ -1595,13 +1537,6 @@ func (x *SigningInfo) GetJailedUntil() *timestamppb.Timestamp {
 		return x.JailedUntil
 	}
 	return nil
-}
-
-func (x *SigningInfo) GetTombstoned() bool {
-	if x != nil {
-		return x.Tombstoned
-	}
-	return false
 }
 
 func (x *SigningInfo) GetMissedBlocksCounter() int64 {
@@ -1649,18 +1584,16 @@ var file_goat_locking_v1_locking_proto_rawDesc = []byte{
 	0x73, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x20, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x6c,
 	0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61,
 	0x74, 0x6f, 0x72, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75,
-	0x73, 0x22, 0xd8, 0x01, 0x0a, 0x0b, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x66,
+	0x73, 0x22, 0xb8, 0x01, 0x0a, 0x0b, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x66,
 	0x6f, 0x12, 0x21, 0x0a, 0x0c, 0x73, 0x74, 0x61, 0x72, 0x74, 0x5f, 0x68, 0x65, 0x69, 0x67, 0x68,
-	0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0b, 0x73, 0x74, 0x61, 0x72, 0x74, 0x48, 0x65,
+	0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0b, 0x73, 0x74, 0x61, 0x72, 0x74, 0x48, 0x65,
 	0x69, 0x67, 0x68, 0x74, 0x12, 0x4c, 0x0a, 0x0c, 0x6a, 0x61, 0x69, 0x6c, 0x65, 0x64, 0x5f, 0x75,
-	0x6e, 0x74, 0x69, 0x6c, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f,
+	0x6e, 0x74, 0x69, 0x6c, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f,
 	0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d,
 	0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x42, 0x0d, 0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01,
 	0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x0b, 0x6a, 0x61, 0x69, 0x6c, 0x65, 0x64, 0x55, 0x6e, 0x74,
-	0x69, 0x6c, 0x12, 0x1e, 0x0a, 0x0a, 0x74, 0x6f, 0x6d, 0x62, 0x73, 0x74, 0x6f, 0x6e, 0x65, 0x64,
-	0x18, 0x05, 0x20, 0x01, 0x28, 0x08, 0x52, 0x0a, 0x74, 0x6f, 0x6d, 0x62, 0x73, 0x74, 0x6f, 0x6e,
-	0x65, 0x64, 0x12, 0x32, 0x0a, 0x15, 0x6d, 0x69, 0x73, 0x73, 0x65, 0x64, 0x5f, 0x62, 0x6c, 0x6f,
-	0x63, 0x6b, 0x73, 0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x65, 0x72, 0x18, 0x06, 0x20, 0x01, 0x28,
+	0x69, 0x6c, 0x12, 0x32, 0x0a, 0x15, 0x6d, 0x69, 0x73, 0x73, 0x65, 0x64, 0x5f, 0x62, 0x6c, 0x6f,
+	0x63, 0x6b, 0x73, 0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x65, 0x72, 0x18, 0x03, 0x20, 0x01, 0x28,
 	0x03, 0x52, 0x13, 0x6d, 0x69, 0x73, 0x73, 0x65, 0x64, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x73, 0x43,
 	0x6f, 0x75, 0x6e, 0x74, 0x65, 0x72, 0x3a, 0x04, 0xe8, 0xa0, 0x1f, 0x01, 0x2a, 0xa5, 0x02, 0x0a,
 	0x0f, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73,

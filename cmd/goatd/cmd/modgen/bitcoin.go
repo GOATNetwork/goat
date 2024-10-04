@@ -108,10 +108,6 @@ func Bitcoin() *cobra.Command {
 						return fmt.Errorf("invalid height: %s", args[0])
 					}
 
-					if genesis.Queue == nil {
-						genesis.Queue = &types.ExecuableQueue{}
-					}
-
 					genesis.BlockHashes = make([][]byte, 0)
 					for idx, hash := range args[1:] {
 						if idx != 0 {
@@ -125,7 +121,7 @@ func Bitcoin() *cobra.Command {
 					}
 					slices.Reverse(genesis.BlockHashes) // tip is first
 					genesis.BlockTip = start
-					genesis.Queue.BlockNumber = start
+					genesis.EthTxQueue.BlockNumber = start
 				}
 				return genesis.Validate()
 			}); err != nil {

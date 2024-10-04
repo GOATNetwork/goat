@@ -41,6 +41,27 @@ func (k Keeper) Lock(ctx context.Context, reqs []*ethtypes.GoatLock) error {
 	return nil
 }
 
+func (k Keeper) thresholdList(ctx context.Context) (sdktypes.Coins, error) {
+	iter, err := k.Tokens.Iterate(sdktypes.UnwrapSDKContext(ctx), nil)
+	if err != nil {
+		return nil, err
+	}
+	defer iter.Close()
+
+	res := sdktypes.Coins{}
+	for ; iter.Valid(); iter.Next() {
+		kv, err := iter.KeyValue()
+		if err != nil {
+			return nil, err
+		}
+		if !kv.Value.Threshold.IsZero() {
+			res = append(res, sdktypes.NewCoin(kv.Key, kv.Value.Threshold))
+		}
+	}
+
+	return res.Sort(), nil
+}
+
 func (k Keeper) lock(ctx context.Context, target common.Address, coins sdktypes.Coins, param *types.Params) error {
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
 
@@ -65,11 +86,13 @@ func (k Keeper) lock(ctx context.Context, target common.Address, coins sdktypes.
 				return err
 			}
 
-			power := math.NewIntFromUint64(token.Weight).Mul(coin.Amount).Quo(types.PowerReduction)
-			if !power.IsUint64() {
-				return types.ErrInvalid.Wrapf("power too large: %s", power)
+			if token.Weight > 0 {
+				power := math.NewIntFromUint64(token.Weight).Mul(coin.Amount).Quo(types.PowerReduction)
+				if !power.IsUint64() {
+					return types.ErrInvalid.Wrapf("power too large: %s", power)
+				}
+				validator.Power += power.Uint64()
 			}
-			validator.Power += power.Uint64()
 
 			pair := collections.Join(coin.Denom, valdtAddr)
 			val, err := k.Locking.Get(sdkctx, pair)
@@ -107,12 +130,12 @@ func (k Keeper) lock(ctx context.Context, target common.Address, coins sdktypes.
 			validator.Power += power.Uint64()
 		}
 
-		threshold, err := k.ThresholdList(sdkctx)
+		threshold, err := k.thresholdList(sdkctx)
 		if err != nil {
 			return err
 		}
 
-		if validator.Locking.IsAllGTE(threshold) {
+		if validator.Locking.IsAllGTE(threshold) { // todo: jailed time check
 			validator.Status = types.ValidatorStatus_Pending
 
 			for _, coin := range validator.Locking {
