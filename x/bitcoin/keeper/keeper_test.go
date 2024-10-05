@@ -11,7 +11,6 @@ import (
 	"github.com/goatnetwork/goat/x/bitcoin/keeper"
 	"github.com/goatnetwork/goat/x/bitcoin/mock"
 	"github.com/goatnetwork/goat/x/bitcoin/types"
-	goattypes "github.com/goatnetwork/goat/x/goat/types"
 	relayer "github.com/goatnetwork/goat/x/relayer/types"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/suite"
@@ -410,7 +409,7 @@ func (suite *KeeperTestSuite) TestDequeueBitcoinModuleTx() {
 }
 
 func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
-	withdrawals1 := []*goattypes.WithdrawalReq{
+	withdrawals1 := []*ethtypes.GoatWithdrawal{
 		{
 			Id:         0,
 			Amount:     1,
@@ -459,7 +458,7 @@ func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
 		Status:        types.WITHDRAWAL_STATUS_PENDING,
 	})
 
-	withdrawals2 := []*goattypes.WithdrawalReq{
+	withdrawals2 := []*ethtypes.GoatWithdrawal{
 		{
 			Id:         3,
 			Amount:     1,
@@ -468,7 +467,7 @@ func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
 		},
 	}
 
-	rbf1 := []*goattypes.ReplaceByFeeReq{
+	rbf1 := []*ethtypes.ReplaceByFee{
 		{Id: 2, MaxTxPrice: 2},
 	}
 
@@ -498,7 +497,7 @@ func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
 	wd2.Status = types.WITHDRAWAL_STATUS_PROCESSING
 	suite.Require().NoError(suite.Keeper.Withdrawals.Set(suite.Context, 2, wd2))
 
-	rbf2 := []*goattypes.ReplaceByFeeReq{
+	rbf2 := []*ethtypes.ReplaceByFee{
 		{Id: 2, MaxTxPrice: 3},
 	}
 
@@ -515,7 +514,7 @@ func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
 		Status:        types.WITHDRAWAL_STATUS_PROCESSING,
 	})
 
-	cancel1 := []*goattypes.Cancel1Req{
+	cancel1 := []*ethtypes.Cancel1{
 		{Id: 2},
 		{Id: 3},
 	}

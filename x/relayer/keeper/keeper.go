@@ -16,8 +16,8 @@ import (
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
 	"github.com/kelindar/bitmap"
 
+	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
-	goattypes "github.com/goatnetwork/goat/x/goat/types"
 	"github.com/goatnetwork/goat/x/relayer/types"
 )
 
@@ -148,13 +148,16 @@ func (k Keeper) VerifyProposal(ctx context.Context, req types.IVoteMsg, verifyFn
 		if err := k.Relayer.Set(ctx, relayer); err != nil {
 			return 0, err
 		}
+		k.Logger().Info("new proposer is accepted implicitly", "epoch", relayer.Epoch, "proposer", relayer.Proposer)
+		sdkctx.EventManager().EmitEvent(types.AcceptedProposerEvent(relayer.Proposer, relayer.Epoch))
 	}
 
 	return sequence, nil
 }
 
 func (k Keeper) VerifyNonProposal(ctx context.Context, req types.INonVoteMsg) (types.IRelayer, error) {
-	relayer, err := k.Relayer.Get(ctx)
+	sdkctx := sdktypes.UnwrapSDKContext(ctx)
+	relayer, err := k.Relayer.Get(sdkctx)
 	if err != nil {
 		return nil, err
 	}
@@ -166,9 +169,11 @@ func (k Keeper) VerifyNonProposal(ctx context.Context, req types.INonVoteMsg) (t
 	// As long as the proposer sends a valid tx, it should be considered that the proposer is accepted.
 	if !relayer.ProposerAccepted {
 		relayer.ProposerAccepted = true
-		if err := k.Relayer.Set(ctx, relayer); err != nil {
+		if err := k.Relayer.Set(sdkctx, relayer); err != nil {
 			return nil, err
 		}
+		k.Logger().Info("new proposer is accepted implicitly", "epoch", relayer.Epoch, "proposer", relayer.Proposer)
+		sdkctx.EventManager().EmitEvent(types.AcceptedProposerEvent(relayer.Proposer, relayer.Epoch))
 	}
 
 	return &relayer, nil
@@ -341,13 +346,13 @@ func (k Keeper) GetCurrentProposer(ctx context.Context) (sdktypes.AccAddress, er
 	return k.AddrCodec.StringToBytes(relayer.Proposer)
 }
 
-func (k Keeper) ProcessRelayerRequest(ctx context.Context, adds []*goattypes.AddVoterReq, rms []*goattypes.RemoveVoterReq) error {
+func (k Keeper) ProcessRelayerRequest(ctx context.Context, adds []*ethtypes.AddVoter, rms []*ethtypes.RemoveVoter) error {
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
 	events := make(sdktypes.Events, 0, len(adds)+len(rms))
 
 	height := uint64(sdkctx.BlockHeight())
 	for _, add := range adds {
-		addr, err := k.AddrCodec.BytesToString(add.Voter)
+		addr, err := k.AddrCodec.BytesToString(add.Voter[:])
 		if err != nil {
 			return err
 		}
@@ -359,8 +364,8 @@ func (k Keeper) ProcessRelayerRequest(ctx context.Context, adds []*goattypes.Add
 			continue
 		}
 		if err := k.Voters.Set(sdkctx, addr, types.Voter{
-			Address: add.Voter,
-			VoteKey: add.PubkeyHash,
+			Address: add.Voter.Bytes(),
+			VoteKey: add.Pubkey.Bytes(),
 			Height:  height,
 			Status:  types.VOTER_STATUS_PENDING,
 		}); err != nil {
@@ -388,7 +393,7 @@ func (k Keeper) ProcessRelayerRequest(ctx context.Context, adds []*goattypes.Add
 
 	active := len(relayer.Voters) + 1 - len(queue.OffBoarding)
 	for _, rm := range rms {
-		addr, err := k.AddrCodec.BytesToString(rm.Voter)
+		addr, err := k.AddrCodec.BytesToString(rm.Voter.Bytes())
 		if err != nil {
 			return err
 		}

@@ -15,12 +15,6 @@ type AccountKeeper interface {
 	NewAccountWithAddress(ctx context.Context, addr sdk.AccAddress) sdk.AccountI
 }
 
-// ParamSubspace defines the expected Subspace interface for parameters.
-type ParamSubspace interface {
-	Get(context.Context, []byte, interface{})
-	Set(context.Context, []byte, interface{})
-}
-
 type IVoteMsg interface {
 	GetProposer() string
 	GetVote() *Votes

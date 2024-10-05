@@ -65,8 +65,6 @@ func (q queryServer) Voters(ctx context.Context, req *types.QueryVotersRequest) 
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	// todo: Pagination
-
 	iter, err := q.k.Voters.Iterate(ctx, nil)
 	if err != nil {
 		return nil, err

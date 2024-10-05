@@ -16,7 +16,6 @@ import (
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 	"github.com/goatnetwork/goat/x/bitcoin/types"
-	goattypes "github.com/goatnetwork/goat/x/goat/types"
 	relayertypes "github.com/goatnetwork/goat/x/relayer/types"
 )
 
@@ -282,7 +281,7 @@ func (k Keeper) DequeueBitcoinModuleTx(ctx context.Context) (txs []*ethtypes.Tra
 	return txs, nil
 }
 
-func (k Keeper) ProcessBridgeRequest(ctx context.Context, withdrawals []*goattypes.WithdrawalReq, rbf []*goattypes.ReplaceByFeeReq, cancel1 []*goattypes.Cancel1Req) error {
+func (k Keeper) ProcessBridgeRequest(ctx context.Context, withdrawals []*ethtypes.GoatWithdrawal, rbf []*ethtypes.ReplaceByFee, cancel1 []*ethtypes.Cancel1) error {
 	reqLens := len(withdrawals) + len(rbf) + len(cancel1)
 	if reqLens == 0 {
 		return nil

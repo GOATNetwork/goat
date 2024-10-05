@@ -134,6 +134,7 @@ func (k msgServer) AcceptProposer(ctx context.Context, req *types.MsgAcceptPropo
 		return nil, err
 	}
 
+	k.Logger().Info("new proposer is accepted", "epoch", relayer.Epoch, "proposer", relayer.Proposer)
 	sdkctx.EventManager().EmitEvent(types.AcceptedProposerEvent(relayer.Proposer, relayer.Epoch))
 	return &types.MsgAcceptProposerResponse{}, nil
 }
