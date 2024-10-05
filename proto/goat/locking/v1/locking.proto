@@ -26,48 +26,47 @@ enum ValidatorStatus {
   VALIDATOR_STATUS_INACTIVE = 5 [(gogoproto.enumvalue_customname) = "Inactive"];
 }
 
+// SigningInfo
+message SigningInfo {
+  // offset of the current sign window
+  int64 offset = 1;
+
+  // missed of the current sign window
+  int64 missed = 2;
+
+  // Timestamp until which the validator is jailed due to liveness downtime.
+  google.protobuf.Timestamp jailed_until = 3 [
+    (gogoproto.stdtime) = true,
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
 // Validator
 message Validator {
   bytes pubkey = 1;
   uint64 power = 2;
-
   // the total locking
   repeated cosmos.base.v1beta1.Coin locking = 3 [
     (amino.dont_omitempty) = true,
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
-
   // unclaimed goat reward
-  string goat_reward = 4 [
+  string reward = 4 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false
   ];
-
   // unclaimed gas fee rewrad
   string gas_reward = 5 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false
   ];
-
   ValidatorStatus status = 6;
-}
-
-// SigningInfo
-message SigningInfo {
-  option (gogoproto.equal) = true;
-
-  // Height at which validator was first a candidate OR was un-jailed
-  int64 start_height = 1;
-  // Timestamp until which the validator is jailed due to liveness downtime.
-  google.protobuf.Timestamp jailed_until = 2 [
-    (gogoproto.stdtime) = true,
+  SigningInfo signing_info = 7 [
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
-  // A counter of missed (unsigned) blocks. It is used to avoid unnecessary
-  // reads in the missed block bitmap.
-  int64 missed_blocks_counter = 3;
 }

@@ -83,13 +83,11 @@ func (k Keeper) distributeReward(ctx context.Context) error {
 		return errors.New("invalid zero power")
 	}
 
+	remainGas, remainReward := pool.Gas.BigInt(), pool.Goat.BigInt()
 	// Here we send reward to all validators even if it didn't vote for the block
 	// it prevents proposer only including 2/3 votes to get more reward
 	for _, voteInfo := range sdkctx.VoteInfos() {
 		power := math.LegacyNewDec(voteInfo.Validator.Power).QuoTruncate(math.LegacyNewDec(totalPower))
-		if power.IsZero() {
-			continue
-		}
 
 		validator, err := k.Validators.Get(sdkctx, voteInfo.Validator.Address)
 		if err != nil {
@@ -98,17 +96,20 @@ func (k Keeper) distributeReward(ctx context.Context) error {
 
 		if !pool.Gas.IsZero() {
 			share := math.LegacyNewDecFromBigInt(pool.Gas.BigInt()).MulTruncate(power).TruncateInt()
+			remainGas.Sub(remainGas, share.BigIntMut())
 			validator.GasReward = validator.GasReward.Add(share)
 		}
 
 		if !pool.Goat.IsZero() {
 			share := math.LegacyNewDecFromBigInt(pool.Goat.BigInt()).MulTruncate(power).TruncateInt()
-			validator.GoatReward = validator.GoatReward.Add(share)
+			remainReward.Sub(remainReward, share.BigIntMut())
+			validator.Reward = validator.Reward.Add(share)
 		}
 	}
 
-	pool.Gas = math.ZeroInt()
-	pool.Goat = math.ZeroInt()
+	// give back the dust to pool again
+	pool.Gas = math.NewIntFromBigIntMut(remainGas)
+	pool.Goat = math.NewIntFromBigIntMut(remainReward)
 	if err := k.RewardPool.Set(sdkctx, pool); err != nil {
 		return err
 	}

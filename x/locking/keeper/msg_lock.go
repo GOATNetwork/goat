@@ -41,27 +41,6 @@ func (k Keeper) Lock(ctx context.Context, reqs []*ethtypes.GoatLock) error {
 	return nil
 }
 
-func (k Keeper) thresholdList(ctx context.Context) (sdktypes.Coins, error) {
-	iter, err := k.Tokens.Iterate(sdktypes.UnwrapSDKContext(ctx), nil)
-	if err != nil {
-		return nil, err
-	}
-	defer iter.Close()
-
-	res := sdktypes.Coins{}
-	for ; iter.Valid(); iter.Next() {
-		kv, err := iter.KeyValue()
-		if err != nil {
-			return nil, err
-		}
-		if !kv.Value.Threshold.IsZero() {
-			res = append(res, sdktypes.NewCoin(kv.Key, kv.Value.Threshold))
-		}
-	}
-
-	return res.Sort(), nil
-}
-
 func (k Keeper) lock(ctx context.Context, target common.Address, coins sdktypes.Coins, param *types.Params) error {
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
 
@@ -117,31 +96,31 @@ func (k Keeper) lock(ctx context.Context, target common.Address, coins sdktypes.
 			return err
 		}
 	case types.ValidatorStatus_Downgrade:
-		for _, coin := range coins {
-			token, err := k.Tokens.Get(sdkctx, coin.Denom)
-			if err != nil {
-				return err
-			}
-
-			power := math.NewIntFromUint64(token.Weight).Mul(coin.Amount).Quo(types.PowerReduction)
-			if !power.IsUint64() {
-				return types.ErrInvalid.Wrapf("power too large: %s", power)
-			}
-			validator.Power += power.Uint64()
-		}
-
-		threshold, err := k.thresholdList(sdkctx)
+		threshold, err := k.Threshold.Get(sdkctx)
 		if err != nil {
 			return err
 		}
 
-		if validator.Locking.IsAllGTE(threshold) { // todo: jailed time check
+		if sdkctx.BlockTime().After(validator.SigningInfo.JailedUntil) && validator.Locking.IsAllGTE(threshold.List) {
 			validator.Status = types.ValidatorStatus_Pending
 
 			for _, coin := range validator.Locking {
 				if err := k.Locking.Set(sdkctx,
 					collections.Join(coin.Denom, valdtAddr), coin.Amount); err != nil {
 					return err
+				}
+
+				token, err := k.Tokens.Get(sdkctx, coin.Denom)
+				if err != nil {
+					return err
+				}
+
+				if token.Weight > 0 {
+					power := math.NewIntFromUint64(token.Weight).Mul(coin.Amount).Quo(types.PowerReduction)
+					if !power.IsUint64() {
+						return types.ErrInvalid.Wrapf("power too large: %s", power)
+					}
+					validator.Power += power.Uint64()
 				}
 			}
 

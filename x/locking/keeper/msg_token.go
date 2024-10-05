@@ -36,23 +36,33 @@ func (k Keeper) UpdateTokens(ctx context.Context, weights []*ethtypes.UpdateToke
 		}
 	}
 
+	if len(thresholds) == 0 {
+		return nil
+	}
+
+	thrs, err := k.Threshold.Get(sdkctx)
+	if err != nil {
+		return err
+	}
+
 	for _, update := range thresholds {
 		addr := hex.EncodeToString(update.Token.Bytes())
 		token, err := k.Tokens.Get(sdkctx, addr)
 		if err != nil {
-			if !errors.Is(err, collections.ErrNotFound) {
-				return err
-			}
-			token = types.Token{Threshold: math.NewIntFromBigInt(update.Threshold)}
-		} else {
-			token.Threshold = math.NewIntFromBigInt(update.Threshold)
+			return err
 		}
 
+		sub := math.NewIntFromBigInt(update.Threshold).Sub(token.Threshold)
+		thrs.List = thrs.List.Add(sdktypes.NewCoin(addr, sub))
+		token.Threshold = math.NewIntFromBigInt(update.Threshold)
 		if err := k.Tokens.Set(sdkctx, addr, token); err != nil {
 			return err
 		}
 	}
 
+	if err := k.Threshold.Set(sdkctx, thrs); err != nil {
+		return err
+	}
 	return nil
 }
 

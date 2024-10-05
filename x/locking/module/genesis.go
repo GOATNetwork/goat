@@ -46,7 +46,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 		}
 
 		if validator.Status == types.ValidatorStatus_Active {
-			if err := k.ValidatorSet.Set(ctx, address); err != nil {
+			if err := k.ValidatorSet.Set(ctx, address, validator.Power); err != nil {
 				panic(err)
 			}
 		}
@@ -59,11 +59,18 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 
 	// tokens
 	{
+		var threshold sdk.Coins
 		for _, token := range genState.Tokens {
 			err := k.Tokens.Set(ctx, token.Denom, token.Token)
 			if err != nil {
 				panic(err)
 			}
+			if !token.Token.Threshold.IsZero() {
+				threshold = threshold.Add(sdk.NewCoin(token.Denom, token.Token.Threshold))
+			}
+		}
+		if err := k.Threshold.Set(ctx, types.Threshold{List: threshold}); err != nil {
+			panic(err)
 		}
 	}
 

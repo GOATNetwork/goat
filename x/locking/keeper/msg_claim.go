@@ -32,11 +32,11 @@ func (k Keeper) Claim(ctx context.Context, reqs []*ethtypes.GoatClaimReward) err
 		queue.Rewards = append(queue.Rewards, &types.Reward{
 			Id:        req.Id,
 			Recipient: req.Recipient.Bytes(),
-			Goat:      validator.GoatReward,
+			Goat:      validator.Reward,
 			Gas:       validator.GasReward,
 		})
 
-		validator.GoatReward = math.ZeroInt()
+		validator.Reward = math.ZeroInt()
 		validator.GasReward = math.ZeroInt()
 		if err := k.Validators.Set(sdkctx, valdtAddr, validator); err != nil {
 			return err

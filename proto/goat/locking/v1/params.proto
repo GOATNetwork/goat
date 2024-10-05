@@ -27,7 +27,7 @@ message Params {
     (gogoproto.stdduration) = true
   ];
 
-  google.protobuf.Duration downgrade_jail_duration = 3 [
+  google.protobuf.Duration downtime_jail_duration = 3 [
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true,
     (gogoproto.stdduration) = true
@@ -36,14 +36,17 @@ message Params {
   // max_validators is the maximum number of validators.
   int64 max_validators = 4;
 
-  bytes slash_fraction_double_sign = 6 [
+  int64 signed_blocks_window = 5;
+  int64 max_missed_per_window = 6;
+
+  bytes slash_fraction_double_sign = 7 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
 
-  bytes slash_fraction_downtime = 7 [
+  bytes slash_fraction_downtime = 8 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
     (gogoproto.nullable) = false,

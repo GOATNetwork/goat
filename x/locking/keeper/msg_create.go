@@ -49,12 +49,12 @@ func (k Keeper) CreateValidator(ctx context.Context, req *ethtypes.CreateValidat
 
 	// save
 	validator := types.Validator{
-		Pubkey:     pubkey.Key,
-		Power:      0,
-		Locking:    nil,
-		GoatReward: math.ZeroInt(),
-		GasReward:  math.ZeroInt(),
-		Status:     types.ValidatorStatus_Pending,
+		Pubkey:    pubkey.Key,
+		Power:     0,
+		Locking:   nil,
+		Reward:    math.ZeroInt(),
+		GasReward: math.ZeroInt(),
+		Status:    types.ValidatorStatus_Pending,
 	}
 	if err := k.Validators.Set(sdkctx, address, validator); err != nil {
 		return err

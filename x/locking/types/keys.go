@@ -25,6 +25,7 @@ var (
 	EthTxQueueKey   = collections.NewPrefix(8)
 	RewardPoolKey   = collections.NewPrefix(9)
 	UnlockQueueKey  = collections.NewPrefix(10)
+	ThresholdKey    = collections.NewPrefix(11)
 )
 
 func KeyPrefix(p string) []byte {

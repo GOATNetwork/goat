@@ -1,6 +1,8 @@
 syntax = "proto3";
 package goat.locking.v1;
 
+import "amino/amino.proto";
+import "cosmos/base/v1beta1/coin.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 
@@ -80,4 +82,13 @@ message EthTxQueue {
 // Unlocks
 message Unlocks {
   repeated Unlock unlocks = 1;
+}
+
+// Threshold
+message Threshold {
+  repeated cosmos.base.v1beta1.Coin list = 1 [
+    (amino.dont_omitempty) = true,
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
 }
