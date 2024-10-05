@@ -10,16 +10,22 @@ import (
 
 type BitcoinKeeper interface {
 	DequeueBitcoinModuleTx(ctx context.Context) ([]*ethtypes.Transaction, error)
-	ProcessBridgeRequest(ctx context.Context, withdrawals []*WithdrawalReq, rbf []*ReplaceByFeeReq, cancel1 []*Cancel1Req) error
+	ProcessBridgeRequest(ctx context.Context, withdrawals []*ethtypes.GoatWithdrawal, rbf []*ethtypes.ReplaceByFee, cancel1 []*ethtypes.Cancel1) error
 }
 
 type LockingKeeper interface {
 	DequeueLockingModuleTx(ctx context.Context) ([]*ethtypes.Transaction, error)
+	UpdateTokens(ctx context.Context, weights []*ethtypes.UpdateTokenWeight, thresholds []*ethtypes.UpdateTokenThreshold) error
+	UpdateRewardPool(ctx context.Context, gas []*ethtypes.GasRevenue, grants []*ethtypes.GoatGrant, hasTxs bool) error
+	CreateValidator(ctx context.Context, req *ethtypes.CreateValidator) error
+	Claim(ctx context.Context, reqs []*ethtypes.GoatClaimReward) error
+	Lock(ctx context.Context, reqs []*ethtypes.GoatLock) error
+	Unlock(ctx context.Context, reqs []*ethtypes.GoatUnlock) error
 }
 
 type RelayerKeeper interface {
 	GetCurrentProposer(ctx context.Context) (sdk.AccAddress, error)
-	ProcessRelayerRequest(ctx context.Context, adds []*AddVoterReq, rms []*RemoveVoterReq) error
+	ProcessRelayerRequest(ctx context.Context, adds []*ethtypes.AddVoter, rms []*ethtypes.RemoveVoter) error
 }
 
 // AccountKeeper defines the expected interface for the Account module.

@@ -38,13 +38,13 @@ func Goat() *cobra.Command {
 					GasUsed:       header.GasUsed,
 					Timestamp:     header.Time,
 					ExtraData:     header.Extra,
-					BaseFeePerGas: header.BaseFee.Bytes(),
+					BaseFeePerGas: math.NewIntFromBigInt(header.BaseFee),
 					BlockHash:     header.Hash().Bytes(),
 					Transactions:  nil,
 					BeaconRoot:    header.ParentBeaconRoot.Bytes(),
 					BlobGasUsed:   *header.BlobGasUsed,
 					ExcessBlobGas: *header.ExcessBlobGas,
-					GasRevenue:    &types.GasRevenueReq{Amount: math.NewInt(0)},
+					Requests:      nil,
 				}
 				return nil
 			})

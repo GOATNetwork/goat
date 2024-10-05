@@ -21,57 +21,16 @@ message ExecutionPayload {
   uint64 gas_used = 9;
   uint64 timestamp = 10;
   bytes extra_data = 11;
-  bytes base_fee_per_gas = 12;
-  bytes block_hash = 13;
-  repeated bytes transactions = 14;
-  bytes beacon_root = 15;
-  uint64 blob_gas_used = 16;
-  uint64 excess_blob_gas = 17;
-  GasRevenueReq gas_revenue = 18;
-  repeated AddVoterReq add_voter_req = 19;
-  repeated RemoveVoterReq rm_voter_req = 20;
-  repeated WithdrawalReq withdrawal_req = 21;
-  repeated ReplaceByFeeReq rbf_req = 22;
-  repeated Cancel1Req cancel1_req = 23;
-  repeated bytes requests = 24;
-}
-
-// GasRevenueReq
-message GasRevenueReq {
-  string amount = 4 [
+  string base_fee_per_gas = 12 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
-}
-
-// AddVoterReq
-message AddVoterReq {
-  bytes voter = 1;
-  bytes pubkey_hash = 2;
-}
-
-// RemoveVoterReq
-message RemoveVoterReq {
-  bytes voter = 1;
-}
-
-// WithdrawalReq
-message WithdrawalReq {
-  uint64 id = 1;
-  uint64 amount = 2;
-  uint64 max_tx_price = 3;
-  string address = 4;
-}
-
-// ReplaceByFeeReq
-message ReplaceByFeeReq {
-  uint64 id = 1;
-  uint64 max_tx_price = 2;
-}
-
-// Cancel1Req
-message Cancel1Req {
-  uint64 id = 1;
+  bytes block_hash = 13;
+  repeated bytes transactions = 14;
+  bytes beacon_root = 15;
+  uint64 blob_gas_used = 16;
+  uint64 excess_blob_gas = 17;
+  repeated bytes requests = 24;
 }

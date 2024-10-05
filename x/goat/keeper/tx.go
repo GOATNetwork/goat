@@ -42,9 +42,7 @@ func (k msgServer) NewEthBlock(ctx context.Context, req *types.MsgNewEthBlock) (
 		return nil, types.ErrInvalidRequest.Wrap("empty payload")
 	}
 
-	if payload.GasRevenue == nil {
-		return nil, types.ErrInvalidRequest.Wrap("no gas revenue request")
-	}
+	// todo: parse execution layer Requests
 
 	if !bytes.Equal(block.BlockHash, payload.ParentHash) || block.BlockNumber+1 != payload.BlockNumber {
 		return nil, types.ErrInvalidRequest.Wrap("refer to incorrect parent block")
@@ -52,10 +50,6 @@ func (k msgServer) NewEthBlock(ctx context.Context, req *types.MsgNewEthBlock) (
 
 	if payload.BlobGasUsed > 0 {
 		return nil, types.ErrInvalidRequest.Wrap("blob tx is not allowed")
-	}
-
-	if cometTime := uint64(sdkctx.BlockTime().UTC().Unix()); payload.Timestamp < cometTime {
-		return nil, types.ErrInvalidRequest.Wrap("invalid timestamp")
 	}
 
 	beaconRoot, err := k.BeaconRoot.Get(sdkctx)
@@ -74,11 +68,11 @@ func (k msgServer) NewEthBlock(ctx context.Context, req *types.MsgNewEthBlock) (
 		return nil, err
 	}
 
-	if err := k.bitcoinKeeper.ProcessBridgeRequest(sdkctx, payload.WithdrawalReq, payload.RbfReq, payload.Cancel1Req); err != nil {
+	if err := k.bitcoinKeeper.ProcessBridgeRequest(sdkctx, nil, nil, nil); err != nil {
 		return nil, err
 	}
 
-	if err := k.relayerKeeper.ProcessRelayerRequest(sdkctx, payload.AddVoterReq, payload.RmVoterReq); err != nil {
+	if err := k.relayerKeeper.ProcessRelayerRequest(sdkctx, nil, nil); err != nil {
 		return nil, err
 	}
 

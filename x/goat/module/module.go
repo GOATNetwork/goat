@@ -94,19 +94,16 @@ func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *r
 type AppModule struct {
 	AppModuleBasic
 
-	keeper        keeper.Keeper
-	accountKeeper types.AccountKeeper
+	keeper keeper.Keeper
 }
 
 func NewAppModule(
 	cdc codec.Codec,
 	keeper keeper.Keeper,
-	accountKeeper types.AccountKeeper,
 ) AppModule {
 	return AppModule{
 		AppModuleBasic: NewAppModuleBasic(cdc),
 		keeper:         keeper,
-		accountKeeper:  accountKeeper,
 	}
 }
 
@@ -199,11 +196,6 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.EngineClient,
 		in.TxConfig,
 	)
-	m := NewAppModule(
-		in.Cdc,
-		k,
-		in.AccountKeeper,
-	)
-
+	m := NewAppModule(in.Cdc, k)
 	return ModuleOutputs{GoatKeeper: k, Module: m}
 }

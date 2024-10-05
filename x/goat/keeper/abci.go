@@ -236,10 +236,6 @@ func (k Keeper) verifyEthBlockProposal(sdkctx sdk.Context, msg *types.MsgNewEthB
 		return errors.New("empty payload")
 	}
 
-	if payload.GasRevenue == nil {
-		return errors.New("no gas revenue request")
-	}
-
 	k.Logger().Info("Verify new executable payload", payload.LogKeyVals()...)
 	eg, egctx := errgroup.WithContext(sdkctx)
 	eg.Go(func() error {
@@ -262,8 +258,7 @@ func (k Keeper) verifyEthBlockProposal(sdkctx sdk.Context, msg *types.MsgNewEthB
 
 		// we don't use cometbft timestamp
 		// refer to the note in the PrepareProposalHandler for the details
-		systemTime, cometTime := uint64(time.Now().UTC().Unix()), uint64(sdkctx.BlockTime().UTC().Unix())
-		if payload.Timestamp > systemTime || payload.Timestamp < cometTime {
+		if systemTime := uint64(time.Now().UTC().Unix()); payload.Timestamp > systemTime {
 			return errors.New("invalid MsgNewEthBlock timestamp")
 		}
 
@@ -301,17 +296,17 @@ func (k Keeper) verifyEthBlockProposal(sdkctx sdk.Context, msg *types.MsgNewEthB
 	})
 
 	eg.Go(func() error {
-		res, err := k.ethclient.NewPayloadV3(egctx, types.PayloadToExecutableData(payload),
-			[]common.Hash{}, common.BytesToHash(payload.BeaconRoot))
+		res, err := k.ethclient.NewPayloadV4(egctx, types.PayloadToExecutableData(payload),
+			[]common.Hash{}, common.BytesToHash(payload.BeaconRoot), payload.Requests)
 		if err != nil {
 			return err
 		}
 
 		if res.Status != engine.VALID {
 			if res.ValidationError != nil {
-				return fmt.Errorf("NewPayloadV3 non-VALID status(%s): %s", res.Status, *res.ValidationError)
+				return fmt.Errorf("NewPayloadV4 non-VALID status(%s): %s", res.Status, *res.ValidationError)
 			}
-			return fmt.Errorf("NewPayloadV3 non-VALID status: %s", res.Status)
+			return fmt.Errorf("NewPayloadV4 non-VALID status: %s", res.Status)
 		}
 		return nil
 	})

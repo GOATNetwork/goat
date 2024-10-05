@@ -193,14 +193,14 @@ func (k Keeper) Finalized(ctx context.Context) error { // EndBlock phase only!
 	}
 
 	k.Logger().Info("notify NewPayload", "number", block.BlockNumber)
-	plRes, err := k.ethclient.NewPayloadV3(ctx, types.PayloadToExecutableData(&block),
-		[]common.Hash{}, common.BytesToHash(block.BeaconRoot))
+	response, err := k.ethclient.NewPayloadV4(ctx, types.PayloadToExecutableData(&block),
+		[]common.Hash{}, common.BytesToHash(block.BeaconRoot), block.Requests)
 	if err != nil {
 		return err
 	}
 
-	if plRes.Status == engine.INVALID {
-		return errors.New("invalid from NewPayloadV3 api")
+	if response.Status == engine.INVALID {
+		return errors.New("invalid from NewPayloadV4 api")
 	}
 
 	// set current block hash to head state and set previous block hash to safe and finalized state

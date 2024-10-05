@@ -5,6 +5,7 @@ import (
 
 	"github.com/ethereum/go-ethereum/beacon/engine"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/params"
 )
 
@@ -26,9 +27,32 @@ func (ec *Client) GetPayloadV3(ctx context.Context, payloadID engine.PayloadID) 
 	return &result, nil
 }
 
-func (ec *Client) NewPayloadV3(ctx context.Context, params *engine.ExecutableData, versionedHashes []common.Hash, beaconRoot common.Hash) (*engine.PayloadStatusV1, error) {
+func (ec *Client) GetPayloadV4(ctx context.Context, payloadID engine.PayloadID) (*engine.ExecutionPayloadEnvelope, error) {
+	var result engine.ExecutionPayloadEnvelope
+	err := ec.Client.Client().CallContext(ctx, &result, GetPayloadMethodV4, payloadID)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
+func (ec *Client) NewPayloadV3(ctx context.Context, params *engine.ExecutableData, blobHashes []common.Hash, beaconRoot common.Hash) (*engine.PayloadStatusV1, error) {
 	var result engine.PayloadStatusV1
-	err := ec.Client.Client().CallContext(ctx, &result, NewPayloadMethodV3, params, versionedHashes, beaconRoot)
+	err := ec.Client.Client().CallContext(ctx, &result, NewPayloadMethodV3, params, blobHashes, beaconRoot)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
+func (ec *Client) NewPayloadV4(ctx context.Context, params *engine.ExecutableData, blobHashes []common.Hash, beaconRoot common.Hash, reqeusts [][]byte) (*engine.PayloadStatusV1, error) {
+	var execRequests []hexutil.Bytes
+	for i := 0; i < len(reqeusts); i++ {
+		execRequests = append(execRequests, reqeusts[i])
+	}
+
+	var result engine.PayloadStatusV1
+	err := ec.Client.Client().CallContext(ctx, &result, NewPayloadMethodV4, params, blobHashes, beaconRoot, execRequests)
 	if err != nil {
 		return nil, err
 	}

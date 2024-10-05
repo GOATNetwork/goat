@@ -56,11 +56,11 @@ func Validator() *cobra.Command {
 					}
 				}
 				genesis.Validators = append(genesis.Validators, types.Validator{
-					Pubkey:     pubkeyRaw,
-					Power:      votePower,
-					GoatReward: math.ZeroInt(),
-					GasReward:  math.ZeroInt(),
-					Status:     types.ValidatorStatus_Active,
+					Pubkey:    pubkeyRaw,
+					Power:     votePower,
+					Reward:    math.ZeroInt(),
+					GasReward: math.ZeroInt(),
+					Status:    types.ValidatorStatus_Active,
 				})
 				return nil
 			}); err != nil {
