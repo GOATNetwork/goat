@@ -187,8 +187,6 @@ proto-gen:
 	@echo "Generating Protobuf files"
 	# ignite generate proto-go -y --clear-cache
 	@$(protoImage) sh ./contrib/scripts/protocgen.sh
-
-proto-swagger-gen:
 	@echo "Generating Protobuf Swagger"
 	@$(protoImage) sh ./contrib/scripts/protoc-swagger-gen.sh
 
