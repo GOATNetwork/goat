@@ -6,26 +6,24 @@ import (
 	"cosmossdk.io/core/address"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	bitcointypes "github.com/goatnetwork/goat/x/bitcoin/types"
+	lockingtypes "github.com/goatnetwork/goat/x/locking/types"
+	relayertypes "github.com/goatnetwork/goat/x/relayer/types"
 )
 
 type BitcoinKeeper interface {
 	DequeueBitcoinModuleTx(ctx context.Context) ([]*ethtypes.Transaction, error)
-	ProcessBridgeRequest(ctx context.Context, withdrawals []*ethtypes.GoatWithdrawal, rbf []*ethtypes.ReplaceByFee, cancel1 []*ethtypes.Cancel1) error
+	ProcessBridgeRequest(ctx context.Context, req bitcointypes.ExecRequests) error
 }
 
 type LockingKeeper interface {
 	DequeueLockingModuleTx(ctx context.Context) ([]*ethtypes.Transaction, error)
-	UpdateTokens(ctx context.Context, weights []*ethtypes.UpdateTokenWeight, thresholds []*ethtypes.UpdateTokenThreshold) error
-	UpdateRewardPool(ctx context.Context, gas []*ethtypes.GasRevenue, grants []*ethtypes.GoatGrant, hasTxs bool) error
-	CreateValidator(ctx context.Context, req *ethtypes.CreateValidator) error
-	Claim(ctx context.Context, reqs []*ethtypes.GoatClaimReward) error
-	Lock(ctx context.Context, reqs []*ethtypes.GoatLock) error
-	Unlock(ctx context.Context, reqs []*ethtypes.GoatUnlock) error
+	ProcessLockingRequest(ctx context.Context, req lockingtypes.ExecRequests, hasTx bool) error
 }
 
 type RelayerKeeper interface {
 	GetCurrentProposer(ctx context.Context) (sdk.AccAddress, error)
-	ProcessRelayerRequest(ctx context.Context, adds []*ethtypes.AddVoter, rms []*ethtypes.RemoveVoter) error
+	ProcessRelayerRequest(ctx context.Context, req relayertypes.ExecRequests) error
 }
 
 // AccountKeeper defines the expected interface for the Account module.

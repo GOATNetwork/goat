@@ -12,7 +12,16 @@ import (
 	"github.com/goatnetwork/goat/x/locking/types"
 )
 
-func (k Keeper) CreateValidator(ctx context.Context, req *ethtypes.CreateValidator) error {
+func (k *Keeper) Create(ctx context.Context, req []*ethtypes.CreateValidator) error {
+	for _, create := range req {
+		if err := k.createValidator(ctx, create); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (k Keeper) createValidator(ctx context.Context, req *ethtypes.CreateValidator) error {
 	uncomp, err := ethcrypto.UnmarshalPubkey(append([]byte{0x04}, req.Pubkey[:]...))
 	if err != nil {
 		return err

@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -83,4 +84,31 @@ func NewKeeper(
 // Logger returns a module-specific logger.
 func (k Keeper) Logger() log.Logger {
 	return k.logger.With("module", fmt.Sprintf("x/%s", types.ModuleName))
+}
+
+func (k Keeper) ProcessLockingRequest(ctx context.Context, reqs types.ExecRequests, hasTx bool) error {
+	if err := k.UpdateRewardPool(ctx, reqs.GasRevenues, reqs.Grants, hasTx); err != nil {
+		return err
+	}
+
+	if err := k.UpdateTokens(ctx, reqs.UpdateWeights, reqs.UpdateThresholds); err != nil {
+		return err
+	}
+
+	if err := k.Create(ctx, reqs.Creates); err != nil {
+		return err
+	}
+
+	if err := k.Lock(ctx, reqs.Locks); err != nil {
+		return err
+	}
+
+	if err := k.Unlock(ctx, reqs.Unlocks); err != nil {
+		return err
+	}
+
+	if err := k.Claim(ctx, reqs.Claims); err != nil {
+		return err
+	}
+	return nil
 }

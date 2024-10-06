@@ -42,8 +42,6 @@ func (k msgServer) NewEthBlock(ctx context.Context, req *types.MsgNewEthBlock) (
 		return nil, types.ErrInvalidRequest.Wrap("empty payload")
 	}
 
-	// todo: parse execution layer Requests
-
 	if !bytes.Equal(block.BlockHash, payload.ParentHash) || block.BlockNumber+1 != payload.BlockNumber {
 		return nil, types.ErrInvalidRequest.Wrap("refer to incorrect parent block")
 	}
@@ -64,15 +62,24 @@ func (k msgServer) NewEthBlock(ctx context.Context, req *types.MsgNewEthBlock) (
 		return nil, types.ErrInvalidRequest.Wrap("dequeue mismatched")
 	}
 
+	bridgeReq, relayerReq, lockingReq, err := payload.DecodeGoatRequests()
+	if err != nil {
+		return nil, types.ErrInvalidRequest.Wrap("invalid execution requests")
+	}
+
+	if err := k.lockingKeeper.ProcessLockingRequest(sdkctx, lockingReq, len(payload.Transactions) > 0); err != nil {
+		return nil, err
+	}
+
+	if err := k.bitcoinKeeper.ProcessBridgeRequest(sdkctx, bridgeReq); err != nil {
+		return nil, err
+	}
+
+	if err := k.relayerKeeper.ProcessRelayerRequest(sdkctx, relayerReq); err != nil {
+		return nil, err
+	}
+
 	if err := k.Block.Set(sdkctx, *payload); err != nil {
-		return nil, err
-	}
-
-	if err := k.bitcoinKeeper.ProcessBridgeRequest(sdkctx, nil, nil, nil); err != nil {
-		return nil, err
-	}
-
-	if err := k.relayerKeeper.ProcessRelayerRequest(sdkctx, nil, nil); err != nil {
 		return nil, err
 	}
 

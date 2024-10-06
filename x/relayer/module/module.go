@@ -138,7 +138,7 @@ func (AppModule) ConsensusVersion() uint64 { return 1 }
 // EndBlock contains the logic that is automatically triggered at the end of each block.
 // The end block implementation is optional.
 func (am AppModule) EndBlock(ctx context.Context) error {
-	return am.keeper.ElectProposer(ctx)
+	return am.keeper.EndBlocker(ctx)
 }
 
 // IsOnePerModuleType implements the depinject.OnePerModuleType interface.

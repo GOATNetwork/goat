@@ -1,5 +1,9 @@
 package types
 
+import (
+	ethtypes "github.com/ethereum/go-ethereum/core/types"
+)
+
 const (
 	NewPubkeyMethodSigName            = "Bitcoin/NewPubkey"
 	NewBlocksMethodSigName            = "Bitcoin/NewBlocks"
@@ -26,3 +30,9 @@ const (
 	MinDepositTxSize    = 4 + 1 + 32 + 4 + 1 + 0 + 4 + 1 + 8 + 1 + 34 + 4
 	MaxAllowedBtcTxSize = 32 * 1024
 )
+
+type ExecRequests struct {
+	Withdrawals []*ethtypes.GoatWithdrawal
+	RBFs        []*ethtypes.ReplaceByFee
+	Cancel1s    []*ethtypes.Cancel1
+}

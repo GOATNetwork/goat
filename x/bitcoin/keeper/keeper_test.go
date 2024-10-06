@@ -431,7 +431,7 @@ func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
 	}
 
 	suite.Require().NoError(suite.Keeper.EthTxQueue.Set(suite.Context, types.EthTxQueue{}))
-	err := suite.Keeper.ProcessBridgeRequest(suite.Context, withdrawals1, nil, nil)
+	err := suite.Keeper.ProcessBridgeRequest(suite.Context, types.ExecRequests{Withdrawals: withdrawals1})
 	suite.Require().NoError(err)
 	suite.Require().Equal(len(suite.Context.EventManager().Events()), 1)
 
@@ -471,7 +471,7 @@ func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
 		{Id: 2, MaxTxPrice: 2},
 	}
 
-	err = suite.Keeper.ProcessBridgeRequest(suite.Context, withdrawals2, rbf1, nil)
+	err = suite.Keeper.ProcessBridgeRequest(suite.Context, types.ExecRequests{Withdrawals: withdrawals2, RBFs: rbf1})
 	suite.Require().NoError(err)
 
 	wd2, err = suite.Keeper.Withdrawals.Get(suite.Context, 2)
@@ -501,7 +501,7 @@ func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
 		{Id: 2, MaxTxPrice: 3},
 	}
 
-	err = suite.Keeper.ProcessBridgeRequest(suite.Context, nil, rbf2, nil)
+	err = suite.Keeper.ProcessBridgeRequest(suite.Context, types.ExecRequests{RBFs: rbf2})
 	suite.Require().NoError(err)
 
 	wd2, err = suite.Keeper.Withdrawals.Get(suite.Context, 2)
@@ -519,7 +519,7 @@ func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
 		{Id: 3},
 	}
 
-	err = suite.Keeper.ProcessBridgeRequest(suite.Context, nil, nil, cancel1)
+	err = suite.Keeper.ProcessBridgeRequest(suite.Context, types.ExecRequests{Cancel1s: cancel1})
 	suite.Require().NoError(err)
 
 	wd2, err = suite.Keeper.Withdrawals.Get(suite.Context, 2)

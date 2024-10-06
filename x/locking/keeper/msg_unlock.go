@@ -171,7 +171,7 @@ func (k Keeper) dequeueMatureUnlocks(ctx context.Context) error {
 
 	execQueue.Unlocks = append(execQueue.Unlocks, values...)
 	if err := k.EthTxQueue.Set(sdkctx, execQueue); err != nil {
-		panic(err)
+		return err
 	}
 
 	return nil

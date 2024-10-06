@@ -6,6 +6,9 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	bitcointypes "github.com/goatnetwork/goat/x/bitcoin/types"
+	lockingtypes "github.com/goatnetwork/goat/x/locking/types"
+	relayertypes "github.com/goatnetwork/goat/x/relayer/types"
 )
 
 func ExecutableDataToPayload(data *engine.ExecutableData, beaconRoot []byte) *ExecutionPayload {
@@ -91,4 +94,49 @@ func (payload *ExecutionPayload) LogKeyVals() []any {
 		"len(Transactions)", len(payload.Transactions),
 		"len(Requests)", len(payload.Requests),
 	}
+}
+
+func (payload *ExecutionPayload) DecodeGoatRequests() (
+	bridge bitcointypes.ExecRequests,
+	relayer relayertypes.ExecRequests,
+	locking lockingtypes.ExecRequests,
+	err error,
+) {
+	for _, raw := range payload.Requests {
+		req := new(ethtypes.Request)
+		err = req.UnmarshalBinary(raw)
+		if err != nil {
+			return
+		}
+
+		switch v := req.Inner().(type) {
+		case *ethtypes.GasRevenue:
+			locking.GasRevenues = append(locking.GasRevenues, v)
+		case *ethtypes.AddVoter:
+			relayer.AddVoters = append(relayer.AddVoters, v)
+		case *ethtypes.RemoveVoter:
+			relayer.RemoveVoters = append(relayer.RemoveVoters, v)
+		case *ethtypes.GoatWithdrawal:
+			bridge.Withdrawals = append(bridge.Withdrawals, v)
+		case *ethtypes.ReplaceByFee:
+			bridge.RBFs = append(bridge.RBFs, v)
+		case *ethtypes.Cancel1:
+			bridge.Cancel1s = append(bridge.Cancel1s, v)
+		case *ethtypes.CreateValidator:
+			locking.Creates = append(locking.Creates, v)
+		case *ethtypes.GoatLock:
+			locking.Locks = append(locking.Locks, v)
+		case *ethtypes.GoatUnlock:
+			locking.Unlocks = append(locking.Unlocks, v)
+		case *ethtypes.GoatClaimReward:
+			locking.Claims = append(locking.Claims, v)
+		case *ethtypes.GoatGrant:
+			locking.Grants = append(locking.Grants, v)
+		case *ethtypes.UpdateTokenThreshold:
+			locking.UpdateThresholds = append(locking.UpdateThresholds, v)
+		case *ethtypes.UpdateTokenWeight:
+			locking.UpdateWeights = append(locking.UpdateWeights, v)
+		}
+	}
+	return
 }
