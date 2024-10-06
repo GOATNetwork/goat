@@ -69,23 +69,22 @@ func (k Keeper) unlock(ctx context.Context, req *ethtypes.GoatUnlock, param *typ
 		powerU64 = p.Uint64()
 	}
 
-	exiting := validator.Status == types.ValidatorStatus_Inactive ||
-		validator.Status == types.ValidatorStatus_Tombstoned || lockingAmount.LT(token.Threshold)
-
 	if validator.Power > powerU64 {
 		validator.Power -= powerU64
 	} else { // the latest weight is bigger than before
 		validator.Power = 0
-		exiting = true
 	}
 
+	exiting := validator.Status == types.ValidatorStatus_Inactive ||
+		validator.Status == types.ValidatorStatus_Tombstoned || lockingAmount.LT(token.Threshold)
 	var unlockTime time.Time
 	if exiting {
+		unlockTime = sdkctx.BlockTime().Add(param.ExitingDuration)
+
 		switch validator.Status {
 		case types.ValidatorStatus_Active, types.ValidatorStatus_Pending:
 			validator.Status = types.ValidatorStatus_Inactive
 		}
-		unlockTime = sdkctx.BlockTime().Add(param.ExitingDuration)
 
 		// remove all from locking state
 		for _, coin := range validator.Locking {

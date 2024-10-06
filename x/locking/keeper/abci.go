@@ -87,7 +87,7 @@ func (k Keeper) EndBlocker(ctx context.Context) ([]abci.ValidatorUpdate, error) 
 			delete(lastSet, valstr)
 		case types.ValidatorStatus_Pending:
 			if _, ok := lastSet[valstr]; ok {
-				return nil, fmt.Errorf("pending validator %x should be existed in the last validator set", valAddr)
+				return nil, fmt.Errorf("pending validator %x existed in the last validator set", valAddr.Bytes())
 			}
 			validator.Status = types.ValidatorStatus_Active
 			validator.SigningInfo.Missed = 0
@@ -101,7 +101,7 @@ func (k Keeper) EndBlocker(ctx context.Context) ([]abci.ValidatorUpdate, error) 
 			newSet = append(newSet, abci.ValidatorUpdate{
 				Power: int64(validator.Power), PubKey: validator.CMPubkey()})
 		default:
-			return nil, fmt.Errorf("validator %x with status %s should in the power ranking", valAddr, validator.Status)
+			return nil, fmt.Errorf("%s validator %x in power ranking", validator.Status, valAddr.Bytes())
 		}
 		count++
 	}

@@ -48,7 +48,7 @@ func (k Keeper) handleVoteInfo(ctx context.Context, address sdktypes.ConsAddress
 	isDown := validator.SigningInfo.Missed >= param.MaxMissedPerWindow
 
 	validator.SigningInfo.Offset++
-	if validator.SigningInfo.Offset == param.SignedBlocksWindow {
+	if validator.SigningInfo.Offset >= param.SignedBlocksWindow {
 		validator.SigningInfo.Missed = 0
 		validator.SigningInfo.Offset = 0
 	}

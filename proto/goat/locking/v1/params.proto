@@ -52,4 +52,8 @@ message Params {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
+
+  int64 halving_interval = 9;
+
+  int64 initial_block_reward = 10;
 }

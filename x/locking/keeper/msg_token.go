@@ -87,7 +87,7 @@ func (k Keeper) onWeightChanged(ctx context.Context, token string, previous, cur
 		}
 
 		if t := kv.Key.K1(); t != token {
-			return fmt.Errorf("invalid interator: inconsistent token: expected %s got %s", token, t)
+			return fmt.Errorf("invalid interator: expected token %s got %s", token, t)
 		}
 
 		valdtAddr, amount := kv.Key.K2(), kv.Value

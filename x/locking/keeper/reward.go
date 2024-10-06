@@ -31,8 +31,13 @@ func (k Keeper) UpdateRewardPool(ctx context.Context, gas []*ethtypes.GasRevenue
 	}
 
 	if hasTxs {
-		reward := big.NewInt(types.InitialBlockReward)
-		if halvings := pool.Index / types.HalvingInterval; halvings > 0 {
+		param, err := k.Params.Get(sdkctx)
+		if err != nil {
+			return err
+		}
+
+		reward := big.NewInt(param.InitialBlockReward)
+		if halvings := pool.Index / param.HalvingInterval; halvings > 0 {
 			count := big.NewInt(2)
 			count.Exp(count, big.NewInt(halvings), nil)
 			reward.Div(reward, count)
