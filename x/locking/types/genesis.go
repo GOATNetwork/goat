@@ -1,5 +1,10 @@
 package types
 
+import (
+	"cosmossdk.io/math"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+)
+
 // DefaultIndex is the default global index
 const DefaultIndex uint64 = 1
 
@@ -7,14 +12,17 @@ const DefaultIndex uint64 = 1
 func DefaultGenesis() *GenesisState {
 	return &GenesisState{
 		// this line is used by starport scaffolding # genesis/types/default
-		Params: DefaultParams(),
+		Params:  DefaultParams(),
+		Slashed: sdk.NewCoins(),
+		RewardPool: RewardPool{
+			Goat: math.ZeroInt(),
+			Gas:  math.ZeroInt(),
+		},
 	}
 }
 
 // Validate performs basic genesis state validation returning an error upon any
 // failure.
 func (gs GenesisState) Validate() error {
-	// this line is used by starport scaffolding # genesis/types/validate
-
 	return gs.Params.Validate()
 }

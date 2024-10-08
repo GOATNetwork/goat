@@ -31,7 +31,7 @@ const (
 type QueryClient interface {
 	// Parameters queries the parameters of the module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
-	// Validator queries the parameters of the module.
+	// Validator queries validator state by address.
 	Validator(ctx context.Context, in *QueryValidatorRequest, opts ...grpc.CallOption) (*QueryValidatorResponse, error)
 }
 
@@ -71,7 +71,7 @@ func (c *queryClient) Validator(ctx context.Context, in *QueryValidatorRequest, 
 type QueryServer interface {
 	// Parameters queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
-	// Validator queries the parameters of the module.
+	// Validator queries validator state by address.
 	Validator(context.Context, *QueryValidatorRequest) (*QueryValidatorResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }

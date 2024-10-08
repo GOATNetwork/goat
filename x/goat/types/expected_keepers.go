@@ -6,24 +6,22 @@ import (
 	"cosmossdk.io/core/address"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
-	bitcointypes "github.com/goatnetwork/goat/x/bitcoin/types"
-	lockingtypes "github.com/goatnetwork/goat/x/locking/types"
-	relayertypes "github.com/goatnetwork/goat/x/relayer/types"
+	"github.com/ethereum/go-ethereum/core/types/goattypes"
 )
 
 type BitcoinKeeper interface {
 	DequeueBitcoinModuleTx(ctx context.Context) ([]*ethtypes.Transaction, error)
-	ProcessBridgeRequest(ctx context.Context, req bitcointypes.ExecRequests) error
+	ProcessBridgeRequest(ctx context.Context, req goattypes.BridgeRequests) error
 }
 
 type LockingKeeper interface {
 	DequeueLockingModuleTx(ctx context.Context) ([]*ethtypes.Transaction, error)
-	ProcessLockingRequest(ctx context.Context, req lockingtypes.ExecRequests, hasTx bool) error
+	ProcessLockingRequest(ctx context.Context, req goattypes.LockingRequests, hasTx bool) error
 }
 
 type RelayerKeeper interface {
 	GetCurrentProposer(ctx context.Context) (sdk.AccAddress, error)
-	ProcessRelayerRequest(ctx context.Context, req relayertypes.ExecRequests) error
+	ProcessRelayerRequest(ctx context.Context, req goattypes.RelayerRequests) error
 }
 
 // AccountKeeper defines the expected interface for the Account module.

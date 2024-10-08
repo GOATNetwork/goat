@@ -14,6 +14,7 @@ import (
 	"github.com/ethereum/go-ethereum/beacon/engine"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
+	ethtypes "github.com/ethereum/go-ethereum/core/types"
 
 	"github.com/goatnetwork/goat/pkg/ethrpc"
 	"github.com/goatnetwork/goat/x/goat/types"
@@ -97,9 +98,9 @@ func (k Keeper) Finalized(ctx context.Context) error { // EndBlock phase only!
 		return err
 	}
 
-	k.Logger().Info("notify NewPayload", "number", block.BlockNumber)
+	k.Logger().Info("Notify NewPayload", "number", block.BlockNumber)
 	response, err := k.ethclient.NewPayloadV4(ctx, types.PayloadToExecutableData(&block),
-		[]common.Hash{}, common.BytesToHash(block.BeaconRoot), block.Requests)
+		[]common.Hash{}, common.BytesToHash(block.BeaconRoot), ethtypes.CalcRequestsHash(block.Requests))
 	if err != nil {
 		return err
 	}
@@ -109,7 +110,7 @@ func (k Keeper) Finalized(ctx context.Context) error { // EndBlock phase only!
 	}
 
 	// set current block hash to head state and set previous block hash to safe and finalized state
-	k.Logger().Info("notify ForkchoiceUpdated",
+	k.Logger().Info("Notify ForkchoiceUpdated",
 		"head", hexutil.Encode(block.BlockHash), "finalized", hexutil.Encode(block.ParentHash))
 	forkRes, err := k.ethclient.ForkchoiceUpdatedV3(ctx, &engine.ForkchoiceStateV1{
 		HeadBlockHash:      common.BytesToHash(block.BlockHash),

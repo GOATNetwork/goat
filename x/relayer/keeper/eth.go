@@ -6,15 +6,16 @@ import (
 
 	"cosmossdk.io/collections"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
+	"github.com/ethereum/go-ethereum/core/types/goattypes"
 	"github.com/goatnetwork/goat/x/relayer/types"
 )
 
-func (k Keeper) ProcessRelayerRequest(ctx context.Context, req types.ExecRequests) error {
+func (k Keeper) ProcessRelayerRequest(ctx context.Context, req goattypes.RelayerRequests) error {
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
-	events := make(sdktypes.Events, 0, len(req.AddVoters)+len(req.RemoveVoters))
+	events := make(sdktypes.Events, 0, len(req.Adds)+len(req.Removes))
 
 	height := uint64(sdkctx.BlockHeight())
-	for _, add := range req.AddVoters {
+	for _, add := range req.Adds {
 		addr, err := k.AddrCodec.BytesToString(add.Voter[:])
 		if err != nil {
 			return err
@@ -38,7 +39,7 @@ func (k Keeper) ProcessRelayerRequest(ctx context.Context, req types.ExecRequest
 		events = append(events, types.PendingVoterEvent(addr))
 	}
 
-	if len(req.RemoveVoters) == 0 {
+	if len(req.Removes) == 0 {
 		sdkctx.EventManager().EmitEvents(events)
 		return nil
 	}
@@ -55,7 +56,7 @@ func (k Keeper) ProcessRelayerRequest(ctx context.Context, req types.ExecRequest
 	}
 
 	active := len(relayer.Voters) + 1 - len(queue.OffBoarding)
-	for _, rm := range req.RemoveVoters {
+	for _, rm := range req.Removes {
 		addr, err := k.AddrCodec.BytesToString(rm.Voter.Bytes())
 		if err != nil {
 			return err

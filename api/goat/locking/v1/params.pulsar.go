@@ -1013,8 +1013,8 @@ type Params struct {
 	MaxMissedPerWindow      int64  `protobuf:"varint,6,opt,name=max_missed_per_window,json=maxMissedPerWindow,proto3" json:"max_missed_per_window,omitempty"`
 	SlashFractionDoubleSign []byte `protobuf:"bytes,7,opt,name=slash_fraction_double_sign,json=slashFractionDoubleSign,proto3" json:"slash_fraction_double_sign,omitempty"`
 	SlashFractionDowntime   []byte `protobuf:"bytes,8,opt,name=slash_fraction_downtime,json=slashFractionDowntime,proto3" json:"slash_fraction_downtime,omitempty"`
-	HalvingInterval         int64  `protobuf:"varint,9,opt,name=halving_interval,json=halvingInterval,proto3" json:"halving_interval,omitempty"`             // 42048000
-	InitialBlockReward      int64  `protobuf:"varint,10,opt,name=initial_block_reward,json=initialBlockReward,proto3" json:"initial_block_reward,omitempty"` // 2378234400000000000
+	HalvingInterval         int64  `protobuf:"varint,9,opt,name=halving_interval,json=halvingInterval,proto3" json:"halving_interval,omitempty"`
+	InitialBlockReward      int64  `protobuf:"varint,10,opt,name=initial_block_reward,json=initialBlockReward,proto3" json:"initial_block_reward,omitempty"`
 }
 
 func (x *Params) Reset() {

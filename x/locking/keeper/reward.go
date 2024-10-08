@@ -2,16 +2,17 @@ package keeper
 
 import (
 	"context"
+	"encoding/hex"
 	"errors"
 	"math/big"
 
 	"cosmossdk.io/math"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/core/types/goattypes"
 	"github.com/goatnetwork/goat/x/locking/types"
 )
 
-func (k Keeper) UpdateRewardPool(ctx context.Context, gas []*ethtypes.GasRevenue, grants []*ethtypes.GoatGrant, hasTxs bool) error {
+func (k Keeper) UpdateRewardPool(ctx context.Context, gas []*goattypes.GasRequest, grants []*goattypes.GrantRequest, hasTxs bool) error {
 	if l := len(gas); l != 1 {
 		return types.ErrInvalid.Wrapf("expected gas revenue request length 1 but got %d", l)
 	}
@@ -23,11 +24,13 @@ func (k Keeper) UpdateRewardPool(ctx context.Context, gas []*ethtypes.GasRevenue
 	}
 
 	for _, revenue := range gas {
-		pool.Gas = pool.Gas.Add(math.NewIntFromBigInt(revenue.Amount))
+		pool.Gas = pool.Gas.Add(math.NewIntFromBigIntMut(revenue.Amount))
+		k.Logger().Debug("Add gas fee", "amount", revenue.Amount.String())
 	}
 
 	for _, grant := range grants {
-		pool.Remain = pool.Remain.Add(math.NewIntFromBigInt(grant.Amount))
+		pool.Remain = pool.Remain.Add(math.NewIntFromBigIntMut(grant.Amount))
+		k.Logger().Debug("Grant reward", "amount", grant.Amount.String())
 	}
 
 	if hasTxs {
@@ -53,6 +56,7 @@ func (k Keeper) UpdateRewardPool(ctx context.Context, gas []*ethtypes.GasRevenue
 			pool.Remain = pool.Remain.Sub(r)
 			pool.Index++
 		}
+		k.Logger().Debug("Add reward to pool", "amount", reward.String())
 	}
 
 	if err := k.RewardPool.Set(sdkctx, pool); err != nil {
@@ -103,12 +107,16 @@ func (k Keeper) distributeReward(ctx context.Context) error {
 			share := math.LegacyNewDecFromBigInt(pool.Gas.BigInt()).MulTruncate(power).TruncateInt()
 			remainGas.Sub(remainGas, share.BigIntMut())
 			validator.GasReward = validator.GasReward.Add(share)
+			k.Logger().Debug("Distribute gas reward",
+				"address", hex.EncodeToString(voteInfo.Validator.Address), "amount", share)
 		}
 
 		if !pool.Goat.IsZero() {
 			share := math.LegacyNewDecFromBigInt(pool.Goat.BigInt()).MulTruncate(power).TruncateInt()
 			remainReward.Sub(remainReward, share.BigIntMut())
 			validator.Reward = validator.Reward.Add(share)
+			k.Logger().Debug("Distribute goat reward",
+				"address", hex.EncodeToString(voteInfo.Validator.Address), "amount", share)
 		}
 	}
 

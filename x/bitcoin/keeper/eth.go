@@ -6,6 +6,7 @@ import (
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
 
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/core/types/goattypes"
 	"github.com/goatnetwork/goat/x/bitcoin/types"
 )
 
@@ -88,8 +89,8 @@ func (k Keeper) DequeueBitcoinModuleTx(ctx context.Context) (txs []*ethtypes.Tra
 	return txs, nil
 }
 
-func (k Keeper) ProcessBridgeRequest(ctx context.Context, reqs types.ExecRequests) error {
-	reqLens := len(reqs.Withdrawals) + len(reqs.RBFs) + len(reqs.Cancel1s)
+func (k Keeper) ProcessBridgeRequest(ctx context.Context, reqs goattypes.BridgeRequests) error {
+	reqLens := len(reqs.Withdraws) + len(reqs.ReplaceByFees) + len(reqs.Cancel1s)
 	if reqLens == 0 {
 		return nil
 	}
@@ -102,7 +103,7 @@ func (k Keeper) ProcessBridgeRequest(ctx context.Context, reqs types.ExecRequest
 	events := make(sdktypes.Events, 0, reqLens)
 
 	var rejecting []uint64
-	for _, v := range reqs.Withdrawals {
+	for _, v := range reqs.Withdraws {
 		// reject if we have an invalid address
 		script, err := types.DecodeBtcAddress(v.Address, types.BitcoinNetworks[param.NetworkName])
 		if err != nil {
@@ -114,13 +115,13 @@ func (k Keeper) ProcessBridgeRequest(ctx context.Context, reqs types.ExecRequest
 		if err := k.Withdrawals.Set(ctx, v.Id, types.Withdrawal{
 			Address:       v.Address,
 			RequestAmount: v.Amount,
-			MaxTxPrice:    v.MaxTxPrice,
+			MaxTxPrice:    v.TxPrice,
 			OutputScript:  script,
 			Status:        types.WITHDRAWAL_STATUS_PENDING,
 		}); err != nil {
 			return err
 		}
-		events = append(events, types.NewWithdrawalRequestEvent(v.Address, v.Id, v.MaxTxPrice, v.Amount))
+		events = append(events, types.NewWithdrawalRequestEvent(v.Address, v.Id, v.TxPrice, v.Amount))
 	}
 
 	if len(rejecting) > 0 {
@@ -134,7 +135,7 @@ func (k Keeper) ProcessBridgeRequest(ctx context.Context, reqs types.ExecRequest
 		}
 	}
 
-	for _, v := range reqs.RBFs {
+	for _, v := range reqs.ReplaceByFees {
 		withdrawal, err := k.Withdrawals.Get(ctx, v.Id)
 		if err != nil {
 			return err
@@ -143,11 +144,11 @@ func (k Keeper) ProcessBridgeRequest(ctx context.Context, reqs types.ExecRequest
 			k.Logger().Info("disregard rbf request due to it's processing", "id", v.Id)
 			continue
 		}
-		withdrawal.MaxTxPrice = v.MaxTxPrice
+		withdrawal.MaxTxPrice = v.TxPrice
 		if err := k.Withdrawals.Set(ctx, v.Id, withdrawal); err != nil {
 			return err
 		}
-		events = append(events, types.NewWithdrawalReplaceEvent(v.Id, v.MaxTxPrice))
+		events = append(events, types.NewWithdrawalReplaceEvent(v.Id, v.TxPrice))
 	}
 
 	for _, v := range reqs.Cancel1s {

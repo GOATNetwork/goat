@@ -9,11 +9,11 @@ import (
 	"cosmossdk.io/collections"
 	"cosmossdk.io/math"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/core/types/goattypes"
 	"github.com/goatnetwork/goat/x/locking/types"
 )
 
-func (k Keeper) UpdateTokens(ctx context.Context, weights []*ethtypes.UpdateTokenWeight, thresholds []*ethtypes.UpdateTokenThreshold) error {
+func (k Keeper) UpdateTokens(ctx context.Context, weights []*goattypes.UpdateTokenWeightRequest, thresholds []*goattypes.UpdateTokenThresholdRequest) error {
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
 
 	for _, update := range weights {
@@ -109,10 +109,11 @@ func (k Keeper) onWeightChanged(ctx context.Context, token string, previous, cur
 			validator.Power += diff.Uint64()
 		} else {
 			diff := math.NewIntFromUint64(previous - current).Mul(amount).Quo(types.PowerReduction)
-			if validator.Power < diff.Uint64() {
-				return fmt.Errorf("previous power is less than updated power when weight is decreased (token %s validator %x)", token, valdtAddr.Bytes())
+			if df := diff.Uint64(); validator.Power > df {
+				validator.Power -= df
+			} else {
+				validator.Power = 0
 			}
-			validator.Power -= diff.Uint64()
 		}
 		if err := k.Validators.Set(sdkctx, valdtAddr, validator); err != nil {
 			return err

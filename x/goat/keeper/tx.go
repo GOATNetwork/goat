@@ -5,6 +5,7 @@ import (
 	"context"
 
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
+	"github.com/ethereum/go-ethereum/core/types/goattypes"
 	"github.com/goatnetwork/goat/x/goat/types"
 )
 
@@ -62,7 +63,7 @@ func (k msgServer) NewEthBlock(ctx context.Context, req *types.MsgNewEthBlock) (
 		return nil, types.ErrInvalidRequest.Wrap("dequeue mismatched")
 	}
 
-	bridgeReq, relayerReq, lockingReq, err := payload.DecodeGoatRequests()
+	bridgeReq, relayerReq, lockingReq, err := goattypes.DecodeRequests(payload.Requests)
 	if err != nil {
 		return nil, types.ErrInvalidRequest.Wrap("invalid execution requests")
 	}

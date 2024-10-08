@@ -153,7 +153,7 @@ func (k Keeper) VerifyDeposit(ctx context.Context, headers map[uint64][]byte, de
 	switch deposit.Version {
 	case 0:
 		if err := types.VerifyDespositScriptV0(deposit.RelayerPubkey, deposit.EvmAddress, txout.PkScript); err != nil {
-			k.logger.Debug("invalid deposit version 0 script", "txid", types.BtcTxid(txid), "txout", deposit.OutputIndex, "err", err.Error())
+			k.logger.Warn("invalid deposit version 0 script", "txid", types.BtcTxid(txid), "txout", deposit.OutputIndex, "err", err.Error())
 			return nil, types.ErrInvalidRequest.Wrap("invalid deposit version 0 script")
 		}
 	case 1:
@@ -162,7 +162,7 @@ func (k Keeper) VerifyDeposit(ctx context.Context, headers map[uint64][]byte, de
 		}
 		if err := types.VerifyDespositScriptV1(deposit.RelayerPubkey,
 			param.DepositMagicPrefix, deposit.EvmAddress, txout.PkScript, tx.TxOut[1].PkScript); err != nil {
-			k.logger.Debug("invalid deposit version 1 script", "txid", types.BtcTxid(txid), "txout", deposit.OutputIndex, "err", err.Error())
+			k.logger.Warn("invalid deposit version 1 script", "txid", types.BtcTxid(txid), "txout", deposit.OutputIndex, "err", err.Error())
 			return nil, types.ErrInvalidRequest.Wrap("invalid deposit version 1 script")
 		}
 	default:

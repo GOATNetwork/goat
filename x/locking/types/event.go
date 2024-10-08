@@ -1,20 +1,26 @@
 package types
 
 import (
-	"math/big"
-	"strconv"
+	"encoding/hex"
 
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
 )
 
 const (
-	EventTypeAddReward = "goat_add_reward"
+	EventTypeDowngraded = "validator_downgraded"
+	EventTypeTombstoned = "validator_tombstoned"
 )
 
-func AddRewardEvent(blockNumber int64, amount *big.Int) sdktypes.Event {
+func ValidatorDowngradedEvent(validator sdktypes.ConsAddress) sdktypes.Event {
 	return sdktypes.NewEvent(
-		EventTypeAddReward,
-		sdktypes.NewAttribute("block", strconv.FormatInt(blockNumber, 10)),
-		sdktypes.NewAttribute("amount", amount.String()),
+		EventTypeDowngraded,
+		sdktypes.NewAttribute("validator", hex.EncodeToString(validator.Bytes())),
+	)
+}
+
+func ValidatorTombstonedEvent(validator sdktypes.ConsAddress) sdktypes.Event {
+	return sdktypes.NewEvent(
+		EventTypeTombstoned,
+		sdktypes.NewAttribute("validator", hex.EncodeToString(validator.Bytes())),
 	)
 }

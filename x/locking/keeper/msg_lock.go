@@ -9,11 +9,11 @@ import (
 	"cosmossdk.io/math"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/core/types/goattypes"
 	"github.com/goatnetwork/goat/x/locking/types"
 )
 
-func (k Keeper) Lock(ctx context.Context, reqs []*ethtypes.GoatLock) error {
+func (k Keeper) Lock(ctx context.Context, reqs []*goattypes.LockRequest) error {
 	if len(reqs) == 0 {
 		return nil
 	}
@@ -54,7 +54,7 @@ func (k Keeper) lock(ctx context.Context, target common.Address, coins sdktypes.
 	validator.Locking = validator.Locking.Add(coins...)
 
 	switch validator.Status {
-	case types.ValidatorStatus_Pending, types.ValidatorStatus_Active:
+	case types.Pending, types.Active:
 		// remove it from power ranking
 		if err := k.PowerRanking.Remove(ctx,
 			collections.Join(validator.Power, valdtAddr)); err != nil {
@@ -95,15 +95,16 @@ func (k Keeper) lock(ctx context.Context, target common.Address, coins sdktypes.
 			collections.Join(validator.Power, valdtAddr)); err != nil {
 			return err
 		}
-	case types.ValidatorStatus_Downgrade:
+		k.Logger().Info("Lock", "validator", hex.EncodeToString(valdtAddr), "power", validator.Power)
+	case types.Downgrade:
 		threshold, err := k.Threshold.Get(sdkctx)
 		if err != nil {
 			return err
 		}
 
 		// check if it's unjailed and locking is enough
-		if sdkctx.BlockTime().After(validator.SigningInfo.JailedUntil) && validator.Locking.IsAllGTE(threshold.List) {
-			validator.Status = types.ValidatorStatus_Pending
+		if sdkctx.BlockTime().After(validator.JailedUntil) && validator.Locking.IsAllGTE(threshold.List) {
+			validator.Status = types.Pending
 
 			for _, coin := range validator.Locking {
 				if err := k.Locking.Set(sdkctx,
@@ -129,8 +130,9 @@ func (k Keeper) lock(ctx context.Context, target common.Address, coins sdktypes.
 				collections.Join(validator.Power, valdtAddr)); err != nil {
 				return err
 			}
+			k.Logger().Info("Unjail", "validator", hex.EncodeToString(valdtAddr), "power", validator.Power)
 		}
-	case types.ValidatorStatus_Tombstoned, types.ValidatorStatus_Inactive:
+	case types.Tombstoned, types.Inactive:
 		// don't do anything
 	}
 

@@ -51,11 +51,6 @@ func (k Keeper) handleEvidence(ctx context.Context, evidence comet.Evidence, par
 		ageDuration := sdkctx.BlockTime().Sub(evidence.Time())
 		ageBlocks := sdkctx.BlockHeight() - evidence.Height()
 		if ageDuration > cp.Evidence.MaxAgeDuration && ageBlocks > cp.Evidence.MaxAgeNumBlocks {
-			k.Logger().Info(
-				"ignored equivocation; evidence too old", "validator", hex.EncodeToString(address),
-				"infraction_height", evidence.Height(), "max_age_num_blocks", cp.Evidence.MaxAgeNumBlocks,
-				"infraction_time", evidence.Time(), "max_age_duration", cp.Evidence.MaxAgeDuration,
-			)
 			return nil
 		}
 	}
@@ -66,12 +61,7 @@ func (k Keeper) handleEvidence(ctx context.Context, evidence comet.Evidence, par
 	}
 
 	switch validator.Status {
-	case types.ValidatorStatus_Tombstoned:
-		k.Logger().Info(
-			"ignored equivocation; validator already tombstoned",
-			"validator", hex.EncodeToString(address),
-			"infraction_height", evidence.Height(), "infraction_time", evidence.Time(),
-		)
+	case types.Tombstoned:
 		return nil
 	}
 
@@ -112,11 +102,12 @@ func (k Keeper) handleEvidence(ctx context.Context, evidence comet.Evidence, par
 	}
 
 	validator.Locking = updated
-	validator.Status = types.ValidatorStatus_Tombstoned
+	validator.Status = types.Tombstoned
 	validator.Power = 0
 	if err := k.Validators.Set(sdkctx, address, validator); err != nil {
 		return err
 	}
 
+	sdkctx.EventManager().EmitEvent(types.ValidatorTombstonedEvent(address))
 	return nil
 }

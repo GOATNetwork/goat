@@ -6,7 +6,6 @@ import (
 	"slices"
 
 	"github.com/btcsuite/btcd/btcec/v2"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 )
 
@@ -61,9 +60,4 @@ func (msg *OnBoardingVoterRequest) SignDoc() []byte {
 
 func (msg *OnBoardingVoterRequest) MethodName() string {
 	return "Relayer/NewVoter"
-}
-
-type ExecRequests struct {
-	AddVoters    []*ethtypes.AddVoter
-	RemoveVoters []*ethtypes.RemoveVoter
 }

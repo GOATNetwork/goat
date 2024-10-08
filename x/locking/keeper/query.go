@@ -62,5 +62,5 @@ func (q queryServer) Validator(ctx context.Context, req *types.QueryValidatorReq
 		return nil, status.Error(codes.Internal, "internal error")
 	}
 
-	return &types.QueryValidatorResponse{Validator: &validator}, nil
+	return &types.QueryValidatorResponse{Validator: validator}, nil
 }

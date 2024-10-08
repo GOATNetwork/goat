@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"encoding/hex"
 	"errors"
 
 	"cosmossdk.io/collections"
@@ -12,7 +13,7 @@ import (
 	"github.com/goatnetwork/goat/x/locking/types"
 )
 
-func (k Keeper) HandleVoteInfo(ctx context.Context) error {
+func (k Keeper) HandleVoteInfos(ctx context.Context) error {
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
 	param, err := k.Params.Get(sdkctx)
 	if err != nil {
@@ -38,7 +39,7 @@ func (k Keeper) handleVoteInfo(ctx context.Context, address sdktypes.ConsAddress
 	}
 
 	// It was slashed
-	if validator.Status != types.ValidatorStatus_Active {
+	if validator.Status != types.Active {
 		return nil
 	}
 
@@ -86,9 +87,11 @@ func (k Keeper) handleVoteInfo(ctx context.Context, address sdktypes.ConsAddress
 		}
 
 		validator.Locking = updated
-		validator.Status = types.ValidatorStatus_Downgrade
+		validator.Status = types.Downgrade
 		validator.Power = 0
-		validator.SigningInfo.JailedUntil = sdkctx.BlockTime().Add(param.DowntimeJailDuration)
+		validator.JailedUntil = sdkctx.BlockTime().Add(param.DowntimeJailDuration)
+		sdkctx.EventManager().EmitEvent(types.ValidatorDowngradedEvent(address))
+		k.Logger().Warn("Validator is down", "address", hex.EncodeToString(address))
 	}
 
 	if err := k.Validators.Set(sdkctx, address, validator); err != nil {

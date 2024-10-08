@@ -27,8 +27,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 			panic(err)
 		}
 
-		if validator.Status != types.ValidatorStatus_Active &&
-			validator.Status != types.ValidatorStatus_Pending {
+		if validator.Status != types.Active && validator.Status != types.Pending {
 			continue
 		}
 
@@ -45,7 +44,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 			})
 		}
 
-		if validator.Status == types.ValidatorStatus_Active {
+		if validator.Status == types.Active {
 			if err := k.ValidatorSet.Set(ctx, address, validator.Power); err != nil {
 				panic(err)
 			}

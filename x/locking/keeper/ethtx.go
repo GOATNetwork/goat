@@ -7,7 +7,7 @@ import (
 )
 
 func (k Keeper) DequeueLockingModuleTx(ctx context.Context) ([]*ethtypes.Transaction, error) {
-	const MaxTx = 32
+	const MaxTx = 16
 
 	queue, err := k.EthTxQueue.Get(ctx)
 	if err != nil {
@@ -19,11 +19,11 @@ func (k Keeper) DequeueLockingModuleTx(ctx context.Context) ([]*ethtypes.Transac
 		return nil, err
 	}
 
-	var n int
 	var txs []*ethtypes.Transaction
 
 	// distributeReward txs
 	{
+		var n int
 		for ; n < len(queue.Rewards) && n < MaxTx; n++ {
 			dist := queue.Rewards[n]
 			txs = append(txs, dist.EthTx(txNonce))
@@ -34,6 +34,7 @@ func (k Keeper) DequeueLockingModuleTx(ctx context.Context) ([]*ethtypes.Transac
 
 	// completeUnlock txs
 	{
+		var n int
 		for ; n < len(queue.Unlocks) && n < MaxTx; n++ {
 			unlock := queue.Unlocks[n]
 			txs = append(txs, unlock.EthTx(txNonce))
@@ -42,7 +43,7 @@ func (k Keeper) DequeueLockingModuleTx(ctx context.Context) ([]*ethtypes.Transac
 		queue.Unlocks = queue.Unlocks[n:]
 	}
 
-	if n > 0 {
+	if len(txs) > 0 {
 		if err := k.EthTxQueue.Set(ctx, queue); err != nil {
 			return nil, err
 		}

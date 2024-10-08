@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"encoding/hex"
 	"fmt"
 	"time"
 
@@ -10,9 +11,12 @@ import (
 	"cosmossdk.io/core/store"
 	"cosmossdk.io/log"
 	"cosmossdk.io/math"
+	cmttypes "github.com/cometbft/cometbft/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
+	"github.com/ethereum/go-ethereum/core/types/goattypes"
 
+	cmsecp256k1 "github.com/cometbft/cometbft/crypto/secp256k1"
 	"github.com/goatnetwork/goat/x/locking/types"
 )
 
@@ -86,8 +90,8 @@ func (k Keeper) Logger() log.Logger {
 	return k.logger.With("module", fmt.Sprintf("x/%s", types.ModuleName))
 }
 
-func (k Keeper) ProcessLockingRequest(ctx context.Context, reqs types.ExecRequests, hasTx bool) error {
-	if err := k.UpdateRewardPool(ctx, reqs.GasRevenues, reqs.Grants, hasTx); err != nil {
+func (k Keeper) ProcessLockingRequest(ctx context.Context, reqs goattypes.LockingRequests, hasTx bool) error {
+	if err := k.UpdateRewardPool(ctx, reqs.Gas, reqs.Grants, hasTx); err != nil {
 		return err
 	}
 
@@ -111,4 +115,35 @@ func (k Keeper) ProcessLockingRequest(ctx context.Context, reqs types.ExecReques
 		return err
 	}
 	return nil
+}
+
+func (k Keeper) ActiveValidators(ctx context.Context) ([]cmttypes.GenesisValidator, error) {
+	sdkctx := sdktypes.UnwrapSDKContext(ctx)
+
+	iter, err := k.ValidatorSet.Iterate(sdkctx, nil)
+	if err != nil {
+		return nil, err
+	}
+	defer iter.Close()
+
+	var vals []cmttypes.GenesisValidator
+	for ; iter.Valid(); iter.Next() {
+		kv, err := iter.KeyValue()
+		if err != nil {
+			return nil, err
+		}
+
+		validator, err := k.Validators.Get(sdkctx, kv.Key)
+		if err != nil {
+			return nil, err
+		}
+
+		vals = append(vals, cmttypes.GenesisValidator{
+			Address: kv.Key.Bytes(),
+			PubKey:  cmsecp256k1.PubKey(validator.Pubkey),
+			Power:   int64(kv.Value),
+			Name:    hex.EncodeToString(kv.Key.Bytes()),
+		})
+	}
+	return vals, nil
 }

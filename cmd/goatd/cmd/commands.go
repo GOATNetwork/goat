@@ -187,7 +187,7 @@ func ModgenCommand() *cobra.Command {
 		modgen.Bitcoin(),
 		modgen.Relayer(),
 		modgen.Goat(),
-		modgen.Validator(),
+		modgen.Locking(),
 		modgen.NewKey(),
 	)
 	return cmd

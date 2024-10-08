@@ -16,7 +16,7 @@ service Query {
     option (google.api.http).get = "/goatnetwork/goat/locking/v1/params";
   }
 
-  // Validator queries the parameters of the module.
+  // Validator queries validator state by address.
   rpc Validator(QueryValidatorRequest) returns (QueryValidatorResponse) {
     option (google.api.http).get = "/goatnetwork/goat/locking/v1/validator";
   }
@@ -41,5 +41,8 @@ message QueryValidatorRequest {
 
 // QueryValidatorResponse
 message QueryValidatorResponse {
-  Validator validator = 1;
+  Validator validator = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
 }

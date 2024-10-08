@@ -23,9 +23,7 @@ import (
 	_ "github.com/cosmos/cosmos-sdk/x/auth" // import for side-effects
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	_ "github.com/cosmos/cosmos-sdk/x/auth/tx/config" // import for side-effects
-	_ "github.com/cosmos/cosmos-sdk/x/bank"           // import for side-effects
-	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
-	_ "github.com/cosmos/cosmos-sdk/x/consensus" // import for side-effects
+	_ "github.com/cosmos/cosmos-sdk/x/consensus"      // import for side-effects
 	consensuskeeper "github.com/cosmos/cosmos-sdk/x/consensus/keeper"
 	"go.uber.org/automaxprocs/maxprocs"
 
@@ -64,7 +62,6 @@ type App struct {
 
 	// keepers
 	AccountKeeper         authkeeper.AccountKeeper
-	BankKeeper            bankkeeper.Keeper
 	ConsensusParamsKeeper consensuskeeper.Keeper
 	RelayerKeeper         relayermodulekeeper.Keeper
 	BitcoinKeeper         bitcoinmodulekeeper.Keeper
@@ -127,7 +124,6 @@ func New(
 		&app.txConfig,
 		&app.interfaceRegistry,
 		&app.AccountKeeper,
-		&app.BankKeeper,
 		&app.ConsensusParamsKeeper,
 		&app.RelayerKeeper,
 		&app.BitcoinKeeper,

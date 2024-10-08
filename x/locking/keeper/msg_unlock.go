@@ -9,11 +9,11 @@ import (
 	"cosmossdk.io/collections"
 	"cosmossdk.io/math"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/core/types/goattypes"
 	"github.com/goatnetwork/goat/x/locking/types"
 )
 
-func (k Keeper) Unlock(ctx context.Context, reqs []*ethtypes.GoatUnlock) error {
+func (k Keeper) Unlock(ctx context.Context, reqs []*goattypes.UnlockRequest) error {
 	if len(reqs) == 0 {
 		return nil
 	}
@@ -31,7 +31,7 @@ func (k Keeper) Unlock(ctx context.Context, reqs []*ethtypes.GoatUnlock) error {
 	return nil
 }
 
-func (k Keeper) unlock(ctx context.Context, req *ethtypes.GoatUnlock, param *types.Params) error {
+func (k Keeper) unlock(ctx context.Context, req *goattypes.UnlockRequest, param *types.Params) error {
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
 
 	tokenAddr := hex.EncodeToString(req.Token.Bytes())
@@ -60,30 +60,28 @@ func (k Keeper) unlock(ctx context.Context, req *ethtypes.GoatUnlock, param *typ
 	validator.Locking = validator.Locking.Sub(sdktypes.NewCoin(tokenAddr, amount))
 	lockingAmount = lockingAmount.Sub(amount)
 
-	var powerU64 uint64
-	if !amount.IsZero() && token.Weight > 0 && validator.Status != types.ValidatorStatus_Tombstoned {
+	if !amount.IsZero() && token.Weight > 0 && validator.Status != types.Tombstoned {
 		p := math.NewIntFromUint64(token.Weight).Mul(amount).Quo(types.PowerReduction)
 		if !p.IsUint64() {
 			return types.ErrInvalid.Wrapf("power too large: %s", p)
 		}
-		powerU64 = p.Uint64()
+
+		if powerU64 := p.Uint64(); validator.Power > powerU64 {
+			validator.Power -= powerU64
+		} else { // the latest weight is bigger than before
+			validator.Power = 0
+		}
 	}
 
-	if validator.Power > powerU64 {
-		validator.Power -= powerU64
-	} else { // the latest weight is bigger than before
-		validator.Power = 0
-	}
-
-	exiting := validator.Status == types.ValidatorStatus_Inactive ||
-		validator.Status == types.ValidatorStatus_Tombstoned || lockingAmount.LT(token.Threshold)
+	exiting := validator.Status == types.Inactive ||
+		validator.Status == types.Tombstoned || lockingAmount.LT(token.Threshold)
 	var unlockTime time.Time
 	if exiting {
 		unlockTime = sdkctx.BlockTime().Add(param.ExitingDuration)
 
 		switch validator.Status {
-		case types.ValidatorStatus_Active, types.ValidatorStatus_Pending:
-			validator.Status = types.ValidatorStatus_Inactive
+		case types.Active, types.Pending:
+			validator.Status = types.Inactive
 		}
 
 		// remove all from locking state
@@ -134,6 +132,8 @@ func (k Keeper) unlock(ctx context.Context, req *ethtypes.GoatUnlock, param *typ
 		return err
 	}
 
+	k.Logger().Info("Unlock", "id", req.Id, "validator", hex.EncodeToString(valdtAddr),
+		"token", tokenAddr, "amount", amount, "unlockTime", unlockTime)
 	return nil
 }
 

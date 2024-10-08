@@ -7,6 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/core/types/goattypes"
 	keepertest "github.com/goatnetwork/goat/testutil/keeper"
 	"github.com/goatnetwork/goat/x/bitcoin/keeper"
 	"github.com/goatnetwork/goat/x/bitcoin/mock"
@@ -409,29 +410,29 @@ func (suite *KeeperTestSuite) TestDequeueBitcoinModuleTx() {
 }
 
 func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
-	withdrawals1 := []*ethtypes.GoatWithdrawal{
+	withdrawals1 := []*goattypes.WithdrawalRequest{
 		{
-			Id:         0,
-			Amount:     1,
-			MaxTxPrice: 1,
-			Address:    "bc1qaplz7zlds5hwkr9wz62hrmdvlrljly0c2uzye09rnht8venzy7rsz245xr",
+			Id:      0,
+			Amount:  1,
+			TxPrice: 1,
+			Address: "bc1qaplz7zlds5hwkr9wz62hrmdvlrljly0c2uzye09rnht8venzy7rsz245xr",
 		},
 		{
-			Id:         1,
-			Amount:     1,
-			MaxTxPrice: 1,
-			Address:    "17yhJ5DME9Fu3wVjVoVfP4jKxjrc9WRyaB",
+			Id:      1,
+			Amount:  1,
+			TxPrice: 1,
+			Address: "17yhJ5DME9Fu3wVjVoVfP4jKxjrc9WRyaB",
 		},
 		{
-			Id:         2,
-			Amount:     1,
-			MaxTxPrice: 1,
-			Address:    "bcrt1q268jv3p5gcs8a0xf2pgty8lv9a87ufy38nxwclt88txf4ptzzzaqwa2hp7",
+			Id:      2,
+			Amount:  1,
+			TxPrice: 1,
+			Address: "bcrt1q268jv3p5gcs8a0xf2pgty8lv9a87ufy38nxwclt88txf4ptzzzaqwa2hp7",
 		},
 	}
 
 	suite.Require().NoError(suite.Keeper.EthTxQueue.Set(suite.Context, types.EthTxQueue{}))
-	err := suite.Keeper.ProcessBridgeRequest(suite.Context, types.ExecRequests{Withdrawals: withdrawals1})
+	err := suite.Keeper.ProcessBridgeRequest(suite.Context, goattypes.BridgeRequests{Withdraws: withdrawals1})
 	suite.Require().NoError(err)
 	suite.Require().Equal(len(suite.Context.EventManager().Events()), 1)
 
@@ -453,25 +454,25 @@ func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
 	suite.Require().Equal(wd2, types.Withdrawal{
 		Address:       withdrawals1[2].Address,
 		RequestAmount: withdrawals1[2].Amount,
-		MaxTxPrice:    withdrawals1[2].MaxTxPrice,
+		MaxTxPrice:    withdrawals1[2].TxPrice,
 		OutputScript:  common.Hex2Bytes("0020568f26443446207ebcc95050b21fec2f4fee24913cccec7d673acc9a856210ba"),
 		Status:        types.WITHDRAWAL_STATUS_PENDING,
 	})
 
-	withdrawals2 := []*ethtypes.GoatWithdrawal{
+	withdrawals2 := []*goattypes.WithdrawalRequest{
 		{
-			Id:         3,
-			Amount:     1,
-			MaxTxPrice: 1,
-			Address:    "bcrt1q5h7tn8l6euv670gzjp7s9nlcadmcmttprrylyj",
+			Id:      3,
+			Amount:  1,
+			TxPrice: 1,
+			Address: "bcrt1q5h7tn8l6euv670gzjp7s9nlcadmcmttprrylyj",
 		},
 	}
 
-	rbf1 := []*ethtypes.ReplaceByFee{
-		{Id: 2, MaxTxPrice: 2},
+	rbf1 := []*goattypes.ReplaceByFeeRequest{
+		{Id: 2, TxPrice: 2},
 	}
 
-	err = suite.Keeper.ProcessBridgeRequest(suite.Context, types.ExecRequests{Withdrawals: withdrawals2, RBFs: rbf1})
+	err = suite.Keeper.ProcessBridgeRequest(suite.Context, goattypes.BridgeRequests{Withdraws: withdrawals2, ReplaceByFees: rbf1})
 	suite.Require().NoError(err)
 
 	wd2, err = suite.Keeper.Withdrawals.Get(suite.Context, 2)
@@ -479,7 +480,7 @@ func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
 	suite.Require().Equal(wd2, types.Withdrawal{
 		Address:       withdrawals1[2].Address,
 		RequestAmount: withdrawals1[2].Amount,
-		MaxTxPrice:    rbf1[0].MaxTxPrice,
+		MaxTxPrice:    rbf1[0].TxPrice,
 		OutputScript:  common.Hex2Bytes("0020568f26443446207ebcc95050b21fec2f4fee24913cccec7d673acc9a856210ba"),
 		Status:        types.WITHDRAWAL_STATUS_PENDING,
 	})
@@ -489,7 +490,7 @@ func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
 	suite.Require().Equal(wd3, types.Withdrawal{
 		Address:       withdrawals2[0].Address,
 		RequestAmount: withdrawals2[0].Amount,
-		MaxTxPrice:    withdrawals2[0].MaxTxPrice,
+		MaxTxPrice:    withdrawals2[0].TxPrice,
 		OutputScript:  common.Hex2Bytes("0014a5fcb99ffacf19af3d02907d02cff8eb778dad61"),
 		Status:        types.WITHDRAWAL_STATUS_PENDING,
 	})
@@ -497,11 +498,11 @@ func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
 	wd2.Status = types.WITHDRAWAL_STATUS_PROCESSING
 	suite.Require().NoError(suite.Keeper.Withdrawals.Set(suite.Context, 2, wd2))
 
-	rbf2 := []*ethtypes.ReplaceByFee{
-		{Id: 2, MaxTxPrice: 3},
+	rbf2 := []*goattypes.ReplaceByFeeRequest{
+		{Id: 2, TxPrice: 3},
 	}
 
-	err = suite.Keeper.ProcessBridgeRequest(suite.Context, types.ExecRequests{RBFs: rbf2})
+	err = suite.Keeper.ProcessBridgeRequest(suite.Context, goattypes.BridgeRequests{ReplaceByFees: rbf2})
 	suite.Require().NoError(err)
 
 	wd2, err = suite.Keeper.Withdrawals.Get(suite.Context, 2)
@@ -509,17 +510,17 @@ func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
 	suite.Require().Equal(wd2, types.Withdrawal{
 		Address:       withdrawals1[2].Address,
 		RequestAmount: withdrawals1[2].Amount,
-		MaxTxPrice:    rbf1[0].MaxTxPrice,
+		MaxTxPrice:    rbf1[0].TxPrice,
 		OutputScript:  common.Hex2Bytes("0020568f26443446207ebcc95050b21fec2f4fee24913cccec7d673acc9a856210ba"),
 		Status:        types.WITHDRAWAL_STATUS_PROCESSING,
 	})
 
-	cancel1 := []*ethtypes.Cancel1{
+	cancel1 := []*goattypes.Cancel1Request{
 		{Id: 2},
 		{Id: 3},
 	}
 
-	err = suite.Keeper.ProcessBridgeRequest(suite.Context, types.ExecRequests{Cancel1s: cancel1})
+	err = suite.Keeper.ProcessBridgeRequest(suite.Context, goattypes.BridgeRequests{Cancel1s: cancel1})
 	suite.Require().NoError(err)
 
 	wd2, err = suite.Keeper.Withdrawals.Get(suite.Context, 2)
@@ -527,7 +528,7 @@ func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
 	suite.Require().Equal(wd2, types.Withdrawal{
 		Address:       withdrawals1[2].Address,
 		RequestAmount: withdrawals1[2].Amount,
-		MaxTxPrice:    rbf1[0].MaxTxPrice,
+		MaxTxPrice:    rbf1[0].TxPrice,
 		OutputScript:  common.Hex2Bytes("0020568f26443446207ebcc95050b21fec2f4fee24913cccec7d673acc9a856210ba"),
 		Status:        types.WITHDRAWAL_STATUS_PROCESSING,
 	})
@@ -537,7 +538,7 @@ func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
 	suite.Require().Equal(wd3, types.Withdrawal{
 		Address:       withdrawals2[0].Address,
 		RequestAmount: withdrawals2[0].Amount,
-		MaxTxPrice:    withdrawals2[0].MaxTxPrice,
+		MaxTxPrice:    withdrawals2[0].TxPrice,
 		OutputScript:  common.Hex2Bytes("0014a5fcb99ffacf19af3d02907d02cff8eb778dad61"),
 		Status:        types.WITHDRAWAL_STATUS_CANCELING,
 	})

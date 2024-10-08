@@ -49,7 +49,7 @@ func (k Keeper) PrepareProposalHandler(txpool mempool.Mempool, txVerifier baseap
 				memTx := iterator.Tx()
 				txBytes, err := txVerifier.PrepareProposalVerifyTx(memTx)
 				if err != nil {
-					k.Logger().Debug("Remove mempool tx", "reason", err.Error())
+					k.Logger().Info("Remove tx from mempool", "reason", err.Error())
 
 					err := txpool.Remove(memTx)
 					if err != nil && !errors.Is(err, mempool.ErrTxNotFound) {
@@ -141,7 +141,7 @@ func (k Keeper) createEthBlockProposal(sdkctx sdk.Context, keyProvider cryptotyp
 
 	// Note: the waiting duration is for the payload building starting instead of finishing
 	<-time.After(time.Millisecond * 50)
-	envelope, err := k.ethclient.GetPayloadV3(tmctx, *forkChoiceResp.PayloadID)
+	envelope, err := k.ethclient.GetPayloadV4(tmctx, *forkChoiceResp.PayloadID)
 	if err != nil {
 		return nil, err
 	}
@@ -150,7 +150,7 @@ func (k Keeper) createEthBlockProposal(sdkctx sdk.Context, keyProvider cryptotyp
 	txBuilder.SetGasLimit(1e8)
 	txBuilder.SetTimeoutHeight(uint64(rpp.Height))
 
-	payload := types.ExecutableDataToPayload(envelope.ExecutionPayload, beaconBlock)
+	payload := types.ExecutableDataToPayload(envelope.ExecutionPayload, beaconBlock, envelope.Requests)
 	k.Logger().Info("Propose new executable payload", payload.LogKeyVals()...)
 	if err := txBuilder.SetMsgs(&types.MsgNewEthBlock{Proposer: validatorAddr, Payload: payload}); err != nil {
 		return nil, err
@@ -252,10 +252,6 @@ func (k Keeper) verifyEthBlockProposal(sdkctx sdk.Context, msg *types.MsgNewEthB
 			return errors.New("fee recipient mismatched")
 		}
 
-		if payload.BlobGasUsed > 0 {
-			return errors.New("blob tx is not allowed")
-		}
-
 		// we don't use cometbft timestamp
 		// refer to the note in the PrepareProposalHandler for the details
 		if systemTime := uint64(time.Now().UTC().Unix()); payload.Timestamp > systemTime {
@@ -273,10 +269,6 @@ func (k Keeper) verifyEthBlockProposal(sdkctx sdk.Context, msg *types.MsgNewEthB
 
 		if block.BlockNumber+1 != payload.BlockNumber {
 			return fmt.Errorf("refer to incorrect parent block: expected %d got %d", block.BlockNumber+1, payload.BlockNumber)
-		}
-
-		if payload.BlobGasUsed > 0 {
-			return errors.New("blob tx type is not activated")
 		}
 
 		beaconRoot, err := k.BeaconRoot.Get(sdkctx)
@@ -297,7 +289,7 @@ func (k Keeper) verifyEthBlockProposal(sdkctx sdk.Context, msg *types.MsgNewEthB
 
 	eg.Go(func() error {
 		res, err := k.ethclient.NewPayloadV4(egctx, types.PayloadToExecutableData(payload),
-			[]common.Hash{}, common.BytesToHash(payload.BeaconRoot), payload.Requests)
+			[]common.Hash{}, common.BytesToHash(payload.BeaconRoot), ethtypes.CalcRequestsHash(payload.Requests))
 		if err != nil {
 			return err
 		}

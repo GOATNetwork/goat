@@ -11,6 +11,8 @@ option go_package = "github.com/goatnetwork/goat/x/locking/types";
 
 // ValidatorStatus is the status of a validator.
 enum ValidatorStatus {
+  option (gogoproto.goproto_enum_prefix) = false;
+
   // UNSPECIFIED defines an invalid validator status.
   VALIDATOR_STATUS_UNSPECIFIED = 0 [(gogoproto.enumvalue_customname) = "Unspecified"];
   // Pending means the validator is waitting for
@@ -33,13 +35,6 @@ message SigningInfo {
 
   // missed of the current sign window
   int64 missed = 2;
-
-  // Timestamp until which the validator is jailed due to liveness downtime.
-  google.protobuf.Timestamp jailed_until = 3 [
-    (gogoproto.stdtime) = true,
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
-  ];
 }
 
 // Validator
@@ -66,6 +61,12 @@ message Validator {
   ];
   ValidatorStatus status = 6;
   SigningInfo signing_info = 7 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  // Timestamp until which the validator is jailed due to liveness downtime.
+  google.protobuf.Timestamp jailed_until = 8 [
+    (gogoproto.stdtime) = true,
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];

@@ -3,16 +3,17 @@ package keeper
 import (
 	"bytes"
 	"context"
+	"encoding/hex"
 
 	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/core/types/goattypes"
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
 	"github.com/goatnetwork/goat/x/locking/types"
 )
 
-func (k *Keeper) Create(ctx context.Context, req []*ethtypes.CreateValidator) error {
+func (k *Keeper) Create(ctx context.Context, req []*goattypes.CreateRequest) error {
 	for _, create := range req {
 		if err := k.createValidator(ctx, create); err != nil {
 			return err
@@ -21,7 +22,7 @@ func (k *Keeper) Create(ctx context.Context, req []*ethtypes.CreateValidator) er
 	return nil
 }
 
-func (k Keeper) createValidator(ctx context.Context, req *ethtypes.CreateValidator) error {
+func (k Keeper) createValidator(ctx context.Context, req *goattypes.CreateRequest) error {
 	uncomp, err := ethcrypto.UnmarshalPubkey(append([]byte{0x04}, req.Pubkey[:]...))
 	if err != nil {
 		return err
@@ -63,11 +64,12 @@ func (k Keeper) createValidator(ctx context.Context, req *ethtypes.CreateValidat
 		Locking:   nil,
 		Reward:    math.ZeroInt(),
 		GasReward: math.ZeroInt(),
-		Status:    types.ValidatorStatus_Pending,
+		Status:    types.Pending,
 	}
 	if err := k.Validators.Set(sdkctx, address, validator); err != nil {
 		return err
 	}
 
+	k.Logger().Info("Create", "address", hex.EncodeToString(address))
 	return nil
 }

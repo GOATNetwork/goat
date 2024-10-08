@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"encoding/hex"
 	"errors"
 	"fmt"
 
@@ -19,7 +20,7 @@ func (k Keeper) BeginBlocker(ctx context.Context) error {
 	if err := k.dequeueMatureUnlocks(sdkctx); err != nil {
 		return err
 	}
-	if err := k.HandleVoteInfo(sdkctx); err != nil {
+	if err := k.HandleVoteInfos(sdkctx); err != nil {
 		return err
 	}
 	if err := k.HandleEvidences(sdkctx); err != nil {
@@ -79,17 +80,18 @@ func (k Keeper) EndBlocker(ctx context.Context) ([]abci.ValidatorUpdate, error) 
 		valstr := string(valAddr)
 
 		switch validator.Status {
-		case types.ValidatorStatus_Active:
+		case types.Active:
 			if power := lastSet[valstr]; power != validator.Power { // the power is changed
 				newSet = append(newSet, abci.ValidatorUpdate{
 					Power: int64(validator.Power), PubKey: validator.CMPubkey()})
+				k.Logger().Info("Validator set updated", "address", hex.EncodeToString(valAddr), "power", validator.Power)
 			}
 			delete(lastSet, valstr)
-		case types.ValidatorStatus_Pending:
+		case types.Pending:
 			if _, ok := lastSet[valstr]; ok {
 				return nil, fmt.Errorf("pending validator %x existed in the last validator set", valAddr.Bytes())
 			}
-			validator.Status = types.ValidatorStatus_Active
+			validator.Status = types.Active
 			validator.SigningInfo.Missed = 0
 			validator.SigningInfo.Offset = 0
 			if err := k.Validators.Set(sdkctx, valAddr, validator); err != nil {
@@ -100,6 +102,7 @@ func (k Keeper) EndBlocker(ctx context.Context) ([]abci.ValidatorUpdate, error) 
 			}
 			newSet = append(newSet, abci.ValidatorUpdate{
 				Power: int64(validator.Power), PubKey: validator.CMPubkey()})
+			k.Logger().Info("Validator set updated", "address", hex.EncodeToString(valAddr), "power", validator.Power)
 		default:
 			return nil, fmt.Errorf("%s validator %x in power ranking", validator.Status, valAddr.Bytes())
 		}
@@ -112,8 +115,8 @@ func (k Keeper) EndBlocker(ctx context.Context) ([]abci.ValidatorUpdate, error) 
 		if err != nil {
 			return nil, err
 		}
-		if validator.Status == types.ValidatorStatus_Active {
-			validator.Status = types.ValidatorStatus_Pending
+		if validator.Status == types.Active {
+			validator.Status = types.Pending
 			if err := k.Validators.Set(sdkctx, valAddr, validator); err != nil {
 				return nil, err
 			}
@@ -122,6 +125,7 @@ func (k Keeper) EndBlocker(ctx context.Context) ([]abci.ValidatorUpdate, error) 
 			return nil, err
 		}
 		newSet = append(newSet, abci.ValidatorUpdate{PubKey: validator.CMPubkey()})
+		k.Logger().Info("Validator set updated", "address", hex.EncodeToString(valAddr), "power", 0)
 	}
 	return newSet, nil
 }

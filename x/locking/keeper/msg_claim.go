@@ -2,14 +2,15 @@ package keeper
 
 import (
 	"context"
+	"encoding/hex"
 
 	"cosmossdk.io/math"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/core/types/goattypes"
 	"github.com/goatnetwork/goat/x/locking/types"
 )
 
-func (k Keeper) Claim(ctx context.Context, reqs []*ethtypes.GoatClaimReward) error {
+func (k Keeper) Claim(ctx context.Context, reqs []*goattypes.ClaimRequest) error {
 	if len(reqs) == 0 {
 		return nil
 	}
@@ -29,6 +30,8 @@ func (k Keeper) Claim(ctx context.Context, reqs []*ethtypes.GoatClaimReward) err
 			return err
 		}
 
+		k.Logger().Info("Claim", "address",
+			hex.EncodeToString(valdtAddr), "goat", validator.Reward, "gas", validator.GasReward)
 		queue.Rewards = append(queue.Rewards, &types.Reward{
 			Id:        req.Id,
 			Recipient: req.Recipient.Bytes(),
