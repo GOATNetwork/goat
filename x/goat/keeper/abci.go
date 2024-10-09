@@ -25,6 +25,8 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
+const maxTxLen = 16
+
 func (k Keeper) PrepareProposalHandler(txpool mempool.Mempool, txVerifier baseapp.ProposalTxVerifier, keyProvider cryptotypes.PrivKey) sdk.PrepareProposalHandler {
 	if keyProvider == nil {
 		panic("no eth block signer provided")
@@ -59,6 +61,9 @@ func (k Keeper) PrepareProposalHandler(txpool mempool.Mempool, txVerifier baseap
 					continue
 				}
 				memTxs = append(memTxs, txBytes)
+				if len(memTxs)+1 >= maxTxLen {
+					return nil
+				}
 				iterator = iterator.Next()
 			}
 			return nil
@@ -189,14 +194,16 @@ func (k Keeper) createEthBlockProposal(sdkctx sdk.Context, keyProvider cryptotyp
 
 func (k Keeper) ProcessProposalHandler(txVerifier baseapp.ProposalTxVerifier) sdk.ProcessProposalHandler {
 	return func(sdkctx sdk.Context, rpp *abci.RequestProcessProposal) (*abci.ResponseProcessProposal, error) {
-		if len(rpp.Txs) == 0 {
-			return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "empty block")
+		if l := len(rpp.Txs); l == 0 {
+			return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "no transactions")
+		} else if l > maxTxLen {
+			return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "too many transactions")
 		}
 
 		for txIdx, rawTx := range rpp.Txs {
 			tx, err := txVerifier.ProcessProposalVerifyTx(rawTx)
 			if err != nil {
-				return nil, fmt.Errorf("invalid transaction: index %d: %s", txIdx, err)
+				return nil, errorsmod.Wrapf(sdkerrors.ErrLogic, "invalid transaction: index %d: %s", txIdx, err)
 			}
 
 			msgs := tx.GetMsgs()
