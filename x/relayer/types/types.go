@@ -4,10 +4,30 @@ import (
 	"crypto/sha256"
 	"errors"
 	"slices"
+	"time"
 
 	"github.com/btcsuite/btcd/btcec/v2"
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 )
+
+//go:generate mockgen -source=types.go -destination=../mock/vote.go -package=mock IVoteMsg
+type IVoteMsg interface {
+	GetProposer() string
+	GetVote() *Votes
+	MethodName() string
+	VoteSigDoc() []byte
+}
+
+type INonVoteMsg interface {
+	GetProposer() string
+}
+
+type IRelayer interface {
+	GetProposer() string
+	GetEpoch() uint64
+	GetLastElected() time.Time
+	GetVoters() []string
+}
 
 func (v *Votes) Validate() error {
 	if len(v.Voters) > sha256.Size { // we have max 256 voters

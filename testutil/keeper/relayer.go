@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"testing"
+	"time"
 
 	"cosmossdk.io/core/address"
 	"cosmossdk.io/log"
@@ -21,7 +22,7 @@ import (
 	"github.com/goatnetwork/goat/x/relayer/types"
 )
 
-func RelayerKeeper(t testing.TB) (keeper.Keeper, sdk.Context, address.Codec) {
+func RelayerKeeper(t testing.TB, accountKeeper types.AccountKeeper) (keeper.Keeper, sdk.Context, address.Codec) {
 	storeKey := storetypes.NewKVStoreKey(types.StoreKey)
 
 	db := dbm.NewMemDB()
@@ -37,15 +38,27 @@ func RelayerKeeper(t testing.TB) (keeper.Keeper, sdk.Context, address.Codec) {
 		cdc,
 		addressCodec,
 		runtime.NewKVStoreService(storeKey),
-		nil,
+		accountKeeper,
 		log.NewNopLogger(),
 	)
 
-	ctx := sdk.NewContext(stateStore, cmtproto.Header{}, false, log.NewNopLogger())
+	ctx := sdk.NewContext(stateStore, cmtproto.Header{ChainID: "goat-unit-test", Time: time.Now().UTC()}, false, log.NewNopLogger())
 
 	// Initialize params
 	if err := k.Params.Set(ctx, types.DefaultParams()); err != nil {
 		t.Fatalf("failed to set params: %v", err)
+	}
+
+	if err := k.Queue.Set(ctx, types.VoterQueue{}); err != nil {
+		t.Fatalf("failed to set VoterQueue: %v", err)
+	}
+
+	if err := k.Randao.Set(ctx, make([]byte, 32)); err != nil {
+		t.Fatalf("failed to set Randao: %v", err)
+	}
+
+	if err := k.Sequence.Set(ctx, 0); err != nil {
+		t.Fatalf("failed to set Sequence: %v", err)
 	}
 
 	return k, ctx, addressCodec

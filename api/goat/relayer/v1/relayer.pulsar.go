@@ -3598,8 +3598,8 @@ const (
 	// VOTER_STATUS_UNSPECIFIED defines an invalid status.
 	VoterStatus_VOTER_STATUS_UNSPECIFIED VoterStatus = 0
 	// VOTER_STATUS_PENDING defines a pending voter which was added on the chain
-	// he still needs to send online proof to proposer to prove readiness and
-	// ownership of public keys
+	// he still needs to send online proof to proposer to prove liveness and
+	// ownership of the public key
 	VoterStatus_VOTER_STATUS_PENDING VoterStatus = 1
 	// VOTER_STATUS_ON_BOARDING defines a voter that is approved from current
 	// proposer the voter will be added to voter list in the next election

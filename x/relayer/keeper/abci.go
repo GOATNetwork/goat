@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"errors"
 	"math/big"
 	"slices"
 
@@ -66,8 +67,7 @@ func (k Keeper) EndBlocker(ctx context.Context) error {
 
 		if isProposerRemvoed {
 			if len(newVoters) == 0 { // it should never happen
-				k.Logger().Error("delete too many voters in ElectProposer")
-				return nil
+				return errors.New("delete too many voters in ElectProposer")
 			}
 			// use the first voter as the new proposer
 			relayer.Proposer = newVoters[0]

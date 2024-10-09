@@ -31,7 +31,7 @@ func (k msgServer) NewVoter(ctx context.Context, req *types.MsgNewVoterRequest) 
 		return nil, types.ErrInvalid.Wrapf("invalid request: %s", err.Error())
 	}
 
-	relayer, err := k.VerifyNonProposal(ctx, req)
+	relayer, err := k.VerifyNonProposal(sdkctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -42,7 +42,7 @@ func (k msgServer) NewVoter(ctx context.Context, req *types.MsgNewVoterRequest) 
 		return nil, err
 	}
 
-	voter, err := k.Voters.Get(ctx, addrStr)
+	voter, err := k.Voters.Get(sdkctx, addrStr)
 	if err != nil {
 		return nil, err
 	}
@@ -68,27 +68,27 @@ func (k msgServer) NewVoter(ctx context.Context, req *types.MsgNewVoterRequest) 
 	}
 
 	// add account
-	if !k.accountKeeper.HasAccount(ctx, addrRaw) {
-		acc := k.accountKeeper.NewAccountWithAddress(ctx, addrRaw)
+	if !k.accountKeeper.HasAccount(sdkctx, addrRaw) {
+		acc := k.accountKeeper.NewAccountWithAddress(sdkctx, addrRaw)
 		if err := acc.SetPubKey(&secp256k1.PubKey{Key: req.VoterTxKey}); err != nil {
 			return nil, types.ErrInvalid.Wrapf("unable to set pubkey")
 		}
-		k.accountKeeper.SetAccount(ctx, acc)
+		k.accountKeeper.SetAccount(sdkctx, acc)
 	}
 
-	queue, err := k.Queue.Get(ctx)
+	voter.VoteKey = req.VoterBlsKey
+	voter.Status = types.VOTER_STATUS_ON_BOARDING
+	if err := k.Voters.Set(sdkctx, addrStr, voter); err != nil {
+		return nil, err
+	}
+
+	queue, err := k.Queue.Get(sdkctx)
 	if err != nil {
 		return nil, err
 	}
 	queue.OnBoarding = append(queue.OnBoarding, addrStr)
 
-	voter.VoteKey = req.VoterBlsKey
-	voter.Status = types.VOTER_STATUS_ON_BOARDING
-	if err := k.Voters.Set(ctx, addrStr, voter); err != nil {
-		return nil, err
-	}
-
-	if err := k.Queue.Set(ctx, queue); err != nil {
+	if err := k.Queue.Set(sdkctx, queue); err != nil {
 		return nil, err
 	}
 
@@ -97,16 +97,9 @@ func (k msgServer) NewVoter(ctx context.Context, req *types.MsgNewVoterRequest) 
 }
 
 func (k msgServer) AcceptProposer(ctx context.Context, req *types.MsgAcceptProposerRequest) (*types.MsgAcceptProposerResponse, error) {
-	param, err := k.Params.Get(ctx)
-	if err != nil {
-		return nil, err
-	}
+	sdkctx := sdktypes.UnwrapSDKContext(ctx)
 
-	if param.AcceptProposerTimeout == 0 {
-		return &types.MsgAcceptProposerResponse{}, nil
-	}
-
-	relayer, err := k.Relayer.Get(ctx)
+	relayer, err := k.Relayer.Get(sdkctx)
 	if err != nil {
 		return nil, err
 	}
@@ -120,21 +113,24 @@ func (k msgServer) AcceptProposer(ctx context.Context, req *types.MsgAcceptPropo
 	}
 
 	if relayer.Epoch != req.Epoch {
-		return nil, types.ErrInvalid.Wrapf("invalid epoch: expected: %d", relayer.Epoch)
+		return nil, types.ErrInvalid.Wrapf("invalid epoch: expected %d", relayer.Epoch)
 	}
 
-	sdkctx := sdktypes.UnwrapSDKContext(ctx)
+	param, err := k.Params.Get(sdkctx)
+	if err != nil {
+		return nil, err
+	}
+
 	if sdkctx.BlockTime().Sub(relayer.LastElected) > param.AcceptProposerTimeout {
 		return nil, types.ErrInvalid.Wrapf("timeout to accept proposer role")
 	}
 
 	relayer.ProposerAccepted = true
-
-	if err := k.Relayer.Set(ctx, relayer); err != nil {
+	if err := k.Relayer.Set(sdkctx, relayer); err != nil {
 		return nil, err
 	}
 
-	k.Logger().Info("new proposer is accepted", "epoch", relayer.Epoch, "proposer", relayer.Proposer)
+	k.Logger().Info("New proposer is accepted", "epoch", relayer.Epoch, "proposer", relayer.Proposer)
 	sdkctx.EventManager().EmitEvent(types.AcceptedProposerEvent(relayer.Proposer, relayer.Epoch))
 	return &types.MsgAcceptProposerResponse{}, nil
 }

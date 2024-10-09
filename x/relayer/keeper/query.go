@@ -71,15 +71,15 @@ func (q queryServer) Voters(ctx context.Context, req *types.QueryVotersRequest) 
 	}
 	defer iter.Close()
 
-	res := types.QueryVotersResponse{Voters: []types.Voter{}}
+	var voters []types.Voter
 	for ; iter.Valid(); iter.Next() {
 		kv, err := iter.KeyValue()
 		if err != nil {
 			return nil, err
 		}
-		res.Voters = append(res.Voters, kv.Value)
+		voters = append(voters, kv.Value)
 	}
-	return &res, nil
+	return &types.QueryVotersResponse{Voters: voters}, nil
 }
 
 func (q queryServer) Pubkeys(ctx context.Context, req *types.QueryPubkeysRequest) (*types.QueryPubkeysResponse, error) {
