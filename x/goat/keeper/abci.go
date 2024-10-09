@@ -296,7 +296,7 @@ func (k Keeper) verifyEthBlockProposal(sdkctx sdk.Context, msg *types.MsgNewEthB
 
 	eg.Go(func() error {
 		res, err := k.ethclient.NewPayloadV4(egctx, types.PayloadToExecutableData(payload),
-			[]common.Hash{}, common.BytesToHash(payload.BeaconRoot), ethtypes.CalcRequestsHash(payload.Requests))
+			[]common.Hash{}, common.BytesToHash(payload.BeaconRoot), payload.Requests)
 		if err != nil {
 			return err
 		}

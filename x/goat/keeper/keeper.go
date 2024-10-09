@@ -14,7 +14,6 @@ import (
 	"github.com/ethereum/go-ethereum/beacon/engine"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
 
 	"github.com/goatnetwork/goat/pkg/ethrpc"
 	"github.com/goatnetwork/goat/x/goat/types"
@@ -100,7 +99,7 @@ func (k Keeper) Finalized(ctx context.Context) error { // EndBlock phase only!
 
 	k.Logger().Info("Notify NewPayload", "number", block.BlockNumber)
 	response, err := k.ethclient.NewPayloadV4(ctx, types.PayloadToExecutableData(&block),
-		[]common.Hash{}, common.BytesToHash(block.BeaconRoot), ethtypes.CalcRequestsHash(block.Requests))
+		[]common.Hash{}, common.BytesToHash(block.BeaconRoot), block.Requests)
 	if err != nil {
 		return err
 	}
