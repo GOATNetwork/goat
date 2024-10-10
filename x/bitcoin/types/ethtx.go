@@ -67,7 +67,7 @@ func NewBitcoinHashEthTx(seq uint64, hash []byte) *ethtypes.Transaction {
 			goattypes.BirdgeModule,
 			goattypes.BitcoinNewBlockAction,
 			seq,
-			&goattypes.NewBitcoinBlock{
+			&goattypes.NewBtcBlockTx{
 				Hash: common.BytesToHash(hash),
 			},
 		),

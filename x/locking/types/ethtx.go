@@ -12,7 +12,7 @@ func (r *Reward) EthTx(seq uint64) *ethtypes.Transaction {
 			goattypes.LockingModule,
 			goattypes.LockingDistributeRewardAction,
 			seq,
-			&goattypes.DistributeReward{
+			&goattypes.DistributeRewardTx{
 				Id:        r.Id,
 				Recipient: common.BytesToAddress(r.Recipient),
 				Goat:      r.Goat.BigInt(),
@@ -28,7 +28,7 @@ func (l *Unlock) EthTx(seq uint64) *ethtypes.Transaction {
 			goattypes.LockingModule,
 			goattypes.LockingCompleteUnlockAction,
 			seq,
-			&goattypes.CompleteUnlock{
+			&goattypes.CompleteUnlockTx{
 				Id:        l.Id,
 				Recipient: common.BytesToAddress(l.Recipient),
 				Token:     common.BytesToAddress(l.Token),
