@@ -45,6 +45,8 @@ require (
 )
 
 replace (
+	// use cosmos fork of keyring
+	github.com/99designs/keyring => github.com/cosmos/keyring v1.2.0
 	// github.com/cosmos/cosmos-sdk => ../goat-cosmos-sdk
 	// goat-geth implemention
 	github.com/ethereum/go-ethereum => ../goat-geth
