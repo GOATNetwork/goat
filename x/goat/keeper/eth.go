@@ -62,10 +62,6 @@ func (k Keeper) VerifyDequeue(ctx context.Context, txRoot []byte, txs [][]byte) 
 	}
 
 	for idx, tx := range btcTxs {
-		if !tx.IsGoatTx() {
-			return fmt.Errorf("not a goat tx %d", idx)
-		}
-
 		raw, err := tx.MarshalBinary()
 		if err != nil {
 			return err
@@ -87,10 +83,6 @@ func (k Keeper) VerifyDequeue(ctx context.Context, txRoot []byte, txs [][]byte) 
 	}
 
 	for idx, tx := range lockingTxs {
-		if !tx.IsGoatTx() {
-			return fmt.Errorf("not a goat tx %d", idx+len(btcTxs))
-		}
-
 		raw, err := tx.MarshalBinary()
 		if err != nil {
 			return err
