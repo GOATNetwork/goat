@@ -9,6 +9,7 @@ import (
 	"github.com/ethereum/go-ethereum/core/types/goattypes"
 )
 
+//go:generate mockgen -source=expected_keepers.go -destination=../mock/keeper.go -package=mock
 type BitcoinKeeper interface {
 	DequeueBitcoinModuleTx(ctx context.Context) ([]*ethtypes.Transaction, error)
 	ProcessBridgeRequest(ctx context.Context, req goattypes.BridgeRequests) error
@@ -50,10 +51,4 @@ type AccountKeeper interface {
 	// AddressCodec returns the account address codec.
 	AddressCodec() address.Codec
 	// Methods imported from account should be defined here
-}
-
-// ParamSubspace defines the expected Subspace interface for parameters.
-type ParamSubspace interface {
-	Get(context.Context, []byte, interface{})
-	Set(context.Context, []byte, interface{})
 }

@@ -14,6 +14,10 @@ func (k Keeper) DequeueLockingModuleTx(ctx context.Context) ([]*ethtypes.Transac
 		return nil, err
 	}
 
+	if len(queue.Rewards) == 0 && len(queue.Unlocks) == 0 {
+		return nil, nil
+	}
+
 	txNonce, err := k.EthTxNonce.Peek(ctx)
 	if err != nil {
 		return nil, err
@@ -43,13 +47,12 @@ func (k Keeper) DequeueLockingModuleTx(ctx context.Context) ([]*ethtypes.Transac
 		queue.Unlocks = queue.Unlocks[n:]
 	}
 
-	if len(txs) > 0 {
-		if err := k.EthTxQueue.Set(ctx, queue); err != nil {
-			return nil, err
-		}
-		if err := k.EthTxNonce.Set(ctx, txNonce); err != nil {
-			return nil, err
-		}
+	if err := k.EthTxQueue.Set(ctx, queue); err != nil {
+		return nil, err
 	}
+	if err := k.EthTxNonce.Set(ctx, txNonce); err != nil {
+		return nil, err
+	}
+
 	return txs, nil
 }

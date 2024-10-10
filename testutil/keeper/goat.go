@@ -17,11 +17,18 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
+	"github.com/goatnetwork/goat/pkg/ethrpc"
 	"github.com/goatnetwork/goat/x/goat/keeper"
 	"github.com/goatnetwork/goat/x/goat/types"
 )
 
-func GoatKeeper(t testing.TB) (keeper.Keeper, sdk.Context, address.Codec) {
+func GoatKeeper(t testing.TB,
+	bitcoinKeeper types.BitcoinKeeper,
+	lockingKeeper types.LockingKeeper,
+	relayerKeeper types.RelayerKeeper,
+	accountKeeper types.AccountKeeper,
+	ethClient ethrpc.EngineClient,
+) (keeper.Keeper, sdk.Context, address.Codec) {
 	storeKey := storetypes.NewKVStoreKey(types.StoreKey)
 
 	db := dbm.NewMemDB()
@@ -38,12 +45,11 @@ func GoatKeeper(t testing.TB) (keeper.Keeper, sdk.Context, address.Codec) {
 		addressCodec,
 		runtime.NewKVStoreService(storeKey),
 		log.NewNopLogger(),
-		nil,
-		nil,
-		nil,
-		nil,
-		nil,
-		nil,
+		bitcoinKeeper,
+		lockingKeeper,
+		relayerKeeper,
+		accountKeeper,
+		ethClient,
 	)
 
 	ctx := sdk.NewContext(stateStore, cmtproto.Header{}, false, log.NewNopLogger())

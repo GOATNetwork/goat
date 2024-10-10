@@ -5,6 +5,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+
+	"github.com/ethereum/go-ethereum/params"
 )
 
 func (k Keeper) Dequeue(ctx context.Context) ([][]byte, error) {
@@ -41,7 +43,7 @@ func (k Keeper) Dequeue(ctx context.Context) ([][]byte, error) {
 // VerifyDequeue verifies if the goat transactions of the new eth block are consistent with expected here
 func (k Keeper) VerifyDequeue(ctx context.Context, txRoot []byte, txs [][]byte) error {
 	// goat-geth will check the tx root hash
-	if len(txRoot) != 33 {
+	if len(txRoot) != params.GoatHeaderExtraLengthV0 {
 		return errors.New("invalid goat tx root")
 	}
 
@@ -56,10 +58,14 @@ func (k Keeper) VerifyDequeue(ctx context.Context, txRoot []byte, txs [][]byte) 
 	}
 
 	if len(txs) < len(btcTxs) {
-		return fmt.Errorf("bitcoin module txs length mismatched: len(txs)=%d len(mod)=%d", len(txs), len(btcTxs))
+		return fmt.Errorf("tx mismatched: len(txs)=%d len(btc)=%d", len(txs), len(btcTxs))
 	}
 
 	for idx, tx := range btcTxs {
+		if !tx.IsGoatTx() {
+			return fmt.Errorf("not a goat tx %d", idx)
+		}
+
 		raw, err := tx.MarshalBinary()
 		if err != nil {
 			return err
@@ -77,10 +83,14 @@ func (k Keeper) VerifyDequeue(ctx context.Context, txRoot []byte, txs [][]byte) 
 
 	txs = txs[len(btcTxs):]
 	if len(txs) < len(lockingTxs) {
-		return fmt.Errorf("locking module txs length mismatched: len(txs)=%d len(mod)=%d", len(txs), len(lockingTxs))
+		return fmt.Errorf("tx mismatched: len(txs)=%d len(btc)=%d len(locking)=%d", len(txs), len(btcTxs), len(lockingTxs))
 	}
 
 	for idx, tx := range lockingTxs {
+		if !tx.IsGoatTx() {
+			return fmt.Errorf("not a goat tx %d", idx+len(btcTxs))
+		}
+
 		raw, err := tx.MarshalBinary()
 		if err != nil {
 			return err

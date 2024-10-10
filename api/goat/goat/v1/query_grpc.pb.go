@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Query_EthBlock_FullMethodName = "/goat.goat.v1.Query/EthBlock"
+	Query_EthBlockTip_FullMethodName = "/goat.goat.v1.Query/EthBlockTip"
 )
 
 // QueryClient is the client API for Query service.
@@ -29,7 +29,7 @@ const (
 // Query defines the gRPC querier service.
 type QueryClient interface {
 	// EthBlock
-	EthBlock(ctx context.Context, in *QueryEthBlockRequest, opts ...grpc.CallOption) (*QueryEthBlockResponse, error)
+	EthBlockTip(ctx context.Context, in *QueryEthBlockTipRequest, opts ...grpc.CallOption) (*QueryEthBlockTipResponse, error)
 }
 
 type queryClient struct {
@@ -40,10 +40,10 @@ func NewQueryClient(cc grpc.ClientConnInterface) QueryClient {
 	return &queryClient{cc}
 }
 
-func (c *queryClient) EthBlock(ctx context.Context, in *QueryEthBlockRequest, opts ...grpc.CallOption) (*QueryEthBlockResponse, error) {
+func (c *queryClient) EthBlockTip(ctx context.Context, in *QueryEthBlockTipRequest, opts ...grpc.CallOption) (*QueryEthBlockTipResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(QueryEthBlockResponse)
-	err := c.cc.Invoke(ctx, Query_EthBlock_FullMethodName, in, out, cOpts...)
+	out := new(QueryEthBlockTipResponse)
+	err := c.cc.Invoke(ctx, Query_EthBlockTip_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +57,7 @@ func (c *queryClient) EthBlock(ctx context.Context, in *QueryEthBlockRequest, op
 // Query defines the gRPC querier service.
 type QueryServer interface {
 	// EthBlock
-	EthBlock(context.Context, *QueryEthBlockRequest) (*QueryEthBlockResponse, error)
+	EthBlockTip(context.Context, *QueryEthBlockTipRequest) (*QueryEthBlockTipResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -68,8 +68,8 @@ type QueryServer interface {
 // pointer dereference when methods are called.
 type UnimplementedQueryServer struct{}
 
-func (UnimplementedQueryServer) EthBlock(context.Context, *QueryEthBlockRequest) (*QueryEthBlockResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method EthBlock not implemented")
+func (UnimplementedQueryServer) EthBlockTip(context.Context, *QueryEthBlockTipRequest) (*QueryEthBlockTipResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EthBlockTip not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 func (UnimplementedQueryServer) testEmbeddedByValue()               {}
@@ -92,20 +92,20 @@ func RegisterQueryServer(s grpc.ServiceRegistrar, srv QueryServer) {
 	s.RegisterService(&Query_ServiceDesc, srv)
 }
 
-func _Query_EthBlock_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryEthBlockRequest)
+func _Query_EthBlockTip_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryEthBlockTipRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).EthBlock(ctx, in)
+		return srv.(QueryServer).EthBlockTip(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Query_EthBlock_FullMethodName,
+		FullMethod: Query_EthBlockTip_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).EthBlock(ctx, req.(*QueryEthBlockRequest))
+		return srv.(QueryServer).EthBlockTip(ctx, req.(*QueryEthBlockTipRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -118,8 +118,8 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*QueryServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "EthBlock",
-			Handler:    _Query_EthBlock_Handler,
+			MethodName: "EthBlockTip",
+			Handler:    _Query_EthBlockTip_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

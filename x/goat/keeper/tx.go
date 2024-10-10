@@ -44,7 +44,7 @@ func (k msgServer) NewEthBlock(ctx context.Context, req *types.MsgNewEthBlock) (
 	}
 
 	if !bytes.Equal(block.BlockHash, payload.ParentHash) || block.BlockNumber+1 != payload.BlockNumber {
-		return nil, types.ErrInvalidRequest.Wrap("refer to incorrect parent block")
+		return nil, types.ErrInvalidRequest.Wrap("incorrect parent block")
 	}
 
 	if payload.BlobGasUsed > 0 {

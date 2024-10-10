@@ -172,7 +172,6 @@ type ModuleInputs struct {
 	BitcoinKeeper types.BitcoinKeeper
 	LockingKeeper types.LockingKeeper
 	RelayerKeeper types.RelayerKeeper
-	TxConfig      client.TxConfig
 	EngineClient  ethrpc.EngineClient `optional:"true"` // optinal for client context
 }
 
@@ -194,7 +193,6 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.RelayerKeeper,
 		in.AccountKeeper,
 		in.EngineClient,
-		in.TxConfig,
 	)
 	m := NewAppModule(in.Cdc, k)
 	return ModuleOutputs{GoatKeeper: k, Module: m}

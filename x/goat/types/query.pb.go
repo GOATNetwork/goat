@@ -6,6 +6,8 @@ package types
 import (
 	context "context"
 	fmt "fmt"
+	_ "github.com/cosmos/cosmos-sdk/types/tx/amino"
+	_ "github.com/cosmos/gogoproto/gogoproto"
 	grpc1 "github.com/cosmos/gogoproto/grpc"
 	proto "github.com/cosmos/gogoproto/proto"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
@@ -29,21 +31,21 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // QueryEthBlockRequest is request type for the Query/EthBlock RPC method.
-type QueryEthBlockRequest struct {
+type QueryEthBlockTipRequest struct {
 }
 
-func (m *QueryEthBlockRequest) Reset()         { *m = QueryEthBlockRequest{} }
-func (m *QueryEthBlockRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryEthBlockRequest) ProtoMessage()    {}
-func (*QueryEthBlockRequest) Descriptor() ([]byte, []int) {
+func (m *QueryEthBlockTipRequest) Reset()         { *m = QueryEthBlockTipRequest{} }
+func (m *QueryEthBlockTipRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryEthBlockTipRequest) ProtoMessage()    {}
+func (*QueryEthBlockTipRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_4c738d633936d905, []int{0}
 }
-func (m *QueryEthBlockRequest) XXX_Unmarshal(b []byte) error {
+func (m *QueryEthBlockTipRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryEthBlockRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryEthBlockTipRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryEthBlockRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryEthBlockTipRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -53,35 +55,35 @@ func (m *QueryEthBlockRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte
 		return b[:n], nil
 	}
 }
-func (m *QueryEthBlockRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryEthBlockRequest.Merge(m, src)
+func (m *QueryEthBlockTipRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryEthBlockTipRequest.Merge(m, src)
 }
-func (m *QueryEthBlockRequest) XXX_Size() int {
+func (m *QueryEthBlockTipRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryEthBlockRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryEthBlockRequest.DiscardUnknown(m)
+func (m *QueryEthBlockTipRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryEthBlockTipRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryEthBlockRequest proto.InternalMessageInfo
+var xxx_messageInfo_QueryEthBlockTipRequest proto.InternalMessageInfo
 
 // QueryEthBlockResponse is response type for the Query/EthBlock RPC method.
-type QueryEthBlockResponse struct {
-	Block *ExecutionPayload `protobuf:"bytes,1,opt,name=block,proto3" json:"block,omitempty"`
+type QueryEthBlockTipResponse struct {
+	Block ExecutionPayload `protobuf:"bytes,1,opt,name=block,proto3" json:"block"`
 }
 
-func (m *QueryEthBlockResponse) Reset()         { *m = QueryEthBlockResponse{} }
-func (m *QueryEthBlockResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryEthBlockResponse) ProtoMessage()    {}
-func (*QueryEthBlockResponse) Descriptor() ([]byte, []int) {
+func (m *QueryEthBlockTipResponse) Reset()         { *m = QueryEthBlockTipResponse{} }
+func (m *QueryEthBlockTipResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryEthBlockTipResponse) ProtoMessage()    {}
+func (*QueryEthBlockTipResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_4c738d633936d905, []int{1}
 }
-func (m *QueryEthBlockResponse) XXX_Unmarshal(b []byte) error {
+func (m *QueryEthBlockTipResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryEthBlockResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryEthBlockTipResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryEthBlockResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryEthBlockTipResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -91,51 +93,54 @@ func (m *QueryEthBlockResponse) XXX_Marshal(b []byte, deterministic bool) ([]byt
 		return b[:n], nil
 	}
 }
-func (m *QueryEthBlockResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryEthBlockResponse.Merge(m, src)
+func (m *QueryEthBlockTipResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryEthBlockTipResponse.Merge(m, src)
 }
-func (m *QueryEthBlockResponse) XXX_Size() int {
+func (m *QueryEthBlockTipResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryEthBlockResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryEthBlockResponse.DiscardUnknown(m)
+func (m *QueryEthBlockTipResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryEthBlockTipResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryEthBlockResponse proto.InternalMessageInfo
+var xxx_messageInfo_QueryEthBlockTipResponse proto.InternalMessageInfo
 
-func (m *QueryEthBlockResponse) GetBlock() *ExecutionPayload {
+func (m *QueryEthBlockTipResponse) GetBlock() ExecutionPayload {
 	if m != nil {
 		return m.Block
 	}
-	return nil
+	return ExecutionPayload{}
 }
 
 func init() {
-	proto.RegisterType((*QueryEthBlockRequest)(nil), "goat.goat.v1.QueryEthBlockRequest")
-	proto.RegisterType((*QueryEthBlockResponse)(nil), "goat.goat.v1.QueryEthBlockResponse")
+	proto.RegisterType((*QueryEthBlockTipRequest)(nil), "goat.goat.v1.QueryEthBlockTipRequest")
+	proto.RegisterType((*QueryEthBlockTipResponse)(nil), "goat.goat.v1.QueryEthBlockTipResponse")
 }
 
 func init() { proto.RegisterFile("goat/goat/v1/query.proto", fileDescriptor_4c738d633936d905) }
 
 var fileDescriptor_4c738d633936d905 = []byte{
-	// 269 bytes of a gzipped FileDescriptorProto
+	// 305 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0x48, 0xcf, 0x4f, 0x2c,
 	0xd1, 0x07, 0x13, 0x65, 0x86, 0xfa, 0x85, 0xa5, 0xa9, 0x45, 0x95, 0x7a, 0x05, 0x45, 0xf9, 0x25,
-	0xf9, 0x42, 0x3c, 0x20, 0x41, 0x3d, 0x30, 0x51, 0x66, 0x28, 0x25, 0x8e, 0xa2, 0x0e, 0x2c, 0x0a,
-	0x56, 0x26, 0x25, 0x93, 0x9e, 0x9f, 0x9f, 0x9e, 0x93, 0xaa, 0x9f, 0x58, 0x90, 0xa9, 0x9f, 0x98,
-	0x97, 0x97, 0x5f, 0x92, 0x58, 0x92, 0x99, 0x9f, 0x57, 0x0c, 0x91, 0x55, 0x12, 0xe3, 0x12, 0x09,
-	0x04, 0x99, 0xe9, 0x5a, 0x92, 0xe1, 0x94, 0x93, 0x9f, 0x9c, 0x1d, 0x94, 0x5a, 0x58, 0x9a, 0x5a,
-	0x5c, 0xa2, 0xe4, 0xcb, 0x25, 0x8a, 0x26, 0x5e, 0x5c, 0x90, 0x9f, 0x57, 0x9c, 0x2a, 0x64, 0xc2,
-	0xc5, 0x9a, 0x04, 0x12, 0x90, 0x60, 0x54, 0x60, 0xd4, 0xe0, 0x36, 0x92, 0xd3, 0x43, 0x76, 0x85,
-	0x9e, 0x6b, 0x45, 0x6a, 0x72, 0x29, 0xc8, 0xfc, 0x80, 0xc4, 0xca, 0x9c, 0xfc, 0xc4, 0x94, 0x20,
-	0x88, 0x62, 0xa3, 0x0e, 0x46, 0x2e, 0x56, 0xb0, 0x79, 0x42, 0xf5, 0x5c, 0x1c, 0x30, 0x33, 0x85,
-	0x94, 0x50, 0x35, 0x63, 0x73, 0x88, 0x94, 0x32, 0x5e, 0x35, 0x10, 0x47, 0x29, 0x69, 0x35, 0x5d,
-	0x7e, 0x32, 0x99, 0x49, 0x45, 0x48, 0x09, 0xec, 0xf1, 0xbc, 0xd4, 0x92, 0xf2, 0xfc, 0xa2, 0x6c,
-	0x7d, 0x94, 0x10, 0x49, 0x2d, 0xc9, 0x00, 0x3b, 0xc5, 0xc9, 0xe9, 0xc4, 0x23, 0x39, 0xc6, 0x0b,
-	0x8f, 0xe4, 0x18, 0x1f, 0x3c, 0x92, 0x63, 0x9c, 0xf0, 0x58, 0x8e, 0xe1, 0xc2, 0x63, 0x39, 0x86,
-	0x1b, 0x8f, 0xe5, 0x18, 0xa2, 0x34, 0xd2, 0x33, 0x4b, 0x32, 0x4a, 0x93, 0xf4, 0x92, 0xf3, 0x73,
-	0x31, 0xcd, 0xa9, 0x80, 0x50, 0x25, 0x95, 0x05, 0xa9, 0xc5, 0x49, 0x6c, 0xe0, 0xc0, 0x33, 0x06,
-	0x04, 0x00, 0x00, 0xff, 0xff, 0xf6, 0xe0, 0x1b, 0xda, 0x9d, 0x01, 0x00, 0x00,
+	0xf9, 0x42, 0x3c, 0x20, 0x41, 0x3d, 0x30, 0x51, 0x66, 0x28, 0x25, 0x98, 0x98, 0x9b, 0x99, 0x97,
+	0xaf, 0x0f, 0x26, 0x21, 0x0a, 0xa4, 0xc4, 0x51, 0xb4, 0x82, 0x15, 0x42, 0x24, 0x44, 0xd2, 0xf3,
+	0xd3, 0xf3, 0xc1, 0x4c, 0x7d, 0x10, 0x0b, 0x2a, 0x2a, 0x93, 0x9e, 0x9f, 0x9f, 0x9e, 0x93, 0xaa,
+	0x9f, 0x58, 0x90, 0xa9, 0x9f, 0x98, 0x97, 0x97, 0x5f, 0x92, 0x58, 0x92, 0x99, 0x9f, 0x57, 0x0c,
+	0x91, 0x55, 0x92, 0xe4, 0x12, 0x0f, 0x04, 0x59, 0xee, 0x5a, 0x92, 0xe1, 0x94, 0x93, 0x9f, 0x9c,
+	0x1d, 0x92, 0x59, 0x10, 0x94, 0x5a, 0x58, 0x9a, 0x5a, 0x5c, 0xa2, 0x14, 0xcd, 0x25, 0x81, 0x29,
+	0x55, 0x5c, 0x90, 0x9f, 0x57, 0x9c, 0x2a, 0x64, 0xcf, 0xc5, 0x9a, 0x04, 0x12, 0x93, 0x60, 0x54,
+	0x60, 0xd4, 0xe0, 0x36, 0x92, 0xd3, 0x43, 0x76, 0xb4, 0x9e, 0x6b, 0x45, 0x6a, 0x72, 0x29, 0xc8,
+	0x96, 0x80, 0xc4, 0xca, 0x9c, 0xfc, 0xc4, 0x14, 0x27, 0xce, 0x13, 0xf7, 0xe4, 0x19, 0x56, 0x3c,
+	0xdf, 0xa0, 0xc5, 0x18, 0x04, 0xd1, 0x67, 0x34, 0x95, 0x91, 0x8b, 0x15, 0x6c, 0xba, 0x50, 0x37,
+	0x23, 0x17, 0x37, 0x92, 0x15, 0x42, 0xaa, 0xa8, 0x66, 0xe1, 0x70, 0x9d, 0x94, 0x1a, 0x21, 0x65,
+	0x10, 0x97, 0x2a, 0xe9, 0x36, 0x5d, 0x7e, 0x32, 0x99, 0x49, 0x5d, 0x48, 0x15, 0x1c, 0x52, 0x79,
+	0xa9, 0x25, 0xe5, 0xf9, 0x45, 0xd9, 0xfa, 0x28, 0x41, 0x98, 0x8a, 0xd0, 0xe6, 0xe4, 0x74, 0xe2,
+	0x91, 0x1c, 0xe3, 0x85, 0x47, 0x72, 0x8c, 0x0f, 0x1e, 0xc9, 0x31, 0x4e, 0x78, 0x2c, 0xc7, 0x70,
+	0xe1, 0xb1, 0x1c, 0xc3, 0x8d, 0xc7, 0x72, 0x0c, 0x51, 0x1a, 0xe9, 0x99, 0x25, 0x19, 0xa5, 0x49,
+	0x7a, 0xc9, 0xf9, 0xb9, 0x98, 0x46, 0x55, 0x40, 0xa8, 0x92, 0xca, 0x82, 0xd4, 0xe2, 0x24, 0x36,
+	0x70, 0xd0, 0x1a, 0x03, 0x02, 0x00, 0x00, 0xff, 0xff, 0x82, 0x34, 0x84, 0xb6, 0xe4, 0x01, 0x00,
+	0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -151,7 +156,7 @@ const _ = grpc.SupportPackageIsVersion4
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type QueryClient interface {
 	// EthBlock
-	EthBlock(ctx context.Context, in *QueryEthBlockRequest, opts ...grpc.CallOption) (*QueryEthBlockResponse, error)
+	EthBlockTip(ctx context.Context, in *QueryEthBlockTipRequest, opts ...grpc.CallOption) (*QueryEthBlockTipResponse, error)
 }
 
 type queryClient struct {
@@ -162,9 +167,9 @@ func NewQueryClient(cc grpc1.ClientConn) QueryClient {
 	return &queryClient{cc}
 }
 
-func (c *queryClient) EthBlock(ctx context.Context, in *QueryEthBlockRequest, opts ...grpc.CallOption) (*QueryEthBlockResponse, error) {
-	out := new(QueryEthBlockResponse)
-	err := c.cc.Invoke(ctx, "/goat.goat.v1.Query/EthBlock", in, out, opts...)
+func (c *queryClient) EthBlockTip(ctx context.Context, in *QueryEthBlockTipRequest, opts ...grpc.CallOption) (*QueryEthBlockTipResponse, error) {
+	out := new(QueryEthBlockTipResponse)
+	err := c.cc.Invoke(ctx, "/goat.goat.v1.Query/EthBlockTip", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -174,35 +179,35 @@ func (c *queryClient) EthBlock(ctx context.Context, in *QueryEthBlockRequest, op
 // QueryServer is the server API for Query service.
 type QueryServer interface {
 	// EthBlock
-	EthBlock(context.Context, *QueryEthBlockRequest) (*QueryEthBlockResponse, error)
+	EthBlockTip(context.Context, *QueryEthBlockTipRequest) (*QueryEthBlockTipResponse, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
 type UnimplementedQueryServer struct {
 }
 
-func (*UnimplementedQueryServer) EthBlock(ctx context.Context, req *QueryEthBlockRequest) (*QueryEthBlockResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method EthBlock not implemented")
+func (*UnimplementedQueryServer) EthBlockTip(ctx context.Context, req *QueryEthBlockTipRequest) (*QueryEthBlockTipResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EthBlockTip not implemented")
 }
 
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
 	s.RegisterService(&_Query_serviceDesc, srv)
 }
 
-func _Query_EthBlock_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryEthBlockRequest)
+func _Query_EthBlockTip_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryEthBlockTipRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).EthBlock(ctx, in)
+		return srv.(QueryServer).EthBlockTip(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/goat.goat.v1.Query/EthBlock",
+		FullMethod: "/goat.goat.v1.Query/EthBlockTip",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).EthBlock(ctx, req.(*QueryEthBlockRequest))
+		return srv.(QueryServer).EthBlockTip(ctx, req.(*QueryEthBlockTipRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -213,15 +218,15 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*QueryServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "EthBlock",
-			Handler:    _Query_EthBlock_Handler,
+			MethodName: "EthBlockTip",
+			Handler:    _Query_EthBlockTip_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "goat/goat/v1/query.proto",
 }
 
-func (m *QueryEthBlockRequest) Marshal() (dAtA []byte, err error) {
+func (m *QueryEthBlockTipRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -231,12 +236,12 @@ func (m *QueryEthBlockRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryEthBlockRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryEthBlockTipRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryEthBlockRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryEthBlockTipRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -244,7 +249,7 @@ func (m *QueryEthBlockRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryEthBlockResponse) Marshal() (dAtA []byte, err error) {
+func (m *QueryEthBlockTipResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -254,28 +259,26 @@ func (m *QueryEthBlockResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryEthBlockResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryEthBlockTipResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryEthBlockResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryEthBlockTipResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Block != nil {
-		{
-			size, err := m.Block.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
+	{
+		size, err := m.Block.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0xa
+		i -= size
+		i = encodeVarintQuery(dAtA, i, uint64(size))
 	}
+	i--
+	dAtA[i] = 0xa
 	return len(dAtA) - i, nil
 }
 
@@ -290,7 +293,7 @@ func encodeVarintQuery(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *QueryEthBlockRequest) Size() (n int) {
+func (m *QueryEthBlockTipRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -299,16 +302,14 @@ func (m *QueryEthBlockRequest) Size() (n int) {
 	return n
 }
 
-func (m *QueryEthBlockResponse) Size() (n int) {
+func (m *QueryEthBlockTipResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.Block != nil {
-		l = m.Block.Size()
-		n += 1 + l + sovQuery(uint64(l))
-	}
+	l = m.Block.Size()
+	n += 1 + l + sovQuery(uint64(l))
 	return n
 }
 
@@ -318,7 +319,7 @@ func sovQuery(x uint64) (n int) {
 func sozQuery(x uint64) (n int) {
 	return sovQuery(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *QueryEthBlockRequest) Unmarshal(dAtA []byte) error {
+func (m *QueryEthBlockTipRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -341,10 +342,10 @@ func (m *QueryEthBlockRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryEthBlockRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryEthBlockTipRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryEthBlockRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryEthBlockTipRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
@@ -368,7 +369,7 @@ func (m *QueryEthBlockRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryEthBlockResponse) Unmarshal(dAtA []byte) error {
+func (m *QueryEthBlockTipResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -391,10 +392,10 @@ func (m *QueryEthBlockResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryEthBlockResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryEthBlockTipResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryEthBlockResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryEthBlockTipResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -425,9 +426,6 @@ func (m *QueryEthBlockResponse) Unmarshal(dAtA []byte) error {
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
-			}
-			if m.Block == nil {
-				m.Block = &ExecutionPayload{}
 			}
 			if err := m.Block.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err

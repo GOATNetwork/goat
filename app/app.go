@@ -148,7 +148,7 @@ func New(
 	app.sm.RegisterStoreDecoders()
 
 	// register goat handlers
-	app.SetPrepareProposal(app.GoatKeeper.PrepareProposalHandler(app.Mempool(), app, app.NodeKeyProvider))
+	app.SetPrepareProposal(app.GoatKeeper.PrepareProposalHandler(app.Mempool(), app, app.NodeKeyProvider, app.txConfig))
 	app.SetProcessProposal(app.GoatKeeper.ProcessProposalHandler(app))
 	app.SetAnteHandler(NewAnteHandler(app.AccountKeeper, app.RelayerKeeper, app.txConfig.SignModeHandler()))
 

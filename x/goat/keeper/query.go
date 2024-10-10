@@ -24,19 +24,13 @@ type queryServer struct {
 	k Keeper
 }
 
-func (q queryServer) EthBlock(ctx context.Context, req *types.QueryEthBlockRequest) (*types.QueryEthBlockResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid request")
-	}
-
+func (q queryServer) EthBlockTip(ctx context.Context, req *types.QueryEthBlockTipRequest) (*types.QueryEthBlockTipResponse, error) {
 	block, err := q.k.Block.Get(ctx)
 	if err != nil {
 		if errors.Is(err, collections.ErrNotFound) {
 			return nil, status.Error(codes.NotFound, "not found")
 		}
-
 		return nil, status.Error(codes.Internal, "internal error")
 	}
-
-	return &types.QueryEthBlockResponse{Block: &block}, nil
+	return &types.QueryEthBlockTipResponse{Block: block}, nil
 }

@@ -11,6 +11,7 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
+	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -27,7 +28,12 @@ import (
 
 const maxTxLen = 16
 
-func (k Keeper) PrepareProposalHandler(txpool mempool.Mempool, txVerifier baseapp.ProposalTxVerifier, keyProvider cryptotypes.PrivKey) sdk.PrepareProposalHandler {
+func (k Keeper) PrepareProposalHandler(
+	txpool mempool.Mempool,
+	txVerifier baseapp.ProposalTxVerifier,
+	keyProvider cryptotypes.PrivKey,
+	txConfig client.TxConfig,
+) sdk.PrepareProposalHandler {
 	if keyProvider == nil {
 		panic("no eth block signer provided")
 	}
@@ -39,7 +45,7 @@ func (k Keeper) PrepareProposalHandler(txpool mempool.Mempool, txVerifier baseap
 
 		// build eth block msg
 		eg.Go(func() (err error) {
-			ethTx, err = k.createEthBlockProposal(sdkctx, keyProvider, rpp)
+			ethTx, err = k.createEthBlockProposal(sdkctx, keyProvider, txConfig, rpp)
 			return
 		})
 
@@ -76,7 +82,7 @@ func (k Keeper) PrepareProposalHandler(txpool mempool.Mempool, txVerifier baseap
 	}
 }
 
-func (k Keeper) createEthBlockProposal(sdkctx sdk.Context, keyProvider cryptotypes.PrivKey, rpp *abci.RequestPrepareProposal) ([]byte, error) {
+func (k Keeper) createEthBlockProposal(sdkctx sdk.Context, keyProvider cryptotypes.PrivKey, txConfig client.TxConfig, rpp *abci.RequestPrepareProposal) ([]byte, error) {
 	validatorAddr, err := k.addressCodec.BytesToString(rpp.ProposerAddress)
 	if err != nil {
 		return nil, err
@@ -151,7 +157,7 @@ func (k Keeper) createEthBlockProposal(sdkctx sdk.Context, keyProvider cryptotyp
 		return nil, err
 	}
 
-	txBuilder := k.txConfig.NewTxBuilder()
+	txBuilder := txConfig.NewTxBuilder()
 	txBuilder.SetGasLimit(1e8)
 	txBuilder.SetTimeoutHeight(uint64(rpp.Height))
 
@@ -161,7 +167,7 @@ func (k Keeper) createEthBlockProposal(sdkctx sdk.Context, keyProvider cryptotyp
 		return nil, err
 	}
 
-	sigMode := signing.SignMode(k.txConfig.SignModeHandler().DefaultMode())
+	sigMode := signing.SignMode(txConfig.SignModeHandler().DefaultMode())
 	if err := txBuilder.SetSignatures(signing.SignatureV2{
 		PubKey:   validatorAcc.GetPubKey(),
 		Data:     &signing.SingleSignatureData{SignMode: sigMode},
@@ -176,7 +182,7 @@ func (k Keeper) createEthBlockProposal(sdkctx sdk.Context, keyProvider cryptotyp
 		AccountNumber: validatorAcc.GetAccountNumber(),
 		Sequence:      validatorAcc.GetSequence(),
 		PubKey:        validatorAcc.GetPubKey(),
-	}, txBuilder, keyProvider, k.txConfig, validatorAcc.GetSequence())
+	}, txBuilder, keyProvider, txConfig, validatorAcc.GetSequence())
 	if err != nil {
 		return nil, err
 	}
@@ -185,7 +191,7 @@ func (k Keeper) createEthBlockProposal(sdkctx sdk.Context, keyProvider cryptotyp
 		return nil, err
 	}
 
-	ethTx, err := k.txConfig.TxEncoder()(txBuilder.GetTx())
+	ethTx, err := txConfig.TxEncoder()(txBuilder.GetTx())
 	if err != nil {
 		return nil, err
 	}

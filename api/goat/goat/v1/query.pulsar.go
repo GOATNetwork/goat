@@ -2,8 +2,10 @@
 package goatv1
 
 import (
+	_ "cosmossdk.io/api/amino"
 	fmt "fmt"
 	runtime "github.com/cosmos/cosmos-proto/runtime"
+	_ "github.com/cosmos/gogoproto/gogoproto"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
@@ -14,23 +16,23 @@ import (
 )
 
 var (
-	md_QueryEthBlockRequest protoreflect.MessageDescriptor
+	md_QueryEthBlockTipRequest protoreflect.MessageDescriptor
 )
 
 func init() {
 	file_goat_goat_v1_query_proto_init()
-	md_QueryEthBlockRequest = File_goat_goat_v1_query_proto.Messages().ByName("QueryEthBlockRequest")
+	md_QueryEthBlockTipRequest = File_goat_goat_v1_query_proto.Messages().ByName("QueryEthBlockTipRequest")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryEthBlockRequest)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryEthBlockTipRequest)(nil)
 
-type fastReflection_QueryEthBlockRequest QueryEthBlockRequest
+type fastReflection_QueryEthBlockTipRequest QueryEthBlockTipRequest
 
-func (x *QueryEthBlockRequest) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryEthBlockRequest)(x)
+func (x *QueryEthBlockTipRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryEthBlockTipRequest)(x)
 }
 
-func (x *QueryEthBlockRequest) slowProtoReflect() protoreflect.Message {
+func (x *QueryEthBlockTipRequest) slowProtoReflect() protoreflect.Message {
 	mi := &file_goat_goat_v1_query_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -42,43 +44,43 @@ func (x *QueryEthBlockRequest) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryEthBlockRequest_messageType fastReflection_QueryEthBlockRequest_messageType
-var _ protoreflect.MessageType = fastReflection_QueryEthBlockRequest_messageType{}
+var _fastReflection_QueryEthBlockTipRequest_messageType fastReflection_QueryEthBlockTipRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryEthBlockTipRequest_messageType{}
 
-type fastReflection_QueryEthBlockRequest_messageType struct{}
+type fastReflection_QueryEthBlockTipRequest_messageType struct{}
 
-func (x fastReflection_QueryEthBlockRequest_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryEthBlockRequest)(nil)
+func (x fastReflection_QueryEthBlockTipRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryEthBlockTipRequest)(nil)
 }
-func (x fastReflection_QueryEthBlockRequest_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryEthBlockRequest)
+func (x fastReflection_QueryEthBlockTipRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryEthBlockTipRequest)
 }
-func (x fastReflection_QueryEthBlockRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryEthBlockRequest
+func (x fastReflection_QueryEthBlockTipRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryEthBlockTipRequest
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryEthBlockRequest) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryEthBlockRequest
+func (x *fastReflection_QueryEthBlockTipRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryEthBlockTipRequest
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryEthBlockRequest) Type() protoreflect.MessageType {
-	return _fastReflection_QueryEthBlockRequest_messageType
+func (x *fastReflection_QueryEthBlockTipRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryEthBlockTipRequest_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryEthBlockRequest) New() protoreflect.Message {
-	return new(fastReflection_QueryEthBlockRequest)
+func (x *fastReflection_QueryEthBlockTipRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryEthBlockTipRequest)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryEthBlockRequest) Interface() protoreflect.ProtoMessage {
-	return (*QueryEthBlockRequest)(x)
+func (x *fastReflection_QueryEthBlockTipRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryEthBlockTipRequest)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -86,7 +88,7 @@ func (x *fastReflection_QueryEthBlockRequest) Interface() protoreflect.ProtoMess
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryEthBlockRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_QueryEthBlockTipRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 }
 
 // Has reports whether a field is populated.
@@ -100,13 +102,13 @@ func (x *fastReflection_QueryEthBlockRequest) Range(f func(protoreflect.FieldDes
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryEthBlockRequest) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryEthBlockTipRequest) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.QueryEthBlockRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.QueryEthBlockTipRequest"))
 		}
-		panic(fmt.Errorf("message goat.goat.v1.QueryEthBlockRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.goat.v1.QueryEthBlockTipRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -116,13 +118,13 @@ func (x *fastReflection_QueryEthBlockRequest) Has(fd protoreflect.FieldDescripto
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryEthBlockRequest) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryEthBlockTipRequest) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.QueryEthBlockRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.QueryEthBlockTipRequest"))
 		}
-		panic(fmt.Errorf("message goat.goat.v1.QueryEthBlockRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.goat.v1.QueryEthBlockTipRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -132,13 +134,13 @@ func (x *fastReflection_QueryEthBlockRequest) Clear(fd protoreflect.FieldDescrip
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryEthBlockRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryEthBlockTipRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.QueryEthBlockRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.QueryEthBlockTipRequest"))
 		}
-		panic(fmt.Errorf("message goat.goat.v1.QueryEthBlockRequest does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message goat.goat.v1.QueryEthBlockTipRequest does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -152,13 +154,13 @@ func (x *fastReflection_QueryEthBlockRequest) Get(descriptor protoreflect.FieldD
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryEthBlockRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryEthBlockTipRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.QueryEthBlockRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.QueryEthBlockTipRequest"))
 		}
-		panic(fmt.Errorf("message goat.goat.v1.QueryEthBlockRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.goat.v1.QueryEthBlockTipRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -172,36 +174,36 @@ func (x *fastReflection_QueryEthBlockRequest) Set(fd protoreflect.FieldDescripto
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryEthBlockRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryEthBlockTipRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.QueryEthBlockRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.QueryEthBlockTipRequest"))
 		}
-		panic(fmt.Errorf("message goat.goat.v1.QueryEthBlockRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.goat.v1.QueryEthBlockTipRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryEthBlockRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryEthBlockTipRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.QueryEthBlockRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.QueryEthBlockTipRequest"))
 		}
-		panic(fmt.Errorf("message goat.goat.v1.QueryEthBlockRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.goat.v1.QueryEthBlockTipRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryEthBlockRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryEthBlockTipRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in goat.goat.v1.QueryEthBlockRequest", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in goat.goat.v1.QueryEthBlockTipRequest", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -209,7 +211,7 @@ func (x *fastReflection_QueryEthBlockRequest) WhichOneof(d protoreflect.OneofDes
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryEthBlockRequest) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryEthBlockTipRequest) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -220,7 +222,7 @@ func (x *fastReflection_QueryEthBlockRequest) GetUnknown() protoreflect.RawField
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryEthBlockRequest) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryEthBlockTipRequest) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -232,7 +234,7 @@ func (x *fastReflection_QueryEthBlockRequest) SetUnknown(fields protoreflect.Raw
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryEthBlockRequest) IsValid() bool {
+func (x *fastReflection_QueryEthBlockTipRequest) IsValid() bool {
 	return x != nil
 }
 
@@ -242,9 +244,9 @@ func (x *fastReflection_QueryEthBlockRequest) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryEthBlockRequest) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryEthBlockTipRequest) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryEthBlockRequest)
+		x := input.Message.Interface().(*QueryEthBlockTipRequest)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -266,7 +268,7 @@ func (x *fastReflection_QueryEthBlockRequest) ProtoMethods() *protoiface.Methods
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryEthBlockRequest)
+		x := input.Message.Interface().(*QueryEthBlockTipRequest)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -296,7 +298,7 @@ func (x *fastReflection_QueryEthBlockRequest) ProtoMethods() *protoiface.Methods
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryEthBlockRequest)
+		x := input.Message.Interface().(*QueryEthBlockTipRequest)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -328,10 +330,10 @@ func (x *fastReflection_QueryEthBlockRequest) ProtoMethods() *protoiface.Methods
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryEthBlockRequest: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryEthBlockTipRequest: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryEthBlockRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryEthBlockTipRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			default:
@@ -370,25 +372,25 @@ func (x *fastReflection_QueryEthBlockRequest) ProtoMethods() *protoiface.Methods
 }
 
 var (
-	md_QueryEthBlockResponse       protoreflect.MessageDescriptor
-	fd_QueryEthBlockResponse_block protoreflect.FieldDescriptor
+	md_QueryEthBlockTipResponse       protoreflect.MessageDescriptor
+	fd_QueryEthBlockTipResponse_block protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_goat_goat_v1_query_proto_init()
-	md_QueryEthBlockResponse = File_goat_goat_v1_query_proto.Messages().ByName("QueryEthBlockResponse")
-	fd_QueryEthBlockResponse_block = md_QueryEthBlockResponse.Fields().ByName("block")
+	md_QueryEthBlockTipResponse = File_goat_goat_v1_query_proto.Messages().ByName("QueryEthBlockTipResponse")
+	fd_QueryEthBlockTipResponse_block = md_QueryEthBlockTipResponse.Fields().ByName("block")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryEthBlockResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryEthBlockTipResponse)(nil)
 
-type fastReflection_QueryEthBlockResponse QueryEthBlockResponse
+type fastReflection_QueryEthBlockTipResponse QueryEthBlockTipResponse
 
-func (x *QueryEthBlockResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryEthBlockResponse)(x)
+func (x *QueryEthBlockTipResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryEthBlockTipResponse)(x)
 }
 
-func (x *QueryEthBlockResponse) slowProtoReflect() protoreflect.Message {
+func (x *QueryEthBlockTipResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_goat_goat_v1_query_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -400,43 +402,43 @@ func (x *QueryEthBlockResponse) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryEthBlockResponse_messageType fastReflection_QueryEthBlockResponse_messageType
-var _ protoreflect.MessageType = fastReflection_QueryEthBlockResponse_messageType{}
+var _fastReflection_QueryEthBlockTipResponse_messageType fastReflection_QueryEthBlockTipResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryEthBlockTipResponse_messageType{}
 
-type fastReflection_QueryEthBlockResponse_messageType struct{}
+type fastReflection_QueryEthBlockTipResponse_messageType struct{}
 
-func (x fastReflection_QueryEthBlockResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryEthBlockResponse)(nil)
+func (x fastReflection_QueryEthBlockTipResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryEthBlockTipResponse)(nil)
 }
-func (x fastReflection_QueryEthBlockResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryEthBlockResponse)
+func (x fastReflection_QueryEthBlockTipResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryEthBlockTipResponse)
 }
-func (x fastReflection_QueryEthBlockResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryEthBlockResponse
+func (x fastReflection_QueryEthBlockTipResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryEthBlockTipResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryEthBlockResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryEthBlockResponse
+func (x *fastReflection_QueryEthBlockTipResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryEthBlockTipResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryEthBlockResponse) Type() protoreflect.MessageType {
-	return _fastReflection_QueryEthBlockResponse_messageType
+func (x *fastReflection_QueryEthBlockTipResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryEthBlockTipResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryEthBlockResponse) New() protoreflect.Message {
-	return new(fastReflection_QueryEthBlockResponse)
+func (x *fastReflection_QueryEthBlockTipResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryEthBlockTipResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryEthBlockResponse) Interface() protoreflect.ProtoMessage {
-	return (*QueryEthBlockResponse)(x)
+func (x *fastReflection_QueryEthBlockTipResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryEthBlockTipResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -444,10 +446,10 @@ func (x *fastReflection_QueryEthBlockResponse) Interface() protoreflect.ProtoMes
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryEthBlockResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_QueryEthBlockTipResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Block != nil {
 		value := protoreflect.ValueOfMessage(x.Block.ProtoReflect())
-		if !f(fd_QueryEthBlockResponse_block, value) {
+		if !f(fd_QueryEthBlockTipResponse_block, value) {
 			return
 		}
 	}
@@ -464,15 +466,15 @@ func (x *fastReflection_QueryEthBlockResponse) Range(f func(protoreflect.FieldDe
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryEthBlockResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryEthBlockTipResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "goat.goat.v1.QueryEthBlockResponse.block":
+	case "goat.goat.v1.QueryEthBlockTipResponse.block":
 		return x.Block != nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.QueryEthBlockResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.QueryEthBlockTipResponse"))
 		}
-		panic(fmt.Errorf("message goat.goat.v1.QueryEthBlockResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.goat.v1.QueryEthBlockTipResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -482,15 +484,15 @@ func (x *fastReflection_QueryEthBlockResponse) Has(fd protoreflect.FieldDescript
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryEthBlockResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryEthBlockTipResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "goat.goat.v1.QueryEthBlockResponse.block":
+	case "goat.goat.v1.QueryEthBlockTipResponse.block":
 		x.Block = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.QueryEthBlockResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.QueryEthBlockTipResponse"))
 		}
-		panic(fmt.Errorf("message goat.goat.v1.QueryEthBlockResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.goat.v1.QueryEthBlockTipResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -500,16 +502,16 @@ func (x *fastReflection_QueryEthBlockResponse) Clear(fd protoreflect.FieldDescri
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryEthBlockResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryEthBlockTipResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "goat.goat.v1.QueryEthBlockResponse.block":
+	case "goat.goat.v1.QueryEthBlockTipResponse.block":
 		value := x.Block
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.QueryEthBlockResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.QueryEthBlockTipResponse"))
 		}
-		panic(fmt.Errorf("message goat.goat.v1.QueryEthBlockResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message goat.goat.v1.QueryEthBlockTipResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -523,15 +525,15 @@ func (x *fastReflection_QueryEthBlockResponse) Get(descriptor protoreflect.Field
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryEthBlockResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryEthBlockTipResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "goat.goat.v1.QueryEthBlockResponse.block":
+	case "goat.goat.v1.QueryEthBlockTipResponse.block":
 		x.Block = value.Message().Interface().(*ExecutionPayload)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.QueryEthBlockResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.QueryEthBlockTipResponse"))
 		}
-		panic(fmt.Errorf("message goat.goat.v1.QueryEthBlockResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.goat.v1.QueryEthBlockTipResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -545,44 +547,44 @@ func (x *fastReflection_QueryEthBlockResponse) Set(fd protoreflect.FieldDescript
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryEthBlockResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryEthBlockTipResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "goat.goat.v1.QueryEthBlockResponse.block":
+	case "goat.goat.v1.QueryEthBlockTipResponse.block":
 		if x.Block == nil {
 			x.Block = new(ExecutionPayload)
 		}
 		return protoreflect.ValueOfMessage(x.Block.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.QueryEthBlockResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.QueryEthBlockTipResponse"))
 		}
-		panic(fmt.Errorf("message goat.goat.v1.QueryEthBlockResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.goat.v1.QueryEthBlockTipResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryEthBlockResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryEthBlockTipResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "goat.goat.v1.QueryEthBlockResponse.block":
+	case "goat.goat.v1.QueryEthBlockTipResponse.block":
 		m := new(ExecutionPayload)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.QueryEthBlockResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.goat.v1.QueryEthBlockTipResponse"))
 		}
-		panic(fmt.Errorf("message goat.goat.v1.QueryEthBlockResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message goat.goat.v1.QueryEthBlockTipResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryEthBlockResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryEthBlockTipResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in goat.goat.v1.QueryEthBlockResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in goat.goat.v1.QueryEthBlockTipResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -590,7 +592,7 @@ func (x *fastReflection_QueryEthBlockResponse) WhichOneof(d protoreflect.OneofDe
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryEthBlockResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryEthBlockTipResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -601,7 +603,7 @@ func (x *fastReflection_QueryEthBlockResponse) GetUnknown() protoreflect.RawFiel
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryEthBlockResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryEthBlockTipResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -613,7 +615,7 @@ func (x *fastReflection_QueryEthBlockResponse) SetUnknown(fields protoreflect.Ra
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryEthBlockResponse) IsValid() bool {
+func (x *fastReflection_QueryEthBlockTipResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -623,9 +625,9 @@ func (x *fastReflection_QueryEthBlockResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryEthBlockResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryEthBlockTipResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryEthBlockResponse)
+		x := input.Message.Interface().(*QueryEthBlockTipResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -651,7 +653,7 @@ func (x *fastReflection_QueryEthBlockResponse) ProtoMethods() *protoiface.Method
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryEthBlockResponse)
+		x := input.Message.Interface().(*QueryEthBlockTipResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -695,7 +697,7 @@ func (x *fastReflection_QueryEthBlockResponse) ProtoMethods() *protoiface.Method
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryEthBlockResponse)
+		x := input.Message.Interface().(*QueryEthBlockTipResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -727,10 +729,10 @@ func (x *fastReflection_QueryEthBlockResponse) ProtoMethods() *protoiface.Method
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryEthBlockResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryEthBlockTipResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryEthBlockResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryEthBlockTipResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -818,14 +820,14 @@ const (
 )
 
 // QueryEthBlockRequest is request type for the Query/EthBlock RPC method.
-type QueryEthBlockRequest struct {
+type QueryEthBlockTipRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *QueryEthBlockRequest) Reset() {
-	*x = QueryEthBlockRequest{}
+func (x *QueryEthBlockTipRequest) Reset() {
+	*x = QueryEthBlockTipRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_goat_goat_v1_query_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -833,19 +835,19 @@ func (x *QueryEthBlockRequest) Reset() {
 	}
 }
 
-func (x *QueryEthBlockRequest) String() string {
+func (x *QueryEthBlockTipRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryEthBlockRequest) ProtoMessage() {}
+func (*QueryEthBlockTipRequest) ProtoMessage() {}
 
-// Deprecated: Use QueryEthBlockRequest.ProtoReflect.Descriptor instead.
-func (*QueryEthBlockRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use QueryEthBlockTipRequest.ProtoReflect.Descriptor instead.
+func (*QueryEthBlockTipRequest) Descriptor() ([]byte, []int) {
 	return file_goat_goat_v1_query_proto_rawDescGZIP(), []int{0}
 }
 
 // QueryEthBlockResponse is response type for the Query/EthBlock RPC method.
-type QueryEthBlockResponse struct {
+type QueryEthBlockTipResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -853,8 +855,8 @@ type QueryEthBlockResponse struct {
 	Block *ExecutionPayload `protobuf:"bytes,1,opt,name=block,proto3" json:"block,omitempty"`
 }
 
-func (x *QueryEthBlockResponse) Reset() {
-	*x = QueryEthBlockResponse{}
+func (x *QueryEthBlockTipResponse) Reset() {
+	*x = QueryEthBlockTipResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_goat_goat_v1_query_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -862,18 +864,18 @@ func (x *QueryEthBlockResponse) Reset() {
 	}
 }
 
-func (x *QueryEthBlockResponse) String() string {
+func (x *QueryEthBlockTipResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryEthBlockResponse) ProtoMessage() {}
+func (*QueryEthBlockTipResponse) ProtoMessage() {}
 
-// Deprecated: Use QueryEthBlockResponse.ProtoReflect.Descriptor instead.
-func (*QueryEthBlockResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use QueryEthBlockTipResponse.ProtoReflect.Descriptor instead.
+func (*QueryEthBlockTipResponse) Descriptor() ([]byte, []int) {
 	return file_goat_goat_v1_query_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *QueryEthBlockResponse) GetBlock() *ExecutionPayload {
+func (x *QueryEthBlockTipResponse) GetBlock() *ExecutionPayload {
 	if x != nil {
 		return x.Block
 	}
@@ -885,37 +887,41 @@ var File_goat_goat_v1_query_proto protoreflect.FileDescriptor
 var file_goat_goat_v1_query_proto_rawDesc = []byte{
 	0x0a, 0x18, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x76, 0x31, 0x2f, 0x71,
 	0x75, 0x65, 0x72, 0x79, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x0c, 0x67, 0x6f, 0x61, 0x74,
-	0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x76, 0x31, 0x1a, 0x17, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x67,
-	0x6f, 0x61, 0x74, 0x2f, 0x76, 0x31, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x1a, 0x1c, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x61, 0x6e,
-	0x6e, 0x6f, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22,
-	0x16, 0x0a, 0x14, 0x51, 0x75, 0x65, 0x72, 0x79, 0x45, 0x74, 0x68, 0x42, 0x6c, 0x6f, 0x63, 0x6b,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x4d, 0x0a, 0x15, 0x51, 0x75, 0x65, 0x72, 0x79,
-	0x45, 0x74, 0x68, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x12, 0x34, 0x0a, 0x05, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32,
-	0x1e, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x45,
-	0x78, 0x65, 0x63, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x50, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x52,
-	0x05, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x32, 0x88, 0x01, 0x0a, 0x05, 0x51, 0x75, 0x65, 0x72, 0x79,
-	0x12, 0x7f, 0x0a, 0x08, 0x45, 0x74, 0x68, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x12, 0x22, 0x2e, 0x67,
-	0x6f, 0x61, 0x74, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72,
-	0x79, 0x45, 0x74, 0x68, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x1a, 0x23, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x76, 0x31, 0x2e,
-	0x51, 0x75, 0x65, 0x72, 0x79, 0x45, 0x74, 0x68, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x2a, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x24, 0x12, 0x22, 0x2f,
-	0x67, 0x6f, 0x61, 0x74, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x67, 0x6f, 0x61, 0x74,
-	0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x76, 0x31, 0x2f, 0x65, 0x74, 0x68, 0x62, 0x6c, 0x6f, 0x63,
-	0x6b, 0x42, 0xa5, 0x01, 0x0a, 0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x67,
-	0x6f, 0x61, 0x74, 0x2e, 0x76, 0x31, 0x42, 0x0a, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x72, 0x6f,
-	0x74, 0x6f, 0x50, 0x01, 0x5a, 0x33, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d,
-	0x2f, 0x67, 0x6f, 0x61, 0x74, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x67, 0x6f, 0x61,
-	0x74, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f,
-	0x76, 0x31, 0x3b, 0x67, 0x6f, 0x61, 0x74, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x47, 0x47, 0x58, 0xaa,
-	0x02, 0x0c, 0x47, 0x6f, 0x61, 0x74, 0x2e, 0x47, 0x6f, 0x61, 0x74, 0x2e, 0x56, 0x31, 0xca, 0x02,
-	0x0c, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x18,
-	0x47, 0x6f, 0x61, 0x74, 0x5c, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42,
-	0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0e, 0x47, 0x6f, 0x61, 0x74, 0x3a,
-	0x3a, 0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x33,
+	0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x76, 0x31, 0x1a, 0x11, 0x61, 0x6d, 0x69, 0x6e, 0x6f, 0x2f,
+	0x61, 0x6d, 0x69, 0x6e, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x17, 0x67, 0x6f, 0x61,
+	0x74, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x76, 0x31, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f,
+	0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x1c, 0x67, 0x6f, 0x6f, 0x67,
+	0x6c, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x61, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x19, 0x0a, 0x17, 0x51, 0x75, 0x65, 0x72,
+	0x79, 0x45, 0x74, 0x68, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x54, 0x69, 0x70, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x22, 0x5b, 0x0a, 0x18, 0x51, 0x75, 0x65, 0x72, 0x79, 0x45, 0x74, 0x68, 0x42,
+	0x6c, 0x6f, 0x63, 0x6b, 0x54, 0x69, 0x70, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
+	0x3f, 0x0a, 0x05, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1e,
+	0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x45, 0x78,
+	0x65, 0x63, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x50, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x42, 0x09,
+	0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x05, 0x62, 0x6c, 0x6f, 0x63, 0x6b,
+	0x32, 0x95, 0x01, 0x0a, 0x05, 0x51, 0x75, 0x65, 0x72, 0x79, 0x12, 0x8b, 0x01, 0x0a, 0x0b, 0x45,
+	0x74, 0x68, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x54, 0x69, 0x70, 0x12, 0x25, 0x2e, 0x67, 0x6f, 0x61,
+	0x74, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x45,
+	0x74, 0x68, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x54, 0x69, 0x70, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x26, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x76, 0x31,
+	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x45, 0x74, 0x68, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x54, 0x69,
+	0x70, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x2d, 0x82, 0xd3, 0xe4, 0x93, 0x02,
+	0x27, 0x12, 0x25, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f,
+	0x67, 0x6f, 0x61, 0x74, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x76, 0x31, 0x2f, 0x65, 0x74, 0x68,
+	0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x54, 0x69, 0x70, 0x42, 0xa5, 0x01, 0x0a, 0x10, 0x63, 0x6f, 0x6d,
+	0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x76, 0x31, 0x42, 0x0a, 0x51,
+	0x75, 0x65, 0x72, 0x79, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x33, 0x67, 0x69, 0x74,
+	0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x6e, 0x65, 0x74, 0x77,
+	0x6f, 0x72, 0x6b, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x61,
+	0x74, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x76, 0x31, 0x3b, 0x67, 0x6f, 0x61, 0x74, 0x76, 0x31,
+	0xa2, 0x02, 0x03, 0x47, 0x47, 0x58, 0xaa, 0x02, 0x0c, 0x47, 0x6f, 0x61, 0x74, 0x2e, 0x47, 0x6f,
+	0x61, 0x74, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x0c, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x47, 0x6f, 0x61,
+	0x74, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x18, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x47, 0x6f, 0x61, 0x74,
+	0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea,
+	0x02, 0x0e, 0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x56, 0x31,
+	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -932,14 +938,14 @@ func file_goat_goat_v1_query_proto_rawDescGZIP() []byte {
 
 var file_goat_goat_v1_query_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_goat_goat_v1_query_proto_goTypes = []interface{}{
-	(*QueryEthBlockRequest)(nil),  // 0: goat.goat.v1.QueryEthBlockRequest
-	(*QueryEthBlockResponse)(nil), // 1: goat.goat.v1.QueryEthBlockResponse
-	(*ExecutionPayload)(nil),      // 2: goat.goat.v1.ExecutionPayload
+	(*QueryEthBlockTipRequest)(nil),  // 0: goat.goat.v1.QueryEthBlockTipRequest
+	(*QueryEthBlockTipResponse)(nil), // 1: goat.goat.v1.QueryEthBlockTipResponse
+	(*ExecutionPayload)(nil),         // 2: goat.goat.v1.ExecutionPayload
 }
 var file_goat_goat_v1_query_proto_depIdxs = []int32{
-	2, // 0: goat.goat.v1.QueryEthBlockResponse.block:type_name -> goat.goat.v1.ExecutionPayload
-	0, // 1: goat.goat.v1.Query.EthBlock:input_type -> goat.goat.v1.QueryEthBlockRequest
-	1, // 2: goat.goat.v1.Query.EthBlock:output_type -> goat.goat.v1.QueryEthBlockResponse
+	2, // 0: goat.goat.v1.QueryEthBlockTipResponse.block:type_name -> goat.goat.v1.ExecutionPayload
+	0, // 1: goat.goat.v1.Query.EthBlockTip:input_type -> goat.goat.v1.QueryEthBlockTipRequest
+	1, // 2: goat.goat.v1.Query.EthBlockTip:output_type -> goat.goat.v1.QueryEthBlockTipResponse
 	2, // [2:3] is the sub-list for method output_type
 	1, // [1:2] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
@@ -955,7 +961,7 @@ func file_goat_goat_v1_query_proto_init() {
 	file_goat_goat_v1_goat_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_goat_goat_v1_query_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryEthBlockRequest); i {
+			switch v := v.(*QueryEthBlockTipRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -967,7 +973,7 @@ func file_goat_goat_v1_query_proto_init() {
 			}
 		}
 		file_goat_goat_v1_query_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryEthBlockResponse); i {
+			switch v := v.(*QueryEthBlockTipResponse); i {
 			case 0:
 				return &v.state
 			case 1:

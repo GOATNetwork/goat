@@ -1,7 +1,9 @@
 syntax = "proto3";
 package goat.goat.v1;
 
+import "amino/amino.proto";
 import "goat/goat/v1/goat.proto";
+import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 
 option go_package = "github.com/goatnetwork/goat/x/goat/types";
@@ -9,15 +11,18 @@ option go_package = "github.com/goatnetwork/goat/x/goat/types";
 // Query defines the gRPC querier service.
 service Query {
   // EthBlock
-  rpc EthBlock(QueryEthBlockRequest) returns (QueryEthBlockResponse) {
-    option (google.api.http).get = "/goatnetwork/goat/goat/v1/ethblock";
+  rpc EthBlockTip(QueryEthBlockTipRequest) returns (QueryEthBlockTipResponse) {
+    option (google.api.http).get = "/goatnetwork/goat/goat/v1/ethBlockTip";
   }
 }
 
 // QueryEthBlockRequest is request type for the Query/EthBlock RPC method.
-message QueryEthBlockRequest {}
+message QueryEthBlockTipRequest {}
 
 // QueryEthBlockResponse is response type for the Query/EthBlock RPC method.
-message QueryEthBlockResponse {
-  ExecutionPayload block = 1;
+message QueryEthBlockTipResponse {
+  ExecutionPayload block = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
 }

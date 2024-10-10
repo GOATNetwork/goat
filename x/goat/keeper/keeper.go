@@ -9,7 +9,6 @@ import (
 	"cosmossdk.io/core/address"
 	"cosmossdk.io/core/store"
 	"cosmossdk.io/log"
-	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/ethereum/go-ethereum/beacon/engine"
 	"github.com/ethereum/go-ethereum/common"
@@ -31,7 +30,6 @@ type (
 		BeaconRoot collections.Item[[]byte] // the cometbft blockhash
 		Block      collections.Item[types.ExecutionPayload]
 		ethclient  ethrpc.EngineClient
-		txConfig   client.TxConfig
 		// this line is used by starport scaffolding # collection/type
 
 		bitcoinKeeper types.BitcoinKeeper
@@ -52,7 +50,6 @@ func NewKeeper(
 	relayerKeeper types.RelayerKeeper,
 	accountKeeper types.AccountKeeper,
 	ethclient ethrpc.EngineClient,
-	txConfig client.TxConfig,
 ) Keeper {
 	sb := collections.NewSchemaBuilder(storeService)
 
@@ -70,8 +67,6 @@ func NewKeeper(
 		Block:         collections.NewItem(sb, types.BlockKey, "block", codec.CollValue[types.ExecutionPayload](cdc)),
 		BeaconRoot:    collections.NewItem(sb, types.ConsHashKey, "consensus_hash", collections.BytesValue),
 		ethclient:     ethclient,
-		txConfig:      txConfig,
-		// this line is used by starport scaffolding # collection/instantiate
 	}
 
 	schema, err := sb.Build()
