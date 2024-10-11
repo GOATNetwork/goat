@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"context"
-	"encoding/hex"
 	"fmt"
 	"time"
 
@@ -142,7 +141,7 @@ func (k Keeper) ActiveValidators(ctx context.Context) ([]cmttypes.GenesisValidat
 			Address: kv.Key.Bytes(),
 			PubKey:  cmsecp256k1.PubKey(validator.Pubkey),
 			Power:   int64(kv.Value),
-			Name:    hex.EncodeToString(kv.Key.Bytes()),
+			Name:    types.ValidatorName(kv.Key.Bytes()),
 		})
 	}
 	return vals, nil

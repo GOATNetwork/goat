@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"context"
-	"encoding/hex"
 	"errors"
 	"fmt"
 
@@ -17,13 +16,13 @@ func (k Keeper) UpdateTokens(ctx context.Context, weights []*goattypes.UpdateTok
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
 
 	for _, update := range weights {
-		addr := hex.EncodeToString(update.Token.Bytes())
+		addr := types.TokenDenom(update.Token)
 		token, err := k.Tokens.Get(sdkctx, addr)
 		if err != nil {
 			if !errors.Is(err, collections.ErrNotFound) {
 				return err
 			}
-			token = types.Token{Weight: update.Weight}
+			token = types.Token{Weight: update.Weight, Threshold: math.ZeroInt()}
 		}
 
 		if err := k.onWeightChanged(sdkctx, addr, token.Weight, update.Weight); err != nil {
@@ -46,17 +45,22 @@ func (k Keeper) UpdateTokens(ctx context.Context, weights []*goattypes.UpdateTok
 	}
 
 	for _, update := range thresholds {
-		addr := hex.EncodeToString(update.Token.Bytes())
+		addr := types.TokenDenom(update.Token)
 		token, err := k.Tokens.Get(sdkctx, addr)
 		if err != nil {
 			return err
 		}
-
 		sub := math.NewIntFromBigInt(update.Threshold).Sub(token.Threshold)
-		thrs.List = thrs.List.Add(sdktypes.NewCoin(addr, sub))
-		token.Threshold = math.NewIntFromBigInt(update.Threshold)
-		if err := k.Tokens.Set(sdkctx, addr, token); err != nil {
-			return err
+		if !sub.IsZero() {
+			if sub.IsNegative() {
+				thrs.List = thrs.List.Sub(sdktypes.NewCoin(addr, sub.Abs()))
+			} else {
+				thrs.List = thrs.List.Add(sdktypes.NewCoin(addr, sub))
+			}
+			token.Threshold = math.NewIntFromBigInt(update.Threshold)
+			if err := k.Tokens.Set(sdkctx, addr, token); err != nil {
+				return err
+			}
 		}
 	}
 

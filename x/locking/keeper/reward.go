@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"context"
-	"encoding/hex"
 	"errors"
 	"math/big"
 
@@ -24,8 +23,10 @@ func (k Keeper) UpdateRewardPool(ctx context.Context, gas []*goattypes.GasReques
 	}
 
 	for _, revenue := range gas {
-		pool.Gas = pool.Gas.Add(math.NewIntFromBigIntMut(revenue.Amount))
-		k.Logger().Debug("Add gas fee", "amount", revenue.Amount.String())
+		if revenue.Amount.Sign() > 0 {
+			pool.Gas = pool.Gas.Add(math.NewIntFromBigIntMut(revenue.Amount))
+			k.Logger().Debug("Add gas fee", "amount", revenue.Amount.String())
+		}
 	}
 
 	for _, grant := range grants {
@@ -46,7 +47,7 @@ func (k Keeper) UpdateRewardPool(ctx context.Context, gas []*goattypes.GasReques
 			reward.Div(reward, count)
 		}
 
-		if remain := pool.Remain.BigInt(); reward.Cmp(remain) < 0 {
+		if remain := pool.Remain.BigInt(); reward.Cmp(remain) > 0 {
 			reward = remain
 		}
 
@@ -66,7 +67,7 @@ func (k Keeper) UpdateRewardPool(ctx context.Context, gas []*goattypes.GasReques
 	return nil
 }
 
-func (k Keeper) distributeReward(ctx context.Context) error {
+func (k Keeper) DistributeReward(ctx context.Context) error {
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
 
 	// the cometbft consensus rule
@@ -79,7 +80,8 @@ func (k Keeper) distributeReward(ctx context.Context) error {
 		return err
 	}
 
-	if pool.Gas.IsZero() && pool.Goat.IsZero() { // todo: remove if reward distribution is changed
+	// todo: remove if the distribution rule is changed
+	if pool.Gas.IsZero() && pool.Goat.IsZero() {
 		return nil
 	}
 
@@ -96,31 +98,38 @@ func (k Keeper) distributeReward(ctx context.Context) error {
 	// Here we send reward to all validators even if it didn't vote for the block
 	// it prevents proposer only including 2/3 votes to get more reward
 	for _, voteInfo := range sdkctx.VoteInfos() {
-		power := math.LegacyNewDec(voteInfo.Validator.Power).QuoTruncate(math.LegacyNewDec(totalPower))
-
 		validator, err := k.Validators.Get(sdkctx, voteInfo.Validator.Address)
 		if err != nil {
 			return err
 		}
 
+		power := math.LegacyNewDec(voteInfo.Validator.Power).Quo(math.LegacyNewDec(totalPower))
 		if !pool.Gas.IsZero() {
 			share := math.LegacyNewDecFromBigInt(pool.Gas.BigInt()).MulTruncate(power).TruncateInt()
-			remainGas.Sub(remainGas, share.BigIntMut())
-			validator.GasReward = validator.GasReward.Add(share)
-			k.Logger().Debug("Distribute gas reward",
-				"address", hex.EncodeToString(voteInfo.Validator.Address), "amount", share)
+			if !share.IsZero() {
+				remainGas.Sub(remainGas, share.BigIntMut())
+				validator.GasReward = validator.GasReward.Add(share)
+				k.Logger().Debug("Distribute gas reward",
+					"address", types.ValidatorName(voteInfo.Validator.Address), "amount", share)
+			}
 		}
 
 		if !pool.Goat.IsZero() {
 			share := math.LegacyNewDecFromBigInt(pool.Goat.BigInt()).MulTruncate(power).TruncateInt()
-			remainReward.Sub(remainReward, share.BigIntMut())
-			validator.Reward = validator.Reward.Add(share)
-			k.Logger().Debug("Distribute goat reward",
-				"address", hex.EncodeToString(voteInfo.Validator.Address), "amount", share)
+			if !share.IsZero() {
+				remainReward.Sub(remainReward, share.BigIntMut())
+				validator.Reward = validator.Reward.Add(share)
+				k.Logger().Debug("Distribute goat reward",
+					"address", types.ValidatorName(voteInfo.Validator.Address), "amount", share)
+			}
+		}
+
+		if err := k.Validators.Set(sdkctx, voteInfo.Validator.Address, validator); err != nil {
+			return err
 		}
 	}
 
-	// give back the dust to pool again
+	// give back the dust to the pool again
 	pool.Gas = math.NewIntFromBigIntMut(remainGas)
 	pool.Goat = math.NewIntFromBigIntMut(remainReward)
 	if err := k.RewardPool.Set(sdkctx, pool); err != nil {

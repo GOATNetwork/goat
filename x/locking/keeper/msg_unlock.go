@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"context"
-	"encoding/hex"
 	"errors"
 	"time"
 
@@ -31,10 +30,8 @@ func (k Keeper) Unlock(ctx context.Context, reqs []*goattypes.UnlockRequest) err
 	return nil
 }
 
-func (k Keeper) unlock(ctx context.Context, req *goattypes.UnlockRequest, param *types.Params) error {
-	sdkctx := sdktypes.UnwrapSDKContext(ctx)
-
-	tokenAddr := hex.EncodeToString(req.Token.Bytes())
+func (k Keeper) unlock(sdkctx sdktypes.Context, req *goattypes.UnlockRequest, param *types.Params) error {
+	tokenAddr := types.TokenDenom(req.Token)
 	valdtAddr := sdktypes.ConsAddress(req.Validator.Bytes())
 
 	validator, err := k.Validators.Get(sdkctx, valdtAddr)
@@ -57,28 +54,32 @@ func (k Keeper) unlock(ctx context.Context, req *goattypes.UnlockRequest, param 
 	if lockingAmount.LT(amount) { // the validator was slashed
 		amount = math.NewIntFromBigIntMut(lockingAmount.BigInt())
 	}
-	validator.Locking = validator.Locking.Sub(sdktypes.NewCoin(tokenAddr, amount))
+	updatedLocking := validator.Locking.Sub(sdktypes.NewCoin(tokenAddr, amount))
 	lockingAmount = lockingAmount.Sub(amount)
 
-	if !amount.IsZero() && token.Weight > 0 && validator.Status != types.Tombstoned {
-		p := math.NewIntFromUint64(token.Weight).Mul(amount).Quo(types.PowerReduction)
-		if !p.IsUint64() {
-			return types.ErrInvalid.Wrapf("power too large: %s", p)
-		}
+	isExiting := validator.Status == types.Inactive ||
+		validator.Status == types.Tombstoned || lockingAmount.LT(token.Threshold)
 
-		if powerU64 := p.Uint64(); validator.Power > powerU64 {
-			validator.Power -= powerU64
-		} else { // the latest weight is bigger than before
-			validator.Power = 0
+	if !amount.IsZero() && token.Weight > 0 && !isExiting {
+		if validator.Status == types.Active || validator.Status == types.Pending {
+			p := math.NewIntFromUint64(token.Weight).Mul(amount).Quo(types.PowerReduction)
+			if !p.IsUint64() {
+				return types.ErrInvalid.Wrapf("power too large: %s", p)
+			}
+
+			if powerU64 := p.Uint64(); validator.Power > powerU64 {
+				validator.Power -= powerU64
+			} else {
+				validator.Power = 0
+			}
 		}
 	}
 
-	exiting := validator.Status == types.Inactive ||
-		validator.Status == types.Tombstoned || lockingAmount.LT(token.Threshold)
 	var unlockTime time.Time
-	if exiting {
+	if isExiting {
 		unlockTime = sdkctx.BlockTime().Add(param.ExitingDuration)
 
+		validator.Power = 0
 		switch validator.Status {
 		case types.Active, types.Pending:
 			validator.Status = types.Inactive
@@ -90,6 +91,7 @@ func (k Keeper) unlock(ctx context.Context, req *goattypes.UnlockRequest, param 
 				return err
 			}
 		}
+		validator.Locking = updatedLocking
 	} else {
 		unlockTime = sdkctx.BlockTime().Add(param.UnlockDuration)
 
@@ -105,9 +107,19 @@ func (k Keeper) unlock(ctx context.Context, req *goattypes.UnlockRequest, param 
 			}
 		}
 
-		if err := k.PowerRanking.Set(sdkctx, collections.Join(validator.Power, valdtAddr)); err != nil {
-			return err
+		// insert the power to the ranking again
+		if validator.Power > 0 {
+			if err := k.PowerRanking.Set(sdkctx,
+				collections.Join(validator.Power, valdtAddr)); err != nil {
+				return err
+			}
 		}
+		validator.Locking = updatedLocking
+	}
+
+	// update the validator state
+	if err := k.Validators.Set(sdkctx, valdtAddr, validator); err != nil {
+		return err
 	}
 
 	// get the unlock queue by the time
@@ -128,16 +140,12 @@ func (k Keeper) unlock(ctx context.Context, req *goattypes.UnlockRequest, param 
 		return err
 	}
 
-	if err := k.Validators.Set(sdkctx, valdtAddr, validator); err != nil {
-		return err
-	}
-
-	k.Logger().Info("Unlock", "id", req.Id, "validator", hex.EncodeToString(valdtAddr),
+	k.Logger().Info("Unlock", "id", req.Id, "validator", types.ValidatorName(valdtAddr),
 		"token", tokenAddr, "amount", amount, "unlockTime", unlockTime)
 	return nil
 }
 
-func (k Keeper) dequeueMatureUnlocks(ctx context.Context) error {
+func (k Keeper) DequeueMatureUnlocks(ctx context.Context) error {
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
 
 	var keys []time.Time
@@ -152,15 +160,15 @@ func (k Keeper) dequeueMatureUnlocks(ctx context.Context) error {
 		return err
 	}
 
+	if len(keys) == 0 {
+		return nil
+	}
+
 	for _, key := range keys {
 		err := k.UnlockQueue.Remove(ctx, key)
 		if err != nil {
 			return err
 		}
-	}
-
-	if len(values) == 0 {
-		return nil
 	}
 
 	execQueue, err := k.EthTxQueue.Get(sdkctx)

@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"context"
-	"encoding/hex"
 	"errors"
 
 	"cosmossdk.io/collections"
@@ -24,7 +23,7 @@ func (k Keeper) Lock(ctx context.Context, reqs []*goattypes.LockRequest) error {
 		if _, ok := updates[req.Validator]; !ok {
 			updates[req.Validator] = sdktypes.Coins{}
 		}
-		coin := sdktypes.NewCoin(hex.EncodeToString(req.Token.Bytes()), math.NewIntFromBigInt(req.Amount))
+		coin := sdktypes.NewCoin(types.TokenDenom(req.Token), math.NewIntFromBigInt(req.Amount))
 		updates[req.Validator] = updates[req.Validator].Add(coin)
 	}
 
@@ -95,13 +94,12 @@ func (k Keeper) lock(ctx context.Context, target common.Address, coins sdktypes.
 			collections.Join(validator.Power, valdtAddr)); err != nil {
 			return err
 		}
-		k.Logger().Info("Lock", "validator", hex.EncodeToString(valdtAddr), "power", validator.Power)
+		k.Logger().Info("Lock", "validator", types.ValidatorName(valdtAddr), "power", validator.Power)
 	case types.Downgrade:
 		threshold, err := k.Threshold.Get(sdkctx)
 		if err != nil {
 			return err
 		}
-
 		// check if it's unjailed and locking is enough
 		if sdkctx.BlockTime().After(validator.JailedUntil) && validator.Locking.IsAllGTE(threshold.List) {
 			validator.Status = types.Pending
@@ -130,10 +128,11 @@ func (k Keeper) lock(ctx context.Context, target common.Address, coins sdktypes.
 				collections.Join(validator.Power, valdtAddr)); err != nil {
 				return err
 			}
-			k.Logger().Info("Unjail", "validator", hex.EncodeToString(valdtAddr), "power", validator.Power)
+			k.Logger().Info("Unjail", "validator", types.ValidatorName(valdtAddr), "power", validator.Power)
 		}
 	case types.Tombstoned, types.Inactive:
 		// don't do anything
+		k.Logger().Info("No effect lock", "validator", types.ValidatorName(valdtAddr), "power", validator.Power)
 	}
 
 	// update validator state

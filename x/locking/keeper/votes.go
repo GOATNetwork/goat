@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"context"
-	"encoding/hex"
 	"errors"
 
 	"cosmossdk.io/collections"
@@ -30,9 +29,7 @@ func (k Keeper) HandleVoteInfos(ctx context.Context) error {
 	return nil
 }
 
-func (k Keeper) handleVoteInfo(ctx context.Context, address sdktypes.ConsAddress, signed comet.BlockIDFlag, param *types.Params) error {
-	sdkctx := sdktypes.UnwrapSDKContext(ctx)
-
+func (k Keeper) handleVoteInfo(sdkctx sdktypes.Context, address sdktypes.ConsAddress, signed comet.BlockIDFlag, param *types.Params) error {
 	validator, err := k.Validators.Get(sdkctx, address)
 	if err != nil {
 		return err
@@ -55,6 +52,10 @@ func (k Keeper) handleVoteInfo(ctx context.Context, address sdktypes.ConsAddress
 	}
 
 	if isDown {
+		k.Logger().Info(
+			"Offline confirmed", "validator", types.ValidatorName(address), "height", sdkctx.BlockHeight(),
+		)
+
 		// remove it from power ranking
 		if err := k.PowerRanking.Remove(sdkctx,
 			collections.Join(validator.Power, address)); err != nil {
@@ -91,7 +92,6 @@ func (k Keeper) handleVoteInfo(ctx context.Context, address sdktypes.ConsAddress
 		validator.Power = 0
 		validator.JailedUntil = sdkctx.BlockTime().Add(param.DowntimeJailDuration)
 		sdkctx.EventManager().EmitEvent(types.ValidatorDowngradedEvent(address))
-		k.Logger().Warn("Validator is down", "address", hex.EncodeToString(address))
 	}
 
 	if err := k.Validators.Set(sdkctx, address, validator); err != nil {

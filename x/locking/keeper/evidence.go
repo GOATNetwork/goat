@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"context"
-	"encoding/hex"
 	"errors"
 	"fmt"
 
@@ -60,14 +59,13 @@ func (k Keeper) handleEvidence(ctx context.Context, evidence comet.Evidence, par
 		return err
 	}
 
-	switch validator.Status {
-	case types.Tombstoned:
+	if validator.Status == types.Tombstoned {
 		return nil
 	}
 
 	k.Logger().Info(
-		"confirmed equivocation", "validator", hex.EncodeToString(address),
-		"infraction_height", evidence.Height(), "infraction_time", evidence.Time(),
+		"Evidence confirmed", "validator", types.ValidatorName(address),
+		"height", evidence.Height(), "time", evidence.Time(),
 	)
 
 	if err := k.PowerRanking.Remove(sdkctx,

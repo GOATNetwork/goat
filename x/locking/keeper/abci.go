@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"context"
-	"encoding/hex"
 	"errors"
 	"fmt"
 
@@ -14,10 +13,10 @@ import (
 
 func (k Keeper) BeginBlocker(ctx context.Context) error {
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
-	if err := k.distributeReward(sdkctx); err != nil {
+	if err := k.DistributeReward(sdkctx); err != nil {
 		return err
 	}
-	if err := k.dequeueMatureUnlocks(sdkctx); err != nil {
+	if err := k.DequeueMatureUnlocks(sdkctx); err != nil {
 		return err
 	}
 	if err := k.HandleVoteInfos(sdkctx); err != nil {
@@ -38,13 +37,15 @@ func (k Keeper) EndBlocker(ctx context.Context) ([]abci.ValidatorUpdate, error) 
 		if err != nil {
 			return nil, err
 		}
-		defer iter.Close()
 		for ; iter.Valid(); iter.Next() {
 			kv, err := iter.KeyValue()
 			if err != nil {
 				return nil, err
 			}
 			lastSet[string(kv.Key)] = kv.Value
+		}
+		if err := iter.Close(); err != nil {
+			return nil, err
 		}
 	}
 
@@ -62,13 +63,14 @@ func (k Keeper) EndBlocker(ctx context.Context) ([]abci.ValidatorUpdate, error) 
 
 	var newSet []abci.ValidatorUpdate
 	var lastPower uint64
-	for count := 0; pwIter.Valid() && count < int(param.MaxValidators); pwIter.Next() {
+	for count := int64(0); pwIter.Valid() && count < param.MaxValidators; pwIter.Next() {
 		key, err := pwIter.Key()
 		if err != nil {
 			return nil, err
 		}
+
 		curPower, valAddr := key.K1(), key.K2()
-		if curPower > lastPower {
+		if curPower > lastPower && count != 0 {
 			return nil, errors.New("invalid iterator: validator power is bigger than before")
 		}
 		lastPower = curPower
@@ -82,9 +84,12 @@ func (k Keeper) EndBlocker(ctx context.Context) ([]abci.ValidatorUpdate, error) 
 		switch validator.Status {
 		case types.Active:
 			if power := lastSet[valstr]; power != validator.Power { // the power is changed
+				if err := k.ValidatorSet.Set(sdkctx, valAddr, validator.Power); err != nil {
+					return nil, err
+				}
 				newSet = append(newSet, abci.ValidatorUpdate{
 					Power: int64(validator.Power), PubKey: validator.CMPubkey()})
-				k.Logger().Info("Validator set updated", "address", hex.EncodeToString(valAddr), "power", validator.Power)
+				k.Logger().Info("Validator set updated", "address", types.ValidatorName(valAddr), "power", validator.Power)
 			}
 			delete(lastSet, valstr)
 		case types.Pending:
@@ -92,8 +97,7 @@ func (k Keeper) EndBlocker(ctx context.Context) ([]abci.ValidatorUpdate, error) 
 				return nil, fmt.Errorf("pending validator %x existed in the last validator set", valAddr.Bytes())
 			}
 			validator.Status = types.Active
-			validator.SigningInfo.Missed = 0
-			validator.SigningInfo.Offset = 0
+			validator.SigningInfo = types.SigningInfo{}
 			if err := k.Validators.Set(sdkctx, valAddr, validator); err != nil {
 				return nil, err
 			}
@@ -102,13 +106,14 @@ func (k Keeper) EndBlocker(ctx context.Context) ([]abci.ValidatorUpdate, error) 
 			}
 			newSet = append(newSet, abci.ValidatorUpdate{
 				Power: int64(validator.Power), PubKey: validator.CMPubkey()})
-			k.Logger().Info("Validator set updated", "address", hex.EncodeToString(valAddr), "power", validator.Power)
+			k.Logger().Info("Validator set updated", "address", types.ValidatorName(valAddr), "power", validator.Power)
 		default:
 			return nil, fmt.Errorf("%s validator %x in power ranking", validator.Status, valAddr.Bytes())
 		}
 		count++
 	}
 
+	// remove
 	for val := range lastSet {
 		valAddr := []byte(val)
 		validator, err := k.Validators.Get(sdkctx, valAddr)
@@ -125,7 +130,7 @@ func (k Keeper) EndBlocker(ctx context.Context) ([]abci.ValidatorUpdate, error) 
 			return nil, err
 		}
 		newSet = append(newSet, abci.ValidatorUpdate{PubKey: validator.CMPubkey()})
-		k.Logger().Info("Validator set updated", "address", hex.EncodeToString(valAddr), "power", 0)
+		k.Logger().Info("Validator set updated", "address", types.ValidatorName(valAddr), "power", 0)
 	}
 	return newSet, nil
 }

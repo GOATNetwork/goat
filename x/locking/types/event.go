@@ -1,8 +1,6 @@
 package types
 
 import (
-	"encoding/hex"
-
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -14,13 +12,13 @@ const (
 func ValidatorDowngradedEvent(validator sdktypes.ConsAddress) sdktypes.Event {
 	return sdktypes.NewEvent(
 		EventTypeDowngraded,
-		sdktypes.NewAttribute("validator", hex.EncodeToString(validator.Bytes())),
+		sdktypes.NewAttribute("validator", ValidatorName(validator.Bytes())),
 	)
 }
 
 func ValidatorTombstonedEvent(validator sdktypes.ConsAddress) sdktypes.Event {
 	return sdktypes.NewEvent(
 		EventTypeTombstoned,
-		sdktypes.NewAttribute("validator", hex.EncodeToString(validator.Bytes())),
+		sdktypes.NewAttribute("validator", ValidatorName(validator.Bytes())),
 	)
 }

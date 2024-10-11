@@ -3,13 +3,12 @@ package keeper
 import (
 	"bytes"
 	"context"
-	"encoding/hex"
 
 	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/core/types/goattypes"
-	ethcrypto "github.com/ethereum/go-ethereum/crypto"
+	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 	"github.com/goatnetwork/goat/x/locking/types"
 )
 
@@ -23,13 +22,8 @@ func (k *Keeper) Create(ctx context.Context, req []*goattypes.CreateRequest) err
 }
 
 func (k Keeper) createValidator(ctx context.Context, req *goattypes.CreateRequest) error {
-	uncomp, err := ethcrypto.UnmarshalPubkey(append([]byte{0x04}, req.Pubkey[:]...))
-	if err != nil {
-		return err
-	}
-
 	// check if the address provided is consistent with caculation
-	pubkey := &secp256k1.PubKey{Key: ethcrypto.CompressPubkey(uncomp)}
+	pubkey := &secp256k1.PubKey{Key: goatcrypto.CompressP256k1Pubkey(req.Pubkey)}
 	address := sdktypes.ConsAddress(pubkey.Address())
 	if !bytes.Equal(address, req.Validator.Bytes()) {
 		return types.ErrInvalid.Wrapf("invalid address for pubkey %x: expect %x but got %x",
@@ -70,6 +64,6 @@ func (k Keeper) createValidator(ctx context.Context, req *goattypes.CreateReques
 		return err
 	}
 
-	k.Logger().Info("Create", "address", hex.EncodeToString(address))
+	k.Logger().Info("Create", "address", types.ValidatorName(address))
 	return nil
 }

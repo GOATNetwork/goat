@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"context"
-	"encoding/hex"
 
 	"cosmossdk.io/math"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
@@ -31,7 +30,7 @@ func (k Keeper) Claim(ctx context.Context, reqs []*goattypes.ClaimRequest) error
 		}
 
 		k.Logger().Info("Claim", "address",
-			hex.EncodeToString(valdtAddr), "goat", validator.Reward, "gas", validator.GasReward)
+			types.ValidatorName(valdtAddr), "goat", validator.Reward, "gas", validator.GasReward)
 		queue.Rewards = append(queue.Rewards, &types.Reward{
 			Id:        req.Id,
 			Recipient: req.Recipient.Bytes(),

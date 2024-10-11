@@ -33,6 +33,7 @@ func (p Params) Validate() error {
 	if p.MaxValidators > 100 {
 		return fmt.Errorf("max validator should be less than 100")
 	}
+
 	if p.MaxMissedPerWindow == 0 || p.SignedBlocksWindow == 0 {
 		return fmt.Errorf("zero signed window values")
 	}
@@ -40,6 +41,30 @@ func (p Params) Validate() error {
 	if p.MaxMissedPerWindow > p.SignedBlocksWindow {
 		return fmt.Errorf("MaxMissedPerWindow %d > SignedBlocksWindow %d",
 			p.MaxMissedPerWindow, p.SignedBlocksWindow)
+	}
+
+	if p.SlashFractionDoubleSign.GTE(math.LegacyNewDec(1)) {
+		return fmt.Errorf("SlashFractionDoubleSign too high")
+	}
+
+	if p.SlashFractionDoubleSign.IsZero() {
+		return fmt.Errorf("SlashFractionDoubleSign too low")
+	}
+
+	if p.SlashFractionDowntime.GTE(math.LegacyNewDec(1)) {
+		return fmt.Errorf("SlashFractionDowntime too high")
+	}
+
+	if p.SlashFractionDowntime.IsZero() {
+		return fmt.Errorf("SlashFractionDowntime too low")
+	}
+
+	if p.DowntimeJailDuration == 0 {
+		return fmt.Errorf("DowntimeJailDuration too low")
+	}
+
+	if p.InitialBlockReward == 0 {
+		return fmt.Errorf("InitialBlockReward too low")
 	}
 
 	return nil

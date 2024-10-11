@@ -3,7 +3,6 @@ package keeper
 import (
 	"testing"
 
-	"cosmossdk.io/core/address"
 	"cosmossdk.io/log"
 	"cosmossdk.io/store"
 	"cosmossdk.io/store/metrics"
@@ -21,7 +20,7 @@ import (
 	"github.com/goatnetwork/goat/x/locking/types"
 )
 
-func LockingKeeper(t testing.TB) (keeper.Keeper, sdk.Context, address.Codec) {
+func LockingKeeper(t testing.TB, accountKeeper types.AccountKeeper) (keeper.Keeper, sdk.Context) {
 	storeKey := storetypes.NewKVStoreKey(types.StoreKey)
 
 	db := dbm.NewMemDB()
@@ -37,7 +36,7 @@ func LockingKeeper(t testing.TB) (keeper.Keeper, sdk.Context, address.Codec) {
 		cdc,
 		addressCodec,
 		runtime.NewKVStoreService(storeKey),
-		nil,
+		accountKeeper,
 		log.NewNopLogger(),
 	)
 
@@ -48,5 +47,5 @@ func LockingKeeper(t testing.TB) (keeper.Keeper, sdk.Context, address.Codec) {
 		t.Fatalf("failed to set params: %v", err)
 	}
 
-	return k, ctx, addressCodec
+	return k, ctx
 }
