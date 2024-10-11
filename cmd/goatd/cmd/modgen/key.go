@@ -51,7 +51,8 @@ func NewKey() *cobra.Command {
 				fmt.Println("secp256k1 prvkey", hex.EncodeToString(key.Bytes()))
 				fmt.Println("secp256k1 pubkey", hex.EncodeToString(key.PubKey().Bytes()))
 
-				goatAddr, err := clientCtx.TxConfig.SigningContext().AddressCodec().BytesToString(key.PubKey().Address())
+				rawAddress := key.PubKey().Address()
+				goatAddr, err := clientCtx.TxConfig.SigningContext().AddressCodec().BytesToString(rawAddress)
 				if err != nil {
 					return err
 				}
@@ -61,12 +62,13 @@ func NewKey() *cobra.Command {
 					return err
 				}
 
-				btcAddr, err := btcutil.NewAddressWitnessPubKeyHash(key.PubKey().Address(), network)
+				btcAddr, err := btcutil.NewAddressWitnessPubKeyHash(rawAddress, network)
 				if err != nil {
 					return err
 				}
 
 				fmt.Println("goat address", goatAddr)
+				fmt.Println("goat address bytes", hex.EncodeToString(rawAddress))
 				fmt.Println("eth address", ethcrypto.PubkeyToAddress(*pubkey).String())
 				fmt.Println("btc address", btcAddr.EncodeAddress())
 			}
