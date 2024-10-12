@@ -344,7 +344,7 @@ func (k msgServer) ApproveCancellation(ctx context.Context, req *types.MsgApprov
 		return nil, err
 	}
 
-	var events sdktypes.Events
+	var events = make(sdktypes.Events, 0, len(req.Id))
 	for _, wid := range req.Id {
 		withdrawal, err := k.Withdrawals.Get(ctx, wid)
 		if err != nil {
