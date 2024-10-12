@@ -49,7 +49,6 @@ func NewKey() *cobra.Command {
 				key := secp256k1.GenPrivKey()
 
 				fmt.Println("secp256k1 prvkey", hex.EncodeToString(key.Bytes()))
-				fmt.Println("secp256k1 pubkey", hex.EncodeToString(key.PubKey().Bytes()))
 
 				rawAddress := key.PubKey().Address()
 				goatAddr, err := clientCtx.TxConfig.SigningContext().AddressCodec().BytesToString(rawAddress)
@@ -62,6 +61,10 @@ func NewKey() *cobra.Command {
 					return err
 				}
 
+				fmt.Println("secp256k1 compressed pubkey", hex.EncodeToString(key.PubKey().Bytes()))
+				fmt.Println("uncompressed pubkey", hex.EncodeToString(ethcrypto.FromECDSAPub(pubkey)))
+				fmt.Println()
+
 				btcAddr, err := btcutil.NewAddressWitnessPubKeyHash(rawAddress, network)
 				if err != nil {
 					return err
@@ -69,14 +72,16 @@ func NewKey() *cobra.Command {
 
 				fmt.Println("goat address", goatAddr)
 				fmt.Println("goat address bytes", hex.EncodeToString(rawAddress))
+				fmt.Println()
 				fmt.Println("eth address", ethcrypto.PubkeyToAddress(*pubkey).String())
-				fmt.Println("btc address", btcAddr.EncodeAddress())
+				fmt.Println("btc address(p2wpkh)", btcAddr.EncodeAddress())
 			}
 
 			if isVoteKey {
 				secretKey := goatcrypto.GenPrivKey()
 				publicKey := new(goatcrypto.PublicKey).From(secretKey)
 
+				fmt.Println()
 				fmt.Println("bls12-381 prvkey", hex.EncodeToString(secretKey.Serialize()))
 				fmt.Println("bls12-381 pubkey", hex.EncodeToString(publicKey.Compress()))
 			}
