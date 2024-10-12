@@ -18,7 +18,6 @@ func (suite *KeeperTestSuite) TestUpdateRewardPool() {
 		Goat:   math.ZeroInt(),
 		Gas:    math.ZeroInt(),
 		Remain: math.NewInt(300),
-		Index:  1,
 	})
 	suite.Require().NoError(err)
 
@@ -28,70 +27,57 @@ func (suite *KeeperTestSuite) TestUpdateRewardPool() {
 	})
 	suite.Require().NoError(err)
 
-	err = suite.Keeper.UpdateRewardPool(suite.Context,
+	newctx := suite.Context.WithBlockHeight(1)
+	err = suite.Keeper.UpdateRewardPool(newctx,
 		[]*goattypes.GasRequest{{Amount: big.NewInt(100)}},
-		[]*goattypes.GrantRequest{{Amount: big.NewInt(100)}}, true)
+		[]*goattypes.GrantRequest{{Amount: big.NewInt(100)}})
 	suite.Require().NoError(err)
 
-	updated, err := suite.Keeper.RewardPool.Get(suite.Context)
-	suite.Require().NoError(err)
-	suite.Require().Equal(updated, types.RewardPool{
-		Gas:    math.NewInt(100),
-		Goat:   math.NewInt(200),
-		Remain: math.NewInt(200),
-		Index:  2,
-	})
-
-	err = suite.Keeper.UpdateRewardPool(suite.Context,
-		[]*goattypes.GasRequest{{Amount: new(big.Int)}}, nil, false)
-	suite.Require().NoError(err)
-
-	updated, err = suite.Keeper.RewardPool.Get(suite.Context)
+	updated, err := suite.Keeper.RewardPool.Get(newctx)
 	suite.Require().NoError(err)
 	suite.Require().Equal(updated, types.RewardPool{
 		Gas:    math.NewInt(100),
 		Goat:   math.NewInt(200),
 		Remain: math.NewInt(200),
-		Index:  2,
 	})
 
-	err = suite.Keeper.UpdateRewardPool(suite.Context,
-		[]*goattypes.GasRequest{{Amount: big.NewInt(100)}}, nil, true)
+	newctx = suite.Context.WithBlockHeight(2)
+	err = suite.Keeper.UpdateRewardPool(newctx,
+		[]*goattypes.GasRequest{{Amount: big.NewInt(100)}}, nil)
 	suite.Require().NoError(err)
 
-	updated, err = suite.Keeper.RewardPool.Get(suite.Context)
+	updated, err = suite.Keeper.RewardPool.Get(newctx)
 	suite.Require().NoError(err)
 	suite.Require().Equal(updated, types.RewardPool{
 		Gas:    math.NewInt(200),
 		Goat:   math.NewInt(300),
 		Remain: math.NewInt(100),
-		Index:  3,
 	})
 
-	err = suite.Keeper.UpdateRewardPool(suite.Context,
-		[]*goattypes.GasRequest{{Amount: new(big.Int)}}, nil, true)
+	newctx = suite.Context.WithBlockHeight(3)
+	err = suite.Keeper.UpdateRewardPool(newctx,
+		[]*goattypes.GasRequest{{Amount: new(big.Int)}}, nil)
 	suite.Require().NoError(err)
 
-	updated, err = suite.Keeper.RewardPool.Get(suite.Context)
+	updated, err = suite.Keeper.RewardPool.Get(newctx)
 	suite.Require().NoError(err)
 	suite.Require().Equal(updated, types.RewardPool{
 		Gas:    math.NewInt(200),
 		Goat:   math.NewInt(400),
 		Remain: math.NewInt(0),
-		Index:  4,
 	})
 
-	err = suite.Keeper.UpdateRewardPool(suite.Context,
-		[]*goattypes.GasRequest{{Amount: big.NewInt(100)}}, nil, true)
+	newctx = suite.Context.WithBlockHeight(4)
+	err = suite.Keeper.UpdateRewardPool(newctx,
+		[]*goattypes.GasRequest{{Amount: big.NewInt(100)}}, nil)
 	suite.Require().NoError(err)
 
-	updated, err = suite.Keeper.RewardPool.Get(suite.Context)
+	updated, err = suite.Keeper.RewardPool.Get(newctx)
 	suite.Require().NoError(err)
 	suite.Require().Equal(updated, types.RewardPool{
 		Gas:    math.NewInt(300),
 		Goat:   math.NewInt(400),
 		Remain: math.NewInt(0),
-		Index:  4,
 	})
 }
 
@@ -148,7 +134,6 @@ func (suite *KeeperTestSuite) TestDistributeReward() {
 		Goat:   math.NewInt(288285324),
 		Gas:    math.NewInt(632676834),
 		Remain: math.NewInt(300),
-		Index:  1,
 	})
 	suite.Require().NoError(err)
 

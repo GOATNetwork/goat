@@ -40,9 +40,6 @@ message RewardPool {
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false
   ];
-
-  // the actual height for the reward distribution
-  int64 index = 4;
 }
 
 // Reward

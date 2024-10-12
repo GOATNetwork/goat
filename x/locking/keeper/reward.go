@@ -11,7 +11,7 @@ import (
 	"github.com/goatnetwork/goat/x/locking/types"
 )
 
-func (k Keeper) UpdateRewardPool(ctx context.Context, gas []*goattypes.GasRequest, grants []*goattypes.GrantRequest, hasTxs bool) error {
+func (k Keeper) UpdateRewardPool(ctx context.Context, gas []*goattypes.GasRequest, grants []*goattypes.GrantRequest) error {
 	if l := len(gas); l != 1 {
 		return types.ErrInvalid.Wrapf("expected gas revenue request length 1 but got %d", l)
 	}
@@ -34,31 +34,28 @@ func (k Keeper) UpdateRewardPool(ctx context.Context, gas []*goattypes.GasReques
 		k.Logger().Debug("Grant reward", "amount", grant.Amount.String())
 	}
 
-	if hasTxs {
-		param, err := k.Params.Get(sdkctx)
-		if err != nil {
-			return err
-		}
-
-		reward := big.NewInt(param.InitialBlockReward)
-		if halvings := pool.Index / param.HalvingInterval; halvings > 0 {
-			count := big.NewInt(2)
-			count.Exp(count, big.NewInt(halvings), nil)
-			reward.Div(reward, count)
-		}
-
-		if remain := pool.Remain.BigInt(); reward.Cmp(remain) > 0 {
-			reward = remain
-		}
-
-		if reward.Sign() != 0 {
-			r := math.NewIntFromBigInt(reward)
-			pool.Goat = pool.Goat.Add(r)
-			pool.Remain = pool.Remain.Sub(r)
-			pool.Index++
-		}
-		k.Logger().Debug("Add reward to pool", "amount", reward.String())
+	param, err := k.Params.Get(sdkctx)
+	if err != nil {
+		return err
 	}
+
+	reward := big.NewInt(param.InitialBlockReward)
+	if halvings := sdkctx.BlockHeight() / param.HalvingInterval; halvings > 0 {
+		count := big.NewInt(2)
+		count.Exp(count, big.NewInt(halvings), nil)
+		reward.Div(reward, count)
+	}
+
+	if remain := pool.Remain.BigInt(); reward.Cmp(remain) > 0 {
+		reward = remain
+	}
+
+	if reward.Sign() != 0 {
+		r := math.NewIntFromBigInt(reward)
+		pool.Goat = pool.Goat.Add(r)
+		pool.Remain = pool.Remain.Sub(r)
+	}
+	k.Logger().Debug("Add reward to pool", "amount", reward.String())
 
 	if err := k.RewardPool.Set(sdkctx, pool); err != nil {
 		return err
@@ -78,11 +75,6 @@ func (k Keeper) DistributeReward(ctx context.Context) error {
 	pool, err := k.RewardPool.Get(sdkctx)
 	if err != nil {
 		return err
-	}
-
-	// todo: remove if the distribution rule is changed
-	if pool.Gas.IsZero() && pool.Goat.IsZero() {
-		return nil
 	}
 
 	var totalPower int64 // previous block

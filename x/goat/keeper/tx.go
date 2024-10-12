@@ -68,7 +68,7 @@ func (k msgServer) NewEthBlock(ctx context.Context, req *types.MsgNewEthBlock) (
 		return nil, types.ErrInvalidRequest.Wrap("invalid execution requests")
 	}
 
-	if err := k.lockingKeeper.ProcessLockingRequest(sdkctx, lockingReq, len(payload.Transactions) > 0); err != nil {
+	if err := k.lockingKeeper.ProcessLockingRequest(sdkctx, lockingReq); err != nil {
 		return nil, err
 	}
 

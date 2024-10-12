@@ -89,8 +89,8 @@ func (k Keeper) Logger() log.Logger {
 	return k.logger.With("module", fmt.Sprintf("x/%s", types.ModuleName))
 }
 
-func (k Keeper) ProcessLockingRequest(ctx context.Context, reqs goattypes.LockingRequests, hasTx bool) error {
-	if err := k.UpdateRewardPool(ctx, reqs.Gas, reqs.Grants, hasTx); err != nil {
+func (k Keeper) ProcessLockingRequest(ctx context.Context, reqs goattypes.LockingRequests) error {
+	if err := k.UpdateRewardPool(ctx, reqs.Gas, reqs.Grants); err != nil {
 		return err
 	}
 

@@ -15,9 +15,8 @@ func DefaultGenesis() *GenesisState {
 		Params:  DefaultParams(),
 		Slashed: sdk.NewCoins(),
 		RewardPool: RewardPool{
-			Goat:  math.ZeroInt(),
-			Gas:   math.ZeroInt(),
-			Index: 1,
+			Goat: math.ZeroInt(),
+			Gas:  math.ZeroInt(),
 		},
 	}
 }

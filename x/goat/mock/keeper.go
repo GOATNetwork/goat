@@ -106,17 +106,17 @@ func (mr *MockLockingKeeperMockRecorder) DequeueLockingModuleTx(ctx interface{})
 }
 
 // ProcessLockingRequest mocks base method.
-func (m *MockLockingKeeper) ProcessLockingRequest(ctx context.Context, req goattypes.LockingRequests, hasTx bool) error {
+func (m *MockLockingKeeper) ProcessLockingRequest(ctx context.Context, req goattypes.LockingRequests) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ProcessLockingRequest", ctx, req, hasTx)
+	ret := m.ctrl.Call(m, "ProcessLockingRequest", ctx, req)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // ProcessLockingRequest indicates an expected call of ProcessLockingRequest.
-func (mr *MockLockingKeeperMockRecorder) ProcessLockingRequest(ctx, req, hasTx interface{}) *gomock.Call {
+func (mr *MockLockingKeeperMockRecorder) ProcessLockingRequest(ctx, req interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ProcessLockingRequest", reflect.TypeOf((*MockLockingKeeper)(nil).ProcessLockingRequest), ctx, req, hasTx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ProcessLockingRequest", reflect.TypeOf((*MockLockingKeeper)(nil).ProcessLockingRequest), ctx, req)
 }
 
 // MockRelayerKeeper is a mock of RelayerKeeper interface.

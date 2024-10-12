@@ -17,7 +17,7 @@ type BitcoinKeeper interface {
 
 type LockingKeeper interface {
 	DequeueLockingModuleTx(ctx context.Context) ([]*ethtypes.Transaction, error)
-	ProcessLockingRequest(ctx context.Context, req goattypes.LockingRequests, hasTx bool) error
+	ProcessLockingRequest(ctx context.Context, req goattypes.LockingRequests) error
 }
 
 type RelayerKeeper interface {
