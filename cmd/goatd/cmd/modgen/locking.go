@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/hex"
 	"errors"
+	"fmt"
 	"math/big"
 	"strings"
 
@@ -59,8 +60,12 @@ func Locking() *cobra.Command {
 				return err
 			}
 
-			serverCtx.Logger.Info("update genesis", "module", types.ModuleName, "geneis", genesisFile)
+			serverCtx.Logger.Info("adding validator", "module", types.ModuleName, "geneis", genesisFile)
 			if err := UpdateModuleGenesis(genesisFile, types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
+				if len(genesis.Tokens) == 0 {
+					return fmt.Errorf("No token setting found")
+				}
+
 				for _, v := range genesis.GetValidators() {
 					if bytes.Equal(v.Pubkey, pubkeyRaw) {
 						return nil
@@ -76,6 +81,10 @@ func Locking() *cobra.Command {
 					}
 				}
 
+				if votePower == 0 {
+					return fmt.Errorf("No threshold setting found")
+				}
+
 				genesis.Validators = append(genesis.Validators, types.Validator{
 					Pubkey:    pubkeyRaw,
 					Power:     votePower,
@@ -89,7 +98,7 @@ func Locking() *cobra.Command {
 				return err
 			}
 
-			serverCtx.Logger.Info("update genesis", "module", authtypes.ModuleName, "geneis", genesisFile)
+			serverCtx.Logger.Info("adding account", "module", authtypes.ModuleName, "geneis", genesisFile)
 			// Add the validator account to auth module to allow it sending tx
 			return UpdateModuleGenesis(genesisFile, authtypes.ModuleName, new(authtypes.GenesisState), clientCtx.Codec, func(genesis *authtypes.GenesisState) error {
 				pubkey := &secp256k1.PubKey{Key: pubkeyRaw}
@@ -168,6 +177,10 @@ func Locking() *cobra.Command {
 				address := hex.EncodeToString(tokenAddress)
 				for _, token := range genesis.Tokens {
 					if token.Denom == address {
+						token.Token = types.Token{
+							Weight:    weight,
+							Threshold: math.NewIntFromBigIntMut(share),
+						}
 						return nil
 					}
 				}
