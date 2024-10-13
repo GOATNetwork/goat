@@ -9,12 +9,12 @@ import (
 	"os"
 	"strings"
 
-	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	"github.com/ethereum/go-ethereum/core"
 	"github.com/ethereum/go-ethereum/core/rawdb"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/triedb"
 	"github.com/ethereum/go-ethereum/triedb/hashdb"
+	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 )
 
 func DecodeHexOrBase64String(str string) ([]byte, error) {
@@ -31,14 +31,22 @@ func DecodeHexOrBase64String(str string) ([]byte, error) {
 	return pubkeyRaw, nil
 }
 
-func IsValidSecp256Pubkey(key []byte) error {
-	if len(key) != secp256k1.PubKeySize {
-		return errors.New("invalid secp256k1 pubkey length")
+func GetCompressedK256P1Pubkey(pubkeyRaw []byte) ([]byte, error) {
+	switch len(pubkeyRaw) {
+	case 33:
+		if pubkeyRaw[0] != 2 && pubkeyRaw[0] != 3 {
+			return nil, errors.New("invalid compressed secp256k1 pubkey prefix")
+		}
+	case 64, 65:
+		if len(pubkeyRaw) == 65 {
+			if pubkeyRaw[0] != 4 {
+				return nil, errors.New("invalid uncompressed secp256k1 pubkey prefix")
+			}
+			pubkeyRaw = pubkeyRaw[1:]
+		}
+		pubkeyRaw = goatcrypto.CompressP256k1Pubkey([64]byte(pubkeyRaw))
 	}
-	if key[0] != 2 && key[0] != 3 {
-		return errors.New("invalid secp256k1 pubkey prefix")
-	}
-	return nil
+	return pubkeyRaw, nil
 }
 
 func GetEthGenesisHeaderByFile(genesisPath string) (*ethtypes.Header, error) {

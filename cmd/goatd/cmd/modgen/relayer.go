@@ -90,7 +90,8 @@ func Relayer() *cobra.Command {
 				return err
 			}
 
-			if err := IsValidSecp256Pubkey(txRawKey); err != nil {
+			txRawKey, err = GetCompressedK256P1Pubkey(txRawKey)
+			if err != nil {
 				return err
 			}
 

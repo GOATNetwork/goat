@@ -55,7 +55,8 @@ func Locking() *cobra.Command {
 				return err
 			}
 
-			if err := IsValidSecp256Pubkey(pubkeyRaw); err != nil {
+			pubkeyRaw, err = GetCompressedK256P1Pubkey(pubkeyRaw)
+			if err != nil {
 				return err
 			}
 
