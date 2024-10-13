@@ -61,6 +61,23 @@ func (suite *KeeperTestSuite) TestUpdateToken() {
 	token, err = suite.Keeper.Tokens.Get(suite.Context, TestTokenDenom)
 	suite.Require().NoError(err)
 	suite.Require().Equal(token, types.Token{Weight: 10, Threshold: math.NewInt(0)})
+
+	newToken := common.HexToAddress("0xBC171dC497CC3410d3Ab989B7dc7Da37830c3a33")
+	newTokenDenom := types.TokenDenom(newToken)
+	err = suite.Keeper.UpdateTokens(suite.Context,
+		[]*goattypes.UpdateTokenWeightRequest{{Token: newToken, Weight: 10}},
+		[]*goattypes.UpdateTokenThresholdRequest{{Token: newToken, Threshold: big.NewInt(100)}})
+	suite.Require().NoError(err)
+
+	token, err = suite.Keeper.Tokens.Get(suite.Context, newTokenDenom)
+	suite.Require().NoError(err)
+	suite.Require().Equal(token, types.Token{Weight: 10, Threshold: math.NewInt(100)})
+
+	thres1, err = suite.Keeper.Threshold.Get(suite.Context)
+	suite.Require().NoError(err)
+	existed, trsv := thres1.List.Find(newTokenDenom)
+	suite.Require().True(existed)
+	suite.Require().Equal(sdktypes.NewCoin(newTokenDenom, math.NewInt(100)), trsv)
 }
 
 func (suite *KeeperTestSuite) TestOnWeightChanged() {
