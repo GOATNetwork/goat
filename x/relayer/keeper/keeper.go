@@ -80,7 +80,7 @@ func (k Keeper) UpdateRandao(ctx context.Context, req types.IVoteMsg) error {
 		return err
 	}
 
-	newRandao := goatcrypto.SHA256Sum(randao, req.GetVote().Signature)
+	newRandao := goatcrypto.SHA256Sum(randao, req.GetVote().GetSignature())
 	if err := k.Randao.Set(ctx, newRandao); err != nil {
 		return err
 	}

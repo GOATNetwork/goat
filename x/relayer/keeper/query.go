@@ -23,10 +23,6 @@ type queryServer struct {
 }
 
 func (q queryServer) Params(ctx context.Context, req *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid request")
-	}
-
 	params, err := q.k.Params.Get(ctx)
 	if err != nil {
 		if errors.Is(err, collections.ErrNotFound) {
@@ -40,10 +36,6 @@ func (q queryServer) Params(ctx context.Context, req *types.QueryParamsRequest) 
 }
 
 func (q queryServer) Relayer(ctx context.Context, req *types.QueryRelayerRequest) (*types.QueryRelayerResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid request")
-	}
-
 	sequence, err := q.k.Sequence.Peek(ctx)
 	if err != nil {
 		return nil, status.Error(codes.Internal, "internal error")
@@ -61,10 +53,6 @@ func (q queryServer) Relayer(ctx context.Context, req *types.QueryRelayerRequest
 }
 
 func (q queryServer) Voters(ctx context.Context, req *types.QueryVotersRequest) (*types.QueryVotersResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid request")
-	}
-
 	iter, err := q.k.Voters.Iterate(ctx, nil)
 	if err != nil {
 		return nil, err
@@ -83,10 +71,6 @@ func (q queryServer) Voters(ctx context.Context, req *types.QueryVotersRequest) 
 }
 
 func (q queryServer) Pubkeys(ctx context.Context, req *types.QueryPubkeysRequest) (*types.QueryPubkeysResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid request")
-	}
-
 	iter, err := q.k.Pubkeys.Iterate(ctx, nil)
 	if err != nil {
 		return nil, err

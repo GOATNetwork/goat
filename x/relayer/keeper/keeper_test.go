@@ -2,6 +2,7 @@ package keeper_test
 
 import (
 	"testing"
+	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common"
@@ -79,7 +80,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 			// txPubkey 02d9e0fa8fc514f85131e748fa8b58b88ca1e820cfc1caa5e3124753c724c3f515
 			Address: common.Hex2Bytes("d45b120a2eb7c62f319d9c44e6caaad1752f5773"),
 			VoteKey: common.Hex2Bytes("91fcc71f6c7b6922d7cf6e1d6f2a13e72e13c78cf72e8ef1e24d8f6bea76b4bc040dfb864a541981129c55162e77829f0c346091d45a2cc5a5fc620ca4ab63b27a1192a2715211ae4a59c21044e60d947a59cb79a03e7ffc5fb81f76431436a1"),
-			Status:  types.VOTER_STATUS_UNSPECIFIED,
+			Status:  types.VOTER_STATUS_PENDING,
 		},
 	}
 
@@ -103,4 +104,57 @@ func (suite *KeeperTestSuite) SetupTest() {
 
 func (suite *KeeperTestSuite) TearDownSuite() {
 	suite.Ctrl.Finish()
+}
+
+func (suite *KeeperTestSuite) TestUpdateRandao() {
+	err := suite.Keeper.Randao.Set(suite.Context,
+		common.Hex2Bytes("631ce70cc1e6818ab1b0dd4c7d8c9af4b7a893ff9aed518a886f1c3c9823a970"))
+	suite.Require().NoError(err)
+
+	suite.VoteMsgMock.EXPECT().GetVote().Return(&types.Votes{
+		Signature: common.Hex2Bytes("1d3ae4583cce4fe713e39782131ef6a61c70e58a9952d10fccc1f1f4f74b0b6e7ef59be37e08ca6ecb5666ad0de94132"),
+	})
+
+	err = suite.Keeper.UpdateRandao(suite.Context, suite.VoteMsgMock)
+	suite.Require().NoError(err)
+
+	updated, err := suite.Keeper.Randao.Get(suite.Context)
+	suite.Require().NoError(err)
+	suite.Require().Equal(updated, common.Hex2Bytes("a9c74af54809f927cec82a77d5e23bc24c213480c6cf8dc656e70fffec7308ea"))
+}
+
+func (suite *KeeperTestSuite) TestNewPubkey() {
+	encoded := types.EncodePublicKey(&suite.TestKey)
+	exists, err := suite.Keeper.HasPubkey(suite.Context, encoded)
+	suite.Require().NoError(err)
+	suite.Require().False(exists)
+
+	err = suite.Keeper.AddNewKey(suite.Context, encoded)
+	suite.Require().NoError(err)
+	exists, err = suite.Keeper.HasPubkey(suite.Context, encoded)
+	suite.Require().NoError(err)
+	suite.Require().True(exists)
+}
+
+func (suite *KeeperTestSuite) TestRelayerSeqAndProposer() {
+	relayer := types.Relayer{
+		Proposer:         "goat1vpa50kdf63rfuurelvzsmpp99ffmvuc20h68qh",
+		Voters:           []string{},
+		LastElected:      time.Now().UTC(),
+		ProposerAccepted: true,
+	}
+
+	err := suite.Keeper.Relayer.Set(suite.Context, relayer)
+	suite.Require().NoError(err)
+
+	address, err := suite.Keeper.GetCurrentProposer(suite.Context)
+	suite.Require().NoError(err)
+	suite.Require().Equal(address.Bytes(), common.Hex2Bytes("607b47d9a9d4469e7079fb050d84252a53b6730a"))
+
+	err = suite.Keeper.SetProposalSeq(suite.Context, 100)
+	suite.Require().NoError(err)
+
+	seq, err := suite.Keeper.Sequence.Peek(suite.Context)
+	suite.Require().NoError(err)
+	suite.Require().EqualValues(seq, 100)
 }
