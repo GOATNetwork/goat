@@ -56,3 +56,7 @@ issues:
       text: 'SA1019: "golang.org/x/crypto/ripemd160" is deprecated: RIPEMD-160 is a legacy hash and should not be used for new applications.'
   exclude-dirs:
     - tmp
+    - api
+  exclude-files:
+    - '\*\.pb\.go'
+    - '\*\.pb\.gw\.go'
