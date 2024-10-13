@@ -20,9 +20,9 @@ type GoatConfig struct {
 func initCometBFTConfig() *cmtcfg.Config {
 	cfg := cmtcfg.DefaultConfig()
 
-	// these values put a higher strain on node memory
-	// cfg.P2P.MaxNumInboundPeers = 100
-	// cfg.P2P.MaxNumOutboundPeers = 40
+	cfg.P2P.MaxNumInboundPeers = 150
+	cfg.P2P.MaxNumOutboundPeers = 100
+	cfg.Mempool.Size = 50
 
 	return cfg
 }
@@ -49,7 +49,7 @@ func initAppConfig() (string, interface{}) {
 # the goat-geth node endpoint, using ipc is recommended
 geth = "{{ .Goat.Geth }}"
 # the jwt secret file for engine api, it's only required if connecting to an execution node via HTTP.
-jwt = "{{ .Goat.jwt }}"
+jwt = "{{ .Goat.JWT }}"
 `
 
 	return customAppTemplate, customAppConfig
