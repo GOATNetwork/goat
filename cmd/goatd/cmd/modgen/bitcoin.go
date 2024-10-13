@@ -28,9 +28,9 @@ func Bitcoin() *cobra.Command {
 	parsePubkey := func(raw []byte, typ string) (*relayer.PublicKey, error) {
 		var key relayer.PublicKey
 		switch strings.ToLower(typ) {
-		case "secp256k1":
+		case types.Secp256K1Name:
 			key.Key = &relayer.PublicKey_Secp256K1{Secp256K1: raw}
-		case "schnorr":
+		case types.SchnorrName:
 			key.Key = &relayer.PublicKey_Schnorr{Schnorr: raw}
 		default:
 			return nil, fmt.Errorf("unknown key type: %s", typ)
@@ -38,7 +38,7 @@ func Bitcoin() *cobra.Command {
 		return &key, nil
 	}
 
-	var cmd = &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "bitcoin [height] [hash...]",
 		Short: "init bitcoin module genesis",
 		Args:  cobra.RangeArgs(0, 7),
@@ -144,7 +144,7 @@ func Bitcoin() *cobra.Command {
 	param := types.DefaultParams()
 	cmd.Flags().Uint32(FlagConfirmationNumber, param.ConfirmationNumber, "the confirmation number")
 	cmd.Flags().BytesHex(FlagPubkey, nil, "the initial relayer public key")
-	cmd.Flags().String(FlagPubkeyType, "secp256k1", "the public key type [secp256k1,schnorr]")
+	cmd.Flags().String(FlagPubkeyType, types.SchnorrName, "the public key type [secp256k1,schnorr]")
 	cmd.Flags().String(FlagNetworkName, param.NetworkName, "the bitcoin network name(mainnet|testnet3|regtest|signet)")
 	cmd.Flags().Uint64(FlagMinDeposit, param.MinDepositAmount, "minimal allowed deposit amount")
 

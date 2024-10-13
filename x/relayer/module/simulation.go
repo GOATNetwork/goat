@@ -7,7 +7,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
-
 	"github.com/goatnetwork/goat/testutil/sample"
 	relayersimulation "github.com/goatnetwork/goat/x/relayer/simulation"
 	"github.com/goatnetwork/goat/x/relayer/types"

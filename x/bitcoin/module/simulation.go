@@ -7,7 +7,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
-
 	"github.com/goatnetwork/goat/testutil/sample"
 	bitcoinsimulation "github.com/goatnetwork/goat/x/bitcoin/simulation"
 	"github.com/goatnetwork/goat/x/bitcoin/types"

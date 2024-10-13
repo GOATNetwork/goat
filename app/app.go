@@ -25,14 +25,13 @@ import (
 	_ "github.com/cosmos/cosmos-sdk/x/auth/tx/config" // import for side-effects
 	_ "github.com/cosmos/cosmos-sdk/x/consensus"      // import for side-effects
 	consensuskeeper "github.com/cosmos/cosmos-sdk/x/consensus/keeper"
-	"go.uber.org/automaxprocs/maxprocs"
-
 	"github.com/goatnetwork/goat/docs"
 	"github.com/goatnetwork/goat/pkg/ethrpc"
 	bitcoinmodulekeeper "github.com/goatnetwork/goat/x/bitcoin/keeper"
 	goatmodulekeeper "github.com/goatnetwork/goat/x/goat/keeper"
 	lockingmodulekeeper "github.com/goatnetwork/goat/x/locking/keeper"
 	relayermodulekeeper "github.com/goatnetwork/goat/x/relayer/keeper"
+	"go.uber.org/automaxprocs/maxprocs"
 )
 
 const (
@@ -40,10 +39,8 @@ const (
 	AccountAddressPrefix = Name
 )
 
-var (
-	// DefaultNodeHome default home directories for the application daemon
-	DefaultNodeHome string
-)
+// DefaultNodeHome default home directories for the application daemon
+var DefaultNodeHome string
 
 var (
 	_ runtime.AppI            = (*App)(nil)

@@ -6,7 +6,6 @@ import (
 	tmcrypto "github.com/cometbft/cometbft/proto/tendermint/crypto"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
 	"github.com/goatnetwork/goat/x/locking/keeper"
 	"github.com/goatnetwork/goat/x/locking/types"
 )
@@ -40,7 +39,8 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 			vs = append(vs, abci.ValidatorUpdate{
 				Power: int64(validator.Power),
 				PubKey: tmcrypto.PublicKey{
-					Sum: &tmcrypto.PublicKey_Secp256K1{Secp256K1: validator.Pubkey}},
+					Sum: &tmcrypto.PublicKey_Secp256K1{Secp256K1: validator.Pubkey},
+				},
 			})
 		}
 
@@ -112,7 +112,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 		}
 	}
 
-	return
+	return vs
 }
 
 // ExportGenesis returns the module's exported genesis.

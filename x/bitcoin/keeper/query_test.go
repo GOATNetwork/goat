@@ -3,11 +3,10 @@ package keeper_test
 import (
 	"encoding/hex"
 
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-
 	"github.com/goatnetwork/goat/x/bitcoin/keeper"
 	"github.com/goatnetwork/goat/x/bitcoin/types"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 func (suite *KeeperTestSuite) TestParamsQuery() {

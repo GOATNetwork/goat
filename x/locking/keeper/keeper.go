@@ -10,12 +10,11 @@ import (
 	"cosmossdk.io/core/store"
 	"cosmossdk.io/log"
 	"cosmossdk.io/math"
+	cmsecp256k1 "github.com/cometbft/cometbft/crypto/secp256k1"
 	cmttypes "github.com/cometbft/cometbft/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/core/types/goattypes"
-
-	cmsecp256k1 "github.com/cometbft/cometbft/crypto/secp256k1"
 	"github.com/goatnetwork/goat/x/locking/types"
 )
 

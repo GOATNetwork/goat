@@ -1,0 +1,58 @@
+run:
+  timeout: 20m
+  tests: true
+
+linters:
+  disable-all: true
+  enable:
+    - goimports
+    - gosimple
+    - govet
+    - ineffassign
+    - misspell
+    - unconvert
+    - typecheck
+    - unused
+    - staticcheck
+    - bidichk
+    - durationcheck
+    - copyloopvar
+    - whitespace
+    - revive
+    - durationcheck
+    - gocheckcompilerdirectives
+    - reassign
+    - errcheck
+    - errorlint
+    - makezero
+    - nilerr
+    - dogsled
+    - gci
+    - goconst
+    - gocritic
+    - gofumpt
+    - nakedret
+    - nolintlint
+    - stylecheck
+    - thelper
+    - unparam
+
+linters-settings:
+  gofmt:
+    simplify: true
+  revive:
+    enable-all-rules: false
+    # here we enable specific useful rules
+    # see https://golangci-lint.run/usage/linters/#revive for supported rules
+    rules:
+      - name: receiver-naming
+        severity: warning
+        disabled: false
+        exclude: [""]
+
+issues:
+  exclude-rules:
+    - path: pkg/crypto/hash.go
+      text: 'SA1019: "golang.org/x/crypto/ripemd160" is deprecated: RIPEMD-160 is a legacy hash and should not be used for new applications.'
+  exclude-dirs:
+    - tmp

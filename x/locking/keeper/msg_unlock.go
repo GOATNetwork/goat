@@ -6,8 +6,10 @@ import (
 	"time"
 
 	"cosmossdk.io/collections"
+	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/math"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/ethereum/go-ethereum/core/types/goattypes"
 	"github.com/goatnetwork/goat/x/locking/types"
 )
@@ -64,7 +66,7 @@ func (k Keeper) unlock(sdkctx sdktypes.Context, req *goattypes.UnlockRequest, pa
 		if validator.Status == types.Active || validator.Status == types.Pending {
 			p := math.NewIntFromUint64(token.Weight).Mul(amount).Quo(types.PowerReduction)
 			if !p.IsUint64() {
-				return types.ErrInvalid.Wrapf("power too large: %s", p)
+				return errorsmod.Wrapf(sdkerrors.ErrLogic, "power too large: %s", p)
 			}
 
 			if powerU64 := p.Uint64(); validator.Power > powerU64 {

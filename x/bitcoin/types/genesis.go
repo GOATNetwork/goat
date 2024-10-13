@@ -46,7 +46,7 @@ func (gs GenesisState) Validate() error {
 	}
 
 	if len(gs.BlockHashes) == 0 {
-		return errors.New("No block hash provided in the genesis state")
+		return errors.New("no block hash provided in the genesis state")
 	}
 
 	return nil

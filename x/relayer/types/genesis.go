@@ -25,7 +25,7 @@ func (gs GenesisState) Validate() error {
 
 	for _, voter := range gs.Voters {
 		if err := voter.Validate(); err != nil {
-			return fmt.Errorf("invalid voter of %s: %s", voter.Address, err)
+			return fmt.Errorf("invalid voter of %s: %w", voter.Address, err)
 		}
 	}
 

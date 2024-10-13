@@ -58,9 +58,9 @@ func (suite *KeeperTestSuite) SetupTest() {
 	amount, ok := new(big.Int).SetString("100000000000000000000000", 10)
 	suite.Require().True(ok)
 	suite.Token = map[string]types.Token{
-		NativeTokenDenom: types.Token{Weight: 1e4, Threshold: math.NewIntFromUint64(1e18)},
-		GoatToekenDenom:  types.Token{Weight: 1, Threshold: math.NewIntFromBigInt(amount)},
-		TestTokenDenom:   types.Token{Weight: 1, Threshold: math.ZeroInt()},
+		NativeTokenDenom: {Weight: 1e4, Threshold: math.NewIntFromUint64(1e18)},
+		GoatToekenDenom:  {Weight: 1, Threshold: math.NewIntFromBigInt(amount)},
+		TestTokenDenom:   {Weight: 1, Threshold: math.ZeroInt()},
 	}
 
 	suite.Threshold = sdk.NewCoins(

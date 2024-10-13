@@ -6,9 +6,9 @@ import (
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 )
 
-func VoteSignDoc(method, chainId, proposer string, sequence, epoch uint64, data []byte) []byte {
+func VoteSignDoc(method, chainID, proposer string, sequence, epoch uint64, data []byte) []byte {
 	return goatcrypto.SHA256Sum(
-		[]byte(chainId),
+		[]byte(chainID),
 		goatcrypto.Uint64LE(sequence, epoch),
 		[]byte(method),
 		[]byte(proposer),

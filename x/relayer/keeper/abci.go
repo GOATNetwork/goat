@@ -73,7 +73,7 @@ func (k Keeper) EndBlocker(ctx context.Context) error {
 			relayer.Proposer = newVoters[0]
 			relayer.Voters = newVoters[1:]
 		} else {
-			relayer.Voters = newVoters[:]
+			relayer.Voters = newVoters
 		}
 	}
 
@@ -81,7 +81,7 @@ func (k Keeper) EndBlocker(ctx context.Context) error {
 	relayer.Epoch++
 	relayer.LastElected = sdkctx.BlockTime()
 
-	var events = sdktypes.Events{types.NewEpochEvent(relayer.Epoch)}
+	events := sdktypes.Events{types.NewEpochEvent(relayer.Epoch)}
 	if offBoarding || onBoarding {
 		events = append(types.VoterChangedEvent(relayer.Epoch, queue.OnBoarding, queue.OffBoarding), events...)
 

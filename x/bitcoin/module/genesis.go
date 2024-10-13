@@ -7,7 +7,6 @@ import (
 
 	"cosmossdk.io/collections"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
 	"github.com/goatnetwork/goat/x/bitcoin/keeper"
 	"github.com/goatnetwork/goat/x/bitcoin/types"
 )

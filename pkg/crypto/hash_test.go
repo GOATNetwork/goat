@@ -42,7 +42,7 @@ func TestHash160Sum(t *testing.T) {
 	t.Parallel()
 	for i := 0; i < 100; i++ {
 		t.Run(fmt.Sprintf("Hash160-%d", i), func(t *testing.T) {
-			var data = make([]byte, 32)
+			data := make([]byte, 32)
 			_, _ = rand.Read(data)
 			if got, want := Hash160Sum(data), btcutil.Hash160(data); !reflect.DeepEqual(got, want) {
 				t.Errorf("Hash160Sum() = %x, want %x", got, data)

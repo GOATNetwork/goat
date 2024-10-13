@@ -5,13 +5,12 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/golang/mock/gomock"
-	"github.com/stretchr/testify/suite"
-
 	keepertest "github.com/goatnetwork/goat/testutil/keeper"
 	"github.com/goatnetwork/goat/x/relayer/keeper"
 	"github.com/goatnetwork/goat/x/relayer/mock"
 	"github.com/goatnetwork/goat/x/relayer/types"
+	"github.com/golang/mock/gomock"
+	"github.com/stretchr/testify/suite"
 )
 
 func TestKeeper(t *testing.T) {
@@ -100,7 +99,6 @@ func (suite *KeeperTestSuite) SetupTest() {
 		err = suite.Keeper.Voters.Set(suite.Context, address, voter)
 		suite.Require().NoError(err)
 	}
-
 }
 
 func (suite *KeeperTestSuite) TearDownSuite() {

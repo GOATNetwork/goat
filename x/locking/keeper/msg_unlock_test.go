@@ -170,12 +170,12 @@ func (suite *KeeperTestSuite) TestUnlock() {
 
 	exitTime, unlockTime := now.Add(param.ExitingDuration).Unix(), now.Add(param.UnlockDuration).Unix()
 	expectedUnlocks := map[int64][]*types.Unlock{
-		unlockTime: []*types.Unlock{
+		unlockTime: {
 			{Id: reqs[0].Id, Token: reqs[0].Token[:], Recipient: reqs[0].Recipient[:], Amount: math.NewIntFromBigInt(reqs[0].Amount)},
 			{Id: reqs[3].Id, Token: reqs[3].Token[:], Recipient: reqs[3].Recipient[:], Amount: math.NewIntFromBigInt(reqs[3].Amount)},
 			{Id: reqs[6].Id, Token: reqs[6].Token[:], Recipient: reqs[6].Recipient[:], Amount: math.NewIntFromBigInt(reqs[6].Amount)},
 		},
-		exitTime: []*types.Unlock{
+		exitTime: {
 			{Id: reqs[1].Id, Token: reqs[1].Token[:], Recipient: reqs[1].Recipient[:], Amount: math.NewIntFromBigInt(reqs[1].Amount)},
 			{Id: reqs[2].Id, Token: reqs[2].Token[:], Recipient: reqs[2].Recipient[:], Amount: math.NewInt(1e18)},
 			{Id: reqs[4].Id, Token: reqs[4].Token[:], Recipient: reqs[4].Recipient[:], Amount: math.NewInt(1e18)},
@@ -331,5 +331,5 @@ func (suite *KeeperTestSuite) TestDequeueMatureUnlocks() {
 	suite.Require().NoError(err)
 	suite.Require().Len(queue.Rewards, 0)
 	suite.Require().Len(queue.Unlocks, 9)
-	suite.Require().Equal(queue.Unlocks, unlocks[:])
+	suite.Require().Equal(queue.Unlocks, unlocks)
 }

@@ -4,9 +4,11 @@ import (
 	"bytes"
 	"context"
 
+	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/ethereum/go-ethereum/core/types/goattypes"
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 	"github.com/goatnetwork/goat/x/locking/types"
@@ -26,7 +28,7 @@ func (k Keeper) createValidator(ctx context.Context, req *goattypes.CreateReques
 	pubkey := &secp256k1.PubKey{Key: goatcrypto.CompressP256k1Pubkey(req.Pubkey)}
 	address := sdktypes.ConsAddress(pubkey.Address())
 	if !bytes.Equal(address, req.Validator.Bytes()) {
-		return types.ErrInvalid.Wrapf("invalid address for pubkey %x: expect %x but got %x",
+		return errorsmod.Wrapf(sdkerrors.ErrLogic, "invalid address for pubkey %x: expect %x but got %x",
 			req.Pubkey[:], req.Validator.Bytes(), address.Bytes())
 	}
 
@@ -37,16 +39,16 @@ func (k Keeper) createValidator(ctx context.Context, req *goattypes.CreateReques
 		return err
 	}
 	if exists {
-		return types.ErrInvalid.Wrapf("validator %x has been created", address.Bytes())
+		return errorsmod.Wrapf(sdkerrors.ErrLogic, "validator %x has been created", address.Bytes())
 	}
 
 	// check if account for the address exists
 	if acc := sdktypes.AccAddress(address); k.accountKeeper.HasAccount(ctx, acc) {
-		return types.ErrInvalid.Wrapf("account %x has been created", address.Bytes())
+		return errorsmod.Wrapf(sdkerrors.ErrLogic, "account %x has been created", address.Bytes())
 	} else {
 		acc := k.accountKeeper.NewAccountWithAddress(ctx, acc)
 		if err := acc.SetPubKey(&secp256k1.PubKey{Key: pubkey.Key}); err != nil {
-			return types.ErrInvalid.Wrapf("unable to set pubkey")
+			return errorsmod.Wrapf(sdkerrors.ErrLogic, "unable to set pubkey")
 		}
 		k.accountKeeper.SetAccount(ctx, acc)
 	}

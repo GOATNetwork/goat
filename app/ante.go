@@ -80,7 +80,7 @@ func (ante GoatGuardHandler) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate boo
 		return ctx, err
 	}
 
-	var relayerTxOnly = func(msgName string) error {
+	relayerTxOnly := func(msgName string) error {
 		if !strings.HasPrefix(msgName, "goat.bitcoin.") && !strings.HasPrefix(msgName, "goat.relayer.") {
 			return errorsmod.Wrapf(sdkerrors.ErrTxDecode, "%s is not a relayer message", msgName)
 		}

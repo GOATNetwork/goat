@@ -12,6 +12,5 @@ func DefaultParams() Params {
 
 // Validate validates the set of params.
 func (p Params) Validate() error {
-
 	return nil
 }

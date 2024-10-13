@@ -8,16 +8,12 @@ import (
 	"os"
 	"path/filepath"
 
+	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/math/unsafe"
 	cfg "github.com/cometbft/cometbft/config"
 	tmsecp256k1 "github.com/cometbft/cometbft/crypto/secp256k1"
 	"github.com/cometbft/cometbft/p2p"
 	"github.com/cometbft/cometbft/privval"
-	"github.com/cosmos/go-bip39"
-	"github.com/goatnetwork/goat/app"
-	"github.com/spf13/cobra"
-
-	errorsmod "cosmossdk.io/errors"
 	cmttypes "github.com/cometbft/cometbft/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -30,9 +26,12 @@ import (
 	"github.com/cosmos/cosmos-sdk/version"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
 	"github.com/cosmos/cosmos-sdk/x/genutil/types"
+	"github.com/cosmos/go-bip39"
+	"github.com/goatnetwork/goat/app"
+	"github.com/spf13/cobra"
 )
 
-var printJson = func(info any) error {
+var printJSON = func(info any) error {
 	out, err := json.MarshalIndent(info, "", " ")
 	if err != nil {
 		return err
@@ -173,7 +172,7 @@ func InitCmd(mbm module.BasicManager) *cobra.Command {
 			}
 
 			cfg.WriteConfigFile(filepath.Join(config.RootDir, "config", "config.toml"), config)
-			return printJson(toPrint)
+			return printJSON(toPrint)
 		},
 	}
 
@@ -214,12 +213,13 @@ func initializeNodeValidatorFilesFromMnemonic(config *cfg.Config, mnemonic strin
 	_, pvStateFileErr := os.Stat(pvStateFile)
 
 	var filePV *privval.FilePV
-	if pvKeyFileErr == nil && pvStateFileErr == nil {
+	switch {
+	case pvKeyFileErr == nil && pvStateFileErr == nil:
 		filePV = privval.LoadFilePV(pvKeyFile, pvStateFile)
-	} else if len(mnemonic) == 0 {
+	case len(mnemonic) == 0:
 		filePV = privval.NewFilePV(tmsecp256k1.GenPrivKey(), pvKeyFile, pvStateFile)
 		filePV.Save()
-	} else {
+	default:
 		privKey := tmsecp256k1.GenPrivKeySecp256k1(bip39.NewSeed(mnemonic, ""))
 		filePV = privval.NewFilePV(privKey, pvKeyFile, pvStateFile)
 		filePV.Save()

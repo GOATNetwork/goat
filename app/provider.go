@@ -16,6 +16,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/params"
 	"github.com/goatnetwork/goat/pkg/ethrpc"
+	bitcintypes "github.com/goatnetwork/goat/x/bitcoin/types"
 	"github.com/spf13/cast"
 )
 
@@ -88,7 +89,7 @@ func ProvideValidatorPrvKey(appOpts servertypes.AppOptions) cryptotypes.PrivKey 
 		panic(err)
 	}
 
-	if pvKey.PrivKey.Type() != "secp256k1" {
+	if pvKey.PrivKey.Type() != bitcintypes.Secp256K1Name {
 		panic(prvkey + " is not an secp256k1 key")
 	}
 	return &secp256k1.PrivKey{Key: pvKey.PrivKey.Bytes()}

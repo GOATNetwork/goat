@@ -125,7 +125,6 @@ func TestVerifyMerkelProof(t *testing.T) {
 
 	t.Parallel()
 	for idx, tt := range tests {
-		idx, tt := idx, tt
 		t.Run(tt.name, func(t *testing.T) {
 			txid, err := chainhash.NewHashFromStr(tt.args.txid)
 			if err != nil {

@@ -84,8 +84,6 @@ func TestDepositAddressV1(t *testing.T) {
 	t.Parallel()
 
 	for idx, item := range tests {
-		idx := idx
-		item := item
 		t.Run(fmt.Sprintf("idx-%d", idx), func(t *testing.T) {
 			network, ok := BitcoinNetworks[item.Network]
 			if !ok {
@@ -114,7 +112,7 @@ func TestDepositAddressV1(t *testing.T) {
 				t.Errorf("DepositAddressV1() want = %v got = %v", item.BtcAddress, addr)
 			}
 
-			if !bytes.Equal(opReturns[:], item.OpReturn) {
+			if !bytes.Equal(opReturns, item.OpReturn) {
 				t.Errorf("DepositAddressV1() opReturns: want = %x got = %x", item.OpReturn, opReturns)
 			}
 		})
@@ -147,8 +145,6 @@ func TestDepositAddressV0(t *testing.T) {
 	t.Parallel()
 
 	for idx, item := range tests {
-		idx := idx
-		item := item
 		t.Run(fmt.Sprintf("address-%d", idx), func(t *testing.T) {
 			network, ok := BitcoinNetworks[item.Network]
 			if !ok {
@@ -157,7 +153,7 @@ func TestDepositAddressV0(t *testing.T) {
 			}
 
 			pubkey := &relayer.PublicKey{}
-			if item.Type == "secp256k1" {
+			if item.Type == Secp256K1Name {
 				pubkey.Key = &relayer.PublicKey_Secp256K1{Secp256K1: item.Pubkey}
 			} else if item.Type == "schnorr" {
 				pubkey.Key = &relayer.PublicKey_Schnorr{Schnorr: item.Pubkey}
@@ -206,13 +202,11 @@ func TestVerifySystemAddressScript(t *testing.T) {
 	t.Parallel()
 
 	for idx, item := range tests {
-		idx := idx
-		item := item
 		t.Run(fmt.Sprintf("address-%d", idx), func(t *testing.T) {
 			pubkey := &relayer.PublicKey{}
-			if item.Type == "secp256k1" {
+			if item.Type == Secp256K1Name {
 				pubkey.Key = &relayer.PublicKey_Secp256K1{Secp256K1: item.Pubkey}
-			} else if item.Type == "schnorr" {
+			} else if item.Type == SchnorrName {
 				pubkey.Key = &relayer.PublicKey_Schnorr{Schnorr: item.Pubkey}
 			}
 

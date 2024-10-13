@@ -9,21 +9,23 @@ import (
 
 var blsMode = []byte("BLS_SIG_BLS12381G2_XMD:SHA-256_SSWU_RO_POP_")
 
-type PrivateKey = blst.SecretKey
-type PublicKey = blst.P2Affine
-type Signature = blst.P1Affine
+type (
+	PrivateKey = blst.SecretKey
+	PublicKey  = blst.P2Affine
+	Signature  = blst.P1Affine
+)
 
-type AggregatePublicKey = blst.P2Aggregate
-type AggregateSignature = blst.P1Aggregate
+type (
+	AggregatePublicKey = blst.P2Aggregate
+	AggregateSignature = blst.P1Aggregate
+)
 
 const (
 	PubkeyLength    = blst.BLST_P2_COMPRESS_BYTES
 	SignatureLength = blst.BLST_P1_COMPRESS_BYTES
 )
 
-var (
-	ErrorAggregation = errors.New("crypto: failed to aggregate bls signatures")
-)
+var ErrorAggregation = errors.New("crypto: failed to aggregate bls signatures")
 
 func GenPrivKey() *PrivateKey {
 	var raw [32]byte

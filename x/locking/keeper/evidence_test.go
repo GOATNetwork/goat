@@ -114,7 +114,7 @@ func (suite *KeeperTestSuite) TestHandleEvidences() {
 	iter, err := suite.Keeper.Slashed.Iterate(newctx, nil)
 	suite.Require().NoError(err)
 
-	var slashed = sdk.NewCoins()
+	slashed := sdk.NewCoins()
 	for ; iter.Valid(); iter.Next() {
 		kv, err := iter.KeyValue()
 		suite.Require().NoError(err)

@@ -15,13 +15,10 @@ import (
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-
-	// this line is used by starport scaffolding # 1
-
 	modulev1 "github.com/goatnetwork/goat/api/goat/relayer/module/v1"
 	"github.com/goatnetwork/goat/x/relayer/keeper"
 	"github.com/goatnetwork/goat/x/relayer/types"
+	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 )
 
 var (

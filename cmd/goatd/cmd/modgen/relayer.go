@@ -126,7 +126,7 @@ func Relayer() *cobra.Command {
 						ProposerAccepted: true,
 					}
 				} else {
-					voters := append(genesis.Relayer.Voters, addr)
+					voters := append(slices.Clone(genesis.Relayer.Voters), addr)
 					voters = append(voters, genesis.Relayer.Proposer)
 					slices.Sort(voters)
 					genesis.Relayer.Proposer = voters[0]

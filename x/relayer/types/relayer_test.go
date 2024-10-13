@@ -52,7 +52,7 @@ func TestRelayer_Threshold(t *testing.T) {
 func TestVoteSignDoc(t *testing.T) {
 	type args struct {
 		method   string
-		chainId  string
+		chainID  string
 		proposer string
 		sequence uint64
 		epoch    uint64
@@ -67,7 +67,7 @@ func TestVoteSignDoc(t *testing.T) {
 			name: "1",
 			args: args{
 				method:   "1",
-				chainId:  "goat-test-1",
+				chainID:  "goat-test-1",
 				proposer: "goat15lftp68cgrca3t6j8w6s6j6v5qedfz2wkt7y9a",
 				sequence: 100,
 				epoch:    1,
@@ -78,14 +78,14 @@ func TestVoteSignDoc(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			hasher := sha256.New()
-			hasher.Write([]byte(tt.args.chainId))
+			hasher.Write([]byte(tt.args.chainID))
 			hasher.Write(goatcrypto.Uint64LE(tt.args.sequence, tt.args.epoch))
 			hasher.Write([]byte(tt.args.method))
 			hasher.Write([]byte(tt.args.proposer))
 			hasher.Write(tt.args.data)
 			want := hasher.Sum(nil)
 
-			if got := VoteSignDoc(tt.args.method, tt.args.chainId, tt.args.proposer, tt.args.sequence, tt.args.epoch, tt.args.data); !reflect.DeepEqual(got, want) {
+			if got := VoteSignDoc(tt.args.method, tt.args.chainID, tt.args.proposer, tt.args.sequence, tt.args.epoch, tt.args.data); !reflect.DeepEqual(got, want) {
 				t.Errorf("VoteSignDoc() = %v, want %v", got, tt.want)
 			}
 		})

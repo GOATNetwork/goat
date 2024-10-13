@@ -8,10 +8,11 @@ import (
 	"cosmossdk.io/collections"
 	"cosmossdk.io/core/address"
 	"cosmossdk.io/core/store"
+	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/log"
 	"github.com/btcsuite/btcd/wire"
 	"github.com/cosmos/cosmos-sdk/codec"
-
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 	"github.com/goatnetwork/goat/x/bitcoin/types"
 	relayertypes "github.com/goatnetwork/goat/x/relayer/types"
@@ -47,7 +48,6 @@ func NewKeeper(
 	logger log.Logger,
 	relayerKeeper types.RelayerKeeper,
 ) Keeper {
-
 	sb := collections.NewSchemaBuilder(storeService)
 
 	k := Keeper{
@@ -90,7 +90,7 @@ func (k Keeper) VerifyDeposit(ctx context.Context, headers map[uint64][]byte, de
 	}
 
 	if !hasKey {
-		return nil, types.ErrInvalidRequest.Wrap("relayer pubkey not found")
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "relayer pubkey not found")
 	}
 
 	// check if the block is voted
@@ -106,27 +106,27 @@ func (k Keeper) VerifyDeposit(ctx context.Context, headers map[uint64][]byte, de
 			return nil, err
 		}
 		if tip < deposit.BlockNumber+100 {
-			return nil, types.ErrInvalidRequest.Wrap("coinbase tx should be confirmed more than 100 blocks")
+			return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "coinbase tx should be confirmed more than 100 blocks")
 		}
 	}
 
 	rawHeader := headers[deposit.BlockNumber]
 	if len(rawHeader) != types.RawBtcHeaderSize {
-		return nil, types.ErrInvalidRequest.Wrapf("invalid block header for %d", deposit.BlockNumber)
+		return nil, errorsmod.Wrapf(sdkerrors.ErrLogic, "invalid block header for %d", deposit.BlockNumber)
 	}
 
 	if !bytes.Equal(blockHash, goatcrypto.DoubleSHA256Sum(rawHeader)) {
-		return nil, types.ErrInvalidRequest.Wrap("inconsistent block hash")
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "inconsistent block hash")
 	}
 
 	// check if the tx is valid
 	tx, txrd := new(wire.MsgTx), bytes.NewReader(deposit.NoWitnessTx)
 	if err := tx.DeserializeNoWitness(txrd); err != nil || txrd.Len() > 0 {
-		return nil, types.ErrInvalidRequest.Wrapf("invalid non-witness tx")
+		return nil, errorsmod.Wrapf(sdkerrors.ErrLogic, "invalid non-witness tx")
 	}
 
 	if deposit.OutputIndex >= uint32(len(tx.TxOut)) {
-		return nil, types.ErrInvalidRequest.Wrap("output index out of range")
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "output index out of range")
 	}
 
 	// check if the deposit is duplicated
@@ -136,7 +136,7 @@ func (k Keeper) VerifyDeposit(ctx context.Context, headers map[uint64][]byte, de
 		return nil, err
 	}
 	if deposited {
-		return nil, types.ErrInvalidRequest.Wrap("duplicated deposit")
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "duplicated deposit")
 	}
 
 	param, err := k.Params.Get(ctx)
@@ -147,31 +147,31 @@ func (k Keeper) VerifyDeposit(ctx context.Context, headers map[uint64][]byte, de
 	// check if the deposit script is valid
 	txout := tx.TxOut[deposit.OutputIndex]
 	if txout.Value < int64(param.MinDepositAmount) {
-		return nil, types.ErrInvalidRequest.Wrap("amount too low")
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "amount too low")
 	}
 
 	switch deposit.Version {
 	case 0:
 		if err := types.VerifyDespositScriptV0(deposit.RelayerPubkey, deposit.EvmAddress, txout.PkScript); err != nil {
 			k.logger.Warn("invalid deposit version 0 script", "txid", types.BtcTxid(txid), "txout", deposit.OutputIndex, "err", err.Error())
-			return nil, types.ErrInvalidRequest.Wrap("invalid deposit version 0 script")
+			return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "invalid deposit version 0 script")
 		}
 	case 1:
 		if deposit.OutputIndex != 0 || len(tx.TxOut) < 2 {
-			return nil, types.ErrInvalidRequest.Wrap("invalid txout index for version 1 deposit")
+			return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "invalid txout index for version 1 deposit")
 		}
 		if err := types.VerifyDespositScriptV1(deposit.RelayerPubkey,
 			param.DepositMagicPrefix, deposit.EvmAddress, txout.PkScript, tx.TxOut[1].PkScript); err != nil {
 			k.logger.Warn("invalid deposit version 1 script", "txid", types.BtcTxid(txid), "txout", deposit.OutputIndex, "err", err.Error())
-			return nil, types.ErrInvalidRequest.Wrap("invalid deposit version 1 script")
+			return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "invalid deposit version 1 script")
 		}
 	default:
-		return nil, types.ErrInvalidRequest.Wrapf("unknown deposit version")
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "unknown deposit version")
 	}
 
 	// check if the spv is valid
 	if !types.VerifyMerkelProof(txid, rawHeader[36:68], deposit.IntermediateProof, deposit.TxIndex) {
-		return nil, types.ErrInvalidRequest.Wrap("invalid spv")
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "invalid spv")
 	}
 
 	return &types.DepositExecReceipt{

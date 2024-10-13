@@ -87,8 +87,7 @@ func DepositAddressV1(pubkey *relayer.PublicKey, magicPrefix, evmAddress []byte,
 		return nil, nil, err
 	}
 
-	switch v := pubkey.GetKey().(type) {
-	case *relayer.PublicKey_Secp256K1:
+	if v, ok := pubkey.GetKey().(*relayer.PublicKey_Secp256K1); ok {
 		addr, err := btcutil.NewAddressWitnessPubKeyHash(goatcrypto.Hash160Sum(v.Secp256K1), netwk)
 		if err != nil {
 			return nil, nil, err
@@ -159,8 +158,7 @@ func VerifyDespositScriptV1(pubkey *relayer.PublicKey, magicPrefix, evmAddress, 
 		return errors.New("invalid evm address")
 	}
 
-	switch v := pubkey.GetKey().(type) {
-	case *relayer.PublicKey_Secp256K1:
+	if v, ok := pubkey.GetKey().(*relayer.PublicKey_Secp256K1); ok {
 		if len(txout0) != P2WPKHScriptSize {
 			return errors.New("invalid output script")
 		}

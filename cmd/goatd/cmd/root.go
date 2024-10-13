@@ -16,10 +16,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/cosmos/cosmos-sdk/x/auth/tx"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
+	"github.com/goatnetwork/goat/app"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
-
-	"github.com/goatnetwork/goat/app"
 )
 
 // NewRootCmd creates a new root command for goatd. It is called once in the main function.
@@ -77,7 +76,7 @@ func NewRootCmd() *cobra.Command {
 		},
 	}
 
-	initRootCmd(rootCmd, clientCtx.TxConfig, moduleBasicManager)
+	initRootCmd(rootCmd, moduleBasicManager)
 
 	overwriteFlagDefaults(rootCmd, map[string]string{
 		flags.FlagChainID:        strings.ReplaceAll(app.Name, "-", ""),

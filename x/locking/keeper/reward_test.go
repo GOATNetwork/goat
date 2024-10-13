@@ -145,7 +145,8 @@ func (suite *KeeperTestSuite) TestDistributeReward() {
 		{
 			Validator:   abci.Validator{Address: Addresses[1], Power: int64(Validators[1].Power)},
 			BlockIdFlag: tmtypes.BlockIDFlagAbsent,
-		}})
+		},
+	})
 
 	err = suite.Keeper.DistributeReward(newctx)
 	suite.Require().NoError(err)

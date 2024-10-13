@@ -22,14 +22,19 @@ const (
 	EventTypeNewConsolidation       = "new_consolidation"
 )
 
+const (
+	Secp256K1Name = "secp256k1"
+	SchnorrName   = "schnorr"
+)
+
 func NewKeyEvent(key *relayertypes.PublicKey) sdktypes.Event {
 	var typ, raw string
 	switch v := key.Key.(type) {
 	case *relayertypes.PublicKey_Secp256K1:
-		typ = "secp256k1"
+		typ = Secp256K1Name
 		raw = base64.StdEncoding.EncodeToString(v.Secp256K1)
 	case *relayertypes.PublicKey_Schnorr:
-		typ = "schnorr"
+		typ = SchnorrName
 		raw = base64.StdEncoding.EncodeToString(v.Schnorr)
 	default:
 		typ = "unknown"

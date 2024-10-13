@@ -22,6 +22,7 @@ import (
 	"github.com/ethereum/go-ethereum/beacon/engine"
 	"github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/core/types/goattypes"
 	"github.com/goatnetwork/goat/x/goat/types"
 	"golang.org/x/sync/errgroup"
 )
@@ -41,7 +42,7 @@ func (k Keeper) PrepareProposalHandler(
 	return func(sdkctx sdk.Context, rpp *abci.RequestPrepareProposal) (*abci.ResponsePrepareProposal, error) {
 		var ethTx []byte
 
-		var eg = new(errgroup.Group)
+		eg := new(errgroup.Group)
 
 		// build eth block msg
 		eg.Go(func() (err error) {
@@ -233,8 +234,7 @@ func (k Keeper) ProcessProposalHandler(txVerifier baseapp.ProposalTxVerifier) sd
 			// the GoatGuardHandler checks the first case is matched
 			// and we check the second case here
 			for _, msg := range msgs {
-				switch msg.(type) {
-				case *types.MsgNewEthBlock:
+				if _, ok := msg.(*types.MsgNewEthBlock); ok {
 					return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "MsgNewEthBlock should be first tx in block")
 				}
 			}
@@ -277,11 +277,15 @@ func (k Keeper) verifyEthBlockProposal(sdkctx sdk.Context, msg *types.MsgNewEthB
 		}
 
 		if !bytes.Equal(block.BlockHash, payload.ParentHash) {
-			return fmt.Errorf("refer to incorrect parent block: expected %x got %x", block.BlockHash, payload.ParentHash)
+			return fmt.Errorf("incorrect parent block number: expected %x got %x", block.BlockHash, payload.ParentHash)
 		}
 
 		if block.BlockNumber+1 != payload.BlockNumber {
-			return fmt.Errorf("refer to incorrect parent block: expected %d got %d", block.BlockNumber+1, payload.BlockNumber)
+			return fmt.Errorf("incorrect parent block hash: expected %d got %d", block.BlockNumber+1, payload.BlockNumber)
+		}
+
+		if _, _, _, err := goattypes.DecodeRequests(payload.Requests); err != nil {
+			return fmt.Errorf("invalid goat requests: %w", err)
 		}
 
 		beaconRoot, err := k.BeaconRoot.Get(sdkctx)

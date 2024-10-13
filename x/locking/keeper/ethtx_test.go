@@ -34,7 +34,7 @@ func (suite *KeeperTestSuite) TestDequeueLockingModuleTx() {
 
 			queue.Rewards = append(queue.Rewards, &types.Reward{
 				Id:        i,
-				Recipient: recipent[:],
+				Recipient: recipent,
 				Goat:      math.NewIntFromUint64(i),
 				Gas:       math.NewIntFromUint64(i),
 			})

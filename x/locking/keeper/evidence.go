@@ -8,7 +8,6 @@ import (
 	"cosmossdk.io/collections"
 	"cosmossdk.io/core/comet"
 	"cosmossdk.io/math"
-
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
 	"github.com/goatnetwork/goat/x/locking/types"
 )
@@ -73,7 +72,7 @@ func (k Keeper) handleEvidence(ctx context.Context, evidence comet.Evidence, par
 		return err
 	}
 
-	var updated = sdktypes.Coins{}
+	updated := sdktypes.Coins{}
 	for _, locking := range validator.Locking {
 		if err := k.Locking.Remove(sdkctx, collections.Join(locking.Denom, address)); err != nil {
 			return err

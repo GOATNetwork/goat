@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
 	"github.com/goatnetwork/goat/x/relayer/keeper"
 	"github.com/goatnetwork/goat/x/relayer/types"
 )
@@ -110,7 +109,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 		case types.VOTER_STATUS_ON_BOARDING:
 			queue.OnBoarding = append(queue.OnBoarding, addr)
 		case types.VOTER_STATUS_OFF_BOARDING:
-			queue.OffBoarding = append(queue.OnBoarding, addr)
+			queue.OffBoarding = append(queue.OffBoarding, addr)
 		}
 
 		if err := k.Voters.Set(ctx, addr, *v); err != nil {

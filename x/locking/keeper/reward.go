@@ -5,15 +5,17 @@ import (
 	"errors"
 	"math/big"
 
+	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/math"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/ethereum/go-ethereum/core/types/goattypes"
 	"github.com/goatnetwork/goat/x/locking/types"
 )
 
 func (k Keeper) UpdateRewardPool(ctx context.Context, gas []*goattypes.GasRequest, grants []*goattypes.GrantRequest) error {
 	if l := len(gas); l != 1 {
-		return types.ErrInvalid.Wrapf("expected gas revenue request length 1 but got %d", l)
+		return errorsmod.Wrapf(sdkerrors.ErrLogic, "expected gas revenue request length 1 but got %d", l)
 	}
 
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
@@ -82,7 +84,7 @@ func (k Keeper) DistributeReward(ctx context.Context) error {
 		totalPower += voteInfo.Validator.Power
 	}
 
-	if totalPower == 0 { // should never happend
+	if totalPower == 0 { // should never happened
 		return errors.New("invalid zero power")
 	}
 

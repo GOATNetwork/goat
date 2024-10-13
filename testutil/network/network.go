@@ -5,9 +5,8 @@ import (
 	"testing"
 
 	"github.com/cosmos/cosmos-sdk/testutil/network"
-	"github.com/stretchr/testify/require"
-
 	"github.com/goatnetwork/goat/app"
+	"github.com/stretchr/testify/require"
 )
 
 type (

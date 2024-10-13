@@ -13,7 +13,6 @@ import (
 	"github.com/ethereum/go-ethereum/beacon/engine"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
-
 	"github.com/goatnetwork/goat/pkg/ethrpc"
 	"github.com/goatnetwork/goat/x/goat/types"
 )

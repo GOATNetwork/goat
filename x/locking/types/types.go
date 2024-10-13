@@ -5,16 +5,13 @@ import (
 	"slices"
 
 	"cosmossdk.io/math"
-
 	tmcrypto "github.com/cometbft/cometbft/proto/tendermint/crypto"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types/goattypes"
 )
 
-var (
-	PowerReduction = math.NewIntFromUint64(1e18)
-)
+var PowerReduction = math.NewIntFromUint64(1e18)
 
 func (v *Validator) CMPubkey() tmcrypto.PublicKey {
 	return tmcrypto.PublicKey{Sum: &tmcrypto.PublicKey_Secp256K1{Secp256K1: slices.Clone(v.Pubkey)}}

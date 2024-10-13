@@ -102,7 +102,7 @@ func (suite *KeeperTestSuite) TestEndBlocker() {
 		err = suite.Keeper.PowerRanking.Remove(suite.Context, collections.Join(uint64(10000), suite.Address[0]))
 		suite.Require().NoError(err)
 
-		err = suite.Keeper.PowerRanking.Set(suite.Context, collections.Join(uint64(power), suite.Address[0]))
+		err = suite.Keeper.PowerRanking.Set(suite.Context, collections.Join(power, suite.Address[0]))
 		suite.Require().NoError(err)
 
 		vs, err := suite.Keeper.EndBlocker(suite.Context)

@@ -15,26 +15,27 @@ import (
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/stretchr/testify/require"
-
 	"github.com/goatnetwork/goat/pkg/ethrpc"
 	"github.com/goatnetwork/goat/x/goat/keeper"
 	"github.com/goatnetwork/goat/x/goat/types"
+	"github.com/stretchr/testify/require"
 )
 
-func GoatKeeper(t testing.TB,
+func GoatKeeper(tb testing.TB,
 	bitcoinKeeper types.BitcoinKeeper,
 	lockingKeeper types.LockingKeeper,
 	relayerKeeper types.RelayerKeeper,
 	accountKeeper types.AccountKeeper,
 	ethClient ethrpc.EngineClient,
 ) (keeper.Keeper, sdk.Context, address.Codec) {
+	tb.Helper()
+
 	storeKey := storetypes.NewKVStoreKey(types.StoreKey)
 
 	db := dbm.NewMemDB()
 	stateStore := store.NewCommitMultiStore(db, log.NewNopLogger(), metrics.NewNoOpMetrics())
 	stateStore.MountStoreWithDB(storeKey, storetypes.StoreTypeIAVL, db)
-	require.NoError(t, stateStore.LoadLatestVersion())
+	require.NoError(tb, stateStore.LoadLatestVersion())
 
 	registry := codectypes.NewInterfaceRegistry()
 	cdc := codec.NewProtoCodec(registry)
@@ -56,7 +57,7 @@ func GoatKeeper(t testing.TB,
 
 	// Initialize params
 	if err := k.Params.Set(ctx, types.DefaultParams()); err != nil {
-		t.Fatalf("failed to set params: %v", err)
+		tb.Fatalf("failed to set params: %v", err)
 	}
 
 	return k, ctx, addressCodec

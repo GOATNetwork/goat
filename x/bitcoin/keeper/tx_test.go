@@ -12,7 +12,6 @@ import (
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 	"github.com/goatnetwork/goat/x/bitcoin/keeper"
 	"github.com/goatnetwork/goat/x/bitcoin/types"
-	relayer "github.com/goatnetwork/goat/x/relayer/types"
 	relayertypes "github.com/goatnetwork/goat/x/relayer/types"
 )
 
@@ -62,7 +61,7 @@ func (suite *KeeperTestSuite) TestMsgNewDeposits() {
 			},
 		},
 	}
-	suite.RelayerKeeper.EXPECT().HasPubkey(suite.Context, relayer.EncodePublicKey(&suite.TestKey)).Return(true, nil)
+	suite.RelayerKeeper.EXPECT().HasPubkey(suite.Context, relayertypes.EncodePublicKey(&suite.TestKey)).Return(true, nil)
 	suite.RelayerKeeper.EXPECT().VerifyNonProposal(suite.Context, req).Return(nil, nil)
 	_, err = msgServer.NewDeposits(suite.Context, req)
 	suite.Require().NoError(err)
@@ -87,7 +86,7 @@ func (suite *KeeperTestSuite) TestMsgNewBlockHashes() {
 
 	req := &types.MsgNewBlockHashes{
 		Proposer:         "goat1xa56637tjn857jyg2plgvhdclzmr4crxzn5xus",
-		Vote:             &relayer.Votes{Signature: make([]byte, goatcrypto.SignatureLength)},
+		Vote:             &relayertypes.Votes{Signature: make([]byte, goatcrypto.SignatureLength)},
 		StartBlockNumber: 101,
 		BlockHash: [][]byte{
 			common.Hex2Bytes("9973a71cbd41470951a10bb09236ce5f535edbccecf4c3593ca4755f3c4fe7d3"),
@@ -121,14 +120,15 @@ func (suite *KeeperTestSuite) TestMsgNewBlockHashes() {
 func (suite *KeeperTestSuite) TestMsgNewPubkey() {
 	req := &types.MsgNewPubkey{
 		Proposer: "goat1xa56637tjn857jyg2plgvhdclzmr4crxzn5xus",
-		Vote:     &relayer.Votes{Signature: make([]byte, goatcrypto.SignatureLength)},
-		Pubkey: &relayer.PublicKey{Key: &relayer.PublicKey_Secp256K1{
-			Secp256K1: common.Hex2Bytes("03a466deef30f68c03ad54f89f9deb8284f0529aad1c095985a015be27daec20c6")}},
+		Vote:     &relayertypes.Votes{Signature: make([]byte, goatcrypto.SignatureLength)},
+		Pubkey: &relayertypes.PublicKey{Key: &relayertypes.PublicKey_Secp256K1{
+			Secp256K1: common.Hex2Bytes("03a466deef30f68c03ad54f89f9deb8284f0529aad1c095985a015be27daec20c6"),
+		}},
 	}
 
 	sequence := uint64(100)
 
-	rawKey := relayer.EncodePublicKey(req.Pubkey)
+	rawKey := relayertypes.EncodePublicKey(req.Pubkey)
 	suite.RelayerKeeper.EXPECT().HasPubkey(suite.Context, rawKey).Return(false, nil)
 	suite.RelayerKeeper.EXPECT().VerifyProposal(suite.Context, req).Times(2).Return(sequence, nil)
 	suite.RelayerKeeper.EXPECT().AddNewKey(suite.Context, rawKey)
@@ -161,9 +161,9 @@ func (suite *KeeperTestSuite) TestMsgWithdrawal() {
 	expected := []types.Withdrawal{}
 	// init
 	{
-		var req = &types.MsgInitializeWithdrawal{
+		req := &types.MsgInitializeWithdrawal{
 			Proposer: "goat1xa56637tjn857jyg2plgvhdclzmr4crxzn5xus",
-			Vote:     &relayer.Votes{Signature: make([]byte, goatcrypto.SignatureLength)},
+			Vote:     &relayertypes.Votes{Signature: make([]byte, goatcrypto.SignatureLength)},
 			Proposal: &types.WithdrawalProposal{
 				NoWitnessTx: common.Hex2Bytes("02000000012e0e3e521ac999cfc292a78aaeb31fe19dfb7867c660ae5560537370d55fdf0e0000000000ffffffff06e8030000000000001976a9146a9d23174484d7ba74f7bc2a64ed102b4846267588ace80300000000000017a91413aa207651e0f3724cbe6134f54675aa2d5cdbf987e803000000000000160014279476d2a1d257f0cdcc48641b3679d411187415e8030000000000002200203dad4a1a80c3925f74a48f429eeca43440ade0aee3d5db6880e73b474961631de8030000000000002200200c84239e8447e7c3b471b26736615eb76c4755c5b94516376958f17e0da4648f90c9f505000000001600145b029559baaea5e928e8e2774e9e2350a5fc9c2d00000000"),
 				TxFee:       1000,
@@ -193,7 +193,7 @@ func (suite *KeeperTestSuite) TestMsgWithdrawal() {
 			expected = append(expected, wd)
 		}
 
-		err := suite.Keeper.Pubkey.Set(suite.Context, relayer.PublicKey{Key: &relayer.PublicKey_Secp256K1{
+		err := suite.Keeper.Pubkey.Set(suite.Context, relayertypes.PublicKey{Key: &relayertypes.PublicKey_Secp256K1{
 			Secp256K1: common.Hex2Bytes("037e7bee29c1956152e308d1310823295d720b4cef9e1118726eb1705ffc5a4701"),
 		}})
 		suite.Require().NoError(err)
@@ -221,7 +221,6 @@ func (suite *KeeperTestSuite) TestMsgWithdrawal() {
 
 	// finalize
 	{
-
 		err = suite.Keeper.EthTxQueue.Set(suite.Context, types.EthTxQueue{})
 		suite.Require().NoError(err)
 
@@ -286,7 +285,7 @@ func (suite *KeeperTestSuite) TestMsgApproveCancellation() {
 
 	msgServer := keeper.NewMsgServerImpl(suite.Keeper)
 
-	var req = &types.MsgApproveCancellation{
+	req := &types.MsgApproveCancellation{
 		Proposer: "goat1xa56637tjn857jyg2plgvhdclzmr4crxzn5xus",
 	}
 
@@ -329,7 +328,7 @@ func (suite *KeeperTestSuite) TestMsgApproveCancellation() {
 }
 
 func (suite *KeeperTestSuite) TestNewConsolidation() {
-	err := suite.Keeper.Pubkey.Set(suite.Context, relayer.PublicKey{Key: &relayer.PublicKey_Secp256K1{
+	err := suite.Keeper.Pubkey.Set(suite.Context, relayertypes.PublicKey{Key: &relayertypes.PublicKey_Secp256K1{
 		Secp256K1: common.Hex2Bytes("037e7bee29c1956152e308d1310823295d720b4cef9e1118726eb1705ffc5a4701"),
 	}})
 	suite.Require().NoError(err)
@@ -338,7 +337,7 @@ func (suite *KeeperTestSuite) TestNewConsolidation() {
 	req := &types.MsgNewConsolidation{
 		Proposer:    "goat1xa56637tjn857jyg2plgvhdclzmr4crxzn5xus",
 		NoWitnessTx: common.Hex2Bytes("020000000a59470436f741658f24f25ec84e1af99a1355173b36e19abcd1d8d9079435be470000000000ffffffff59470436f741658f24f25ec84e1af99a1355173b36e19abcd1d8d9079435be470100000000ffffffff59470436f741658f24f25ec84e1af99a1355173b36e19abcd1d8d9079435be470200000000ffffffff59470436f741658f24f25ec84e1af99a1355173b36e19abcd1d8d9079435be470300000000ffffffff59470436f741658f24f25ec84e1af99a1355173b36e19abcd1d8d9079435be470400000000ffffffff59470436f741658f24f25ec84e1af99a1355173b36e19abcd1d8d9079435be470500000000ffffffff59470436f741658f24f25ec84e1af99a1355173b36e19abcd1d8d9079435be470600000000ffffffff59470436f741658f24f25ec84e1af99a1355173b36e19abcd1d8d9079435be470700000000ffffffff59470436f741658f24f25ec84e1af99a1355173b36e19abcd1d8d9079435be470800000000ffffffff59470436f741658f24f25ec84e1af99a1355173b36e19abcd1d8d9079435be470900000000ffffffff0100e1f505000000001600145b029559baaea5e928e8e2774e9e2350a5fc9c2d00000000"),
-		Vote:        &relayer.Votes{Signature: make([]byte, goatcrypto.SignatureLength)},
+		Vote:        &relayertypes.Votes{Signature: make([]byte, goatcrypto.SignatureLength)},
 	}
 
 	sequence := uint64(100)

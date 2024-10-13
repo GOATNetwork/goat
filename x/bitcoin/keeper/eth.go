@@ -4,7 +4,6 @@ import (
 	"context"
 
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
-
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/core/types/goattypes"
 	"github.com/goatnetwork/goat/x/bitcoin/types"

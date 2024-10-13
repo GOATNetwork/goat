@@ -6,8 +6,10 @@ import (
 	"encoding/json"
 
 	"cosmossdk.io/collections"
+	errorsmod "cosmossdk.io/errors"
 	"github.com/btcsuite/btcd/wire"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 	"github.com/goatnetwork/goat/x/bitcoin/types"
 	relayertypes "github.com/goatnetwork/goat/x/relayer/types"
@@ -27,16 +29,16 @@ var _ types.MsgServer = msgServer{}
 
 func (k msgServer) NewDeposits(ctx context.Context, req *types.MsgNewDeposits) (*types.MsgNewDepositsResponse, error) {
 	if err := req.Validate(); err != nil {
-		return nil, types.ErrInvalidRequest.Wrap(err.Error())
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, err.Error())
 	}
 
 	var headers map[uint64][]byte
 	if err := json.Unmarshal(req.BlockHeaders, &headers); err != nil {
-		return nil, types.ErrInvalidRequest.Wrap("invalid block header json")
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "invalid block header json")
 	}
 
 	if h := len(headers); h == 0 || h > len(req.Deposits) {
-		return nil, types.ErrInvalidRequest.Wrap("invalid headers size")
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "invalid headers size")
 	}
 
 	if _, err := k.relayerKeeper.VerifyNonProposal(ctx, req); err != nil {
@@ -47,7 +49,7 @@ func (k msgServer) NewDeposits(ctx context.Context, req *types.MsgNewDeposits) (
 	deposits := make([]*types.DepositExecReceipt, 0, len(req.Deposits))
 	for _, v := range req.Deposits {
 		if err := v.Validate(); err != nil {
-			return nil, types.ErrInvalidRequest.Wrap(err.Error())
+			return nil, errorsmod.Wrap(sdkerrors.ErrLogic, err.Error())
 		}
 
 		deposit, err := k.VerifyDeposit(ctx, headers, v)
@@ -78,7 +80,7 @@ func (k msgServer) NewDeposits(ctx context.Context, req *types.MsgNewDeposits) (
 
 func (k msgServer) NewBlockHashes(ctx context.Context, req *types.MsgNewBlockHashes) (*types.MsgNewBlockHashesResponse, error) {
 	if err := req.Validate(); err != nil {
-		return nil, types.ErrInvalidRequest.Wrap(err.Error())
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, err.Error())
 	}
 
 	parentHeight, err := k.BlockTip.Peek(ctx)
@@ -86,7 +88,7 @@ func (k msgServer) NewBlockHashes(ctx context.Context, req *types.MsgNewBlockHas
 		return nil, err
 	}
 	if req.StartBlockNumber != parentHeight+1 {
-		return nil, types.ErrInvalidRequest.Wrapf("block number is not the next of the block %d", parentHeight)
+		return nil, errorsmod.Wrapf(sdkerrors.ErrLogic, "block number is not the next of the block %d", parentHeight)
 	}
 
 	sequence, err := k.relayerKeeper.VerifyProposal(ctx, req)
@@ -122,7 +124,7 @@ func (k msgServer) NewBlockHashes(ctx context.Context, req *types.MsgNewBlockHas
 
 func (k msgServer) NewPubkey(ctx context.Context, req *types.MsgNewPubkey) (*types.MsgNewPubkeyResponse, error) {
 	if err := req.Validate(); err != nil {
-		return nil, types.ErrInvalidRequest.Wrap(err.Error())
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, err.Error())
 	}
 
 	sequence, err := k.relayerKeeper.VerifyProposal(ctx, req)
@@ -137,7 +139,7 @@ func (k msgServer) NewPubkey(ctx context.Context, req *types.MsgNewPubkey) (*typ
 	}
 
 	if exists {
-		return nil, relayertypes.ErrInvalidPubkey.Wrap("the key already existed")
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "the key already existed")
 	}
 
 	if err := k.relayerKeeper.AddNewKey(ctx, rawKey); err != nil {
@@ -162,17 +164,17 @@ func (k msgServer) NewPubkey(ctx context.Context, req *types.MsgNewPubkey) (*typ
 
 func (k msgServer) InitializeWithdrawal(ctx context.Context, req *types.MsgInitializeWithdrawal) (*types.MsgInitializeWithdrawalResponse, error) {
 	if err := req.Validate(); err != nil {
-		return nil, types.ErrInvalidRequest.Wrap(err.Error())
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, err.Error())
 	}
 
 	tx, txrd := new(wire.MsgTx), bytes.NewReader(req.Proposal.NoWitnessTx)
 	if err := tx.DeserializeNoWitness(txrd); err != nil || txrd.Len() > 0 {
-		return nil, types.ErrInvalidRequest.Wrap("invalid non-witness tx")
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "invalid non-witness tx")
 	}
 
 	txoutLen, withdrawalLen := len(tx.TxOut), len(req.Proposal.Id)
 	if txoutLen != withdrawalLen && txoutLen != withdrawalLen+1 { // change output up to 1
-		return nil, types.ErrInvalidRequest.Wrap("invalid tx output size for withdrawals")
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "invalid tx output size for withdrawals")
 	}
 
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
@@ -203,20 +205,20 @@ func (k msgServer) InitializeWithdrawal(ctx context.Context, req *types.MsgIniti
 		}
 
 		if withdrawal.Status != types.WITHDRAWAL_STATUS_PENDING && withdrawal.Status != types.WITHDRAWAL_STATUS_CANCELING {
-			return nil, types.ErrInvalidRequest.Wrapf("witdhrawal %d is not pending or canceling", wid)
+			return nil, errorsmod.Wrapf(sdkerrors.ErrLogic, "witdhrawal %d is not pending or canceling", wid)
 		}
 
 		if txPrice > float64(withdrawal.MaxTxPrice) {
-			return nil, types.ErrInvalidRequest.Wrapf("tx price is larger than user request for witdhrawal %d", wid)
+			return nil, errorsmod.Wrapf(sdkerrors.ErrLogic, "tx price is larger than user request for witdhrawal %d", wid)
 		}
 
 		txout := tx.TxOut[idx]
 		if !bytes.Equal(withdrawal.OutputScript, txout.PkScript) {
-			return nil, types.ErrInvalidRequest.Wrapf("witdhrawal %d script not matched", wid)
+			return nil, errorsmod.Wrapf(sdkerrors.ErrLogic, "witdhrawal %d script not matched", wid)
 		}
 
 		if withdrawal.RequestAmount < uint64(txout.Value) {
-			return nil, types.ErrInvalidRequest.Wrapf("witdhrawal %d amount too large", wid)
+			return nil, errorsmod.Wrapf(sdkerrors.ErrLogic, "witdhrawal %d amount too large", wid)
 		}
 
 		// the withdrawal id can't be duplicated since we update the status here
@@ -235,7 +237,7 @@ func (k msgServer) InitializeWithdrawal(ctx context.Context, req *types.MsgIniti
 			return nil, err
 		}
 		if !types.VerifySystemAddressScript(&pubkey, change.PkScript) {
-			return nil, types.ErrInvalidRequest.Wrap("give change to not a latest relayer pubkey")
+			return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "give change to not a latest relayer pubkey")
 		}
 	}
 
@@ -281,12 +283,12 @@ func (k msgServer) FinalizeWithdrawal(ctx context.Context, req *types.MsgFinaliz
 	}
 
 	if !bytes.Equal(blockHash, goatcrypto.DoubleSHA256Sum(req.BlockHeader)) {
-		return nil, types.ErrInvalidRequest.Wrap("inconsistent block hash")
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "inconsistent block hash")
 	}
 
 	// check if the spv is valid
 	if !types.VerifyMerkelProof(req.Txid, req.BlockHeader[36:68], req.IntermediateProof, req.TxIndex) {
-		return nil, types.ErrInvalidRequest.Wrap("invalid spv")
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "invalid spv")
 	}
 
 	queue, err := k.EthTxQueue.Get(sdkctx)
@@ -300,11 +302,11 @@ func (k msgServer) FinalizeWithdrawal(ctx context.Context, req *types.MsgFinaliz
 			return nil, err
 		}
 		if withdrawal.Status != types.WITHDRAWAL_STATUS_PROCESSING {
-			return nil, types.ErrInvalidRequest.Wrapf("witdhrawal %d is not processing", wid)
+			return nil, errorsmod.Wrapf(sdkerrors.ErrLogic, "witdhrawal %d is not processing", wid)
 		}
 
 		if withdrawal.Receipt == nil {
-			return nil, types.ErrInvalidRequest.Wrapf("witdhrawal %d receipt is nil", wid)
+			return nil, errorsmod.Wrapf(sdkerrors.ErrLogic, "witdhrawal %d receipt is nil", wid)
 		}
 
 		withdrawal.Status = types.WITHDRAWAL_STATUS_PAID
@@ -332,7 +334,7 @@ func (k msgServer) FinalizeWithdrawal(ctx context.Context, req *types.MsgFinaliz
 
 func (k msgServer) ApproveCancellation(ctx context.Context, req *types.MsgApproveCancellation) (*types.MsgApproveCancellationResponse, error) {
 	if err := req.Validate(); err != nil {
-		return nil, types.ErrInvalidRequest.Wrap(err.Error())
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, err.Error())
 	}
 
 	if _, err := k.relayerKeeper.VerifyNonProposal(ctx, req); err != nil {
@@ -344,14 +346,14 @@ func (k msgServer) ApproveCancellation(ctx context.Context, req *types.MsgApprov
 		return nil, err
 	}
 
-	var events = make(sdktypes.Events, 0, len(req.Id))
+	events := make(sdktypes.Events, 0, len(req.Id))
 	for _, wid := range req.Id {
 		withdrawal, err := k.Withdrawals.Get(ctx, wid)
 		if err != nil {
 			return nil, err
 		}
 		if withdrawal.Status != types.WITHDRAWAL_STATUS_CANCELING {
-			return nil, types.ErrInvalidRequest.Wrapf("witdhrawal %d is not canceling", wid)
+			return nil, errorsmod.Wrapf(sdkerrors.ErrLogic, "witdhrawal %d is not canceling", wid)
 		}
 		withdrawal.Status = types.WITHDRAWAL_STATUS_CANCELED
 		if err := k.Withdrawals.Set(ctx, wid, withdrawal); err != nil {
@@ -371,16 +373,16 @@ func (k msgServer) ApproveCancellation(ctx context.Context, req *types.MsgApprov
 
 func (k msgServer) NewConsolidation(ctx context.Context, req *types.MsgNewConsolidation) (*types.MsgNewConsolidationResponse, error) {
 	if err := req.Validate(); err != nil {
-		return nil, types.ErrInvalidRequest.Wrap(err.Error())
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, err.Error())
 	}
 
 	tx, txrd := new(wire.MsgTx), bytes.NewReader(req.NoWitnessTx)
 	if err := tx.DeserializeNoWitness(txrd); err != nil || txrd.Len() > 0 {
-		return nil, types.ErrInvalidRequest.Wrap("invalid non-witness tx")
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "invalid non-witness tx")
 	}
 
 	if len(tx.TxOut) != 1 {
-		return nil, types.ErrInvalidRequest.Wrap("consolidation should have only 1 output")
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "consolidation should have only 1 output")
 	}
 
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
@@ -390,7 +392,7 @@ func (k msgServer) NewConsolidation(ctx context.Context, req *types.MsgNewConsol
 	}
 
 	if !types.VerifySystemAddressScript(&pubkey, tx.TxOut[0].PkScript) {
-		return nil, types.ErrInvalidRequest.Wrap("not pay to the latest relayer pubkey")
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "not pay to the latest relayer pubkey")
 	}
 
 	sequence, err := k.relayerKeeper.VerifyProposal(sdkctx, req)

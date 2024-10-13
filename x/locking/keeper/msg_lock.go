@@ -5,8 +5,10 @@ import (
 	"errors"
 
 	"cosmossdk.io/collections"
+	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/math"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types/goattypes"
 	"github.com/goatnetwork/goat/x/locking/types"
@@ -28,20 +30,15 @@ func (k Keeper) Lock(ctx context.Context, reqs []*goattypes.LockRequest) error {
 	}
 
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
-	param, err := k.Params.Get(sdkctx)
-	if err != nil {
-		return err
-	}
-
 	for validator, coins := range updates {
-		if err := k.lock(sdkctx, validator, coins, &param); err != nil {
+		if err := k.lock(sdkctx, validator, coins); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func (k Keeper) lock(ctx context.Context, target common.Address, coins sdktypes.Coins, param *types.Params) error {
+func (k Keeper) lock(ctx context.Context, target common.Address, coins sdktypes.Coins) error {
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
 
 	valdtAddr := sdktypes.ConsAddress(target.Bytes())
@@ -70,7 +67,7 @@ func (k Keeper) lock(ctx context.Context, target common.Address, coins sdktypes.
 			if token.Weight > 0 {
 				power := math.NewIntFromUint64(token.Weight).Mul(coin.Amount).Quo(types.PowerReduction)
 				if !power.IsUint64() {
-					return types.ErrInvalid.Wrapf("power too large: %s", power)
+					return errorsmod.Wrapf(sdkerrors.ErrLogic, "power too large: %s", power)
 				}
 				validator.Power += power.Uint64()
 			}
@@ -118,7 +115,7 @@ func (k Keeper) lock(ctx context.Context, target common.Address, coins sdktypes.
 				if token.Weight > 0 {
 					power := math.NewIntFromUint64(token.Weight).Mul(coin.Amount).Quo(types.PowerReduction)
 					if !power.IsUint64() {
-						return types.ErrInvalid.Wrapf("power too large: %s", power)
+						return errorsmod.Wrapf(sdkerrors.ErrLogic, "power too large: %s", power)
 					}
 					validator.Power += power.Uint64()
 				}

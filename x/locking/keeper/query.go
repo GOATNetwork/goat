@@ -5,14 +5,11 @@ import (
 	"errors"
 
 	"cosmossdk.io/collections"
-
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
-
 	bitcointypes "github.com/goatnetwork/goat/x/bitcoin/types"
 	"github.com/goatnetwork/goat/x/locking/types"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 var _ types.QueryServer = queryServer{}

@@ -68,12 +68,12 @@ func EncodePublicKey(v *PublicKey) []byte {
 	switch t := v.Key.(type) {
 	case *PublicKey_Secp256K1:
 		res := make([]byte, 0, 1+btcec.PubKeyBytesLenCompressed)
-		res = append(res, byte(secp256k1Type))
+		res = append(res, secp256k1Type)
 		res = append(res, t.Secp256K1...)
 		return res
 	case *PublicKey_Schnorr:
 		res := make([]byte, 0, 1+schnorr.PubKeyBytesLen)
-		res = append(res, byte(schnoorType))
+		res = append(res, schnoorType)
 		res = append(res, t.Schnorr...)
 		return res
 	}

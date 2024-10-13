@@ -18,16 +18,14 @@ import (
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	authcmd "github.com/cosmos/cosmos-sdk/x/auth/client/cli"
-	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
-
 	"github.com/goatnetwork/goat/app"
 	"github.com/goatnetwork/goat/cmd/goatd/cmd/modgen"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 func initRootCmd(
 	rootCmd *cobra.Command,
-	txConfig client.TxConfig,
 	basicManager module.BasicManager,
 ) {
 	rootCmd.AddCommand(
@@ -42,7 +40,7 @@ func initRootCmd(
 	server.AddCommandsWithStartCmdOptions(rootCmd, app.DefaultNodeHome, newApp, appExport, server.StartCmdOptions{
 		AddFlags: func(cmd *cobra.Command) {
 			cmd.Flags().String(FlagGoatGeth, "http://127.0.0.1:8545", "the goat-geth endpoint, ipc is recommended")
-			cmd.Flags().String(FlagGoatJwtSecret, "", "the jwt secret file for engine api, it's only required if connecting to an goat-geth via http")
+			cmd.Flags().String(FlagJwtPath, "", "the jwt secret file for engine api, it's only required if connecting to an goat-geth via http")
 		},
 	})
 

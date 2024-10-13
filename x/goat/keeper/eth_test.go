@@ -4,14 +4,13 @@ import (
 	"math/big"
 
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/core/types/goattypes"
 )
 
 func (suite *KeeperTestSuite) TestDequeue() {
 	txs := []*ethtypes.Transaction{
-		types.NewTx(ethtypes.NewGoatTx(
+		ethtypes.NewTx(ethtypes.NewGoatTx(
 			goattypes.BirdgeModule,
 			goattypes.BridgeDepoitAction,
 			0,
@@ -22,8 +21,8 @@ func (suite *KeeperTestSuite) TestDequeue() {
 				Amount: big.NewInt(10),
 			},
 		)),
-		types.NewTx(
-			types.NewGoatTx(
+		ethtypes.NewTx(
+			ethtypes.NewGoatTx(
 				goattypes.LockingModule,
 				goattypes.LockingDistributeRewardAction,
 				0,
@@ -54,7 +53,7 @@ func (suite *KeeperTestSuite) TestDequeue() {
 
 func (suite *KeeperTestSuite) TestVerifyDequeue() {
 	txs := []*ethtypes.Transaction{
-		types.NewTx(ethtypes.NewGoatTx(
+		ethtypes.NewTx(ethtypes.NewGoatTx(
 			goattypes.BirdgeModule,
 			goattypes.BridgeDepoitAction,
 			0,
@@ -65,8 +64,8 @@ func (suite *KeeperTestSuite) TestVerifyDequeue() {
 				Amount: big.NewInt(10),
 			},
 		)),
-		types.NewTx(
-			types.NewGoatTx(
+		ethtypes.NewTx(
+			ethtypes.NewGoatTx(
 				goattypes.LockingModule,
 				goattypes.LockingDistributeRewardAction,
 				0,

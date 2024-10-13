@@ -5,7 +5,6 @@ import (
 
 	"cosmossdk.io/collections"
 	"cosmossdk.io/math"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types/goattypes"
@@ -68,9 +67,9 @@ func (suite *KeeperTestSuite) TestOnWeightChanged() {
 	amount, ok := new(big.Int).SetString("100000000000000000000000", 10)
 	suite.Require().True(ok)
 
-	Addresses := []sdk.ConsAddress{
-		sdk.ConsAddress(common.Hex2Bytes("f52a75aa5be8d8c9e3580ea6ba818e68de4fb76e")),
-		sdk.ConsAddress(common.Hex2Bytes("108ca95b90e680f7e4374f911521941fe78b85ce")),
+	Addresses := []sdktypes.ConsAddress{
+		sdktypes.ConsAddress(common.Hex2Bytes("f52a75aa5be8d8c9e3580ea6ba818e68de4fb76e")),
+		sdktypes.ConsAddress(common.Hex2Bytes("108ca95b90e680f7e4374f911521941fe78b85ce")),
 	}
 
 	Validators := []types.Validator{
@@ -80,8 +79,8 @@ func (suite *KeeperTestSuite) TestOnWeightChanged() {
 			Power:     100000,
 			GasReward: math.ZeroInt(),
 			Status:    types.Pending,
-			Locking: sdk.NewCoins(
-				sdk.NewCoin(GoatToekenDenom, math.NewIntFromBigInt(amount)),
+			Locking: sdktypes.NewCoins(
+				sdktypes.NewCoin(GoatToekenDenom, math.NewIntFromBigInt(amount)),
 			),
 		},
 		{
@@ -90,9 +89,9 @@ func (suite *KeeperTestSuite) TestOnWeightChanged() {
 			Power:     110000,
 			GasReward: math.ZeroInt(),
 			Status:    types.Active,
-			Locking: sdk.NewCoins(
-				sdk.NewCoin(NativeTokenDenom, math.NewIntFromUint64(1e18)),
-				sdk.NewCoin(GoatToekenDenom, math.NewIntFromBigInt(amount)),
+			Locking: sdktypes.NewCoins(
+				sdktypes.NewCoin(NativeTokenDenom, math.NewIntFromUint64(1e18)),
+				sdktypes.NewCoin(GoatToekenDenom, math.NewIntFromBigInt(amount)),
 			),
 		},
 	}
@@ -150,8 +149,8 @@ func (suite *KeeperTestSuite) TestOnWeightChanged() {
 				Power:     0,
 				GasReward: math.ZeroInt(),
 				Status:    types.Pending,
-				Locking: sdk.NewCoins(
-					sdk.NewCoin(GoatToekenDenom, math.NewIntFromBigInt(amount)),
+				Locking: sdktypes.NewCoins(
+					sdktypes.NewCoin(GoatToekenDenom, math.NewIntFromBigInt(amount)),
 				),
 			},
 			{
@@ -160,9 +159,9 @@ func (suite *KeeperTestSuite) TestOnWeightChanged() {
 				Power:     10000,
 				GasReward: math.ZeroInt(),
 				Status:    types.Active,
-				Locking: sdk.NewCoins(
-					sdk.NewCoin(NativeTokenDenom, math.NewIntFromUint64(1e18)),
-					sdk.NewCoin(GoatToekenDenom, math.NewIntFromBigInt(amount)),
+				Locking: sdktypes.NewCoins(
+					sdktypes.NewCoin(NativeTokenDenom, math.NewIntFromUint64(1e18)),
+					sdktypes.NewCoin(GoatToekenDenom, math.NewIntFromBigInt(amount)),
 				),
 			},
 		}

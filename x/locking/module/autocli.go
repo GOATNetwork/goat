@@ -2,7 +2,6 @@ package locking
 
 import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
-
 	modulev1 "github.com/goatnetwork/goat/api/goat/locking/v1"
 )
 

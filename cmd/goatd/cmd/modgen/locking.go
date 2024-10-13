@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/hex"
 	"errors"
-	"fmt"
 	"math/big"
 	"strings"
 
@@ -63,7 +62,7 @@ func Locking() *cobra.Command {
 			serverCtx.Logger.Info("adding validator", "module", types.ModuleName, "geneis", genesisFile)
 			if err := UpdateModuleGenesis(genesisFile, types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
 				if len(genesis.Tokens) == 0 {
-					return fmt.Errorf("No token setting found")
+					return errors.New("no token setting found")
 				}
 
 				for _, v := range genesis.GetValidators() {
@@ -82,7 +81,7 @@ func Locking() *cobra.Command {
 				}
 
 				if votePower == 0 {
-					return fmt.Errorf("No threshold setting found")
+					return errors.New("no threshold setting found")
 				}
 
 				genesis.Validators = append(genesis.Validators, types.Validator{
@@ -162,7 +161,7 @@ func Locking() *cobra.Command {
 			}
 
 			var ok bool
-			var share = new(big.Int)
+			share := new(big.Int)
 			if strings.HasPrefix(shareStr, "0x") {
 				_, ok = share.SetString(strings.TrimPrefix(shareStr, "0x"), 16)
 			} else {

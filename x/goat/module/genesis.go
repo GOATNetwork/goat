@@ -2,7 +2,6 @@ package goat
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
 	"github.com/goatnetwork/goat/x/goat/keeper"
 	"github.com/goatnetwork/goat/x/goat/types"
 )

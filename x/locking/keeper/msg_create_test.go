@@ -3,12 +3,11 @@ package keeper_test
 import (
 	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types/goattypes"
-	"github.com/goatnetwork/goat/x/locking/types"
-
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
+	"github.com/goatnetwork/goat/x/locking/types"
 )
 
 func (suite *KeeperTestSuite) TestCreates() {

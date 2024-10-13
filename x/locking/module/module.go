@@ -16,11 +16,10 @@ import (
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-
 	modulev1 "github.com/goatnetwork/goat/api/goat/locking/module/v1"
 	"github.com/goatnetwork/goat/x/locking/keeper"
 	"github.com/goatnetwork/goat/x/locking/types"
+	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 )
 
 var (

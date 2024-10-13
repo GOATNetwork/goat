@@ -68,11 +68,11 @@ func GetEthGenesisHeaderByFile(genesisPath string) (*ethtypes.Header, error) {
 	}
 
 	if *header.WithdrawalsHash != ethtypes.EmptyWithdrawalsHash {
-		return nil, errors.New("No withdrawals required")
+		return nil, errors.New("no withdrawals required")
 	}
 
 	if header.GasUsed != 0 || header.TxHash != ethtypes.EmptyTxsHash {
-		return nil, errors.New("No txs required")
+		return nil, errors.New("no txs required")
 	}
 
 	if header.BlobGasUsed == nil || header.ExcessBlobGas == nil || header.ParentBeaconRoot == nil {
@@ -80,11 +80,11 @@ func GetEthGenesisHeaderByFile(genesisPath string) (*ethtypes.Header, error) {
 	}
 
 	if *header.BlobGasUsed != 0 {
-		return nil, errors.New("No blob txes required")
+		return nil, errors.New("required no blob txes")
 	}
 
 	if header.RequestsHash == nil {
-		return nil, errors.New("No requests provided")
+		return nil, errors.New("no requests provided")
 	}
 
 	return header, nil
