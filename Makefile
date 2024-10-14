@@ -144,6 +144,33 @@ distclean: clean
 	rm -rf vendor/
 
 ###############################################################################
+###                           Tests & Simulation                            ###
+###############################################################################
+
+PACKAGES_UNIT=$(shell go list ./... | grep -v -e '/tests/e2e')
+TEST_PACKAGES=./...
+TEST_TARGETS := test-unit test-unit-cover test-race
+
+test-unit: ARGS=-timeout=15m -tags='norace'
+test-unit: TEST_PACKAGES=$(PACKAGES_UNIT)
+test-unit-cover: ARGS=-timeout=15m -tags='norace' -coverprofile=coverage.txt -covermode=atomic
+test-unit-cover: TEST_PACKAGES=$(PACKAGES_UNIT)
+test-race: ARGS=-timeout=15m -race
+test-race: TEST_PACKAGES=$(PACKAGES_UNIT)
+$(TEST_TARGETS): run-tests
+
+run-tests:
+ifneq (,$(shell which tparse 2>/dev/null))
+	@echo "--> Running tests"
+	@go test -mod=readonly -json $(ARGS) $(TEST_PACKAGES) | tparse
+else
+	@echo "--> Running tests"
+	@go test -mod=readonly $(ARGS) $(TEST_PACKAGES)
+endif
+
+.PHONY: run-tests $(TEST_TARGETS)
+
+###############################################################################
 ###                                Linting                                  ###
 ###############################################################################
 golangci_lint_cmd=golangci-lint

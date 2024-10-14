@@ -19,7 +19,6 @@ linters:
     - copyloopvar
     - whitespace
     - revive
-    - durationcheck
     - gocheckcompilerdirectives
     - reassign
     - errcheck
@@ -36,6 +35,8 @@ linters:
     - stylecheck
     - thelper
     - unparam
+    - mirror
+    - tenv
 
 linters-settings:
   gofmt:

@@ -18,10 +18,6 @@ jobs:
         with:
           go-version: "1.23"
           check-latest: true
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v6
-        with:
-          version: v1.61
       - run: make build
       - run: make lint
-      - run: go test -v ./...
+      - run: make run-tests
