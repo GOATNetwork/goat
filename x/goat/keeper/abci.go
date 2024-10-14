@@ -284,8 +284,10 @@ func (k Keeper) verifyEthBlockProposal(sdkctx sdk.Context, msg *types.MsgNewEthB
 			return fmt.Errorf("incorrect parent block hash: expected %d got %d", block.BlockNumber+1, payload.BlockNumber)
 		}
 
-		if _, _, _, err := goattypes.DecodeRequests(payload.Requests); err != nil {
+		if _, _, lockingReqs, err := goattypes.DecodeRequests(payload.Requests, false); err != nil {
 			return fmt.Errorf("invalid goat requests: %w", err)
+		} else if len(lockingReqs.Gas) != 1 {
+			return errors.New("gas revenue request length is not 1")
 		}
 
 		beaconRoot, err := k.BeaconRoot.Get(sdkctx)

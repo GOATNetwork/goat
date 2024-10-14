@@ -65,7 +65,7 @@ func (k msgServer) NewEthBlock(ctx context.Context, req *types.MsgNewEthBlock) (
 		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "dequeue mismatched")
 	}
 
-	bridgeReq, relayerReq, lockingReq, err := goattypes.DecodeRequests(payload.Requests)
+	bridgeReq, relayerReq, lockingReq, err := goattypes.DecodeRequests(payload.Requests, false)
 	if err != nil {
 		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "invalid execution requests")
 	}
