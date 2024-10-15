@@ -6,12 +6,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"math/big"
 	"os"
 	"strings"
 
 	"github.com/ethereum/go-ethereum/core"
 	"github.com/ethereum/go-ethereum/core/rawdb"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	ethcrypto "github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/triedb"
 	"github.com/ethereum/go-ethereum/triedb/hashdb"
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
@@ -96,4 +98,18 @@ func GetEthGenesisHeaderByFile(genesisPath string) (*ethtypes.Header, error) {
 	}
 
 	return header, nil
+}
+
+func getValidatorSignMsg(chainID uint64, owner, validator []byte) []byte {
+	data := new(big.Int).SetUint64(chainID).FillBytes(make([]byte, 32))
+	return ethcrypto.Keccak256(data, validator, owner)
+}
+
+var PrintJSON = func(info any) error {
+	out, err := json.MarshalIndent(info, "", " ")
+	if err != nil {
+		return err
+	}
+	_, err = fmt.Fprintf(os.Stdout, "%s\n", out)
+	return err
 }

@@ -28,17 +28,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/genutil/types"
 	"github.com/cosmos/go-bip39"
 	"github.com/goatnetwork/goat/app"
+	"github.com/goatnetwork/goat/cmd/goatd/cmd/modgen"
 	"github.com/spf13/cobra"
 )
-
-var printJSON = func(info any) error {
-	out, err := json.MarshalIndent(info, "", " ")
-	if err != nil {
-		return err
-	}
-	_, err = fmt.Fprintf(os.Stderr, "%s\n", out)
-	return err
-}
 
 // InitCmd returns a command that initializes all files needed for Tendermint
 // and the respective application.
@@ -172,7 +164,7 @@ func InitCmd(mbm module.BasicManager) *cobra.Command {
 			}
 
 			cfg.WriteConfigFile(filepath.Join(config.RootDir, "config", "config.toml"), config)
-			return printJSON(toPrint)
+			return modgen.PrintJSON(toPrint)
 		},
 	}
 
