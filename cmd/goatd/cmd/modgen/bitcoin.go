@@ -1,6 +1,7 @@
 package modgen
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"slices"
@@ -23,6 +24,10 @@ func Bitcoin() *cobra.Command {
 		FlagMinDeposit         = "min-deposit"
 		FlagNetworkName        = "network"
 		FlagConfirmationNumber = "confirmation-number"
+
+		FlagDepositTxid    = "txid"
+		FlagDepositTxout   = "txout"
+		FlagDepositSatoshi = "satoshi"
 	)
 
 	parsePubkey := func(raw []byte, typ string) (*relayer.PublicKey, error) {
@@ -113,7 +118,7 @@ func Bitcoin() *cobra.Command {
 						if idx != 0 {
 							start++
 						}
-						r, err := chainhash.NewHashFromStr(strings.TrimPrefix(hash, "0x"))
+						r, err := chainhash.NewHashFromStr(hash)
 						if err != nil {
 							return fmt.Errorf("invalid block hash: %s", hash)
 						}
@@ -141,12 +146,68 @@ func Bitcoin() *cobra.Command {
 		},
 	}
 
+	addDeposit := &cobra.Command{
+		Use:   "add-deposit",
+		Short: "genesis validator deposits",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx := client.GetClientContextFromCmd(cmd)
+			serverCtx := server.GetServerContextFromCmd(cmd)
+
+			config := serverCtx.Config.SetRoot(clientCtx.HomeDir)
+			genesisFile := config.GenesisFile()
+
+			satoshi, err := cmd.Flags().GetUint64(FlagDepositSatoshi)
+			if err != nil {
+				return err
+			}
+
+			if satoshi == 0 {
+				return errors.New("deposit value is 0")
+			}
+
+			// big endian
+			txHash, err := cmd.Flags().GetString(FlagDepositTxid)
+			if err != nil {
+				return err
+			}
+
+			txid, err := chainhash.NewHashFromStr(txHash)
+			if err != nil {
+				return err
+			}
+
+			txout, err := cmd.Flags().GetUint32(FlagDepositTxout)
+			if err != nil {
+				return err
+			}
+
+			return UpdateModuleGenesis(genesisFile, types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
+				for _, item := range genesis.Deposits {
+					if bytes.Equal(item.Txid, txid[:]) && item.Txout == txout {
+						return nil
+					}
+				}
+				genesis.Deposits = append(genesis.Deposits, types.DepositGenesis{
+					Txid:   txid[:],
+					Txout:  txout,
+					Amount: satoshi,
+				})
+				return nil
+			})
+		},
+	}
+
 	param := types.DefaultParams()
 	cmd.Flags().Uint32(FlagConfirmationNumber, param.ConfirmationNumber, "the confirmation number")
 	cmd.Flags().BytesHex(FlagPubkey, nil, "the initial relayer public key")
-	cmd.Flags().String(FlagPubkeyType, types.SchnorrName, "the public key type [secp256k1,schnorr]")
+	cmd.Flags().String(FlagPubkeyType, types.Secp256K1Name, "the public key type [secp256k1,schnorr]")
 	cmd.Flags().String(FlagNetworkName, param.NetworkName, "the bitcoin network name(mainnet|testnet3|regtest|signet)")
 	cmd.Flags().Uint64(FlagMinDeposit, param.MinDepositAmount, "minimal allowed deposit amount")
 
+	cmd.Flags().Uint64(FlagDepositSatoshi, 0, "deposit amount in satoshi")
+	cmd.Flags().String(FlagDepositTxid, "", "deposit txid")
+	cmd.Flags().Uint32(FlagDepositTxout, 0, "deposit txout")
+
+	cmd.AddCommand(addDeposit)
 	return cmd
 }
