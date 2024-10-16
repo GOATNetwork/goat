@@ -51,11 +51,10 @@ func Relayer() *cobra.Command {
 		},
 	}
 
-	appendVoter := &cobra.Command{
-		Use:   "append address",
-		Short: "append new voter",
-		Args:  cobra.ExactArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) error {
+	addVoter := &cobra.Command{
+		Use:   "add-voter",
+		Short: "add new voter",
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 			serverCtx := server.GetServerContextFromCmd(cmd)
 
@@ -63,12 +62,6 @@ func Relayer() *cobra.Command {
 			genesisFile := config.GenesisFile()
 
 			addrcodec := clientCtx.TxConfig.SigningContext().AddressCodec()
-
-			addr := args[0]
-			addrByte, err := addrcodec.StringToBytes(addr)
-			if err != nil {
-				return fmt.Errorf("invalid address: %s", addr)
-			}
 
 			voteKeyStr, err := cmd.Flags().GetString(FlagVoteKey)
 			if err != nil {
@@ -96,9 +89,10 @@ func Relayer() *cobra.Command {
 			}
 
 			txKey := &secp256k1.PubKey{Key: txRawKey}
-			if txKeyAddr := txKey.Address().Bytes(); !bytes.Equal(txKeyAddr, addrByte) {
-				addrStr, _ := addrcodec.BytesToString(txKeyAddr)
-				return fmt.Errorf("address and public key not matched, expected address %s", addrStr)
+			addrByte := txKey.Address().Bytes()
+			addr, err := addrcodec.BytesToString(txKey.Address().Bytes())
+			if err != nil {
+				return err
 			}
 
 			serverCtx.Logger.Info("update genesis", "module", types.ModuleName)
@@ -182,9 +176,9 @@ func Relayer() *cobra.Command {
 	}
 
 	cmd.Flags().Duration(FlagParamElectingPeriod, time.Minute*10, "")
-	cmd.Flags().Duration(FlagParamAcceptProposerTimeout, 0, "")
-	appendVoter.Flags().String(FlagPubkey, "", "the voter tx public key(compressed secp256k1)")
-	appendVoter.Flags().String(FlagVoteKey, "", "the voter vote public key(compressed bls12381 G2)")
-	cmd.AddCommand(appendVoter)
+	cmd.Flags().Duration(FlagParamAcceptProposerTimeout, time.Minute, "")
+	addVoter.Flags().String(FlagPubkey, "", "the voter tx public key(compressed secp256k1)")
+	addVoter.Flags().String(FlagVoteKey, "", "the voter vote public key(compressed bls12381 G2)")
+	cmd.AddCommand(addVoter)
 	return cmd
 }
