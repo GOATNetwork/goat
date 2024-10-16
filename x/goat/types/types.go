@@ -8,7 +8,7 @@ import (
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 )
 
-func ExecutableDataToPayload(data *engine.ExecutableData, beaconRoot []byte, execRequests [][]byte) *ExecutionPayload {
+func ExecutableDataToPayload(data *engine.ExecutableData, beaconRoot []byte, execRequests []hexutil.Bytes) *ExecutionPayload {
 	var BlobGasUsed uint64
 	if data.BlobGasUsed != nil {
 		BlobGasUsed = *data.BlobGasUsed
@@ -17,6 +17,11 @@ func ExecutableDataToPayload(data *engine.ExecutableData, beaconRoot []byte, exe
 	var ExcessBlobGas uint64
 	if data.ExcessBlobGas != nil {
 		ExcessBlobGas = *data.ExcessBlobGas
+	}
+
+	requests := make([][]byte, len(execRequests))
+	for i := 0; i < len(execRequests); i++ {
+		requests[i] = execRequests[i]
 	}
 
 	res := &ExecutionPayload{
@@ -37,7 +42,7 @@ func ExecutableDataToPayload(data *engine.ExecutableData, beaconRoot []byte, exe
 		BeaconRoot:    beaconRoot,
 		BlobGasUsed:   BlobGasUsed,
 		ExcessBlobGas: ExcessBlobGas,
-		Requests:      execRequests,
+		Requests:      requests,
 	}
 	return res
 }

@@ -6,10 +6,11 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/params"
 )
 
-func (k Keeper) Dequeue(ctx context.Context) ([][]byte, error) {
+func (k Keeper) Dequeue(ctx context.Context) ([]hexutil.Bytes, error) {
 	btcTxs, err := k.bitcoinKeeper.DequeueBitcoinModuleTx(ctx)
 	if err != nil {
 		return nil, err
@@ -20,7 +21,7 @@ func (k Keeper) Dequeue(ctx context.Context) ([][]byte, error) {
 		return nil, err
 	}
 
-	res := make([][]byte, 0, len(btcTxs)+len(lockingTxs))
+	res := make([]hexutil.Bytes, 0, len(btcTxs)+len(lockingTxs))
 	for _, tx := range btcTxs {
 		raw, err := tx.MarshalBinary()
 		if err != nil {
