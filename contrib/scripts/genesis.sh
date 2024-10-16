@@ -41,6 +41,17 @@ for ((i=0; i<VALIDATOR_LENGTH; i++)); do
   ./build/goatd modgen locking add-validator --home $1 --pubkey $pubkey
 done
 
+GOAT_LOCKING_CONTRACT='0xbc10000000000000000000000000000000000004'
+TRANSFER_LENGTH=$(jq '.GoatToken.transfers | length' $2)
+for ((i=0; i<TRANSFER_LENGTH; i++)); do
+  address=$(jq -r ".GoatToken.transfers[$i].to" $2 | tr '[:upper:]' '[:lower:]')
+  if [ $address = $GOAT_LOCKING_CONTRACT ]; then
+    value=$(jq -r ".GoatToken.transfers[$i].value" $2)
+    echo "Set initial reward $value"
+    ./build/goatd modgen locking --home $1 --init-reward $value
+  fi
+done
+
 VOTERS_LENGTH=$(jq '.Relayer.voters | length' $2)
 for ((i=0; i<VOTERS_LENGTH; i++)); do
   echo "Add voter $i"

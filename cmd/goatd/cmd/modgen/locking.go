@@ -27,6 +27,8 @@ import (
 
 func Locking() *cobra.Command {
 	const (
+		FlagInitialReward = "init-reward"
+
 		FlagValidatorPubkey = "pubkey"
 
 		FlagTokenAddress   = "token"
@@ -41,7 +43,48 @@ func Locking() *cobra.Command {
 		Use:   "locking",
 		Short: "update locking module genesis",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return nil
+			clientCtx := client.GetClientContextFromCmd(cmd)
+			serverCtx := server.GetServerContextFromCmd(cmd)
+
+			config := serverCtx.Config.SetRoot(clientCtx.HomeDir)
+			genesisFile := config.GenesisFile()
+
+			rewardStr, err := cmd.Flags().GetString(FlagInitialReward)
+			if err != nil {
+				return err
+			}
+
+			if rewardStr == "" {
+				return fmt.Errorf("no reward param provided")
+			}
+
+			reward := math.ZeroInt()
+			switch {
+			case strings.HasSuffix(rewardStr, "ether"):
+				i, ok := new(big.Int).SetString(strings.TrimSuffix(rewardStr, "ether"), 10)
+				if !ok {
+					return fmt.Errorf("invalid reward string: %s", rewardStr)
+				}
+				i.Mul(i, big.NewInt(1e18))
+				reward = math.NewIntFromBigIntMut(i)
+			case strings.HasPrefix(rewardStr, "0x"):
+				i, ok := new(big.Int).SetString(strings.TrimPrefix(rewardStr, "0x"), 16)
+				if !ok {
+					return fmt.Errorf("invalid reward string: %s", rewardStr)
+				}
+				reward = math.NewIntFromBigIntMut(i)
+			default:
+				i, ok := new(big.Int).SetString(rewardStr, 10)
+				if !ok {
+					return fmt.Errorf("invalid reward string: %s", rewardStr)
+				}
+				reward = math.NewIntFromBigIntMut(i)
+			}
+			serverCtx.Logger.Info("update param", "module", types.ModuleName, "geneis", genesisFile)
+			return UpdateModuleGenesis(genesisFile, types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
+				genesis.RewardPool.Remain = reward
+				return nil
+			})
 		},
 	}
 
@@ -277,6 +320,8 @@ func Locking() *cobra.Command {
 			})
 		},
 	}
+
+	cmd.Flags().String(FlagInitialReward, "", "remain reward amount")
 
 	addToken.Flags().String(FlagTokenAddress, "", "token address")
 	addToken.Flags().Uint64(FlagTokenWeight, 0, "validator vote power")
