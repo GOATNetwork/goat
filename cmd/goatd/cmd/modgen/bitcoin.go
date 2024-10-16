@@ -204,9 +204,9 @@ func Bitcoin() *cobra.Command {
 	cmd.Flags().String(FlagNetworkName, param.NetworkName, "the bitcoin network name(mainnet|testnet3|regtest|signet)")
 	cmd.Flags().Uint64(FlagMinDeposit, param.MinDepositAmount, "minimal allowed deposit amount")
 
-	cmd.Flags().Uint64(FlagDepositSatoshi, 0, "deposit amount in satoshi")
-	cmd.Flags().String(FlagDepositTxid, "", "deposit txid")
-	cmd.Flags().Uint32(FlagDepositTxout, 0, "deposit txout")
+	addDeposit.Flags().Uint64(FlagDepositSatoshi, 0, "deposit amount in satoshi")
+	addDeposit.Flags().String(FlagDepositTxid, "", "deposit txid")
+	addDeposit.Flags().Uint32(FlagDepositTxout, 0, "deposit txout")
 
 	cmd.AddCommand(addDeposit)
 	return cmd
