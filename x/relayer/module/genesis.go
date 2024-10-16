@@ -112,7 +112,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 			queue.OffBoarding = append(queue.OffBoarding, addr)
 		}
 
-		if err := k.Voters.Set(ctx, addr, *v); err != nil {
+		if err := k.Voters.Set(ctx, addr, v); err != nil {
 			panic(err)
 		}
 	}
@@ -161,7 +161,7 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 			if err != nil {
 				panic(err)
 			}
-			genesis.Voters = append(genesis.Voters, &kv.Value)
+			genesis.Voters = append(genesis.Voters, kv.Value)
 		}
 	}
 

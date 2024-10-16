@@ -128,7 +128,7 @@ func Relayer() *cobra.Command {
 					genesis.Relayer.Voters = voters[1:]
 				}
 
-				genesis.Voters = append(genesis.Voters, &types.Voter{
+				genesis.Voters = append(genesis.Voters, types.Voter{
 					Address: addrByte,
 					VoteKey: voteKey,
 					Status:  types.VOTER_STATUS_ACTIVATED,
