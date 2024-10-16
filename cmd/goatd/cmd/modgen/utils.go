@@ -20,14 +20,14 @@ import (
 )
 
 func DecodeHexOrBase64String(str string) ([]byte, error) {
+	if strings.HasPrefix(str, "0x") {
+		return hex.DecodeString(str[2:])
+	}
 	pubkeyRaw, err := hex.DecodeString(str)
 	if err != nil {
 		pubkeyRaw, err = base64.StdEncoding.DecodeString(str)
 		if err != nil {
-			pubkeyRaw, err = hex.DecodeString(strings.TrimPrefix(str, "0x"))
-			if err != nil {
-				return nil, fmt.Errorf("pubkey %s doesn't use base64 or hex encoding", str)
-			}
+			return nil, fmt.Errorf("pubkey %s doesn't use base64 or hex encoding", str)
 		}
 	}
 	return pubkeyRaw, nil
