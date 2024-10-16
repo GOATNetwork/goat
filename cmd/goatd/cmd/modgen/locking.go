@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/hex"
 	"errors"
+	"fmt"
 	"math/big"
 	"os"
 	"strings"
@@ -17,6 +18,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/server"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	"github.com/ethereum/go-ethereum/common"
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
 	bitcointypes "github.com/goatnetwork/goat/x/bitcoin/types"
 	"github.com/goatnetwork/goat/x/locking/types"
@@ -63,10 +65,14 @@ func Locking() *cobra.Command {
 				return err
 			}
 
+			fmt.Println(hex.EncodeToString(pubkeyRaw))
+
 			pubkeyRaw, err = GetCompressedK256P1Pubkey(pubkeyRaw)
 			if err != nil {
 				return err
 			}
+
+			fmt.Println(hex.EncodeToString(pubkeyRaw))
 
 			serverCtx.Logger.Info("adding validator", "module", types.ModuleName, "geneis", genesisFile)
 			if err := UpdateModuleGenesis(genesisFile, types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
@@ -154,10 +160,17 @@ func Locking() *cobra.Command {
 			config := serverCtx.Config.SetRoot(clientCtx.HomeDir)
 			genesisFile := config.GenesisFile()
 
-			tokenAddress, err := cmd.Flags().GetBytesHex(FlagTokenAddress)
+			tokenAddress, err := cmd.Flags().GetString(FlagTokenAddress)
 			if err != nil {
 				return err
 			}
+
+			tokenByte, err := bitcointypes.DecodeEthAddress(tokenAddress)
+			if err != nil {
+				return err
+			}
+
+			tokenDenom := types.TokenDenom(common.BytesToAddress(tokenByte))
 
 			weight, err := cmd.Flags().GetUint64(FlagTokenWeight)
 			if err != nil {
@@ -182,9 +195,8 @@ func Locking() *cobra.Command {
 
 			serverCtx.Logger.Info("update genesis", "module", types.ModuleName, "geneis", genesisFile)
 			if err := UpdateModuleGenesis(genesisFile, types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
-				address := hex.EncodeToString(tokenAddress)
 				for _, token := range genesis.Tokens {
-					if token.Denom == address {
+					if token.Denom == tokenDenom {
 						token.Token = types.Token{
 							Weight:    weight,
 							Threshold: math.NewIntFromBigIntMut(share),
@@ -194,7 +206,7 @@ func Locking() *cobra.Command {
 				}
 
 				genesis.Tokens = append(genesis.Tokens, &types.TokenGenesis{
-					Denom: address,
+					Denom: tokenDenom,
 					Token: types.Token{
 						Weight:    weight,
 						Threshold: math.NewIntFromBigIntMut(share),
@@ -266,10 +278,10 @@ func Locking() *cobra.Command {
 		},
 	}
 
-	addToken.Flags().BytesHex(FlagTokenAddress, nil, "validator pubkey(compressed secp256k1)")
+	addToken.Flags().String(FlagTokenAddress, "", "token address")
 	addToken.Flags().Uint64(FlagTokenWeight, 0, "validator vote power")
 	addToken.Flags().String(FlagTokenThreshold, "", "validator vote power")
-	addValidator.Flags().String(FlagValidatorPubkey, "", "validator pubkey(compressed secp256k1)")
+	addValidator.Flags().String(FlagValidatorPubkey, "", "validator pubkey(secp256k1)")
 
 	sign.Flags().Uint64(FlagEthChainID, 31337, "eth chain id")
 	sign.Flags().String(FlagOwner, "", "the validator owner")
