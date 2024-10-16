@@ -4,6 +4,7 @@ import (
 	"math/big"
 
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/core/types/goattypes"
 )
@@ -36,7 +37,7 @@ func (suite *KeeperTestSuite) TestDequeue() {
 		),
 	}
 
-	bytes := make([][]byte, len(txs))
+	bytes := make([]hexutil.Bytes, len(txs))
 	for i := 0; i < len(txs); i++ {
 		tx, err := txs[i].MarshalBinary()
 		suite.Require().NoError(err)
