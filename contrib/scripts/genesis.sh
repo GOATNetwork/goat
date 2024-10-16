@@ -52,6 +52,10 @@ for ((i=0; i<TRANSFER_LENGTH; i++)); do
   fi
 done
 
+./build/goatd modgen locking param --home $1 \
+  --unlock-duration $(jq -r ".Consensus.Locking.unlockDuration" $2) \
+  --exit-duration $(jq -r ".Consensus.Locking.exitDuration" $2)
+
 VOTERS_LENGTH=$(jq '.Relayer.voters | length' $2)
 for ((i=0; i<VOTERS_LENGTH; i++)); do
   echo "Add voter $i"

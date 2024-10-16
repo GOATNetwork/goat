@@ -27,7 +27,9 @@ import (
 
 func Locking() *cobra.Command {
 	const (
-		FlagInitialReward = "init-reward"
+		FlagInitialReward  = "init-reward"
+		FlagUnlockDuration = "unlock-duration"
+		FlagExitDuration   = "exit-duration"
 
 		FlagValidatorPubkey = "pubkey"
 
@@ -80,6 +82,7 @@ func Locking() *cobra.Command {
 				}
 				reward = math.NewIntFromBigIntMut(i)
 			}
+
 			serverCtx.Logger.Info("update param", "module", types.ModuleName, "geneis", genesisFile)
 			return UpdateModuleGenesis(genesisFile, types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
 				genesis.RewardPool.Remain = reward
@@ -321,7 +324,40 @@ func Locking() *cobra.Command {
 		},
 	}
 
+	setParam := &cobra.Command{
+		Use:   "param",
+		Short: "update param",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx := client.GetClientContextFromCmd(cmd)
+			serverCtx := server.GetServerContextFromCmd(cmd)
+
+			config := serverCtx.Config.SetRoot(clientCtx.HomeDir)
+			genesisFile := config.GenesisFile()
+
+			unlockDuration, err := cmd.Flags().GetDuration(FlagUnlockDuration)
+			if err != nil {
+				return err
+			}
+
+			exitDuration, err := cmd.Flags().GetDuration(FlagExitDuration)
+			if err != nil {
+				return err
+			}
+
+			serverCtx.Logger.Info("update param", "module", types.ModuleName, "geneis", genesisFile)
+			return UpdateModuleGenesis(genesisFile, types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
+				genesis.Params.ExitingDuration = exitDuration
+				genesis.Params.UnlockDuration = unlockDuration
+				return genesis.Params.Validate()
+			})
+		},
+	}
+
 	cmd.Flags().String(FlagInitialReward, "", "remain reward amount")
+
+	defaultParam := types.DefaultParams()
+	setParam.Flags().Duration(FlagUnlockDuration, defaultParam.UnlockDuration, "unlock duation")
+	setParam.Flags().Duration(FlagExitDuration, defaultParam.ExitingDuration, "exit duation")
 
 	addToken.Flags().String(FlagTokenAddress, "", "token address")
 	addToken.Flags().Uint64(FlagTokenWeight, 0, "validator vote power")
@@ -330,6 +366,6 @@ func Locking() *cobra.Command {
 
 	sign.Flags().Uint64(FlagEthChainID, 31337, "eth chain id")
 	sign.Flags().String(FlagOwner, "", "the validator owner")
-	cmd.AddCommand(addToken, addValidator, sign)
+	cmd.AddCommand(addToken, addValidator, sign, setParam)
 	return cmd
 }
