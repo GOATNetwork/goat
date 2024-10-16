@@ -36,18 +36,18 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 			if err != nil {
 				panic(err)
 			}
-			vs = append(vs, abci.ValidatorUpdate{
-				Power: int64(validator.Power),
-				PubKey: tmcrypto.PublicKey{
-					Sum: &tmcrypto.PublicKey_Secp256K1{Secp256K1: validator.Pubkey},
-				},
-			})
 		}
 
 		if validator.Status == types.Active {
 			if err := k.ValidatorSet.Set(ctx, address, validator.Power); err != nil {
 				panic(err)
 			}
+			vs = append(vs, abci.ValidatorUpdate{
+				Power: int64(validator.Power),
+				PubKey: tmcrypto.PublicKey{
+					Sum: &tmcrypto.PublicKey_Secp256K1{Secp256K1: validator.Pubkey},
+				},
+			})
 		}
 
 		err = k.PowerRanking.Set(ctx, collections.Join(validator.Power, address))
