@@ -7,6 +7,10 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
+	"strconv"
+	"strings"
+	"time"
 
 	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/math/unsafe"
@@ -44,6 +48,8 @@ func InitCmd(mbm module.BasicManager) *cobra.Command {
 
 		// FlagDefaultBondDenom defines the default denom to use in the genesis file.
 		FlagDefaultBondDenom = "default-denom"
+
+		FlagGenesisTime = "genesis-time"
 	)
 
 	type printInfo struct {
@@ -65,6 +71,8 @@ func InitCmd(mbm module.BasicManager) *cobra.Command {
 			serverCtx := server.GetServerContextFromCmd(cmd)
 			config := serverCtx.Config
 			config.SetRoot(clientCtx.HomeDir)
+
+			genesisTime, _ := cmd.Flags().GetString(FlagGenesisTime)
 
 			chainID, _ := cmd.Flags().GetString(flags.FlagChainID)
 			switch {
@@ -111,7 +119,8 @@ func InitCmd(mbm module.BasicManager) *cobra.Command {
 			// use os.Stat to check if the file exists
 			_, err = os.Stat(genFile)
 			if !overwrite && !os.IsNotExist(err) {
-				return fmt.Errorf("genesis.json file already exists: %v", genFile)
+				fmt.Printf("genesis.json file already exists: %v", genFile)
+				return nil
 			}
 
 			// Overwrites the SDK default denom for side-effects
@@ -134,6 +143,29 @@ func InitCmd(mbm module.BasicManager) *cobra.Command {
 				appGenesis, err = types.AppGenesisFromFile(genFile)
 				if err != nil {
 					return errorsmod.Wrap(err, "Failed to read genesis doc from file")
+				}
+			}
+
+			if genesisTime != "" {
+				switch {
+				case strings.HasPrefix(genesisTime, "+"):
+					du, err := time.ParseDuration(genesisTime[1:])
+					if err != nil {
+						return fmt.Errorf("invalid duation string %s: %w", genesisTime, err)
+					}
+					appGenesis.GenesisTime = time.Now().Add(du).Round(0).UTC()
+				case regexp.MustCompile(`^[0-9]+$`).MatchString(genesisTime):
+					unix, err := strconv.ParseInt(genesisTime, 10, 64)
+					if err != nil {
+						return fmt.Errorf("invalid unix timestamp %s: %w", genesisTime, err)
+					}
+					appGenesis.GenesisTime = time.Unix(unix, 0).Round(0).UTC()
+				default:
+					parsed, err := time.Parse(time.RFC3339, genesisTime)
+					if err != nil {
+						return fmt.Errorf("invalid RFC3339 timestamp %s: %w", genesisTime, err)
+					}
+					appGenesis.GenesisTime = parsed.Round(0).UTC()
 				}
 			}
 
@@ -171,8 +203,9 @@ func InitCmd(mbm module.BasicManager) *cobra.Command {
 	cmd.Flags().String(flags.FlagHome, app.DefaultNodeHome, "node's home directory")
 	cmd.Flags().BoolP(FlagOverwrite, "o", false, "overwrite the genesis.json file")
 	cmd.Flags().Bool(FlagRecover, false, "provide seed phrase to recover existing key instead of creating")
+	cmd.Flags().String(FlagGenesisTime, "", "genesis time(rfc3399/unix number/duration(e.g. +1h))")
 	cmd.Flags().String(flags.FlagChainID, "", "genesis file chain-id, if left blank will be randomly created")
-	cmd.Flags().String(FlagDefaultBondDenom, "bond", "genesis file default denomination, if left blank default value is 'stake'")
+	cmd.Flags().String(FlagDefaultBondDenom, "goat", "genesis file default denomination, if left blank default value is 'stake'")
 	cmd.Flags().Int64(flags.FlagInitHeight, 1, "specify the initial block height at genesis")
 
 	return cmd
