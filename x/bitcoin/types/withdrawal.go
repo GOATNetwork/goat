@@ -21,7 +21,7 @@ func (req *MsgInitializeWithdrawal) VoteSigDoc() []byte {
 
 func (req *MsgInitializeWithdrawal) Validate() error {
 	if req == nil {
-		return errors.New("empty MsgNewWithdrawal")
+		return errors.New("empty MsgInitializeWithdrawal")
 	}
 
 	if req.Proposal == nil {
@@ -48,6 +48,10 @@ func (req *MsgInitializeWithdrawal) Validate() error {
 }
 
 func (req *MsgFinalizeWithdrawal) Validate() error {
+	if req == nil {
+		return errors.New("empty MsgFinalizeWithdrawal")
+	}
+
 	if len(req.Txid) != sha256.Size {
 		return errors.New("invalid txid")
 	}
@@ -62,7 +66,7 @@ func (req *MsgFinalizeWithdrawal) Validate() error {
 
 func (req *MsgApproveCancellation) Validate() error {
 	if req == nil {
-		return errors.New("empty MsgNewWithdrawal")
+		return errors.New("empty MsgApproveCancellation")
 	}
 
 	if len(req.Id) == 0 {
