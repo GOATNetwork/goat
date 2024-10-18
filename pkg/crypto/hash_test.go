@@ -1,9 +1,10 @@
 package crypto
 
 import (
+	"bytes"
 	"crypto/rand"
+	"crypto/sha256"
 	"fmt"
-	"reflect"
 	"testing"
 
 	"github.com/btcsuite/btcd/btcutil"
@@ -31,7 +32,7 @@ func TestUint64LE(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Uint64LE(tt.args.n...); !reflect.DeepEqual(got, tt.want) {
+			if got := Uint64LE(tt.args.n...); !bytes.Equal(got, tt.want) {
 				t.Errorf("Uint64LE() = %v, want %v", got, tt.want)
 			}
 		})
@@ -44,8 +45,23 @@ func TestHash160Sum(t *testing.T) {
 		t.Run(fmt.Sprintf("Hash160-%d", i), func(t *testing.T) {
 			data := make([]byte, 32)
 			_, _ = rand.Read(data)
-			if got, want := Hash160Sum(data), btcutil.Hash160(data); !reflect.DeepEqual(got, want) {
-				t.Errorf("Hash160Sum() = %x, want %x", got, data)
+			if got, want := Hash160Sum(data), btcutil.Hash160(data); !bytes.Equal(got, want) {
+				t.Errorf("Hash160Sum() = %x, want %x", got, want)
+			}
+		})
+	}
+}
+
+func TestDoubleSHA256Sum(t *testing.T) {
+	t.Parallel()
+	for i := 0; i < 100; i++ {
+		t.Run(fmt.Sprintf("DoubleSHA256Sum-%d", i), func(t *testing.T) {
+			data := make([]byte, 32)
+			_, _ = rand.Read(data)
+			h1 := sha256.Sum256(data)
+			want := sha256.Sum256(h1[:])
+			if got := DoubleSHA256Sum(data); !bytes.Equal(got, want[:]) {
+				t.Errorf("DoubleSHA256Sum() = %x, want %x", got, want[:])
 			}
 		})
 	}
