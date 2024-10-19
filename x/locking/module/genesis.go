@@ -3,7 +3,6 @@ package locking
 import (
 	"cosmossdk.io/collections"
 	abci "github.com/cometbft/cometbft/abci/types"
-	tmcrypto "github.com/cometbft/cometbft/proto/tendermint/crypto"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/goatnetwork/goat/x/locking/keeper"
@@ -42,12 +41,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 			if err := k.ValidatorSet.Set(ctx, address, validator.Power); err != nil {
 				panic(err)
 			}
-			vs = append(vs, abci.ValidatorUpdate{
-				Power: int64(validator.Power),
-				PubKey: tmcrypto.PublicKey{
-					Sum: &tmcrypto.PublicKey_Secp256K1{Secp256K1: validator.Pubkey},
-				},
-			})
+			vs = append(vs, abci.ValidatorUpdate{Power: int64(validator.Power), PubKey: validator.CMPubkey()})
 		}
 
 		err = k.PowerRanking.Set(ctx, collections.Join(validator.Power, address))
