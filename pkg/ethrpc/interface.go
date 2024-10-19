@@ -8,7 +8,6 @@ import (
 	"github.com/ethereum/go-ethereum/params"
 )
 
-//go:generate mockgen -source=interface.go -destination=mock.go -package=ethrpc
 type EngineClient interface {
 	ForkchoiceUpdatedV3(ctx context.Context, update *engine.ForkchoiceStateV1, params *engine.PayloadAttributes) (engine.ForkChoiceResponse, error)
 	GetPayloadV4(ctx context.Context, payloadID engine.PayloadID) (*engine.ExecutionPayloadEnvelope, error)

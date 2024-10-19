@@ -7,11 +7,11 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common"
 	keepertest "github.com/goatnetwork/goat/testutil/keeper"
+	"github.com/goatnetwork/goat/testutil/mock"
 	"github.com/goatnetwork/goat/x/relayer/keeper"
-	"github.com/goatnetwork/goat/x/relayer/mock"
 	"github.com/goatnetwork/goat/x/relayer/types"
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/suite"
+	"go.uber.org/mock/gomock"
 )
 
 func TestKeeper(t *testing.T) {

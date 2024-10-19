@@ -4,13 +4,12 @@ import (
 	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/goatnetwork/goat/pkg/ethrpc"
 	keepertest "github.com/goatnetwork/goat/testutil/keeper"
+	"github.com/goatnetwork/goat/testutil/mock"
 	"github.com/goatnetwork/goat/x/goat/keeper"
-	"github.com/goatnetwork/goat/x/goat/mock"
 	"github.com/goatnetwork/goat/x/goat/types"
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/suite"
+	"go.uber.org/mock/gomock"
 )
 
 type KeeperTestSuite struct {
@@ -35,7 +34,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 	bitcoinKeeper := mock.NewMockBitcoinKeeper(ctl)
 	lockingKeeper := mock.NewMockLockingKeeper(ctl)
 	relayerKeeper := mock.NewMockRelayerKeeper(ctl)
-	ethClient := ethrpc.NewMockEngineClient(ctl)
+	ethClient := mock.NewMockEngineClient(ctl)
 
 	keeper, ctx, _ := keepertest.GoatKeeper(suite.T(),
 		bitcoinKeeper, lockingKeeper, relayerKeeper, accountKeeper, ethClient)

@@ -13,8 +13,8 @@ import (
 	"github.com/goatnetwork/goat/testutil/mock"
 	"github.com/goatnetwork/goat/x/locking/keeper"
 	"github.com/goatnetwork/goat/x/locking/types"
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/suite"
+	"go.uber.org/mock/gomock"
 )
 
 type KeeperTestSuite struct {

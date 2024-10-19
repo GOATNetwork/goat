@@ -111,4 +111,8 @@ tools-clean:
 	rm -f $(RUNSIM)
 	rm -f tools-stamp
 
-.PHONY: all tools tools-clean protoc buf protoc-gen-buf-check-breaking protoc-gen-buf-check-lint protoc-gen-gocosmos
+mocks:
+	@go install go.uber.org/mock/mockgen@v0.5.0
+	bash ./contrib/scripts/mockgen.sh
+
+.PHONY: all tools tools-clean protoc buf protoc-gen-buf-check-breaking protoc-gen-buf-check-lint protoc-gen-gocosmos mocks

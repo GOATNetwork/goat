@@ -7,9 +7,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/core/types/goattypes"
+	relayer "github.com/goatnetwork/goat/x/relayer/types"
 )
 
-//go:generate mockgen -source=expected_keepers.go -destination=../mock/keeper.go -package=mock
 type BitcoinKeeper interface {
 	DequeueBitcoinModuleTx(ctx context.Context) ([]*ethtypes.Transaction, error)
 	ProcessBridgeRequest(ctx context.Context, req goattypes.BridgeRequests) error
@@ -23,6 +23,12 @@ type LockingKeeper interface {
 type RelayerKeeper interface {
 	GetCurrentProposer(ctx context.Context) (sdk.AccAddress, error)
 	ProcessRelayerRequest(ctx context.Context, req goattypes.RelayerRequests) error
+	VerifyProposal(ctx context.Context, req relayer.IVoteMsg, verifyFn ...func(sigdoc []byte) error) (uint64, error)
+	VerifyNonProposal(ctx context.Context, req relayer.INonVoteMsg) (relayer.IRelayer, error)
+	UpdateRandao(ctx context.Context, req relayer.IVoteMsg) error
+	HasPubkey(ctx context.Context, raw []byte) (bool, error)
+	AddNewKey(ctx context.Context, raw []byte) error
+	SetProposalSeq(ctx context.Context, seq uint64) error
 }
 
 // AccountKeeper defines the expected interface for the Account module.
@@ -50,5 +56,6 @@ type AccountKeeper interface {
 
 	// AddressCodec returns the account address codec.
 	AddressCodec() address.Codec
-	// Methods imported from account should be defined here
+
+	RemoveAccount(ctx context.Context, acc sdk.AccountI)
 }

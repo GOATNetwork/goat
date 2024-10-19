@@ -10,7 +10,6 @@ import (
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 )
 
-//go:generate mockgen -source=types.go -destination=../mock/vote.go -package=mock IVoteMsg
 type IVoteMsg interface {
 	GetProposer() string
 	GetVote() *Votes
