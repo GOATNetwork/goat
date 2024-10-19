@@ -82,8 +82,7 @@ func (k Keeper) unlock(sdkctx sdktypes.Context, req *goattypes.UnlockRequest, pa
 		unlockTime = sdkctx.BlockTime().Add(param.ExitingDuration)
 
 		validator.Power = 0
-		switch validator.Status {
-		case types.Active, types.Pending:
+		if validator.Status == types.Active || validator.Status == types.Pending {
 			validator.Status = types.Inactive
 		}
 
@@ -93,33 +92,35 @@ func (k Keeper) unlock(sdkctx sdktypes.Context, req *goattypes.UnlockRequest, pa
 				return err
 			}
 		}
-		validator.Locking = updatedLocking
 	} else {
 		unlockTime = sdkctx.BlockTime().Add(param.UnlockDuration)
 
-		// remove if there is no locking
-		if lockingAmount.IsZero() {
-			if err := k.Locking.Remove(sdkctx, collections.Join(tokenAddr, valdtAddr)); err != nil {
-				return err
+		if validator.Status == types.Active || validator.Status == types.Pending {
+			// remove if there is no locking
+			if lockingAmount.IsZero() {
+				if err := k.Locking.Remove(sdkctx,
+					collections.Join(tokenAddr, valdtAddr)); err != nil {
+					return err
+				}
+			} else {
+				if err := k.Locking.Set(sdkctx,
+					collections.Join(tokenAddr, valdtAddr), lockingAmount); err != nil {
+					return err
+				}
 			}
-		} else {
-			if err := k.Locking.Set(sdkctx,
-				collections.Join(tokenAddr, valdtAddr), lockingAmount); err != nil {
-				return err
-			}
-		}
 
-		// insert the power to the ranking again
-		if validator.Power > 0 {
-			if err := k.PowerRanking.Set(sdkctx,
-				collections.Join(validator.Power, valdtAddr)); err != nil {
-				return err
+			// insert the power to the ranking again
+			if validator.Power > 0 {
+				if err := k.PowerRanking.Set(sdkctx,
+					collections.Join(validator.Power, valdtAddr)); err != nil {
+					return err
+				}
 			}
 		}
-		validator.Locking = updatedLocking
 	}
 
 	// update the validator state
+	validator.Locking = updatedLocking
 	if err := k.Validators.Set(sdkctx, valdtAddr, validator); err != nil {
 		return err
 	}

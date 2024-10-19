@@ -271,13 +271,12 @@ func (suite *KeeperTestSuite) TestUnlock() {
 		expectedLocking[address] = expectedLocking[address].Add(sdk.NewCoin(kv.Key.K1(), kv.Value))
 	}
 
-	suite.Require().Equal(len(expectedLocking), 2)
+	suite.Require().Equal(1, len(expectedLocking))
 	suite.Require().Equal(expectedLocking, map[string]sdk.Coins{
 		string(Addresses[2]): sdk.NewCoins(
 			sdk.NewCoin(NativeTokenDenom, math.NewIntFromUint64(1e18)),
 			sdk.NewCoin(GoatToekenDenom, math.NewIntFromBigInt(amount)),
 		),
-		string(Addresses[3]): sdk.NewCoins(sdk.NewCoin(NativeTokenDenom, math.NewIntFromUint64(1e19-1e4))),
 	})
 
 	powerIter, err := suite.Keeper.PowerRanking.Iterate(newctx, nil)
