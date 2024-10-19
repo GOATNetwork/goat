@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"context"
-	"errors"
 
 	"cosmossdk.io/collections"
 	errorsmod "cosmossdk.io/errors"
@@ -72,16 +71,9 @@ func (k Keeper) lock(ctx context.Context, target common.Address, coins sdktypes.
 				validator.Power += power.Uint64()
 			}
 
-			pair := collections.Join(coin.Denom, valdtAddr)
-			val, err := k.Locking.Get(sdkctx, pair)
-			if err != nil {
-				if !errors.Is(err, collections.ErrNotFound) {
-					return err
-				}
-				val = math.ZeroInt()
-			}
-
-			if err := k.Locking.Set(sdkctx, pair, val.Add(coin.Amount)); err != nil {
+			if err := k.Locking.Set(sdkctx,
+				collections.Join(coin.Denom, valdtAddr), validator.Locking.AmountOf(coin.Denom),
+			); err != nil {
 				return err
 			}
 		}
