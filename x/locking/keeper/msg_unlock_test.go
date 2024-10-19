@@ -143,7 +143,7 @@ func (suite *KeeperTestSuite) TestUnlock() {
 		// unlock
 		{Id: 0, Validator: common.Address(Addresses[0]), Recipient: Recipients[0], Token: common.Address{}, Amount: big.NewInt(1e17)},
 		// exit
-		{Id: 1, Validator: common.Address(Addresses[0]), Recipient: Recipients[0], Token: common.Address{}, Amount: big.NewInt(1e4)},
+		{Id: 1, Validator: common.Address(Addresses[0]), Recipient: Recipients[0], Token: common.Address{}, Amount: big.NewInt(1e18)},
 		// exit and was slashed
 		{Id: 2, Validator: common.Address(Addresses[1]), Recipient: Recipients[1], Token: common.Address{}, Amount: new(big.Int).SetUint64(1e19)},
 		// unlock
@@ -154,6 +154,9 @@ func (suite *KeeperTestSuite) TestUnlock() {
 		{Id: 5, Validator: common.Address(Addresses[5]), Recipient: Recipients[5], Token: common.Address{}, Amount: new(big.Int).SetUint64(1e18)},
 		// downgrade unlock
 		{Id: 6, Validator: common.Address(Addresses[3]), Recipient: Recipients[3], Token: common.Address{}, Amount: new(big.Int).SetUint64(1e4)},
+		// downgrade exit
+		{Id: 7, Validator: common.Address(Addresses[3]), Recipient: Recipients[3], Token: common.Address{}, Amount: new(big.Int).SetUint64(1e19 - 1e4)},
+		{Id: 8, Validator: common.Address(Addresses[3]), Recipient: Recipients[3], Token: common.Address{}, Amount: new(big.Int).SetUint64(1e4)},
 	}
 
 	err = suite.Keeper.Unlock(newctx, reqs)
@@ -180,6 +183,8 @@ func (suite *KeeperTestSuite) TestUnlock() {
 			{Id: reqs[2].Id, Token: reqs[2].Token[:], Recipient: reqs[2].Recipient[:], Amount: math.NewInt(1e18)},
 			{Id: reqs[4].Id, Token: reqs[4].Token[:], Recipient: reqs[4].Recipient[:], Amount: math.NewInt(1e18)},
 			{Id: reqs[5].Id, Token: reqs[5].Token[:], Recipient: reqs[5].Recipient[:], Amount: math.NewInt(1e18)},
+			{Id: reqs[7].Id, Token: reqs[7].Token[:], Recipient: reqs[7].Recipient[:], Amount: math.NewIntFromBigInt(reqs[7].Amount)},
+			{Id: reqs[8].Id, Token: reqs[8].Token[:], Recipient: reqs[8].Recipient[:], Amount: math.ZeroInt()},
 		},
 	}
 
@@ -194,18 +199,16 @@ func (suite *KeeperTestSuite) TestUnlock() {
 	Updated := []types.Validator{
 		// 0
 		{
-			Pubkey:    common.Hex2Bytes("0242d59fb617d2cb150966bf42c3c7e943f7194f82e41b68a12124d6c2d2f69ae2"),
+			Pubkey:    Validators[0].Pubkey,
 			Reward:    math.ZeroInt(),
 			GasReward: math.ZeroInt(),
 			Power:     0,
 			Status:    types.Inactive,
-			Locking: sdk.NewCoins(
-				sdk.NewCoin(NativeTokenDenom, math.NewIntFromUint64(1e18-1e4)),
-			),
+			Locking:   nil,
 		},
 		// 1
 		{
-			Pubkey:    common.Hex2Bytes("03a43c6d25cd52c8557e89a047f627d39315f1940f147ff8f191f2d058f33c1211"),
+			Pubkey:    Validators[1].Pubkey,
 			Reward:    math.ZeroInt(),
 			Power:     0,
 			GasReward: math.ZeroInt(),
@@ -216,7 +219,7 @@ func (suite *KeeperTestSuite) TestUnlock() {
 		},
 		// 2
 		{
-			Pubkey:    common.Hex2Bytes("02ae8db8dd5cc564b42d86ed353242ad0e0cfd1d95b65a172e445e3554c9bde9ae"),
+			Pubkey:    Validators[2].Pubkey,
 			Reward:    math.ZeroInt(),
 			Power:     200000,
 			GasReward: math.ZeroInt(),
@@ -228,18 +231,16 @@ func (suite *KeeperTestSuite) TestUnlock() {
 		},
 		// 3
 		{
-			Pubkey:      common.Hex2Bytes("02269670f94151626e04ecf71792cf7ff89bd5bd40b07a408c2a6a11e10085ef76"),
+			Pubkey:      Validators[3].Pubkey,
 			Reward:      math.ZeroInt(),
 			GasReward:   math.ZeroInt(),
-			Status:      types.Downgrade,
+			Status:      types.Inactive,
 			JailedUntil: now.Add(time.Hour),
-			Locking: sdk.NewCoins(
-				sdk.NewCoin(NativeTokenDenom, math.NewIntFromUint64(1e19-1e4)),
-			),
+			Locking:     nil,
 		},
 		// 4
 		{
-			Pubkey:    common.Hex2Bytes("037f812b3c1da7682afff4774ca7606405d81329a920dbc86c49762205489143d1"),
+			Pubkey:    Validators[4].Pubkey,
 			Reward:    math.ZeroInt(),
 			GasReward: math.ZeroInt(),
 			Status:    types.Inactive,
@@ -247,7 +248,7 @@ func (suite *KeeperTestSuite) TestUnlock() {
 		},
 		// 5
 		{
-			Pubkey:    common.Hex2Bytes("034d96d43803ff6b1579587b8a515066f7acebf5041a09706ee9f38a69f8f67ff6"),
+			Pubkey:    Validators[5].Pubkey,
 			Reward:    math.ZeroInt(),
 			GasReward: math.ZeroInt(),
 			Status:    types.Tombstoned,

@@ -82,7 +82,8 @@ func (k Keeper) unlock(sdkctx sdktypes.Context, req *goattypes.UnlockRequest, pa
 		unlockTime = sdkctx.BlockTime().Add(param.ExitingDuration)
 
 		validator.Power = 0
-		if validator.Status == types.Active || validator.Status == types.Pending {
+		switch validator.Status {
+		case types.Active, types.Pending, types.Downgrade:
 			validator.Status = types.Inactive
 		}
 
