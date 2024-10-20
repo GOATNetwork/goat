@@ -1,10 +1,8 @@
 FROM golang:1.23-alpine AS builder
 RUN apk add --no-cache curl make git libc-dev bash file gcc linux-headers eudev-dev
 WORKDIR /app
-COPY go.mod go.sum* ./
-RUN go mod download
 COPY . .
-RUN LEDGER_ENABLED=false LINK_STATICALLY=true BUILD_TAGS=muslc make build
+RUN --mount=type=cache,target=/go/pkg --mount=type=cache,target=/root/.cache/go-build LEDGER_ENABLED=false LINK_STATICALLY=true BUILD_TAGS=muslc make build
 RUN echo "Ensuring binary is statically linked ..."  \
     && file /app/build/goatd | grep "statically linked"
 
