@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# the geneis config file 
+# the genesis config file 
 # https://github.com/GOATNetwork/goat-contracts/blob/main/task/deploy/param.ts
 
 set -e
@@ -82,6 +82,7 @@ done
 
 ./build/goatd modgen bitcoin --home $1 \
   --min-deposit $(jq -r ".Consensus.Bridge.minDepositInSat" $2) \
+  --confirmation-number $(jq -r ".Consensus.Bridge.confirmationNumber" $2) \
   --network $(jq -r ".Bitcoin.network" $2) \
   --pubkey $(jq -r ".Consensus.Relayer.tssPubkey" $2) \
   $(jq -r ".Bitcoin.height" $2) $(jq -r ".Bitcoin.hash" $2)
