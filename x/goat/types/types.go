@@ -79,21 +79,7 @@ func (payload *ExecutionPayload) LogKeyVals() []any {
 	return []any{
 		"BlockNumber", payload.BlockNumber,
 		"BlockHash", hexutil.Encode(payload.BlockHash),
-		"ParentHash", hexutil.Encode(payload.ParentHash),
-		"FeeRecipient", hexutil.Encode(payload.FeeRecipient),
-		"StateRoot", hexutil.Encode(payload.StateRoot),
-		"ReceiptsRoot", hexutil.Encode(payload.ReceiptsRoot),
-		"LogsBloom", hexutil.Encode(payload.LogsBloom),
-		"PrevRandao", hexutil.Encode(payload.PrevRandao),
-		"GasLimit", payload.GasLimit,
-		"GasUsed", payload.GasUsed,
 		"Timestamp", payload.Timestamp,
-		"BeaconRoot", hexutil.Encode(payload.BeaconRoot),
-		"ExtraData", hexutil.Encode(payload.ExtraData),
-		"BaseFeePerGas", payload.BaseFeePerGas.BigInt(),
-		"BlobGasUsed", payload.BlobGasUsed,
-		"ExcessBlobGas", payload.ExcessBlobGas,
 		"len(Transactions)", len(payload.Transactions),
-		"len(Requests)", len(payload.Requests),
 	}
 }
