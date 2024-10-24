@@ -39,13 +39,14 @@ func (k Keeper) createValidator(ctx context.Context, req *goattypes.CreateReques
 		return err
 	}
 	if exists {
-		return errorsmod.Wrapf(sdkerrors.ErrLogic, "validator %x has been created", address.Bytes())
+		k.Logger().Warn("validator %x has been created", address.Bytes())
+		return nil
 	}
 
-	// check if account for the address exists
-	if acc := sdktypes.AccAddress(address); k.accountKeeper.HasAccount(ctx, acc) {
-		return errorsmod.Wrapf(sdkerrors.ErrLogic, "account %x has been created", address.Bytes())
-	} else {
+	// check if account for the validator exists
+	acc := sdktypes.AccAddress(address)
+	hasAccount := k.accountKeeper.HasAccount(ctx, acc)
+	if !hasAccount {
 		acc := k.accountKeeper.NewAccountWithAddress(ctx, acc)
 		if err := acc.SetPubKey(&secp256k1.PubKey{Key: pubkey.Key}); err != nil {
 			return errorsmod.Wrapf(sdkerrors.ErrLogic, "unable to set pubkey")
@@ -62,6 +63,14 @@ func (k Keeper) createValidator(ctx context.Context, req *goattypes.CreateReques
 		GasReward: math.ZeroInt(),
 		Status:    types.Pending,
 	}
+
+	// Don't allow conflict
+	// case for a relayer voter is using the same account
+	if hasAccount {
+		k.Logger().Warn("validator account %x has been created", address.Bytes())
+		validator.Status = types.Inactive
+	}
+
 	if err := k.Validators.Set(sdkctx, address, validator); err != nil {
 		return err
 	}
