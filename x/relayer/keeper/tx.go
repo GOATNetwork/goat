@@ -69,7 +69,8 @@ func (k msgServer) NewVoter(ctx context.Context, req *types.MsgNewVoterRequest) 
 	}
 
 	// add account
-	if !k.accountKeeper.HasAccount(sdkctx, addrRaw) {
+	hasAccount := k.accountKeeper.HasAccount(sdkctx, addrRaw)
+	if !hasAccount {
 		acc := k.accountKeeper.NewAccountWithAddress(sdkctx, addrRaw)
 		if err := acc.SetPubKey(&secp256k1.PubKey{Key: req.VoterTxKey}); err != nil {
 			return nil, errorsmod.Wrapf(sdkerrors.ErrLogic, "failed to set voter's account pubkey: %s", err.Error())
@@ -77,23 +78,29 @@ func (k msgServer) NewVoter(ctx context.Context, req *types.MsgNewVoterRequest) 
 		k.accountKeeper.SetAccount(sdkctx, acc)
 	}
 
-	voter.VoteKey = req.VoterBlsKey
-	voter.Status = types.VOTER_STATUS_ON_BOARDING
-	if err := k.Voters.Set(sdkctx, addrStr, voter); err != nil {
-		return nil, err
-	}
-
 	queue, err := k.Queue.Get(sdkctx)
 	if err != nil {
 		return nil, err
 	}
-	queue.OnBoarding = append(queue.OnBoarding, addrStr)
+
+	voter.VoteKey = req.VoterBlsKey
+	if hasAccount {
+		voter.Status = types.VOTER_STATUS_OFF_BOARDING
+		queue.OffBoarding = append(queue.OffBoarding, addrStr)
+		sdkctx.EventManager().EmitEvent(types.RemovingVoterEvent(addrStr))
+	} else {
+		voter.Status = types.VOTER_STATUS_ON_BOARDING
+		queue.OnBoarding = append(queue.OnBoarding, addrStr)
+		sdkctx.EventManager().EmitEvent(types.VoterBoardedEvent(relayer.GetProposer(), addrStr))
+	}
 
 	if err := k.Queue.Set(sdkctx, queue); err != nil {
 		return nil, err
 	}
 
-	sdkctx.EventManager().EmitEvent(types.VoterBoardedEvent(relayer.GetProposer(), addrStr))
+	if err := k.Voters.Set(sdkctx, addrStr, voter); err != nil {
+		return nil, err
+	}
 	return &types.MsgNewVoterResponse{}, nil
 }
 
