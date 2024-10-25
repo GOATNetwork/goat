@@ -53,7 +53,6 @@ func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
 		Address:       withdrawals1[2].Address,
 		RequestAmount: withdrawals1[2].Amount,
 		MaxTxPrice:    withdrawals1[2].TxPrice,
-		OutputScript:  common.Hex2Bytes("0020568f26443446207ebcc95050b21fec2f4fee24913cccec7d673acc9a856210ba"),
 		Status:        types.WITHDRAWAL_STATUS_PENDING,
 	})
 
@@ -79,7 +78,6 @@ func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
 		Address:       withdrawals1[2].Address,
 		RequestAmount: withdrawals1[2].Amount,
 		MaxTxPrice:    rbf1[0].TxPrice,
-		OutputScript:  common.Hex2Bytes("0020568f26443446207ebcc95050b21fec2f4fee24913cccec7d673acc9a856210ba"),
 		Status:        types.WITHDRAWAL_STATUS_PENDING,
 	})
 
@@ -89,7 +87,6 @@ func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
 		Address:       withdrawals2[0].Address,
 		RequestAmount: withdrawals2[0].Amount,
 		MaxTxPrice:    withdrawals2[0].TxPrice,
-		OutputScript:  common.Hex2Bytes("0014a5fcb99ffacf19af3d02907d02cff8eb778dad61"),
 		Status:        types.WITHDRAWAL_STATUS_PENDING,
 	})
 
@@ -109,7 +106,6 @@ func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
 		Address:       withdrawals1[2].Address,
 		RequestAmount: withdrawals1[2].Amount,
 		MaxTxPrice:    rbf1[0].TxPrice,
-		OutputScript:  common.Hex2Bytes("0020568f26443446207ebcc95050b21fec2f4fee24913cccec7d673acc9a856210ba"),
 		Status:        types.WITHDRAWAL_STATUS_PROCESSING,
 	})
 
@@ -127,7 +123,6 @@ func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
 		Address:       withdrawals1[2].Address,
 		RequestAmount: withdrawals1[2].Amount,
 		MaxTxPrice:    rbf1[0].TxPrice,
-		OutputScript:  common.Hex2Bytes("0020568f26443446207ebcc95050b21fec2f4fee24913cccec7d673acc9a856210ba"),
 		Status:        types.WITHDRAWAL_STATUS_PROCESSING,
 	})
 
@@ -137,7 +132,6 @@ func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
 		Address:       withdrawals2[0].Address,
 		RequestAmount: withdrawals2[0].Amount,
 		MaxTxPrice:    withdrawals2[0].TxPrice,
-		OutputScript:  common.Hex2Bytes("0014a5fcb99ffacf19af3d02907d02cff8eb778dad61"),
 		Status:        types.WITHDRAWAL_STATUS_CANCELING,
 	})
 }

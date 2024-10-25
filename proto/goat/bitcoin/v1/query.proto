@@ -100,7 +100,10 @@ message QueryWithdrawalRequest {
 
 // QueryWithdrawalResponse
 message QueryWithdrawalResponse {
-  Withdrawal withdrawal = 1;
+  Withdrawal withdrawal = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
 }
 
 // QueryBlockTipRequest

@@ -62,10 +62,6 @@ message Withdrawal {
   string address = 1;
   uint64 request_amount = 2;
   uint64 max_tx_price = 3;
-  // the expected output script
-  // we need to check if the withdrawal address is valid in advance
-  // so we don't have to calculate it again in the withdrawal proposal
-  bytes output_script = 4;
-  WithdrawalStatus status = 5;
-  WithdrawalReceipt receipt = 6;
+  WithdrawalStatus status = 4;
+  WithdrawalReceipt receipt = 5;
 }

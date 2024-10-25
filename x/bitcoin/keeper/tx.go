@@ -198,6 +198,16 @@ func (k msgServer) InitializeWithdrawal(ctx context.Context, req *types.MsgIniti
 	// Sat Per Byte
 	txPrice := float64(req.Proposal.TxFee) / float64(len(req.Proposal.NoWitnessTx))
 
+	// get the network config
+	param, err := k.Params.Get(sdkctx)
+	if err != nil {
+		return nil, err
+	}
+	netwk := types.BitcoinNetworks[param.NetworkName]
+	if netwk == nil {
+		return nil, errorsmod.Wrapf(sdkerrors.ErrAppConfig, "%s network is not defined", param.NetworkName)
+	}
+
 	for idx, wid := range req.Proposal.Id {
 		withdrawal, err := k.Withdrawals.Get(sdkctx, wid)
 		if err != nil {
@@ -213,7 +223,12 @@ func (k msgServer) InitializeWithdrawal(ctx context.Context, req *types.MsgIniti
 		}
 
 		txout := tx.TxOut[idx]
-		if !bytes.Equal(withdrawal.OutputScript, txout.PkScript) {
+		outputScript, err := types.DecodeBtcAddress(withdrawal.Address, netwk)
+		if err != nil { // It should not happen
+			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid address to process %d", wid)
+		}
+
+		if !bytes.Equal(outputScript, txout.PkScript) {
 			return nil, errorsmod.Wrapf(sdkerrors.ErrLogic, "witdhrawal %d script not matched", wid)
 		}
 

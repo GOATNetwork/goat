@@ -104,8 +104,7 @@ func (k Keeper) ProcessBridgeRequest(ctx context.Context, reqs goattypes.BridgeR
 	var rejecting []uint64
 	for _, v := range reqs.Withdraws {
 		// reject if we have an invalid address
-		script, err := types.DecodeBtcAddress(v.Address, types.BitcoinNetworks[param.NetworkName])
-		if err != nil {
+		if _, err := types.DecodeBtcAddress(v.Address, types.BitcoinNetworks[param.NetworkName]);err != nil {
 			k.Logger().Info("invalid withdrawal address", "id", v.Id, "address", v.Address, "err", err.Error())
 			rejecting = append(rejecting, v.Id)
 			continue
@@ -115,7 +114,6 @@ func (k Keeper) ProcessBridgeRequest(ctx context.Context, reqs goattypes.BridgeR
 			Address:       v.Address,
 			RequestAmount: v.Amount,
 			MaxTxPrice:    v.TxPrice,
-			OutputScript:  script,
 			Status:        types.WITHDRAWAL_STATUS_PENDING,
 		}); err != nil {
 			return err

@@ -5,9 +5,7 @@ import (
 	"encoding/json"
 
 	"cosmossdk.io/collections"
-	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/txscript"
 	"github.com/ethereum/go-ethereum/common"
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 	"github.com/goatnetwork/goat/x/bitcoin/keeper"
@@ -175,14 +173,8 @@ func (suite *KeeperTestSuite) TestMsgWithdrawal() {
 			if idx%2 == 0 {
 				status = types.WITHDRAWAL_STATUS_CANCELING
 			}
-			decoded, err := btcutil.DecodeAddress(address, types.BitcoinNetworks["regtest"])
-			suite.Require().NoError(err)
-			script, err := txscript.PayToAddrScript(decoded)
-			suite.Require().NoError(err)
-
 			wd := types.Withdrawal{
 				Address:       address,
-				OutputScript:  script,
 				RequestAmount: 1e3,
 				MaxTxPrice:    5,
 				Status:        status,
@@ -291,14 +283,8 @@ func (suite *KeeperTestSuite) TestMsgApproveCancellation() {
 
 	expected := []types.Withdrawal{}
 	for idx, address := range withdrawals {
-		decoded, err := btcutil.DecodeAddress(address, types.BitcoinNetworks["regtest"])
-		suite.Require().NoError(err)
-		script, err := txscript.PayToAddrScript(decoded)
-		suite.Require().NoError(err)
-
 		wd := types.Withdrawal{
 			Address:       address,
-			OutputScript:  script,
 			RequestAmount: 1e3,
 			MaxTxPrice:    5,
 			Status:        types.WITHDRAWAL_STATUS_CANCELING,
