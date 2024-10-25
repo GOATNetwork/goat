@@ -46,6 +46,7 @@ func Goat() *cobra.Command {
 					ExcessBlobGas: *header.ExcessBlobGas,
 					Requests:      nil,
 				}
+				serverCtx.Logger.Info("Eth genesis", "module", types.ModuleName, "hash", header.Hash().String())
 				return nil
 			})
 		},
