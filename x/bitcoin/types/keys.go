@@ -23,8 +23,5 @@ var (
 	EthTxNonceKey   = collections.NewPrefix(6)
 	WithdrawalKey   = collections.NewPrefix(7)
 	ProcessingKey   = collections.NewPrefix(8)
+	ProcessIDKey    = collections.NewPrefix(9)
 )
-
-func KeyPrefix(p string) []byte {
-	return []byte(p)
-}

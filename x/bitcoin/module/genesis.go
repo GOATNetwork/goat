@@ -50,35 +50,28 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 		panic(err)
 	}
 
+	// Deposits
 	for _, item := range genState.Deposits {
 		if err := k.Deposited.Set(ctx, collections.Join(item.Txid, item.Txout), item.Amount); err != nil {
 			panic(err)
 		}
 	}
 
-	processing := make(map[string][]uint64)
+	// withdrawals
 	for _, item := range genState.Withdrawals {
 		if err := k.Withdrawals.Set(ctx, item.Id, item.Withdrawal); err != nil {
 			panic(err)
 		}
-
-		if item.Withdrawal.Status == types.WITHDRAWAL_STATUS_PROCESSING {
-			if item.Withdrawal.Receipt == nil {
-				panic(fmt.Sprintf("processing withdrawal %d don't have receipt", item.Id))
-			}
-
-			txid := string(item.Withdrawal.Receipt.Txid)
-			if _, ok := processing[txid]; !ok {
-				processing[txid] = make([]uint64, 0, 1)
-			}
-			processing[txid] = append(processing[txid], item.Id)
-		}
 	}
 
-	for txid, ids := range processing {
-		if err := k.Processing.Set(ctx, []byte(txid), types.WithdrawalIds{Id: ids}); err != nil {
+	// processing
+	for _, item := range genState.Processing {
+		if err := k.Processing.Set(ctx, item.Id, item.Processing); err != nil {
 			panic(err)
 		}
+	}
+	if err := k.ProcessID.Set(ctx, genState.ProcessingId); err != nil {
+		panic(err)
 	}
 }
 
@@ -153,7 +146,7 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 
 	// withdrawals
 	{
-		iter, err := k.Withdrawals.Iterate(ctx, nil)
+		iter, err := k.Withdrawals.Iterate(ctx, (&collections.Range[uint64]{}).Descending())
 		if err != nil {
 			panic(err)
 		}
@@ -168,6 +161,31 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 			genesis.Withdrawals = append(genesis.Withdrawals, types.WithdrawalGenesis{
 				Id:         kv.Key,
 				Withdrawal: kv.Value,
+			})
+		}
+	}
+
+	// processing
+	{
+		genesis.ProcessingId, err = k.ProcessID.Peek(ctx)
+		if err != nil {
+			panic(err)
+		}
+
+		iter, err := k.Processing.Iterate(ctx, (&collections.Range[uint64]{}).Descending())
+		if err != nil {
+			panic(err)
+		}
+		defer iter.Close()
+
+		for ; iter.Valid(); iter.Next() {
+			kv, err := iter.KeyValue()
+			if err != nil {
+				panic(err)
+			}
+			genesis.Processing = append(genesis.Processing, types.ProcessingGenesis{
+				Id:         kv.Key,
+				Processing: kv.Value,
 			})
 		}
 	}

@@ -19,13 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Msg_NewBlockHashes_FullMethodName       = "/goat.bitcoin.v1.Msg/NewBlockHashes"
-	Msg_NewDeposits_FullMethodName          = "/goat.bitcoin.v1.Msg/NewDeposits"
-	Msg_NewPubkey_FullMethodName            = "/goat.bitcoin.v1.Msg/NewPubkey"
-	Msg_InitializeWithdrawal_FullMethodName = "/goat.bitcoin.v1.Msg/InitializeWithdrawal"
-	Msg_FinalizeWithdrawal_FullMethodName   = "/goat.bitcoin.v1.Msg/FinalizeWithdrawal"
-	Msg_ApproveCancellation_FullMethodName  = "/goat.bitcoin.v1.Msg/ApproveCancellation"
-	Msg_NewConsolidation_FullMethodName     = "/goat.bitcoin.v1.Msg/NewConsolidation"
+	Msg_NewBlockHashes_FullMethodName      = "/goat.bitcoin.v1.Msg/NewBlockHashes"
+	Msg_NewDeposits_FullMethodName         = "/goat.bitcoin.v1.Msg/NewDeposits"
+	Msg_NewPubkey_FullMethodName           = "/goat.bitcoin.v1.Msg/NewPubkey"
+	Msg_ProcessWithdrawal_FullMethodName   = "/goat.bitcoin.v1.Msg/ProcessWithdrawal"
+	Msg_ReplaceWithdrawal_FullMethodName   = "/goat.bitcoin.v1.Msg/ReplaceWithdrawal"
+	Msg_FinalizeWithdrawal_FullMethodName  = "/goat.bitcoin.v1.Msg/FinalizeWithdrawal"
+	Msg_ApproveCancellation_FullMethodName = "/goat.bitcoin.v1.Msg/ApproveCancellation"
+	Msg_NewConsolidation_FullMethodName    = "/goat.bitcoin.v1.Msg/NewConsolidation"
 )
 
 // MsgClient is the client API for Msg service.
@@ -49,8 +50,8 @@ type MsgClient interface {
 	// NewPubkey adds new deposit public key
 	// ** it requires off-chain vote by relayer group
 	NewPubkey(ctx context.Context, in *MsgNewPubkey, opts ...grpc.CallOption) (*MsgNewPubkeyResponse, error)
-	// InitializeWithdrawal submits a non-signed raw tx and its vote for the
-	// withdrawal requests This is the first step to process withdrawals
+	// ProcessWithdrawal submits a non-signed raw tx and its vote for the
+	// withdrawal requests. This is the first step to process withdrawals
 	// ** it requires off-chain vote by relayer group
 	// ** the output index and withdrawal id list are in one-to-one correspondence
 	// ** the tx price should not be larger than withdrawal request
@@ -60,7 +61,13 @@ type MsgClient interface {
 	// signed transaction and submit the transaction to the bitcoin chain when the
 	// signing process is finished Since the signing is an off chain process, so
 	// relayer proposer doesn't need to submit the signed transaction to the chain
-	InitializeWithdrawal(ctx context.Context, in *MsgInitializeWithdrawal, opts ...grpc.CallOption) (*MsgInitializeWithdrawalResponse, error)
+	ProcessWithdrawal(ctx context.Context, in *MsgProcessWithdrawal, opts ...grpc.CallOption) (*MsgProcessWithdrawalResponse, error)
+	// ReplaceWithdrawal replaces a withdrawal by relayer
+	// ** the output for the withdrawal should be not changed, but you can change
+	// the value
+	// ** the new tx price should not be larger than before
+	// ** it requires off-chain vote by relayer group
+	ReplaceWithdrawal(ctx context.Context, in *MsgReplaceWithdrawal, opts ...grpc.CallOption) (*MsgReplaceWithdrawalResponse, error)
 	// FinalizeWithdrawal finlizes withdrawals and informs the chain to create the
 	// withdrawal receipts This is the final step to process withdrawals
 	//
@@ -112,10 +119,20 @@ func (c *msgClient) NewPubkey(ctx context.Context, in *MsgNewPubkey, opts ...grp
 	return out, nil
 }
 
-func (c *msgClient) InitializeWithdrawal(ctx context.Context, in *MsgInitializeWithdrawal, opts ...grpc.CallOption) (*MsgInitializeWithdrawalResponse, error) {
+func (c *msgClient) ProcessWithdrawal(ctx context.Context, in *MsgProcessWithdrawal, opts ...grpc.CallOption) (*MsgProcessWithdrawalResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(MsgInitializeWithdrawalResponse)
-	err := c.cc.Invoke(ctx, Msg_InitializeWithdrawal_FullMethodName, in, out, cOpts...)
+	out := new(MsgProcessWithdrawalResponse)
+	err := c.cc.Invoke(ctx, Msg_ProcessWithdrawal_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) ReplaceWithdrawal(ctx context.Context, in *MsgReplaceWithdrawal, opts ...grpc.CallOption) (*MsgReplaceWithdrawalResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MsgReplaceWithdrawalResponse)
+	err := c.cc.Invoke(ctx, Msg_ReplaceWithdrawal_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -173,8 +190,8 @@ type MsgServer interface {
 	// NewPubkey adds new deposit public key
 	// ** it requires off-chain vote by relayer group
 	NewPubkey(context.Context, *MsgNewPubkey) (*MsgNewPubkeyResponse, error)
-	// InitializeWithdrawal submits a non-signed raw tx and its vote for the
-	// withdrawal requests This is the first step to process withdrawals
+	// ProcessWithdrawal submits a non-signed raw tx and its vote for the
+	// withdrawal requests. This is the first step to process withdrawals
 	// ** it requires off-chain vote by relayer group
 	// ** the output index and withdrawal id list are in one-to-one correspondence
 	// ** the tx price should not be larger than withdrawal request
@@ -184,7 +201,13 @@ type MsgServer interface {
 	// signed transaction and submit the transaction to the bitcoin chain when the
 	// signing process is finished Since the signing is an off chain process, so
 	// relayer proposer doesn't need to submit the signed transaction to the chain
-	InitializeWithdrawal(context.Context, *MsgInitializeWithdrawal) (*MsgInitializeWithdrawalResponse, error)
+	ProcessWithdrawal(context.Context, *MsgProcessWithdrawal) (*MsgProcessWithdrawalResponse, error)
+	// ReplaceWithdrawal replaces a withdrawal by relayer
+	// ** the output for the withdrawal should be not changed, but you can change
+	// the value
+	// ** the new tx price should not be larger than before
+	// ** it requires off-chain vote by relayer group
+	ReplaceWithdrawal(context.Context, *MsgReplaceWithdrawal) (*MsgReplaceWithdrawalResponse, error)
 	// FinalizeWithdrawal finlizes withdrawals and informs the chain to create the
 	// withdrawal receipts This is the final step to process withdrawals
 	//
@@ -215,8 +238,11 @@ func (UnimplementedMsgServer) NewDeposits(context.Context, *MsgNewDeposits) (*Ms
 func (UnimplementedMsgServer) NewPubkey(context.Context, *MsgNewPubkey) (*MsgNewPubkeyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method NewPubkey not implemented")
 }
-func (UnimplementedMsgServer) InitializeWithdrawal(context.Context, *MsgInitializeWithdrawal) (*MsgInitializeWithdrawalResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method InitializeWithdrawal not implemented")
+func (UnimplementedMsgServer) ProcessWithdrawal(context.Context, *MsgProcessWithdrawal) (*MsgProcessWithdrawalResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ProcessWithdrawal not implemented")
+}
+func (UnimplementedMsgServer) ReplaceWithdrawal(context.Context, *MsgReplaceWithdrawal) (*MsgReplaceWithdrawalResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReplaceWithdrawal not implemented")
 }
 func (UnimplementedMsgServer) FinalizeWithdrawal(context.Context, *MsgFinalizeWithdrawal) (*MsgFinalizeWithdrawalResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FinalizeWithdrawal not implemented")
@@ -302,20 +328,38 @@ func _Msg_NewPubkey_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_InitializeWithdrawal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgInitializeWithdrawal)
+func _Msg_ProcessWithdrawal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgProcessWithdrawal)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).InitializeWithdrawal(ctx, in)
+		return srv.(MsgServer).ProcessWithdrawal(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_InitializeWithdrawal_FullMethodName,
+		FullMethod: Msg_ProcessWithdrawal_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).InitializeWithdrawal(ctx, req.(*MsgInitializeWithdrawal))
+		return srv.(MsgServer).ProcessWithdrawal(ctx, req.(*MsgProcessWithdrawal))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_ReplaceWithdrawal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgReplaceWithdrawal)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).ReplaceWithdrawal(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_ReplaceWithdrawal_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).ReplaceWithdrawal(ctx, req.(*MsgReplaceWithdrawal))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -394,8 +438,12 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_NewPubkey_Handler,
 		},
 		{
-			MethodName: "InitializeWithdrawal",
-			Handler:    _Msg_InitializeWithdrawal_Handler,
+			MethodName: "ProcessWithdrawal",
+			Handler:    _Msg_ProcessWithdrawal_Handler,
+		},
+		{
+			MethodName: "ReplaceWithdrawal",
+			Handler:    _Msg_ReplaceWithdrawal_Handler,
 		},
 		{
 			MethodName: "FinalizeWithdrawal",

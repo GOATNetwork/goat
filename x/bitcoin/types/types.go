@@ -1,10 +1,11 @@
 package types
 
 const (
-	NewPubkeyMethodSigName            = "Bitcoin/NewPubkey"
-	NewBlocksMethodSigName            = "Bitcoin/NewBlocks"
-	InitializeWithdrawalMethodSigName = "Bitcoin/InitializeWithdrawal"
-	NewConsolidationMethodSigName     = "Bitcoin/NewConsolidation"
+	NewPubkeyMethodSigName         = "Bitcoin/NewPubkey"
+	NewBlocksMethodSigName         = "Bitcoin/NewBlocks"
+	ProcessWithdrawalMethodSigName = "Bitcoin/ProcessWithdrawal"
+	ReplaceWithdrawalMethodSigName = "Bitcoin/ReplaceWithdrawal"
+	NewConsolidationMethodSigName  = "Bitcoin/NewConsolidation"
 )
 
 const (

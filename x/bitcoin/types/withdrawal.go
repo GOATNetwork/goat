@@ -8,43 +8,72 @@ import (
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 )
 
-func (req *MsgInitializeWithdrawal) MethodName() string {
-	return InitializeWithdrawalMethodSigName
+func (req *MsgProcessWithdrawal) MethodName() string {
+	return ProcessWithdrawalMethodSigName
 }
 
-func (req *MsgInitializeWithdrawal) VoteSigDoc() []byte {
-	ids := goatcrypto.Uint64LE(req.Proposal.Id...)
-	fee := goatcrypto.Uint64LE(req.Proposal.TxFee)
-	tx := goatcrypto.SHA256Sum(req.Proposal.NoWitnessTx)
+func (req *MsgProcessWithdrawal) VoteSigDoc() []byte {
+	ids := goatcrypto.Uint64LE(req.Id...)
+	fee := goatcrypto.Uint64LE(req.TxFee)
+	tx := goatcrypto.SHA256Sum(req.NoWitnessTx)
 	return slices.Concat(ids, tx, fee)
 }
 
-func (req *MsgInitializeWithdrawal) Validate() error {
+func (req *MsgProcessWithdrawal) Validate() error {
 	if req == nil {
-		return errors.New("empty MsgInitializeWithdrawal")
+		return errors.New("empty MsgProcessWithdrawal")
 	}
 
-	if req.Proposal == nil {
-		return errors.New("empty proposal")
+	if req.Vote == nil {
+		return errors.New("empty Vote")
 	}
 
-	if txSize := len(req.Proposal.NoWitnessTx); txSize < MinBtcTxSize || txSize > MaxAllowedBtcTxSize {
+	if txSize := len(req.NoWitnessTx); txSize < MinBtcTxSize || txSize > MaxAllowedBtcTxSize {
 		return errors.New("invalid non-witness tx size")
 	}
 
-	if req.Proposal.TxFee == 0 {
+	if req.TxFee == 0 {
 		return errors.New("invalid tx fee")
 	}
 
-	if len(req.Proposal.Id) == 0 {
+	if len(req.Id) == 0 {
 		return errors.New("no withdrawal ids to process")
 	}
 
-	if len(req.Proposal.Id) > 32 {
+	if len(req.Id) > 32 {
 		return errors.New("associate with too many withdrawal")
 	}
 
 	return nil
+}
+
+func (req *MsgReplaceWithdrawal) MethodName() string {
+	return ReplaceWithdrawalMethodSigName
+}
+
+func (req *MsgReplaceWithdrawal) Validate() error {
+	if req == nil {
+		return errors.New("empty MsgReplaceWithdrawal")
+	}
+
+	if req.Vote == nil {
+		return errors.New("empty Vote")
+	}
+
+	if txSize := len(req.NewNoWitnessTx); txSize < MinBtcTxSize || txSize > MaxAllowedBtcTxSize {
+		return errors.New("invalid non-witness tx size")
+	}
+
+	if req.NewTxFee == 0 {
+		return errors.New("invalid tx fee")
+	}
+	return nil
+}
+
+func (req *MsgReplaceWithdrawal) VoteSigDoc() []byte {
+	ids := goatcrypto.Uint64LE(req.Pid, req.NewTxFee)
+	tx := goatcrypto.SHA256Sum(req.NewNoWitnessTx)
+	return slices.Concat(ids, tx)
 }
 
 func (req *MsgFinalizeWithdrawal) Validate() error {

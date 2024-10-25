@@ -13,6 +13,9 @@ func (req *MsgNewPubkey) Validate() error {
 	if req == nil {
 		return errors.New("empty MsgNewKey")
 	}
+	if req.Vote == nil {
+		return errors.New("empty Vote")
+	}
 	if err := req.Pubkey.Validate(); err != nil {
 		return err
 	}
@@ -33,6 +36,10 @@ func (req *MsgNewPubkey) VoteSigDoc() []byte {
 func (req *MsgNewBlockHashes) Validate() error {
 	if req == nil {
 		return errors.New("empty MsgNewBlockHashes")
+	}
+
+	if req.Vote == nil {
+		return errors.New("empty Vote")
 	}
 
 	if req.StartBlockNumber == 0 {

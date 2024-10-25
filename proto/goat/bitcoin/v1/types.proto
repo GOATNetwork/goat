@@ -1,14 +1,11 @@
 syntax = "proto3";
 package goat.bitcoin.v1;
 
+import "amino/amino.proto";
 import "goat/bitcoin/v1/bitcoin.proto";
+import "gogoproto/gogo.proto";
 
 option go_package = "github.com/goatnetwork/goat/x/bitcoin/types";
-
-// WithdrawalIds
-message WithdrawalIds {
-  repeated uint64 id = 1;
-}
 
 // DepositReceipt
 message DepositExecReceipt {
@@ -30,4 +27,24 @@ message EthTxQueue {
   repeated DepositExecReceipt deposits = 2;
   repeated WithdrawalExecReceipt paid_withdrawals = 3;
   repeated uint64 rejected_withdrawals = 4;
+}
+
+// TxOuptut
+message TxOuptut {
+  repeated uint64 values = 3;
+}
+
+// Processing
+message Processing {
+  // txid list, the last item is the latest tx
+  repeated bytes txid = 1;
+  // the actual amount for the tx
+  repeated TxOuptut output = 2 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  // the withdrawal id list, should not be updated
+  repeated uint64 withdrawals = 3;
+  // fee in satoshi
+  uint64 fee = 4;
 }

@@ -31,8 +31,8 @@ service Msg {
   // ** it requires off-chain vote by relayer group
   rpc NewPubkey(MsgNewPubkey) returns (MsgNewPubkeyResponse);
 
-  // InitializeWithdrawal submits a non-signed raw tx and its vote for the
-  // withdrawal requests This is the first step to process withdrawals
+  // ProcessWithdrawal submits a non-signed raw tx and its vote for the
+  // withdrawal requests. This is the first step to process withdrawals
   // ** it requires off-chain vote by relayer group
   // ** the output index and withdrawal id list are in one-to-one correspondence
   // ** the tx price should not be larger than withdrawal request
@@ -42,7 +42,14 @@ service Msg {
   // signed transaction and submit the transaction to the bitcoin chain when the
   // signing process is finished Since the signing is an off chain process, so
   // relayer proposer doesn't need to submit the signed transaction to the chain
-  rpc InitializeWithdrawal(MsgInitializeWithdrawal) returns (MsgInitializeWithdrawalResponse);
+  rpc ProcessWithdrawal(MsgProcessWithdrawal) returns (MsgProcessWithdrawalResponse);
+
+  // ReplaceWithdrawal replaces a withdrawal by relayer
+  // ** the output for the withdrawal should be not changed, but you can change
+  // the value
+  // ** the new tx price should not be larger than before
+  // ** it requires off-chain vote by relayer group
+  rpc ReplaceWithdrawal(MsgReplaceWithdrawal) returns (MsgReplaceWithdrawalResponse);
 
   // FinalizeWithdrawal finlizes withdrawals and informs the chain to create the
   // withdrawal receipts This is the final step to process withdrawals
@@ -105,18 +112,40 @@ message MsgNewPubkey {
 // MsgNewPubkeyResponse is the Msg/NewPubkey response type.
 message MsgNewPubkeyResponse {}
 
-// MsgNewWithdrawal
-message MsgInitializeWithdrawal {
+// MsgProcessWithdrawal
+message MsgProcessWithdrawal {
   option (cosmos.msg.v1.signer) = "proposer";
-  option (amino.name) = "goat/x/bitcoin/MsgNewWithdrawal";
+  option (amino.name) = "goat/x/bitcoin/MsgProcessWithdrawal";
 
   string proposer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   goat.relayer.v1.Votes vote = 2;
-  WithdrawalProposal proposal = 3;
+  // the withdraw id list
+  repeated uint64 id = 3;
+  bytes no_witness_tx = 4;
+  // tx fee in satoshi
+  uint64 tx_fee = 5;
 }
 
-// MsgNewWithdrawalResponse
-message MsgInitializeWithdrawalResponse {}
+// MsgProcessWithdrawalResponse
+message MsgProcessWithdrawalResponse {}
+
+// MsgReplaceWithdrawal
+message MsgReplaceWithdrawal {
+  option (cosmos.msg.v1.signer) = "proposer";
+  option (amino.name) = "goat/x/bitcoin/MsgReplaceWithdrawal";
+
+  string proposer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  goat.relayer.v1.Votes vote = 2;
+  // the process id of the withdrawals to replace
+  uint64 pid = 3;
+  // the new tx for the withdrawal proposal
+  bytes new_no_witness_tx = 4;
+  // tx fee in satoshi
+  uint64 new_tx_fee = 5;
+}
+
+// MsgReplaceWithdrawalResponse
+message MsgReplaceWithdrawalResponse {}
 
 // MsgFinalizeWithdrawal
 message MsgFinalizeWithdrawal {
@@ -124,16 +153,18 @@ message MsgFinalizeWithdrawal {
   option (amino.name) = "goat/x/bitcoin/MsgFinalizeWithdrawal";
 
   string proposer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  // the txid for the withdrawal proposal
-  bytes txid = 2;
+  // the process id of the withdrawals to finalize
+  uint64 pid = 2;
+  // the final confirmed txid for the withdrawal proposal
+  bytes txid = 3;
   // block_number the block number that transaction located at
-  uint64 block_number = 3;
+  uint64 block_number = 4;
   // tx_index is the index of transaction in the block
-  uint32 tx_index = 4;
+  uint32 tx_index = 5;
   // intermediate proof is the proof without the txid and merkel root
-  bytes intermediate_proof = 5;
+  bytes intermediate_proof = 6;
   // block_header is the raw bitcoin block header bytes
-  bytes block_header = 6;
+  bytes block_header = 7;
 }
 
 // MsgFinalizeWithdrawalResponse

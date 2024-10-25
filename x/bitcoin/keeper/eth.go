@@ -128,7 +128,7 @@ func (k Keeper) ProcessBridgeRequest(ctx context.Context, reqs goattypes.BridgeR
 		}); err != nil {
 			return err
 		}
-		events = append(events, types.NewWithdrawalRequestEvent(v.Address, v.Id, v.TxPrice, v.Amount))
+		events = append(events, types.NewWithdrawalInitEvent(v.Address, v.Id, v.TxPrice, v.Amount))
 	}
 
 	if len(rejecting) > 0 {
@@ -155,7 +155,7 @@ func (k Keeper) ProcessBridgeRequest(ctx context.Context, reqs goattypes.BridgeR
 		if err := k.Withdrawals.Set(ctx, v.Id, withdrawal); err != nil {
 			return err
 		}
-		events = append(events, types.NewWithdrawalReplaceEvent(v.Id, v.TxPrice))
+		events = append(events, types.NewWithdrawalUserReplaceEvent(v.Id, v.TxPrice))
 	}
 
 	for _, v := range reqs.Cancel1s {
@@ -173,7 +173,7 @@ func (k Keeper) ProcessBridgeRequest(ctx context.Context, reqs goattypes.BridgeR
 		if err := k.Withdrawals.Set(ctx, v.Id, withdrawal); err != nil {
 			return err
 		}
-		events = append(events, types.NewWithdrawalCancellationEvent(v.Id))
+		events = append(events, types.NewWithdrawalUserCancelEvent(v.Id))
 	}
 
 	sdktypes.UnwrapSDKContext(ctx).EventManager().EmitEvents(events)

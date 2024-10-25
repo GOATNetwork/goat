@@ -339,25 +339,29 @@ func (m *MsgNewPubkeyResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgNewPubkeyResponse proto.InternalMessageInfo
 
-// MsgNewWithdrawal
-type MsgInitializeWithdrawal struct {
-	Proposer string              `protobuf:"bytes,1,opt,name=proposer,proto3" json:"proposer,omitempty"`
-	Vote     *types.Votes        `protobuf:"bytes,2,opt,name=vote,proto3" json:"vote,omitempty"`
-	Proposal *WithdrawalProposal `protobuf:"bytes,3,opt,name=proposal,proto3" json:"proposal,omitempty"`
+// MsgProcessWithdrawal
+type MsgProcessWithdrawal struct {
+	Proposer string       `protobuf:"bytes,1,opt,name=proposer,proto3" json:"proposer,omitempty"`
+	Vote     *types.Votes `protobuf:"bytes,2,opt,name=vote,proto3" json:"vote,omitempty"`
+	// the withdraw id list
+	Id          []uint64 `protobuf:"varint,3,rep,packed,name=id,proto3" json:"id,omitempty"`
+	NoWitnessTx []byte   `protobuf:"bytes,4,opt,name=no_witness_tx,json=noWitnessTx,proto3" json:"no_witness_tx,omitempty"`
+	// tx fee in satoshi
+	TxFee uint64 `protobuf:"varint,5,opt,name=tx_fee,json=txFee,proto3" json:"tx_fee,omitempty"`
 }
 
-func (m *MsgInitializeWithdrawal) Reset()         { *m = MsgInitializeWithdrawal{} }
-func (m *MsgInitializeWithdrawal) String() string { return proto.CompactTextString(m) }
-func (*MsgInitializeWithdrawal) ProtoMessage()    {}
-func (*MsgInitializeWithdrawal) Descriptor() ([]byte, []int) {
+func (m *MsgProcessWithdrawal) Reset()         { *m = MsgProcessWithdrawal{} }
+func (m *MsgProcessWithdrawal) String() string { return proto.CompactTextString(m) }
+func (*MsgProcessWithdrawal) ProtoMessage()    {}
+func (*MsgProcessWithdrawal) Descriptor() ([]byte, []int) {
 	return fileDescriptor_061207c379e1a1b2, []int{6}
 }
-func (m *MsgInitializeWithdrawal) XXX_Unmarshal(b []byte) error {
+func (m *MsgProcessWithdrawal) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgInitializeWithdrawal) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgProcessWithdrawal) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgInitializeWithdrawal.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgProcessWithdrawal.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -367,55 +371,69 @@ func (m *MsgInitializeWithdrawal) XXX_Marshal(b []byte, deterministic bool) ([]b
 		return b[:n], nil
 	}
 }
-func (m *MsgInitializeWithdrawal) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgInitializeWithdrawal.Merge(m, src)
+func (m *MsgProcessWithdrawal) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgProcessWithdrawal.Merge(m, src)
 }
-func (m *MsgInitializeWithdrawal) XXX_Size() int {
+func (m *MsgProcessWithdrawal) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgInitializeWithdrawal) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgInitializeWithdrawal.DiscardUnknown(m)
+func (m *MsgProcessWithdrawal) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgProcessWithdrawal.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgInitializeWithdrawal proto.InternalMessageInfo
+var xxx_messageInfo_MsgProcessWithdrawal proto.InternalMessageInfo
 
-func (m *MsgInitializeWithdrawal) GetProposer() string {
+func (m *MsgProcessWithdrawal) GetProposer() string {
 	if m != nil {
 		return m.Proposer
 	}
 	return ""
 }
 
-func (m *MsgInitializeWithdrawal) GetVote() *types.Votes {
+func (m *MsgProcessWithdrawal) GetVote() *types.Votes {
 	if m != nil {
 		return m.Vote
 	}
 	return nil
 }
 
-func (m *MsgInitializeWithdrawal) GetProposal() *WithdrawalProposal {
+func (m *MsgProcessWithdrawal) GetId() []uint64 {
 	if m != nil {
-		return m.Proposal
+		return m.Id
 	}
 	return nil
 }
 
-// MsgNewWithdrawalResponse
-type MsgInitializeWithdrawalResponse struct {
+func (m *MsgProcessWithdrawal) GetNoWitnessTx() []byte {
+	if m != nil {
+		return m.NoWitnessTx
+	}
+	return nil
 }
 
-func (m *MsgInitializeWithdrawalResponse) Reset()         { *m = MsgInitializeWithdrawalResponse{} }
-func (m *MsgInitializeWithdrawalResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgInitializeWithdrawalResponse) ProtoMessage()    {}
-func (*MsgInitializeWithdrawalResponse) Descriptor() ([]byte, []int) {
+func (m *MsgProcessWithdrawal) GetTxFee() uint64 {
+	if m != nil {
+		return m.TxFee
+	}
+	return 0
+}
+
+// MsgProcessWithdrawalResponse
+type MsgProcessWithdrawalResponse struct {
+}
+
+func (m *MsgProcessWithdrawalResponse) Reset()         { *m = MsgProcessWithdrawalResponse{} }
+func (m *MsgProcessWithdrawalResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgProcessWithdrawalResponse) ProtoMessage()    {}
+func (*MsgProcessWithdrawalResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_061207c379e1a1b2, []int{7}
 }
-func (m *MsgInitializeWithdrawalResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgProcessWithdrawalResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgInitializeWithdrawalResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgProcessWithdrawalResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgInitializeWithdrawalResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgProcessWithdrawalResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -425,38 +443,157 @@ func (m *MsgInitializeWithdrawalResponse) XXX_Marshal(b []byte, deterministic bo
 		return b[:n], nil
 	}
 }
-func (m *MsgInitializeWithdrawalResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgInitializeWithdrawalResponse.Merge(m, src)
+func (m *MsgProcessWithdrawalResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgProcessWithdrawalResponse.Merge(m, src)
 }
-func (m *MsgInitializeWithdrawalResponse) XXX_Size() int {
+func (m *MsgProcessWithdrawalResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgInitializeWithdrawalResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgInitializeWithdrawalResponse.DiscardUnknown(m)
+func (m *MsgProcessWithdrawalResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgProcessWithdrawalResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgInitializeWithdrawalResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgProcessWithdrawalResponse proto.InternalMessageInfo
+
+// MsgReplaceWithdrawal
+type MsgReplaceWithdrawal struct {
+	Proposer string       `protobuf:"bytes,1,opt,name=proposer,proto3" json:"proposer,omitempty"`
+	Vote     *types.Votes `protobuf:"bytes,2,opt,name=vote,proto3" json:"vote,omitempty"`
+	// the process id of the withdrawals to replace
+	Pid uint64 `protobuf:"varint,3,opt,name=pid,proto3" json:"pid,omitempty"`
+	// the new tx for the withdrawal proposal
+	NewNoWitnessTx []byte `protobuf:"bytes,4,opt,name=new_no_witness_tx,json=newNoWitnessTx,proto3" json:"new_no_witness_tx,omitempty"`
+	// tx fee in satoshi
+	NewTxFee uint64 `protobuf:"varint,5,opt,name=new_tx_fee,json=newTxFee,proto3" json:"new_tx_fee,omitempty"`
+}
+
+func (m *MsgReplaceWithdrawal) Reset()         { *m = MsgReplaceWithdrawal{} }
+func (m *MsgReplaceWithdrawal) String() string { return proto.CompactTextString(m) }
+func (*MsgReplaceWithdrawal) ProtoMessage()    {}
+func (*MsgReplaceWithdrawal) Descriptor() ([]byte, []int) {
+	return fileDescriptor_061207c379e1a1b2, []int{8}
+}
+func (m *MsgReplaceWithdrawal) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgReplaceWithdrawal) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgReplaceWithdrawal.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgReplaceWithdrawal) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgReplaceWithdrawal.Merge(m, src)
+}
+func (m *MsgReplaceWithdrawal) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgReplaceWithdrawal) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgReplaceWithdrawal.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgReplaceWithdrawal proto.InternalMessageInfo
+
+func (m *MsgReplaceWithdrawal) GetProposer() string {
+	if m != nil {
+		return m.Proposer
+	}
+	return ""
+}
+
+func (m *MsgReplaceWithdrawal) GetVote() *types.Votes {
+	if m != nil {
+		return m.Vote
+	}
+	return nil
+}
+
+func (m *MsgReplaceWithdrawal) GetPid() uint64 {
+	if m != nil {
+		return m.Pid
+	}
+	return 0
+}
+
+func (m *MsgReplaceWithdrawal) GetNewNoWitnessTx() []byte {
+	if m != nil {
+		return m.NewNoWitnessTx
+	}
+	return nil
+}
+
+func (m *MsgReplaceWithdrawal) GetNewTxFee() uint64 {
+	if m != nil {
+		return m.NewTxFee
+	}
+	return 0
+}
+
+// MsgReplaceWithdrawalResponse
+type MsgReplaceWithdrawalResponse struct {
+}
+
+func (m *MsgReplaceWithdrawalResponse) Reset()         { *m = MsgReplaceWithdrawalResponse{} }
+func (m *MsgReplaceWithdrawalResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgReplaceWithdrawalResponse) ProtoMessage()    {}
+func (*MsgReplaceWithdrawalResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_061207c379e1a1b2, []int{9}
+}
+func (m *MsgReplaceWithdrawalResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgReplaceWithdrawalResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgReplaceWithdrawalResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgReplaceWithdrawalResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgReplaceWithdrawalResponse.Merge(m, src)
+}
+func (m *MsgReplaceWithdrawalResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgReplaceWithdrawalResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgReplaceWithdrawalResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgReplaceWithdrawalResponse proto.InternalMessageInfo
 
 // MsgFinalizeWithdrawal
 type MsgFinalizeWithdrawal struct {
 	Proposer string `protobuf:"bytes,1,opt,name=proposer,proto3" json:"proposer,omitempty"`
-	// the txid for the withdrawal proposal
-	Txid []byte `protobuf:"bytes,2,opt,name=txid,proto3" json:"txid,omitempty"`
+	// the process id of the withdrawals to finalize
+	Pid uint64 `protobuf:"varint,2,opt,name=pid,proto3" json:"pid,omitempty"`
+	// the final confirmed txid for the withdrawal proposal
+	Txid []byte `protobuf:"bytes,3,opt,name=txid,proto3" json:"txid,omitempty"`
 	// block_number the block number that transaction located at
-	BlockNumber uint64 `protobuf:"varint,3,opt,name=block_number,json=blockNumber,proto3" json:"block_number,omitempty"`
+	BlockNumber uint64 `protobuf:"varint,4,opt,name=block_number,json=blockNumber,proto3" json:"block_number,omitempty"`
 	// tx_index is the index of transaction in the block
-	TxIndex uint32 `protobuf:"varint,4,opt,name=tx_index,json=txIndex,proto3" json:"tx_index,omitempty"`
+	TxIndex uint32 `protobuf:"varint,5,opt,name=tx_index,json=txIndex,proto3" json:"tx_index,omitempty"`
 	// intermediate proof is the proof without the txid and merkel root
-	IntermediateProof []byte `protobuf:"bytes,5,opt,name=intermediate_proof,json=intermediateProof,proto3" json:"intermediate_proof,omitempty"`
+	IntermediateProof []byte `protobuf:"bytes,6,opt,name=intermediate_proof,json=intermediateProof,proto3" json:"intermediate_proof,omitempty"`
 	// block_header is the raw bitcoin block header bytes
-	BlockHeader []byte `protobuf:"bytes,6,opt,name=block_header,json=blockHeader,proto3" json:"block_header,omitempty"`
+	BlockHeader []byte `protobuf:"bytes,7,opt,name=block_header,json=blockHeader,proto3" json:"block_header,omitempty"`
 }
 
 func (m *MsgFinalizeWithdrawal) Reset()         { *m = MsgFinalizeWithdrawal{} }
 func (m *MsgFinalizeWithdrawal) String() string { return proto.CompactTextString(m) }
 func (*MsgFinalizeWithdrawal) ProtoMessage()    {}
 func (*MsgFinalizeWithdrawal) Descriptor() ([]byte, []int) {
-	return fileDescriptor_061207c379e1a1b2, []int{8}
+	return fileDescriptor_061207c379e1a1b2, []int{10}
 }
 func (m *MsgFinalizeWithdrawal) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -490,6 +627,13 @@ func (m *MsgFinalizeWithdrawal) GetProposer() string {
 		return m.Proposer
 	}
 	return ""
+}
+
+func (m *MsgFinalizeWithdrawal) GetPid() uint64 {
+	if m != nil {
+		return m.Pid
+	}
+	return 0
 }
 
 func (m *MsgFinalizeWithdrawal) GetTxid() []byte {
@@ -535,7 +679,7 @@ func (m *MsgFinalizeWithdrawalResponse) Reset()         { *m = MsgFinalizeWithdr
 func (m *MsgFinalizeWithdrawalResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgFinalizeWithdrawalResponse) ProtoMessage()    {}
 func (*MsgFinalizeWithdrawalResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_061207c379e1a1b2, []int{9}
+	return fileDescriptor_061207c379e1a1b2, []int{11}
 }
 func (m *MsgFinalizeWithdrawalResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -574,7 +718,7 @@ func (m *MsgApproveCancellation) Reset()         { *m = MsgApproveCancellation{}
 func (m *MsgApproveCancellation) String() string { return proto.CompactTextString(m) }
 func (*MsgApproveCancellation) ProtoMessage()    {}
 func (*MsgApproveCancellation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_061207c379e1a1b2, []int{10}
+	return fileDescriptor_061207c379e1a1b2, []int{12}
 }
 func (m *MsgApproveCancellation) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -625,7 +769,7 @@ func (m *MsgApproveCancellationResponse) Reset()         { *m = MsgApproveCancel
 func (m *MsgApproveCancellationResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgApproveCancellationResponse) ProtoMessage()    {}
 func (*MsgApproveCancellationResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_061207c379e1a1b2, []int{11}
+	return fileDescriptor_061207c379e1a1b2, []int{13}
 }
 func (m *MsgApproveCancellationResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -665,7 +809,7 @@ func (m *MsgNewConsolidation) Reset()         { *m = MsgNewConsolidation{} }
 func (m *MsgNewConsolidation) String() string { return proto.CompactTextString(m) }
 func (*MsgNewConsolidation) ProtoMessage()    {}
 func (*MsgNewConsolidation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_061207c379e1a1b2, []int{12}
+	return fileDescriptor_061207c379e1a1b2, []int{14}
 }
 func (m *MsgNewConsolidation) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -723,7 +867,7 @@ func (m *MsgNewConsolidationResponse) Reset()         { *m = MsgNewConsolidation
 func (m *MsgNewConsolidationResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgNewConsolidationResponse) ProtoMessage()    {}
 func (*MsgNewConsolidationResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_061207c379e1a1b2, []int{13}
+	return fileDescriptor_061207c379e1a1b2, []int{15}
 }
 func (m *MsgNewConsolidationResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -759,8 +903,10 @@ func init() {
 	proto.RegisterType((*MsgNewDepositsResponse)(nil), "goat.bitcoin.v1.MsgNewDepositsResponse")
 	proto.RegisterType((*MsgNewPubkey)(nil), "goat.bitcoin.v1.MsgNewPubkey")
 	proto.RegisterType((*MsgNewPubkeyResponse)(nil), "goat.bitcoin.v1.MsgNewPubkeyResponse")
-	proto.RegisterType((*MsgInitializeWithdrawal)(nil), "goat.bitcoin.v1.MsgInitializeWithdrawal")
-	proto.RegisterType((*MsgInitializeWithdrawalResponse)(nil), "goat.bitcoin.v1.MsgInitializeWithdrawalResponse")
+	proto.RegisterType((*MsgProcessWithdrawal)(nil), "goat.bitcoin.v1.MsgProcessWithdrawal")
+	proto.RegisterType((*MsgProcessWithdrawalResponse)(nil), "goat.bitcoin.v1.MsgProcessWithdrawalResponse")
+	proto.RegisterType((*MsgReplaceWithdrawal)(nil), "goat.bitcoin.v1.MsgReplaceWithdrawal")
+	proto.RegisterType((*MsgReplaceWithdrawalResponse)(nil), "goat.bitcoin.v1.MsgReplaceWithdrawalResponse")
 	proto.RegisterType((*MsgFinalizeWithdrawal)(nil), "goat.bitcoin.v1.MsgFinalizeWithdrawal")
 	proto.RegisterType((*MsgFinalizeWithdrawalResponse)(nil), "goat.bitcoin.v1.MsgFinalizeWithdrawalResponse")
 	proto.RegisterType((*MsgApproveCancellation)(nil), "goat.bitcoin.v1.MsgApproveCancellation")
@@ -772,64 +918,70 @@ func init() {
 func init() { proto.RegisterFile("goat/bitcoin/v1/tx.proto", fileDescriptor_061207c379e1a1b2) }
 
 var fileDescriptor_061207c379e1a1b2 = []byte{
-	// 912 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x56, 0xcf, 0x6f, 0xdc, 0x44,
-	0x18, 0x8d, 0xb3, 0x9b, 0xd0, 0x7c, 0xbb, 0x09, 0x8d, 0x1b, 0x52, 0xc7, 0xd1, 0x6e, 0xb6, 0x6e,
-	0x0b, 0xab, 0xa5, 0xb1, 0xc9, 0x52, 0x81, 0xb4, 0x17, 0xd4, 0x14, 0x10, 0x15, 0x4a, 0x15, 0x0c,
-	0x22, 0x12, 0x97, 0xc5, 0x5e, 0x4f, 0xbd, 0xa3, 0x78, 0x3d, 0x96, 0x67, 0xb2, 0x71, 0x38, 0x21,
-	0x8e, 0x9c, 0xb8, 0xf1, 0x37, 0x70, 0xcb, 0x81, 0x3f, 0x82, 0x63, 0x29, 0x42, 0xe2, 0x88, 0x92,
-	0x43, 0x8e, 0xdc, 0x38, 0x23, 0x8f, 0x7f, 0x64, 0x93, 0x99, 0x90, 0x55, 0x41, 0xbd, 0x44, 0x3b,
-	0xf3, 0xde, 0xcc, 0xfb, 0xde, 0x9b, 0xf9, 0xc6, 0x01, 0xcd, 0x27, 0x0e, 0xb3, 0x5c, 0xcc, 0x06,
-	0x04, 0x87, 0xd6, 0x78, 0xcb, 0x62, 0x89, 0x19, 0xc5, 0x84, 0x11, 0xf5, 0xf5, 0x14, 0x31, 0x73,
-	0xc4, 0x1c, 0x6f, 0xe9, 0xcb, 0xce, 0x08, 0x87, 0xc4, 0xe2, 0x7f, 0x33, 0x8e, 0x7e, 0x7b, 0x40,
-	0xe8, 0x88, 0x50, 0x6b, 0x44, 0xfd, 0x74, 0xed, 0x88, 0xfa, 0x39, 0xb0, 0x96, 0x01, 0x7d, 0x3e,
-	0xb2, 0xb2, 0x41, 0x0e, 0x35, 0x2e, 0x2b, 0x16, 0x12, 0x93, 0x70, 0x8c, 0x02, 0xe7, 0x08, 0xc5,
-	0x29, 0x9c, 0xff, 0xcc, 0x60, 0xe3, 0x6f, 0x05, 0x96, 0x77, 0xa8, 0xff, 0x14, 0x1d, 0x6e, 0x07,
-	0x64, 0xb0, 0xff, 0x89, 0x43, 0x87, 0x88, 0xaa, 0x0f, 0xe1, 0x46, 0x14, 0x93, 0x88, 0x50, 0x14,
-	0x6b, 0x4a, 0x4b, 0x69, 0x2f, 0x6c, 0x6b, 0x2f, 0x7e, 0xde, 0x5c, 0xc9, 0x75, 0x1f, 0x79, 0x5e,
-	0x8c, 0x28, 0xfd, 0x9c, 0xc5, 0x38, 0xf4, 0xed, 0x92, 0xa9, 0x76, 0xa0, 0x3a, 0x26, 0x0c, 0x69,
-	0xb3, 0x2d, 0xa5, 0x5d, 0xeb, 0xae, 0x9a, 0xdc, 0x70, 0x21, 0x37, 0xde, 0x32, 0xbf, 0x24, 0x0c,
-	0x51, 0x9b, 0x73, 0xd4, 0x07, 0xa0, 0x52, 0xe6, 0xc4, 0xac, 0xef, 0xa6, 0xb2, 0xfd, 0xf0, 0x60,
-	0xe4, 0xa2, 0x58, 0xab, 0xb4, 0x94, 0x76, 0xd5, 0xbe, 0xc9, 0x11, 0x5e, 0xcf, 0x53, 0x3e, 0xaf,
-	0x36, 0x00, 0x32, 0xde, 0xd0, 0xa1, 0x43, 0xad, 0xda, 0xaa, 0xb4, 0xeb, 0xf6, 0x82, 0x5b, 0x14,
-	0xdc, 0xeb, 0x7e, 0x77, 0x76, 0xdc, 0x29, 0xeb, 0xf8, 0xfe, 0xec, 0xb8, 0xd3, 0xe2, 0xae, 0x93,
-	0x32, 0x16, 0xc1, 0xa2, 0xb1, 0x0e, 0x6b, 0xc2, 0xa4, 0x8d, 0x68, 0x44, 0x42, 0x8a, 0x8c, 0x17,
-	0x0a, 0x2c, 0x65, 0xe8, 0x87, 0x28, 0x22, 0x14, 0xb3, 0x97, 0x8d, 0xe4, 0x2e, 0x2c, 0xe6, 0x85,
-	0x23, 0xc7, 0x43, 0x31, 0xe5, 0xd9, 0xd4, 0xed, 0x7a, 0x56, 0x7b, 0x36, 0x97, 0x6e, 0xed, 0xe5,
-	0x32, 0x5a, 0xa5, 0x55, 0x69, 0xd7, 0xba, 0x9a, 0x79, 0xe9, 0xb2, 0x98, 0x79, 0x1d, 0x76, 0xc9,
-	0xec, 0x59, 0x82, 0xe9, 0x86, 0xd4, 0x74, 0xe1, 0xc0, 0xd0, 0x60, 0xf5, 0xe2, 0x4c, 0x69, 0xf7,
-	0x37, 0x05, 0xea, 0x19, 0xb4, 0x7b, 0xe0, 0xee, 0xa3, 0xa3, 0x57, 0x70, 0xfe, 0x5d, 0x98, 0x8f,
-	0xb8, 0x16, 0x3f, 0xf3, 0x5a, 0x57, 0x17, 0xd8, 0xbb, 0x07, 0x6e, 0x80, 0x07, 0x9f, 0xa2, 0x23,
-	0x3b, 0x67, 0xf6, 0x36, 0x05, 0xc7, 0xeb, 0x52, 0xc7, 0x99, 0x09, 0x63, 0x15, 0x56, 0x26, 0xc7,
-	0xa5, 0xdb, 0xbf, 0x14, 0xb8, 0xbd, 0x43, 0xfd, 0x27, 0x21, 0x66, 0xd8, 0x09, 0xf0, 0x37, 0x68,
-	0x0f, 0xb3, 0xa1, 0x17, 0x3b, 0x87, 0x4e, 0xf0, 0x0a, 0x8c, 0x7f, 0x50, 0x28, 0x38, 0x41, 0x6e,
-	0xfd, 0xae, 0x70, 0xd8, 0xe7, 0x05, 0xed, 0xe6, 0x54, 0xbb, 0x5c, 0xd4, 0xdb, 0x12, 0x52, 0xd8,
-	0x90, 0xa6, 0x70, 0xbe, 0x89, 0x71, 0x07, 0x36, 0xae, 0x30, 0x5c, 0x86, 0xf2, 0xd3, 0x2c, 0xbc,
-	0xb1, 0x43, 0xfd, 0x8f, 0x71, 0xf8, 0xff, 0x44, 0xa2, 0x42, 0x95, 0x25, 0xd8, 0xcb, 0xef, 0x3b,
-	0xff, 0xad, 0xde, 0x81, 0xba, 0xa4, 0xdb, 0x6b, 0xee, 0x44, 0xa3, 0xaf, 0xc1, 0x0d, 0x96, 0xf4,
-	0x71, 0xe8, 0xa1, 0x44, 0xab, 0xb6, 0x94, 0xf6, 0xa2, 0xfd, 0x1a, 0x4b, 0x9e, 0xa4, 0x43, 0x75,
-	0x13, 0x54, 0x1c, 0x32, 0x14, 0x8f, 0x90, 0x87, 0x1d, 0x86, 0xd2, 0xa7, 0x90, 0x3c, 0xd3, 0xe6,
-	0xf8, 0xfe, 0xcb, 0x93, 0xc8, 0x6e, 0x0a, 0x9c, 0x8b, 0x65, 0x9d, 0xa7, 0xcd, 0x73, 0x62, 0x6d,
-	0xa2, 0xf1, 0x7a, 0xef, 0x09, 0x49, 0xde, 0x13, 0x93, 0x14, 0x13, 0x31, 0x36, 0xa0, 0x21, 0x05,
-	0xca, 0x30, 0x7f, 0x54, 0x78, 0xab, 0x3d, 0x8a, 0xa2, 0x98, 0x8c, 0xd1, 0x63, 0x27, 0x1c, 0xa0,
-	0x20, 0x70, 0x18, 0x26, 0xe1, 0x4b, 0xa6, 0xb9, 0x04, 0xb3, 0x3c, 0xcb, 0x4a, 0xbb, 0x6a, 0xcf,
-	0x62, 0xaf, 0xf7, 0xbe, 0x50, 0xf9, 0x7d, 0xb1, 0x72, 0x89, 0xbc, 0xd1, 0x82, 0xa6, 0x1c, 0x29,
-	0x6b, 0xff, 0x55, 0x81, 0x5b, 0xd9, 0x05, 0x7a, 0x4c, 0x42, 0x4a, 0x02, 0xec, 0xfd, 0x97, 0xc2,
-	0x0d, 0x58, 0x0c, 0x49, 0xff, 0x10, 0xb3, 0x10, 0x51, 0xda, 0x67, 0x49, 0x7e, 0x1f, 0x6a, 0x21,
-	0xd9, 0xcb, 0xe6, 0xbe, 0x48, 0xca, 0xee, 0xa9, 0x5c, 0xdf, 0x3d, 0xbd, 0x87, 0x82, 0x71, 0x43,
-	0x7a, 0xf9, 0x2f, 0xd4, 0x6e, 0x34, 0x60, 0x5d, 0x32, 0x5d, 0x58, 0xee, 0xfe, 0x3e, 0x07, 0x95,
-	0x1d, 0xea, 0xab, 0x5f, 0xc3, 0xd2, 0xa5, 0xef, 0xa0, 0x21, 0xb4, 0xa6, 0xf0, 0xcd, 0xd0, 0x3b,
-	0xd7, 0x73, 0x0a, 0x25, 0x75, 0x0f, 0x6a, 0x93, 0xdf, 0x94, 0x8d, 0x2b, 0x96, 0x16, 0x04, 0xfd,
-	0xad, 0x6b, 0x08, 0xe5, 0xc6, 0x9f, 0xc1, 0xc2, 0xf9, 0xeb, 0xdd, 0xb8, 0x62, 0x55, 0x06, 0xeb,
-	0xf7, 0xff, 0x15, 0x2e, 0xb7, 0x8c, 0x61, 0x45, 0xfa, 0x44, 0xb6, 0x65, 0xcb, 0x65, 0x4c, 0xfd,
-	0x9d, 0x69, 0x99, 0xa5, 0x66, 0x00, 0xaa, 0xe4, 0x05, 0x7a, 0x53, 0xb6, 0x8f, 0xc8, 0xd3, 0xcd,
-	0xe9, 0x78, 0xa5, 0x1a, 0x81, 0x5b, 0xb2, 0x16, 0x95, 0x86, 0x2e, 0x21, 0xea, 0xd6, 0x94, 0xc4,
-	0x52, 0xf0, 0x19, 0xdc, 0x14, 0xfa, 0xea, 0xde, 0x15, 0xa7, 0x71, 0x81, 0xa5, 0x3f, 0x98, 0x86,
-	0x55, 0xe8, 0xe8, 0x73, 0xdf, 0x9e, 0x1d, 0x77, 0x94, 0xed, 0x8f, 0x7e, 0x39, 0x69, 0x2a, 0xcf,
-	0x4f, 0x9a, 0xca, 0x9f, 0x27, 0x4d, 0xe5, 0x87, 0xd3, 0xe6, 0xcc, 0xf3, 0xd3, 0xe6, 0xcc, 0x1f,
-	0xa7, 0xcd, 0x99, 0xaf, 0xde, 0xf6, 0x31, 0x1b, 0x1e, 0xb8, 0xe6, 0x80, 0x8c, 0xac, 0x74, 0xe3,
-	0x10, 0xb1, 0x43, 0x12, 0xef, 0x5b, 0x97, 0x7a, 0x89, 0x1d, 0x45, 0x88, 0xba, 0xf3, 0xfc, 0x3f,
-	0xc5, 0x77, 0xff, 0x09, 0x00, 0x00, 0xff, 0xff, 0x27, 0x51, 0x53, 0xd1, 0xdb, 0x0a, 0x00, 0x00,
+	// 997 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x56, 0x4f, 0x6f, 0xe3, 0x44,
+	0x1c, 0xad, 0x93, 0x34, 0xdb, 0xfe, 0x92, 0x96, 0xc6, 0xbb, 0x5b, 0x5c, 0x77, 0x93, 0x0d, 0xde,
+	0x5d, 0x08, 0x61, 0x1b, 0xab, 0x61, 0x01, 0x29, 0xb7, 0xed, 0xc2, 0x0a, 0x84, 0x5a, 0x15, 0xb3,
+	0xa2, 0x12, 0x97, 0x60, 0xc7, 0xd3, 0x64, 0x54, 0xc7, 0x63, 0x79, 0xa6, 0x89, 0xcb, 0x09, 0x71,
+	0xdc, 0x13, 0x37, 0xbe, 0x46, 0x0f, 0x48, 0x1c, 0xf8, 0x02, 0x1c, 0x97, 0xe5, 0xc2, 0x11, 0xb5,
+	0x87, 0x7e, 0x03, 0x0e, 0x9c, 0x90, 0xc7, 0x7f, 0x9a, 0x74, 0x5c, 0x1a, 0x6d, 0xa5, 0x5e, 0x22,
+	0x7b, 0xde, 0x9b, 0x79, 0xbf, 0xf7, 0xc6, 0xf3, 0x9b, 0x80, 0xd2, 0x27, 0x26, 0xd3, 0x2d, 0xcc,
+	0x7a, 0x04, 0xbb, 0xfa, 0x68, 0x53, 0x67, 0x41, 0xcb, 0xf3, 0x09, 0x23, 0xf2, 0x5b, 0x21, 0xd2,
+	0x8a, 0x91, 0xd6, 0x68, 0x53, 0xad, 0x98, 0x43, 0xec, 0x12, 0x9d, 0xff, 0x46, 0x1c, 0xf5, 0xed,
+	0x1e, 0xa1, 0x43, 0x42, 0xf5, 0x21, 0xed, 0x87, 0x73, 0x87, 0xb4, 0x1f, 0x03, 0x6b, 0x11, 0xd0,
+	0xe5, 0x6f, 0x7a, 0xf4, 0x12, 0x43, 0xd5, 0x8b, 0x8a, 0x89, 0xc4, 0x24, 0xec, 0x23, 0xc7, 0x3c,
+	0x42, 0x7e, 0x08, 0xc7, 0x8f, 0x11, 0xac, 0xfd, 0x23, 0x41, 0x65, 0x9b, 0xf6, 0x77, 0xd0, 0x78,
+	0xcb, 0x21, 0xbd, 0x83, 0xcf, 0x4d, 0x3a, 0x40, 0x54, 0x7e, 0x02, 0x0b, 0x9e, 0x4f, 0x3c, 0x42,
+	0x91, 0xaf, 0x48, 0x75, 0xa9, 0xb1, 0xb8, 0xa5, 0xbc, 0xfe, 0x65, 0xe3, 0x4e, 0xac, 0xfb, 0xd4,
+	0xb6, 0x7d, 0x44, 0xe9, 0xd7, 0xcc, 0xc7, 0x6e, 0xdf, 0x48, 0x99, 0x72, 0x13, 0x0a, 0x23, 0xc2,
+	0x90, 0x92, 0xab, 0x4b, 0x8d, 0x52, 0x7b, 0xb5, 0xc5, 0x0d, 0x27, 0x72, 0xa3, 0xcd, 0xd6, 0x37,
+	0x84, 0x21, 0x6a, 0x70, 0x8e, 0xfc, 0x18, 0x64, 0xca, 0x4c, 0x9f, 0x75, 0xad, 0x50, 0xb6, 0xeb,
+	0x1e, 0x0e, 0x2d, 0xe4, 0x2b, 0xf9, 0xba, 0xd4, 0x28, 0x18, 0x2b, 0x1c, 0xe1, 0xf5, 0xec, 0xf0,
+	0x71, 0xb9, 0x0a, 0x10, 0xf1, 0x06, 0x26, 0x1d, 0x28, 0x85, 0x7a, 0xbe, 0x51, 0x36, 0x16, 0xad,
+	0xa4, 0xe0, 0x4e, 0xfb, 0xc7, 0xb3, 0xe3, 0x66, 0x5a, 0xc7, 0xcb, 0xb3, 0xe3, 0x66, 0x9d, 0xbb,
+	0x0e, 0xd2, 0x58, 0x04, 0x8b, 0xda, 0x3a, 0xac, 0x09, 0x83, 0x06, 0xa2, 0x1e, 0x71, 0x29, 0xd2,
+	0x5e, 0x4b, 0xb0, 0x1c, 0xa1, 0x9f, 0x22, 0x8f, 0x50, 0xcc, 0xde, 0x34, 0x92, 0x07, 0xb0, 0x14,
+	0x17, 0x8e, 0x4c, 0x1b, 0xf9, 0x94, 0x67, 0x53, 0x36, 0xca, 0x51, 0xed, 0xd1, 0x58, 0xb8, 0xb4,
+	0x1d, 0xcb, 0x28, 0xf9, 0x7a, 0xbe, 0x51, 0x6a, 0x2b, 0xad, 0x0b, 0x1f, 0x4b, 0x2b, 0xae, 0xc3,
+	0x48, 0x99, 0x1d, 0x5d, 0x30, 0x5d, 0xcd, 0x34, 0x9d, 0x38, 0xd0, 0x14, 0x58, 0x9d, 0x1e, 0x49,
+	0xed, 0xfe, 0x29, 0x41, 0x39, 0x82, 0x76, 0x0f, 0xad, 0x03, 0x74, 0x74, 0x03, 0xfb, 0xdf, 0x86,
+	0xa2, 0xc7, 0xb5, 0xf8, 0x9e, 0x97, 0xda, 0xaa, 0xc0, 0xde, 0x3d, 0xb4, 0x1c, 0xdc, 0xfb, 0x12,
+	0x1d, 0x19, 0x31, 0xb3, 0xb3, 0x21, 0x38, 0x5e, 0xcf, 0x74, 0x1c, 0x99, 0xd0, 0x56, 0xe1, 0xce,
+	0xe4, 0x7b, 0xea, 0xf6, 0x5f, 0x89, 0x03, 0xbb, 0x3e, 0xe9, 0x21, 0x4a, 0xf7, 0x30, 0x1b, 0xd8,
+	0xbe, 0x39, 0x36, 0x9d, 0x1b, 0x70, 0xbd, 0x0c, 0x39, 0x6c, 0xf3, 0x3d, 0x2e, 0x18, 0x39, 0x6c,
+	0xcb, 0x1a, 0x2c, 0xb9, 0xa4, 0x3b, 0xc6, 0xcc, 0x45, 0x94, 0x76, 0x59, 0xa0, 0x14, 0xf8, 0xe7,
+	0x51, 0x72, 0xc9, 0x5e, 0x34, 0xf6, 0x22, 0x90, 0xef, 0x42, 0x91, 0x05, 0xdd, 0x7d, 0x84, 0x94,
+	0x79, 0x7e, 0x3a, 0xe6, 0x59, 0xf0, 0x1c, 0xa1, 0xce, 0x47, 0x42, 0x18, 0x0f, 0xc4, 0x30, 0x04,
+	0x8f, 0x5a, 0x0d, 0xee, 0x65, 0x8d, 0xa7, 0xe1, 0xbc, 0xcc, 0xf1, 0x70, 0x0c, 0xe4, 0x39, 0x66,
+	0x0f, 0xdd, 0x68, 0x38, 0x2b, 0x90, 0xf7, 0x78, 0x3a, 0xa1, 0xcb, 0xf0, 0x51, 0x7e, 0x1f, 0x2a,
+	0x2e, 0x1a, 0x77, 0xb3, 0x22, 0x5a, 0x76, 0xd1, 0x78, 0x67, 0x22, 0xa5, 0x7b, 0x00, 0x21, 0x75,
+	0x2a, 0xa9, 0x05, 0x17, 0x8d, 0x5f, 0xcc, 0x1e, 0x96, 0xe0, 0x39, 0x0e, 0x4b, 0x18, 0x4f, 0xc3,
+	0xfa, 0x2d, 0x07, 0x77, 0xb7, 0x69, 0xff, 0x39, 0x76, 0x4d, 0x07, 0x7f, 0x7f, 0xfd, 0xb4, 0xe2,
+	0x04, 0x72, 0xe7, 0x09, 0xc8, 0x50, 0x60, 0x41, 0x1c, 0x4a, 0xd9, 0xe0, 0xcf, 0xf2, 0x3b, 0x50,
+	0x9e, 0x6a, 0x9a, 0x05, 0x4e, 0x2f, 0x59, 0x13, 0xfd, 0x72, 0x0d, 0x16, 0x58, 0xd0, 0xc5, 0xae,
+	0x8d, 0x02, 0x9e, 0xc5, 0x92, 0x71, 0x8b, 0x05, 0x5f, 0x84, 0xaf, 0xf2, 0x06, 0xc8, 0xd8, 0x65,
+	0xc8, 0x1f, 0x22, 0x1b, 0x9b, 0x0c, 0x85, 0x37, 0x0a, 0xd9, 0x57, 0x8a, 0x7c, 0xfd, 0xca, 0x24,
+	0xb2, 0x1b, 0x02, 0xe7, 0x62, 0x51, 0x03, 0x53, 0x6e, 0x45, 0x1f, 0xe8, 0x44, 0xff, 0xea, 0x7c,
+	0x2c, 0x84, 0xfb, 0x50, 0x0c, 0x57, 0xcc, 0x48, 0xbb, 0x0f, 0xd5, 0x4c, 0x20, 0x8d, 0xf7, 0x67,
+	0x89, 0x77, 0xac, 0xa7, 0x9e, 0xe7, 0x93, 0x11, 0x7a, 0x66, 0xba, 0x3d, 0xe4, 0x38, 0x26, 0xc3,
+	0xc4, 0x7d, 0xc3, 0x7c, 0xa3, 0xe3, 0x97, 0x4b, 0x8e, 0x5f, 0xe7, 0x13, 0xa1, 0xf2, 0x47, 0x62,
+	0xe5, 0x19, 0xf2, 0x5a, 0x1d, 0x6a, 0xd9, 0x48, 0x5a, 0xfb, 0x1f, 0x12, 0xdc, 0x8e, 0xba, 0xcf,
+	0x33, 0xe2, 0x52, 0xe2, 0x60, 0xfb, 0x3a, 0x85, 0x0b, 0x7d, 0x22, 0x27, 0xf6, 0x89, 0xe4, 0xa8,
+	0xe5, 0xaf, 0x3e, 0x6a, 0x9d, 0x27, 0x82, 0x71, 0x2d, 0xb3, 0x93, 0x4e, 0xd5, 0xae, 0x55, 0x61,
+	0x3d, 0x63, 0x38, 0xb1, 0xdc, 0xfe, 0xb5, 0x08, 0xf9, 0x6d, 0xda, 0x97, 0xbf, 0x83, 0xe5, 0x0b,
+	0x7f, 0x27, 0x34, 0xe1, 0x3a, 0x13, 0xae, 0x5e, 0xb5, 0x79, 0x35, 0x27, 0x51, 0x92, 0xf7, 0xa0,
+	0x34, 0x79, 0x35, 0xdf, 0xbf, 0x64, 0x6a, 0x42, 0x50, 0xdf, 0xbb, 0x82, 0x90, 0x2e, 0xfc, 0x15,
+	0x2c, 0x9e, 0x5f, 0x82, 0xd5, 0x4b, 0x66, 0x45, 0xb0, 0xfa, 0xe8, 0x7f, 0xe1, 0x74, 0x49, 0x0c,
+	0x15, 0xf1, 0xa6, 0xc9, 0x9c, 0x2b, 0xd0, 0xd4, 0x8d, 0x99, 0x68, 0x93, 0x52, 0x62, 0xdf, 0xce,
+	0x94, 0x12, 0x68, 0xd9, 0x52, 0x97, 0x76, 0x3e, 0xd9, 0x01, 0x39, 0xa3, 0xeb, 0xbd, 0x9b, 0xb5,
+	0x88, 0xc8, 0x53, 0x5b, 0xb3, 0xf1, 0x52, 0x35, 0x02, 0xb7, 0xb3, 0x9a, 0x40, 0xe6, 0xb6, 0x66,
+	0x10, 0x55, 0x7d, 0x46, 0x62, 0x2a, 0xb8, 0x0f, 0x2b, 0xc2, 0xc9, 0x7d, 0x78, 0xc9, 0x7e, 0x4f,
+	0xb1, 0xd4, 0xc7, 0xb3, 0xb0, 0x12, 0x1d, 0x75, 0xfe, 0x87, 0xb3, 0xe3, 0xa6, 0xb4, 0xf5, 0xd9,
+	0xef, 0x27, 0x35, 0xe9, 0xd5, 0x49, 0x4d, 0xfa, 0xfb, 0xa4, 0x26, 0xfd, 0x74, 0x5a, 0x9b, 0x7b,
+	0x75, 0x5a, 0x9b, 0xfb, 0xeb, 0xb4, 0x36, 0xf7, 0xed, 0x07, 0x7d, 0xcc, 0x06, 0x87, 0x56, 0xab,
+	0x47, 0x86, 0x7a, 0xb8, 0xb0, 0x8b, 0xd8, 0x98, 0xf8, 0x07, 0xfa, 0x85, 0xd3, 0xca, 0x8e, 0x3c,
+	0x44, 0xad, 0x22, 0xff, 0x4b, 0xff, 0xe1, 0x7f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x00, 0xd0, 0xbe,
+	0x73, 0x84, 0x0c, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -859,8 +1011,8 @@ type MsgClient interface {
 	// NewPubkey adds new deposit public key
 	// ** it requires off-chain vote by relayer group
 	NewPubkey(ctx context.Context, in *MsgNewPubkey, opts ...grpc.CallOption) (*MsgNewPubkeyResponse, error)
-	// InitializeWithdrawal submits a non-signed raw tx and its vote for the
-	// withdrawal requests This is the first step to process withdrawals
+	// ProcessWithdrawal submits a non-signed raw tx and its vote for the
+	// withdrawal requests. This is the first step to process withdrawals
 	// ** it requires off-chain vote by relayer group
 	// ** the output index and withdrawal id list are in one-to-one correspondence
 	// ** the tx price should not be larger than withdrawal request
@@ -870,7 +1022,13 @@ type MsgClient interface {
 	// signed transaction and submit the transaction to the bitcoin chain when the
 	// signing process is finished Since the signing is an off chain process, so
 	// relayer proposer doesn't need to submit the signed transaction to the chain
-	InitializeWithdrawal(ctx context.Context, in *MsgInitializeWithdrawal, opts ...grpc.CallOption) (*MsgInitializeWithdrawalResponse, error)
+	ProcessWithdrawal(ctx context.Context, in *MsgProcessWithdrawal, opts ...grpc.CallOption) (*MsgProcessWithdrawalResponse, error)
+	// ReplaceWithdrawal replaces a withdrawal by relayer
+	// ** the output for the withdrawal should be not changed, but you can change
+	// the value
+	// ** the new tx price should not be larger than before
+	// ** it requires off-chain vote by relayer group
+	ReplaceWithdrawal(ctx context.Context, in *MsgReplaceWithdrawal, opts ...grpc.CallOption) (*MsgReplaceWithdrawalResponse, error)
 	// FinalizeWithdrawal finlizes withdrawals and informs the chain to create the
 	// withdrawal receipts This is the final step to process withdrawals
 	//
@@ -919,9 +1077,18 @@ func (c *msgClient) NewPubkey(ctx context.Context, in *MsgNewPubkey, opts ...grp
 	return out, nil
 }
 
-func (c *msgClient) InitializeWithdrawal(ctx context.Context, in *MsgInitializeWithdrawal, opts ...grpc.CallOption) (*MsgInitializeWithdrawalResponse, error) {
-	out := new(MsgInitializeWithdrawalResponse)
-	err := c.cc.Invoke(ctx, "/goat.bitcoin.v1.Msg/InitializeWithdrawal", in, out, opts...)
+func (c *msgClient) ProcessWithdrawal(ctx context.Context, in *MsgProcessWithdrawal, opts ...grpc.CallOption) (*MsgProcessWithdrawalResponse, error) {
+	out := new(MsgProcessWithdrawalResponse)
+	err := c.cc.Invoke(ctx, "/goat.bitcoin.v1.Msg/ProcessWithdrawal", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) ReplaceWithdrawal(ctx context.Context, in *MsgReplaceWithdrawal, opts ...grpc.CallOption) (*MsgReplaceWithdrawalResponse, error) {
+	out := new(MsgReplaceWithdrawalResponse)
+	err := c.cc.Invoke(ctx, "/goat.bitcoin.v1.Msg/ReplaceWithdrawal", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -972,8 +1139,8 @@ type MsgServer interface {
 	// NewPubkey adds new deposit public key
 	// ** it requires off-chain vote by relayer group
 	NewPubkey(context.Context, *MsgNewPubkey) (*MsgNewPubkeyResponse, error)
-	// InitializeWithdrawal submits a non-signed raw tx and its vote for the
-	// withdrawal requests This is the first step to process withdrawals
+	// ProcessWithdrawal submits a non-signed raw tx and its vote for the
+	// withdrawal requests. This is the first step to process withdrawals
 	// ** it requires off-chain vote by relayer group
 	// ** the output index and withdrawal id list are in one-to-one correspondence
 	// ** the tx price should not be larger than withdrawal request
@@ -983,7 +1150,13 @@ type MsgServer interface {
 	// signed transaction and submit the transaction to the bitcoin chain when the
 	// signing process is finished Since the signing is an off chain process, so
 	// relayer proposer doesn't need to submit the signed transaction to the chain
-	InitializeWithdrawal(context.Context, *MsgInitializeWithdrawal) (*MsgInitializeWithdrawalResponse, error)
+	ProcessWithdrawal(context.Context, *MsgProcessWithdrawal) (*MsgProcessWithdrawalResponse, error)
+	// ReplaceWithdrawal replaces a withdrawal by relayer
+	// ** the output for the withdrawal should be not changed, but you can change
+	// the value
+	// ** the new tx price should not be larger than before
+	// ** it requires off-chain vote by relayer group
+	ReplaceWithdrawal(context.Context, *MsgReplaceWithdrawal) (*MsgReplaceWithdrawalResponse, error)
 	// FinalizeWithdrawal finlizes withdrawals and informs the chain to create the
 	// withdrawal receipts This is the final step to process withdrawals
 	//
@@ -1010,8 +1183,11 @@ func (*UnimplementedMsgServer) NewDeposits(ctx context.Context, req *MsgNewDepos
 func (*UnimplementedMsgServer) NewPubkey(ctx context.Context, req *MsgNewPubkey) (*MsgNewPubkeyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method NewPubkey not implemented")
 }
-func (*UnimplementedMsgServer) InitializeWithdrawal(ctx context.Context, req *MsgInitializeWithdrawal) (*MsgInitializeWithdrawalResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method InitializeWithdrawal not implemented")
+func (*UnimplementedMsgServer) ProcessWithdrawal(ctx context.Context, req *MsgProcessWithdrawal) (*MsgProcessWithdrawalResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ProcessWithdrawal not implemented")
+}
+func (*UnimplementedMsgServer) ReplaceWithdrawal(ctx context.Context, req *MsgReplaceWithdrawal) (*MsgReplaceWithdrawalResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReplaceWithdrawal not implemented")
 }
 func (*UnimplementedMsgServer) FinalizeWithdrawal(ctx context.Context, req *MsgFinalizeWithdrawal) (*MsgFinalizeWithdrawalResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FinalizeWithdrawal not implemented")
@@ -1081,20 +1257,38 @@ func _Msg_NewPubkey_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_InitializeWithdrawal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgInitializeWithdrawal)
+func _Msg_ProcessWithdrawal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgProcessWithdrawal)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).InitializeWithdrawal(ctx, in)
+		return srv.(MsgServer).ProcessWithdrawal(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/goat.bitcoin.v1.Msg/InitializeWithdrawal",
+		FullMethod: "/goat.bitcoin.v1.Msg/ProcessWithdrawal",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).InitializeWithdrawal(ctx, req.(*MsgInitializeWithdrawal))
+		return srv.(MsgServer).ProcessWithdrawal(ctx, req.(*MsgProcessWithdrawal))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_ReplaceWithdrawal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgReplaceWithdrawal)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).ReplaceWithdrawal(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/goat.bitcoin.v1.Msg/ReplaceWithdrawal",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).ReplaceWithdrawal(ctx, req.(*MsgReplaceWithdrawal))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1171,8 +1365,12 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_NewPubkey_Handler,
 		},
 		{
-			MethodName: "InitializeWithdrawal",
-			Handler:    _Msg_InitializeWithdrawal_Handler,
+			MethodName: "ProcessWithdrawal",
+			Handler:    _Msg_ProcessWithdrawal_Handler,
+		},
+		{
+			MethodName: "ReplaceWithdrawal",
+			Handler:    _Msg_ReplaceWithdrawal_Handler,
 		},
 		{
 			MethodName: "FinalizeWithdrawal",
@@ -1421,7 +1619,7 @@ func (m *MsgNewPubkeyResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgInitializeWithdrawal) Marshal() (dAtA []byte, err error) {
+func (m *MsgProcessWithdrawal) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1431,25 +1629,43 @@ func (m *MsgInitializeWithdrawal) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgInitializeWithdrawal) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgProcessWithdrawal) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgInitializeWithdrawal) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgProcessWithdrawal) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Proposal != nil {
-		{
-			size, err := m.Proposal.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
+	if m.TxFee != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.TxFee))
+		i--
+		dAtA[i] = 0x28
+	}
+	if len(m.NoWitnessTx) > 0 {
+		i -= len(m.NoWitnessTx)
+		copy(dAtA[i:], m.NoWitnessTx)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.NoWitnessTx)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.Id) > 0 {
+		dAtA5 := make([]byte, len(m.Id)*10)
+		var j4 int
+		for _, num := range m.Id {
+			for num >= 1<<7 {
+				dAtA5[j4] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j4++
 			}
-			i -= size
-			i = encodeVarintTx(dAtA, i, uint64(size))
+			dAtA5[j4] = uint8(num)
+			j4++
 		}
+		i -= j4
+		copy(dAtA[i:], dAtA5[:j4])
+		i = encodeVarintTx(dAtA, i, uint64(j4))
 		i--
 		dAtA[i] = 0x1a
 	}
@@ -1475,7 +1691,7 @@ func (m *MsgInitializeWithdrawal) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgInitializeWithdrawalResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgProcessWithdrawalResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1485,12 +1701,94 @@ func (m *MsgInitializeWithdrawalResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgInitializeWithdrawalResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgProcessWithdrawalResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgInitializeWithdrawalResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgProcessWithdrawalResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgReplaceWithdrawal) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgReplaceWithdrawal) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgReplaceWithdrawal) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.NewTxFee != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.NewTxFee))
+		i--
+		dAtA[i] = 0x28
+	}
+	if len(m.NewNoWitnessTx) > 0 {
+		i -= len(m.NewNoWitnessTx)
+		copy(dAtA[i:], m.NewNoWitnessTx)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.NewNoWitnessTx)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.Pid != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.Pid))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.Vote != nil {
+		{
+			size, err := m.Vote.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTx(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Proposer) > 0 {
+		i -= len(m.Proposer)
+		copy(dAtA[i:], m.Proposer)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Proposer)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgReplaceWithdrawalResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgReplaceWithdrawalResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgReplaceWithdrawalResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1523,31 +1821,36 @@ func (m *MsgFinalizeWithdrawal) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		copy(dAtA[i:], m.BlockHeader)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.BlockHeader)))
 		i--
-		dAtA[i] = 0x32
+		dAtA[i] = 0x3a
 	}
 	if len(m.IntermediateProof) > 0 {
 		i -= len(m.IntermediateProof)
 		copy(dAtA[i:], m.IntermediateProof)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.IntermediateProof)))
 		i--
-		dAtA[i] = 0x2a
+		dAtA[i] = 0x32
 	}
 	if m.TxIndex != 0 {
 		i = encodeVarintTx(dAtA, i, uint64(m.TxIndex))
 		i--
-		dAtA[i] = 0x20
+		dAtA[i] = 0x28
 	}
 	if m.BlockNumber != 0 {
 		i = encodeVarintTx(dAtA, i, uint64(m.BlockNumber))
 		i--
-		dAtA[i] = 0x18
+		dAtA[i] = 0x20
 	}
 	if len(m.Txid) > 0 {
 		i -= len(m.Txid)
 		copy(dAtA[i:], m.Txid)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.Txid)))
 		i--
-		dAtA[i] = 0x12
+		dAtA[i] = 0x1a
+	}
+	if m.Pid != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.Pid))
+		i--
+		dAtA[i] = 0x10
 	}
 	if len(m.Proposer) > 0 {
 		i -= len(m.Proposer)
@@ -1603,20 +1906,20 @@ func (m *MsgApproveCancellation) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	var l int
 	_ = l
 	if len(m.Id) > 0 {
-		dAtA7 := make([]byte, len(m.Id)*10)
-		var j6 int
+		dAtA9 := make([]byte, len(m.Id)*10)
+		var j8 int
 		for _, num := range m.Id {
 			for num >= 1<<7 {
-				dAtA7[j6] = uint8(uint64(num)&0x7f | 0x80)
+				dAtA9[j8] = uint8(uint64(num)&0x7f | 0x80)
 				num >>= 7
-				j6++
+				j8++
 			}
-			dAtA7[j6] = uint8(num)
-			j6++
+			dAtA9[j8] = uint8(num)
+			j8++
 		}
-		i -= j6
-		copy(dAtA[i:], dAtA7[:j6])
-		i = encodeVarintTx(dAtA, i, uint64(j6))
+		i -= j8
+		copy(dAtA[i:], dAtA9[:j8])
+		i = encodeVarintTx(dAtA, i, uint64(j8))
 		i--
 		dAtA[i] = 0x12
 	}
@@ -1833,7 +2136,7 @@ func (m *MsgNewPubkeyResponse) Size() (n int) {
 	return n
 }
 
-func (m *MsgInitializeWithdrawal) Size() (n int) {
+func (m *MsgProcessWithdrawal) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1847,14 +2150,60 @@ func (m *MsgInitializeWithdrawal) Size() (n int) {
 		l = m.Vote.Size()
 		n += 1 + l + sovTx(uint64(l))
 	}
-	if m.Proposal != nil {
-		l = m.Proposal.Size()
+	if len(m.Id) > 0 {
+		l = 0
+		for _, e := range m.Id {
+			l += sovTx(uint64(e))
+		}
+		n += 1 + sovTx(uint64(l)) + l
+	}
+	l = len(m.NoWitnessTx)
+	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.TxFee != 0 {
+		n += 1 + sovTx(uint64(m.TxFee))
 	}
 	return n
 }
 
-func (m *MsgInitializeWithdrawalResponse) Size() (n int) {
+func (m *MsgProcessWithdrawalResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgReplaceWithdrawal) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Proposer)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.Vote != nil {
+		l = m.Vote.Size()
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.Pid != 0 {
+		n += 1 + sovTx(uint64(m.Pid))
+	}
+	l = len(m.NewNoWitnessTx)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.NewTxFee != 0 {
+		n += 1 + sovTx(uint64(m.NewTxFee))
+	}
+	return n
+}
+
+func (m *MsgReplaceWithdrawalResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1872,6 +2221,9 @@ func (m *MsgFinalizeWithdrawal) Size() (n int) {
 	l = len(m.Proposer)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.Pid != 0 {
+		n += 1 + sovTx(uint64(m.Pid))
 	}
 	l = len(m.Txid)
 	if l > 0 {
@@ -2591,7 +2943,7 @@ func (m *MsgNewPubkeyResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgInitializeWithdrawal) Unmarshal(dAtA []byte) error {
+func (m *MsgProcessWithdrawal) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2614,10 +2966,10 @@ func (m *MsgInitializeWithdrawal) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgInitializeWithdrawal: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgProcessWithdrawal: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgInitializeWithdrawal: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgProcessWithdrawal: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2689,8 +3041,269 @@ func (m *MsgInitializeWithdrawal) Unmarshal(dAtA []byte) error {
 			}
 			iNdEx = postIndex
 		case 3:
+			if wireType == 0 {
+				var v uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTx
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.Id = append(m.Id, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTx
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthTx
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthTx
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				var count int
+				for _, integer := range dAtA[iNdEx:postIndex] {
+					if integer < 128 {
+						count++
+					}
+				}
+				elementCount = count
+				if elementCount != 0 && len(m.Id) == 0 {
+					m.Id = make([]uint64, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTx
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.Id = append(m.Id, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+		case 4:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Proposal", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field NoWitnessTx", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NoWitnessTx = append(m.NoWitnessTx[:0], dAtA[iNdEx:postIndex]...)
+			if m.NoWitnessTx == nil {
+				m.NoWitnessTx = []byte{}
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TxFee", wireType)
+			}
+			m.TxFee = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.TxFee |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgProcessWithdrawalResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgProcessWithdrawalResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgProcessWithdrawalResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgReplaceWithdrawal) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgReplaceWithdrawal: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgReplaceWithdrawal: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Proposer", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Proposer = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Vote", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -2717,13 +3330,85 @@ func (m *MsgInitializeWithdrawal) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Proposal == nil {
-				m.Proposal = &WithdrawalProposal{}
+			if m.Vote == nil {
+				m.Vote = &types.Votes{}
 			}
-			if err := m.Proposal.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Vote.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pid", wireType)
+			}
+			m.Pid = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Pid |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NewNoWitnessTx", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NewNoWitnessTx = append(m.NewNoWitnessTx[:0], dAtA[iNdEx:postIndex]...)
+			if m.NewNoWitnessTx == nil {
+				m.NewNoWitnessTx = []byte{}
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NewTxFee", wireType)
+			}
+			m.NewTxFee = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.NewTxFee |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTx(dAtA[iNdEx:])
@@ -2745,7 +3430,7 @@ func (m *MsgInitializeWithdrawal) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgInitializeWithdrawalResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgReplaceWithdrawalResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2768,10 +3453,10 @@ func (m *MsgInitializeWithdrawalResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgInitializeWithdrawalResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgReplaceWithdrawalResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgInitializeWithdrawalResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgReplaceWithdrawalResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
@@ -2857,6 +3542,25 @@ func (m *MsgFinalizeWithdrawal) Unmarshal(dAtA []byte) error {
 			m.Proposer = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pid", wireType)
+			}
+			m.Pid = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Pid |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Txid", wireType)
 			}
@@ -2890,7 +3594,7 @@ func (m *MsgFinalizeWithdrawal) Unmarshal(dAtA []byte) error {
 				m.Txid = []byte{}
 			}
 			iNdEx = postIndex
-		case 3:
+		case 4:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field BlockNumber", wireType)
 			}
@@ -2909,7 +3613,7 @@ func (m *MsgFinalizeWithdrawal) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 4:
+		case 5:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field TxIndex", wireType)
 			}
@@ -2928,7 +3632,7 @@ func (m *MsgFinalizeWithdrawal) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 5:
+		case 6:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field IntermediateProof", wireType)
 			}
@@ -2962,7 +3666,7 @@ func (m *MsgFinalizeWithdrawal) Unmarshal(dAtA []byte) error {
 				m.IntermediateProof = []byte{}
 			}
 			iNdEx = postIndex
-		case 6:
+		case 7:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field BlockHeader", wireType)
 			}

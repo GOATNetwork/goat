@@ -11,7 +11,8 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 		new(MsgNewBlockHashes),
 		new(MsgNewDeposits),
 		new(MsgNewPubkey),
-		new(MsgInitializeWithdrawal),
+		new(MsgProcessWithdrawal),
+		new(MsgReplaceWithdrawal),
 		new(MsgFinalizeWithdrawal),
 		new(MsgApproveCancellation),
 	)

@@ -33,8 +33,9 @@ type (
 		Deposited   collections.Map[collections.Pair[[]byte, uint32], uint64]
 		EthTxNonce  collections.Sequence
 		Withdrawals collections.Map[uint64, types.Withdrawal]
-		// processing withdrawal(a pair of txid and withdrawal id list)
-		Processing collections.Map[[]byte, types.WithdrawalIds]
+		// processing withdrawal(a pair of pid and the details)
+		ProcessID  collections.Sequence
+		Processing collections.Map[uint64, types.Processing]
 		EthTxQueue collections.Item[types.EthTxQueue]
 
 		relayerKeeper types.RelayerKeeper
@@ -65,7 +66,8 @@ func NewKeeper(
 		EthTxNonce:    collections.NewSequence(sb, types.EthTxNonceKey, "eth_tx_nonce"),
 		EthTxQueue:    collections.NewItem(sb, types.EthTxQueueKey, "eth_tx_queue", codec.CollValue[types.EthTxQueue](cdc)),
 		Withdrawals:   collections.NewMap(sb, types.WithdrawalKey, "withdrawals", collections.Uint64Key, codec.CollValue[types.Withdrawal](cdc)),
-		Processing:    collections.NewMap(sb, types.ProcessingKey, "processings", collections.BytesKey, codec.CollValue[types.WithdrawalIds](cdc)),
+		Processing:    collections.NewMap(sb, types.ProcessingKey, "processings", collections.Uint64Key, codec.CollValue[types.Processing](cdc)),
+		ProcessID:     collections.NewSequence(sb, types.ProcessIDKey, "process_id"),
 	}
 
 	schema, err := sb.Build()

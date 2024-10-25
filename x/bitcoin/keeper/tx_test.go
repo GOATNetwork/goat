@@ -6,8 +6,10 @@ import (
 
 	"cosmossdk.io/collections"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
+	sdktypes "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common"
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
+	"github.com/goatnetwork/goat/testutil"
 	"github.com/goatnetwork/goat/x/bitcoin/keeper"
 	"github.com/goatnetwork/goat/x/bitcoin/types"
 	relayertypes "github.com/goatnetwork/goat/x/relayer/types"
@@ -153,19 +155,19 @@ func (suite *KeeperTestSuite) TestMsgWithdrawal() {
 
 	msgServer := keeper.NewMsgServerImpl(suite.Keeper)
 
-	txid, err := chainhash.NewHashFromStr("884879222670f204932d5dfc275bfb11bdc38a93b884f6c54501ff9e721de411")
+	fristTxid, err := chainhash.NewHashFromStr("884879222670f204932d5dfc275bfb11bdc38a93b884f6c54501ff9e721de411")
+	suite.Require().NoError(err)
+	secondTxid, err := chainhash.NewHashFromStr("445ede02feadfca4ff92ad46b640b2bd6d8f60c14c09efe7659ef7c5e6c26192")
 	suite.Require().NoError(err)
 
-	expected := []types.Withdrawal{}
-	// init
+	expected, events := []types.Withdrawal{}, []sdktypes.Event{}
+	// process it
 	{
-		req := &types.MsgInitializeWithdrawal{
-			Proposer: "goat1xa56637tjn857jyg2plgvhdclzmr4crxzn5xus",
-			Vote:     &relayertypes.Votes{Signature: make([]byte, goatcrypto.SignatureLength)},
-			Proposal: &types.WithdrawalProposal{
-				NoWitnessTx: common.Hex2Bytes("02000000012e0e3e521ac999cfc292a78aaeb31fe19dfb7867c660ae5560537370d55fdf0e0000000000ffffffff06e8030000000000001976a9146a9d23174484d7ba74f7bc2a64ed102b4846267588ace80300000000000017a91413aa207651e0f3724cbe6134f54675aa2d5cdbf987e803000000000000160014279476d2a1d257f0cdcc48641b3679d411187415e8030000000000002200203dad4a1a80c3925f74a48f429eeca43440ade0aee3d5db6880e73b474961631de8030000000000002200200c84239e8447e7c3b471b26736615eb76c4755c5b94516376958f17e0da4648f90c9f505000000001600145b029559baaea5e928e8e2774e9e2350a5fc9c2d00000000"),
-				TxFee:       1000,
-			},
+		req := &types.MsgProcessWithdrawal{
+			Proposer:    "goat1xa56637tjn857jyg2plgvhdclzmr4crxzn5xus",
+			Vote:        &relayertypes.Votes{Signature: make([]byte, goatcrypto.SignatureLength)},
+			NoWitnessTx: common.Hex2Bytes("02000000012e0e3e521ac999cfc292a78aaeb31fe19dfb7867c660ae5560537370d55fdf0e0000000000ffffffff06e8030000000000001976a9146a9d23174484d7ba74f7bc2a64ed102b4846267588ace80300000000000017a91413aa207651e0f3724cbe6134f54675aa2d5cdbf987e803000000000000160014279476d2a1d257f0cdcc48641b3679d411187415e8030000000000002200203dad4a1a80c3925f74a48f429eeca43440ade0aee3d5db6880e73b474961631de8030000000000002200200c84239e8447e7c3b471b26736615eb76c4755c5b94516376958f17e0da4648f90c9f505000000001600145b029559baaea5e928e8e2774e9e2350a5fc9c2d00000000"),
+			TxFee:       1000,
 		}
 
 		for idx, address := range withdrawals {
@@ -176,11 +178,11 @@ func (suite *KeeperTestSuite) TestMsgWithdrawal() {
 			wd := types.Withdrawal{
 				Address:       address,
 				RequestAmount: 1e3,
-				MaxTxPrice:    5,
+				MaxTxPrice:    50,
 				Status:        status,
 			}
 			err = suite.Keeper.Withdrawals.Set(suite.Context, uint64(idx), wd)
-			req.Proposal.Id = append(req.Proposal.Id, uint64(idx))
+			req.Id = append(req.Id, uint64(idx))
 			suite.Require().NoError(err)
 			expected = append(expected, wd)
 		}
@@ -195,23 +197,78 @@ func (suite *KeeperTestSuite) TestMsgWithdrawal() {
 		suite.RelayerKeeper.EXPECT().SetProposalSeq(suite.Context, sequence+1)
 		suite.RelayerKeeper.EXPECT().UpdateRandao(suite.Context, req)
 
-		_, err = msgServer.InitializeWithdrawal(suite.Context, req)
+		_, err = msgServer.ProcessWithdrawal(suite.Context, req)
 		suite.Require().NoError(err)
 
 		for idx, wd := range expected {
 			wd.Status = types.WITHDRAWAL_STATUS_PROCESSING
-			wd.Receipt = &types.WithdrawalReceipt{Txid: txid[:], Txout: uint32(idx), Amount: 1e3}
+			wd.Receipt = &types.WithdrawalReceipt{Txid: fristTxid[:], Txout: uint32(idx), Amount: 1e3}
 			withdrawal, err := suite.Keeper.Withdrawals.Get(suite.Context, uint64(idx))
 			suite.Require().NoError(err)
 			suite.Require().Equal(withdrawal, wd)
 		}
 
-		processing, err := suite.Keeper.Processing.Get(suite.Context, txid[:])
+		processing, err := suite.Keeper.Processing.Get(suite.Context, 0)
 		suite.Require().NoError(err)
-		suite.Require().Equal(processing.Id, []uint64{0, 1, 2, 3, 4})
+		suite.Require().Equal(processing, types.Processing{
+			Txid:        [][]byte{fristTxid.CloneBytes()},
+			Output:      []types.TxOuptut{{Values: []uint64{1e3, 1e3, 1e3, 1e3, 1e3}}},
+			Withdrawals: []uint64{0, 1, 2, 3, 4},
+			Fee:         1000,
+		})
+		latestPid, err := suite.Keeper.ProcessID.Peek(suite.Context)
+		suite.Require().NoError(err)
+		suite.Require().EqualValues(latestPid, 1)
+		suite.Require().Len(suite.Context.EventManager().ABCIEvents(), 2)
+		events = append(events, sdktypes.NewEvent(types.EventTypeWithdrawalProcessing,
+			sdktypes.NewAttribute("pid", "0"), sdktypes.NewAttribute("txid", types.BtcTxid(fristTxid.CloneBytes()))))
+		events = append(events, sdktypes.NewEvent(relayertypes.EventFinalizedProposal, sdktypes.NewAttribute("sequence", "100")))
 	}
 
-	// finalize
+	// replace it
+	{
+		req := &types.MsgReplaceWithdrawal{
+			Proposer:       "goat1xa56637tjn857jyg2plgvhdclzmr4crxzn5xus",
+			Vote:           &relayertypes.Votes{Signature: make([]byte, goatcrypto.SignatureLength)},
+			Pid:            0,
+			NewNoWitnessTx: common.Hex2Bytes("02000000012e0e3e521ac999cfc292a78aaeb31fe19dfb7867c660ae5560537370d55fdf0e0000000000ffffffff06b0030000000000001976a9146a9d23174484d7ba74f7bc2a64ed102b4846267588aca00300000000000017a91413aa207651e0f3724cbe6134f54675aa2d5cdbf987e303000000000000160014279476d2a1d257f0cdcc48641b3679d41118741599030000000000002200203dad4a1a80c3925f74a48f429eeca43440ade0aee3d5db6880e73b474961631de3030000000000002200200c84239e8447e7c3b471b26736615eb76c4755c5b94516376958f17e0da4648f10270000000000001600145b029559baaea5e928e8e2774e9e2350a5fc9c2d00000000"),
+			NewTxFee:       1100,
+		}
+
+		sequence := uint64(101)
+		suite.RelayerKeeper.EXPECT().VerifyProposal(suite.Context, req).Return(sequence, nil)
+		suite.RelayerKeeper.EXPECT().SetProposalSeq(suite.Context, sequence+1)
+		suite.RelayerKeeper.EXPECT().UpdateRandao(suite.Context, req)
+
+		_, err = msgServer.ReplaceWithdrawal(suite.Context, req)
+		suite.Require().NoError(err)
+
+		processing, err := suite.Keeper.Processing.Get(suite.Context, 0)
+		suite.Require().NoError(err)
+
+		values := []uint64{944, 928, 995, 921, 995}
+		suite.Require().Equal(processing, types.Processing{
+			Txid:        [][]byte{fristTxid.CloneBytes(), secondTxid.CloneBytes()},
+			Output:      []types.TxOuptut{{Values: []uint64{1e3, 1e3, 1e3, 1e3, 1e3}}, {Values: values}},
+			Withdrawals: []uint64{0, 1, 2, 3, 4},
+			Fee:         1100,
+		})
+
+		for idx, wd := range expected {
+			wd.Status = types.WITHDRAWAL_STATUS_PROCESSING
+			wd.Receipt = &types.WithdrawalReceipt{Txid: secondTxid[:], Txout: uint32(idx), Amount: values[idx]}
+			withdrawal, err := suite.Keeper.Withdrawals.Get(suite.Context, uint64(idx))
+			suite.Require().NoError(err)
+			suite.Require().Equal(withdrawal, wd)
+		}
+		suite.Require().Len(suite.Context.EventManager().ABCIEvents(), 4)
+
+		events = append(events, sdktypes.NewEvent(types.EventTypeWithdrawalRelayerReplace,
+			sdktypes.NewAttribute("pid", "0"), sdktypes.NewAttribute("txid", types.BtcTxid(secondTxid.CloneBytes()))))
+		events = append(events, sdktypes.NewEvent(relayertypes.EventFinalizedProposal, sdktypes.NewAttribute("sequence", "101")))
+	}
+
+	// finalize it but the first tx is confirmed
 	{
 		err = suite.Keeper.EthTxQueue.Set(suite.Context, types.EthTxQueue{})
 		suite.Require().NoError(err)
@@ -231,7 +288,8 @@ func (suite *KeeperTestSuite) TestMsgWithdrawal() {
 
 		req := &types.MsgFinalizeWithdrawal{
 			Proposer:          "goat1xa56637tjn857jyg2plgvhdclzmr4crxzn5xus",
-			Txid:              txid[:],
+			Pid:               0,
+			Txid:              fristTxid.CloneBytes(),
 			BlockNumber:       height,
 			TxIndex:           1,
 			IntermediateProof: proof,
@@ -247,7 +305,7 @@ func (suite *KeeperTestSuite) TestMsgWithdrawal() {
 
 		for idx, wd := range expected {
 			wd.Status = types.WITHDRAWAL_STATUS_PAID
-			wd.Receipt = &types.WithdrawalReceipt{Txid: txid[:], Txout: uint32(idx), Amount: 1e3}
+			wd.Receipt = &types.WithdrawalReceipt{Txid: fristTxid.CloneBytes(), Txout: uint32(idx), Amount: 1e3}
 			withdrawal, err := suite.Keeper.Withdrawals.Get(suite.Context, uint64(idx))
 			suite.Require().NoError(err)
 			suite.Require().Equal(withdrawal, wd)
@@ -257,10 +315,14 @@ func (suite *KeeperTestSuite) TestMsgWithdrawal() {
 			}, queue.PaidWithdrawals[idx])
 		}
 
-		noProcessing, err := suite.Keeper.Processing.Has(suite.Context, txid[:])
+		noProcessing, err := suite.Keeper.Processing.Has(suite.Context, 0)
 		suite.Require().NoError(err)
 		suite.Require().False(noProcessing)
+		suite.Require().Len(suite.Context.EventManager().ABCIEvents(), 5)
+		events = append(events, sdktypes.NewEvent(types.EventTypeWithdrawalFinalized, sdktypes.NewAttribute("pid", "0")))
 	}
+
+	testutil.EventEquals(suite.T(), events, suite.Context.EventManager().Events())
 }
 
 func (suite *KeeperTestSuite) TestMsgApproveCancellation() {

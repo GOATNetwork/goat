@@ -25,13 +25,6 @@ message Deposit {
   goat.relayer.v1.PublicKey relayer_pubkey = 8;
 }
 
-// WithdrawalProposal
-message WithdrawalProposal {
-  repeated uint64 id = 1;
-  bytes no_witness_tx = 2;
-  uint64 tx_fee = 3; // tx fee in satoshi
-}
-
 // WithdrawalStatus is the status of a withdrawal.
 enum WithdrawalStatus {
   option (gogoproto.goproto_enum_prefix) = false;

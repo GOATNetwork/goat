@@ -26,6 +26,15 @@ message DepositGenesis {
   uint64 amount = 3;
 }
 
+// ProcessingGenesis
+message ProcessingGenesis {
+  uint64 id = 1;
+  Processing processing = 2 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
 // GenesisState defines the bitcoin module's genesis state.
 message GenesisState {
   // params defines all the parameters of the module.
@@ -49,4 +58,9 @@ message GenesisState {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
+  repeated ProcessingGenesis processing = 9 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  uint64 processing_id = 10;
 }
