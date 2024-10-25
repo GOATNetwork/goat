@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/btcsuite/btcd/chaincfg"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/core/types/goattypes"
@@ -95,17 +96,20 @@ func (k Keeper) ProcessBridgeRequest(ctx context.Context, reqs goattypes.BridgeR
 		return nil
 	}
 
-	param, err := k.Params.Get(ctx)
-	if err != nil {
-		return err
-	}
-
-	netwk := types.BitcoinNetworks[param.NetworkName]
-	if netwk == nil {
-		return fmt.Errorf("%s network is not defined", param.NetworkName)
-	}
-
 	events := make(sdktypes.Events, 0, reqLens)
+
+	var netwk *chaincfg.Params
+	if len(reqs.Withdraws) > 0 {
+		param, err := k.Params.Get(ctx)
+		if err != nil {
+			return err
+		}
+
+		netwk = types.BitcoinNetworks[param.NetworkName]
+		if netwk == nil {
+			return fmt.Errorf("%s network is not defined", param.NetworkName)
+		}
+	}
 
 	var rejecting []uint64
 	for _, v := range reqs.Withdraws {
