@@ -1699,17 +1699,17 @@ func (x *_GenesisState_9_list) IsValid() bool {
 }
 
 var (
-	md_GenesisState               protoreflect.MessageDescriptor
-	fd_GenesisState_params        protoreflect.FieldDescriptor
-	fd_GenesisState_block_tip     protoreflect.FieldDescriptor
-	fd_GenesisState_block_hashes  protoreflect.FieldDescriptor
-	fd_GenesisState_eth_tx_nonce  protoreflect.FieldDescriptor
-	fd_GenesisState_eth_tx_queue  protoreflect.FieldDescriptor
-	fd_GenesisState_pubkey        protoreflect.FieldDescriptor
-	fd_GenesisState_deposits      protoreflect.FieldDescriptor
-	fd_GenesisState_withdrawals   protoreflect.FieldDescriptor
-	fd_GenesisState_processing    protoreflect.FieldDescriptor
-	fd_GenesisState_processing_id protoreflect.FieldDescriptor
+	md_GenesisState                   protoreflect.MessageDescriptor
+	fd_GenesisState_params            protoreflect.FieldDescriptor
+	fd_GenesisState_block_tip         protoreflect.FieldDescriptor
+	fd_GenesisState_block_hashes      protoreflect.FieldDescriptor
+	fd_GenesisState_eth_tx_nonce      protoreflect.FieldDescriptor
+	fd_GenesisState_eth_tx_queue      protoreflect.FieldDescriptor
+	fd_GenesisState_pubkey            protoreflect.FieldDescriptor
+	fd_GenesisState_deposits          protoreflect.FieldDescriptor
+	fd_GenesisState_withdrawals       protoreflect.FieldDescriptor
+	fd_GenesisState_processing        protoreflect.FieldDescriptor
+	fd_GenesisState_latest_process_id protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -1724,7 +1724,7 @@ func init() {
 	fd_GenesisState_deposits = md_GenesisState.Fields().ByName("deposits")
 	fd_GenesisState_withdrawals = md_GenesisState.Fields().ByName("withdrawals")
 	fd_GenesisState_processing = md_GenesisState.Fields().ByName("processing")
-	fd_GenesisState_processing_id = md_GenesisState.Fields().ByName("processing_id")
+	fd_GenesisState_latest_process_id = md_GenesisState.Fields().ByName("latest_process_id")
 }
 
 var _ protoreflect.Message = (*fastReflection_GenesisState)(nil)
@@ -1846,9 +1846,9 @@ func (x *fastReflection_GenesisState) Range(f func(protoreflect.FieldDescriptor,
 			return
 		}
 	}
-	if x.ProcessingId != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.ProcessingId)
-		if !f(fd_GenesisState_processing_id, value) {
+	if x.LatestProcessId != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.LatestProcessId)
+		if !f(fd_GenesisState_latest_process_id, value) {
 			return
 		}
 	}
@@ -1885,8 +1885,8 @@ func (x *fastReflection_GenesisState) Has(fd protoreflect.FieldDescriptor) bool 
 		return len(x.Withdrawals) != 0
 	case "goat.bitcoin.v1.GenesisState.processing":
 		return len(x.Processing) != 0
-	case "goat.bitcoin.v1.GenesisState.processing_id":
-		return x.ProcessingId != uint64(0)
+	case "goat.bitcoin.v1.GenesisState.latest_process_id":
+		return x.LatestProcessId != uint64(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.GenesisState"))
@@ -1921,8 +1921,8 @@ func (x *fastReflection_GenesisState) Clear(fd protoreflect.FieldDescriptor) {
 		x.Withdrawals = nil
 	case "goat.bitcoin.v1.GenesisState.processing":
 		x.Processing = nil
-	case "goat.bitcoin.v1.GenesisState.processing_id":
-		x.ProcessingId = uint64(0)
+	case "goat.bitcoin.v1.GenesisState.latest_process_id":
+		x.LatestProcessId = uint64(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.GenesisState"))
@@ -1978,8 +1978,8 @@ func (x *fastReflection_GenesisState) Get(descriptor protoreflect.FieldDescripto
 		}
 		listValue := &_GenesisState_9_list{list: &x.Processing}
 		return protoreflect.ValueOfList(listValue)
-	case "goat.bitcoin.v1.GenesisState.processing_id":
-		value := x.ProcessingId
+	case "goat.bitcoin.v1.GenesisState.latest_process_id":
+		value := x.LatestProcessId
 		return protoreflect.ValueOfUint64(value)
 	default:
 		if descriptor.IsExtension() {
@@ -2027,8 +2027,8 @@ func (x *fastReflection_GenesisState) Set(fd protoreflect.FieldDescriptor, value
 		lv := value.List()
 		clv := lv.(*_GenesisState_9_list)
 		x.Processing = *clv.list
-	case "goat.bitcoin.v1.GenesisState.processing_id":
-		x.ProcessingId = value.Uint()
+	case "goat.bitcoin.v1.GenesisState.latest_process_id":
+		x.LatestProcessId = value.Uint()
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.GenesisState"))
@@ -2092,8 +2092,8 @@ func (x *fastReflection_GenesisState) Mutable(fd protoreflect.FieldDescriptor) p
 		panic(fmt.Errorf("field block_tip of message goat.bitcoin.v1.GenesisState is not mutable"))
 	case "goat.bitcoin.v1.GenesisState.eth_tx_nonce":
 		panic(fmt.Errorf("field eth_tx_nonce of message goat.bitcoin.v1.GenesisState is not mutable"))
-	case "goat.bitcoin.v1.GenesisState.processing_id":
-		panic(fmt.Errorf("field processing_id of message goat.bitcoin.v1.GenesisState is not mutable"))
+	case "goat.bitcoin.v1.GenesisState.latest_process_id":
+		panic(fmt.Errorf("field latest_process_id of message goat.bitcoin.v1.GenesisState is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.bitcoin.v1.GenesisState"))
@@ -2132,7 +2132,7 @@ func (x *fastReflection_GenesisState) NewField(fd protoreflect.FieldDescriptor) 
 	case "goat.bitcoin.v1.GenesisState.processing":
 		list := []*ProcessingGenesis{}
 		return protoreflect.ValueOfList(&_GenesisState_9_list{list: &list})
-	case "goat.bitcoin.v1.GenesisState.processing_id":
+	case "goat.bitcoin.v1.GenesisState.latest_process_id":
 		return protoreflect.ValueOfUint64(uint64(0))
 	default:
 		if fd.IsExtension() {
@@ -2245,8 +2245,8 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
 		}
-		if x.ProcessingId != 0 {
-			n += 1 + runtime.Sov(uint64(x.ProcessingId))
+		if x.LatestProcessId != 0 {
+			n += 1 + runtime.Sov(uint64(x.LatestProcessId))
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -2277,8 +2277,8 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if x.ProcessingId != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.ProcessingId))
+		if x.LatestProcessId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.LatestProcessId))
 			i--
 			dAtA[i] = 0x50
 		}
@@ -2722,9 +2722,9 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 10:
 				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ProcessingId", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LatestProcessId", wireType)
 				}
-				x.ProcessingId = 0
+				x.LatestProcessId = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -2734,7 +2734,7 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.ProcessingId |= uint64(b&0x7F) << shift
+					x.LatestProcessId |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -2934,16 +2934,16 @@ type GenesisState struct {
 	unknownFields protoimpl.UnknownFields
 
 	// params defines all the parameters of the module.
-	Params       *Params              `protobuf:"bytes,1,opt,name=params,proto3" json:"params,omitempty"`
-	BlockTip     uint64               `protobuf:"varint,2,opt,name=block_tip,json=blockTip,proto3" json:"block_tip,omitempty"`
-	BlockHashes  [][]byte             `protobuf:"bytes,3,rep,name=block_hashes,json=blockHashes,proto3" json:"block_hashes,omitempty"`
-	EthTxNonce   uint64               `protobuf:"varint,4,opt,name=eth_tx_nonce,json=ethTxNonce,proto3" json:"eth_tx_nonce,omitempty"`
-	EthTxQueue   *EthTxQueue          `protobuf:"bytes,5,opt,name=eth_tx_queue,json=ethTxQueue,proto3" json:"eth_tx_queue,omitempty"`
-	Pubkey       *v1.PublicKey        `protobuf:"bytes,6,opt,name=pubkey,proto3" json:"pubkey,omitempty"`
-	Deposits     []*DepositGenesis    `protobuf:"bytes,7,rep,name=deposits,proto3" json:"deposits,omitempty"`
-	Withdrawals  []*WithdrawalGenesis `protobuf:"bytes,8,rep,name=withdrawals,proto3" json:"withdrawals,omitempty"`
-	Processing   []*ProcessingGenesis `protobuf:"bytes,9,rep,name=processing,proto3" json:"processing,omitempty"`
-	ProcessingId uint64               `protobuf:"varint,10,opt,name=processing_id,json=processingId,proto3" json:"processing_id,omitempty"`
+	Params          *Params              `protobuf:"bytes,1,opt,name=params,proto3" json:"params,omitempty"`
+	BlockTip        uint64               `protobuf:"varint,2,opt,name=block_tip,json=blockTip,proto3" json:"block_tip,omitempty"`
+	BlockHashes     [][]byte             `protobuf:"bytes,3,rep,name=block_hashes,json=blockHashes,proto3" json:"block_hashes,omitempty"`
+	EthTxNonce      uint64               `protobuf:"varint,4,opt,name=eth_tx_nonce,json=ethTxNonce,proto3" json:"eth_tx_nonce,omitempty"`
+	EthTxQueue      *EthTxQueue          `protobuf:"bytes,5,opt,name=eth_tx_queue,json=ethTxQueue,proto3" json:"eth_tx_queue,omitempty"`
+	Pubkey          *v1.PublicKey        `protobuf:"bytes,6,opt,name=pubkey,proto3" json:"pubkey,omitempty"`
+	Deposits        []*DepositGenesis    `protobuf:"bytes,7,rep,name=deposits,proto3" json:"deposits,omitempty"`
+	Withdrawals     []*WithdrawalGenesis `protobuf:"bytes,8,rep,name=withdrawals,proto3" json:"withdrawals,omitempty"`
+	Processing      []*ProcessingGenesis `protobuf:"bytes,9,rep,name=processing,proto3" json:"processing,omitempty"`
+	LatestProcessId uint64               `protobuf:"varint,10,opt,name=latest_process_id,json=latestProcessId,proto3" json:"latest_process_id,omitempty"`
 }
 
 func (x *GenesisState) Reset() {
@@ -3029,9 +3029,9 @@ func (x *GenesisState) GetProcessing() []*ProcessingGenesis {
 	return nil
 }
 
-func (x *GenesisState) GetProcessingId() uint64 {
+func (x *GenesisState) GetLatestProcessId() uint64 {
 	if x != nil {
-		return x.ProcessingId
+		return x.LatestProcessId
 	}
 	return 0
 }
@@ -3071,7 +3071,7 @@ var file_goat_bitcoin_v1_genesis_proto_rawDesc = []byte{
 	0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x50,
 	0x72, 0x6f, 0x63, 0x65, 0x73, 0x73, 0x69, 0x6e, 0x67, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8,
 	0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x0a, 0x70, 0x72, 0x6f, 0x63, 0x65, 0x73, 0x73, 0x69, 0x6e, 0x67,
-	0x22, 0xb7, 0x04, 0x0a, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x53, 0x74, 0x61, 0x74,
+	0x22, 0xbe, 0x04, 0x0a, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x53, 0x74, 0x61, 0x74,
 	0x65, 0x12, 0x3a, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28,
 	0x0b, 0x32, 0x17, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e,
 	0x2e, 0x76, 0x31, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00,
@@ -3104,22 +3104,22 @@ var file_goat_bitcoin_v1_genesis_proto_rawDesc = []byte{
 	0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x72, 0x6f,
 	0x63, 0x65, 0x73, 0x73, 0x69, 0x6e, 0x67, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x42, 0x09,
 	0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x0a, 0x70, 0x72, 0x6f, 0x63, 0x65,
-	0x73, 0x73, 0x69, 0x6e, 0x67, 0x12, 0x23, 0x0a, 0x0d, 0x70, 0x72, 0x6f, 0x63, 0x65, 0x73, 0x73,
-	0x69, 0x6e, 0x67, 0x5f, 0x69, 0x64, 0x18, 0x0a, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0c, 0x70, 0x72,
-	0x6f, 0x63, 0x65, 0x73, 0x73, 0x69, 0x6e, 0x67, 0x49, 0x64, 0x42, 0xbc, 0x01, 0x0a, 0x13, 0x63,
-	0x6f, 0x6d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e,
-	0x76, 0x31, 0x42, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f,
-	0x50, 0x01, 0x5a, 0x39, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67,
-	0x6f, 0x61, 0x74, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f,
-	0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e,
-	0x2f, 0x76, 0x31, 0x3b, 0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x76, 0x31, 0xa2, 0x02, 0x03,
-	0x47, 0x42, 0x58, 0xaa, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x2e, 0x42, 0x69, 0x74, 0x63, 0x6f,
-	0x69, 0x6e, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x42, 0x69, 0x74,
-	0x63, 0x6f, 0x69, 0x6e, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x1b, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x42,
-	0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74,
-	0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x11, 0x47, 0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x42, 0x69,
-	0x74, 0x63, 0x6f, 0x69, 0x6e, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x33,
+	0x73, 0x73, 0x69, 0x6e, 0x67, 0x12, 0x2a, 0x0a, 0x11, 0x6c, 0x61, 0x74, 0x65, 0x73, 0x74, 0x5f,
+	0x70, 0x72, 0x6f, 0x63, 0x65, 0x73, 0x73, 0x5f, 0x69, 0x64, 0x18, 0x0a, 0x20, 0x01, 0x28, 0x04,
+	0x52, 0x0f, 0x6c, 0x61, 0x74, 0x65, 0x73, 0x74, 0x50, 0x72, 0x6f, 0x63, 0x65, 0x73, 0x73, 0x49,
+	0x64, 0x42, 0xbc, 0x01, 0x0a, 0x13, 0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x62,
+	0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x42, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73,
+	0x69, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x39, 0x67, 0x69, 0x74, 0x68, 0x75,
+	0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72,
+	0x6b, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f,
+	0x62, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2f, 0x76, 0x31, 0x3b, 0x62, 0x69, 0x74, 0x63, 0x6f,
+	0x69, 0x6e, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x47, 0x42, 0x58, 0xaa, 0x02, 0x0f, 0x47, 0x6f, 0x61,
+	0x74, 0x2e, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x0f, 0x47,
+	0x6f, 0x61, 0x74, 0x5c, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x5c, 0x56, 0x31, 0xe2, 0x02,
+	0x1b, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x5c, 0x56, 0x31,
+	0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x11, 0x47,
+	0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x3a, 0x3a, 0x56, 0x31,
+	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (

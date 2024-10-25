@@ -62,5 +62,5 @@ message GenesisState {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
-  uint64 processing_id = 10;
+  uint64 latest_process_id = 10;
 }

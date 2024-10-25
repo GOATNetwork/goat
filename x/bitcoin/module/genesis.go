@@ -70,7 +70,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 			panic(err)
 		}
 	}
-	if err := k.ProcessID.Set(ctx, genState.ProcessingId); err != nil {
+	if err := k.ProcessID.Set(ctx, genState.LatestProcessId); err != nil {
 		panic(err)
 	}
 }
@@ -167,7 +167,7 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 
 	// processing
 	{
-		genesis.ProcessingId, err = k.ProcessID.Peek(ctx)
+		genesis.LatestProcessId, err = k.ProcessID.Peek(ctx)
 		if err != nil {
 			panic(err)
 		}
