@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
@@ -99,12 +100,17 @@ func (k Keeper) ProcessBridgeRequest(ctx context.Context, reqs goattypes.BridgeR
 		return err
 	}
 
+	netwk := types.BitcoinNetworks[param.NetworkName]
+	if netwk == nil {
+		return fmt.Errorf("%s network is not defined", param.NetworkName)
+	}
+
 	events := make(sdktypes.Events, 0, reqLens)
 
 	var rejecting []uint64
 	for _, v := range reqs.Withdraws {
 		// reject if we have an invalid address
-		if _, err := types.DecodeBtcAddress(v.Address, types.BitcoinNetworks[param.NetworkName]);err != nil {
+		if _, err := types.DecodeBtcAddress(v.Address, netwk); err != nil {
 			k.Logger().Info("invalid withdrawal address", "id", v.Id, "address", v.Address, "err", err.Error())
 			rejecting = append(rejecting, v.Id)
 			continue
