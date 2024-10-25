@@ -105,7 +105,7 @@ func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
 	suite.Require().Equal(wd2, types.Withdrawal{
 		Address:       withdrawals1[2].Address,
 		RequestAmount: withdrawals1[2].Amount,
-		MaxTxPrice:    rbf1[0].TxPrice,
+		MaxTxPrice:    rbf2[0].TxPrice,
 		Status:        types.WITHDRAWAL_STATUS_PROCESSING,
 	})
 
@@ -122,7 +122,7 @@ func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
 	suite.Require().Equal(wd2, types.Withdrawal{
 		Address:       withdrawals1[2].Address,
 		RequestAmount: withdrawals1[2].Amount,
-		MaxTxPrice:    rbf1[0].TxPrice,
+		MaxTxPrice:    rbf2[0].TxPrice,
 		Status:        types.WITHDRAWAL_STATUS_PROCESSING,
 	})
 

@@ -147,8 +147,10 @@ func (k Keeper) ProcessBridgeRequest(ctx context.Context, reqs goattypes.BridgeR
 		if err != nil {
 			return err
 		}
-		if withdrawal.Status != types.WITHDRAWAL_STATUS_PENDING {
-			k.Logger().Info("disregard rbf request due to it's processing", "id", v.Id)
+		// event if it's processing, we should allow the change
+		// relayer can use the latest tx price to do the rbf
+		if withdrawal.Status != types.WITHDRAWAL_STATUS_PENDING && withdrawal.Status != types.WITHDRAWAL_STATUS_PROCESSING {
+			k.Logger().Info("disregard rbf request", "id", v.Id)
 			continue
 		}
 		withdrawal.MaxTxPrice = v.TxPrice
