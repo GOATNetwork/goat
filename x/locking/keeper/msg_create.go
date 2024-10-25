@@ -28,7 +28,7 @@ func (k Keeper) createValidator(ctx context.Context, req *goattypes.CreateReques
 	pubkey := &secp256k1.PubKey{Key: goatcrypto.CompressP256k1Pubkey(req.Pubkey)}
 	address := sdktypes.ConsAddress(pubkey.Address())
 	if !bytes.Equal(address, req.Validator.Bytes()) {
-		return errorsmod.Wrapf(sdkerrors.ErrLogic, "invalid address for pubkey %x: expect %x but got %x",
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid address for pubkey %x: expect %x but got %x",
 			req.Pubkey[:], req.Validator.Bytes(), address.Bytes())
 	}
 

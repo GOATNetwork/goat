@@ -15,7 +15,7 @@ import (
 
 func (k Keeper) UpdateRewardPool(ctx context.Context, gas []*goattypes.GasRequest, grants []*goattypes.GrantRequest) error {
 	if l := len(gas); l != 1 {
-		return errorsmod.Wrapf(sdkerrors.ErrLogic, "expected gas revenue request length 1 but got %d", l)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "expected gas revenue request length 1 but got %d", l)
 	}
 
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)

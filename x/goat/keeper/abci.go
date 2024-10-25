@@ -202,15 +202,15 @@ func (k Keeper) createEthBlockProposal(sdkctx sdk.Context, keyProvider cryptotyp
 func (k Keeper) ProcessProposalHandler(txVerifier baseapp.ProposalTxVerifier) sdk.ProcessProposalHandler {
 	return func(sdkctx sdk.Context, rpp *abci.RequestProcessProposal) (*abci.ResponseProcessProposal, error) {
 		if l := len(rpp.Txs); l == 0 {
-			return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "no transactions")
+			return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "no transactions")
 		} else if l > maxTxLen {
-			return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "too many transactions")
+			return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "too many transactions")
 		}
 
 		for txIdx, rawTx := range rpp.Txs {
 			tx, err := txVerifier.ProcessProposalVerifyTx(rawTx)
 			if err != nil {
-				return nil, errorsmod.Wrapf(sdkerrors.ErrLogic, "invalid transaction: index %d: %s", txIdx, err)
+				return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid transaction: index %d: %s", txIdx, err)
 			}
 
 			msgs := tx.GetMsgs()
@@ -218,14 +218,14 @@ func (k Keeper) ProcessProposalHandler(txVerifier baseapp.ProposalTxVerifier) sd
 			// the first tx should be for MsgNewEthBlock
 			if txIdx == 0 {
 				if len(msgs) != 1 {
-					return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "invalid MsgNewEthBlock message")
+					return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid MsgNewEthBlock message")
 				}
 				ethBlock, ok := msgs[0].(*types.MsgNewEthBlock)
 				if !ok {
-					return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "the first tx should be MsgNewEthBlock")
+					return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "the first tx should be MsgNewEthBlock")
 				}
 				if err := k.verifyEthBlockProposal(sdkctx, ethBlock); err != nil {
-					return nil, errorsmod.Wrapf(sdkerrors.ErrLogic, "invalid MsgNewEthBlock: %s", err.Error())
+					return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid MsgNewEthBlock: %s", err.Error())
 				}
 				continue
 			}
@@ -235,7 +235,7 @@ func (k Keeper) ProcessProposalHandler(txVerifier baseapp.ProposalTxVerifier) sd
 			// and we check the second case here
 			for _, msg := range msgs {
 				if _, ok := msg.(*types.MsgNewEthBlock); ok {
-					return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "MsgNewEthBlock should be first tx in block")
+					return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "MsgNewEthBlock should be first tx in block")
 				}
 			}
 		}

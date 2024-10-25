@@ -32,7 +32,7 @@ func (k msgServer) NewEthBlock(ctx context.Context, req *types.MsgNewEthBlock) (
 
 	cometProposer := sdkctx.CometInfo().GetProposerAddress()
 	if !bytes.Equal(proposer, cometProposer) || !bytes.Equal(proposer, req.Payload.FeeRecipient) {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "consensus proposer mismatched")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "consensus proposer mismatched")
 	}
 
 	block, err := k.Block.Get(sdkctx)
@@ -42,15 +42,15 @@ func (k msgServer) NewEthBlock(ctx context.Context, req *types.MsgNewEthBlock) (
 
 	payload := req.Payload
 	if payload == nil {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "empty payload")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "empty payload")
 	}
 
 	if !bytes.Equal(block.BlockHash, payload.ParentHash) || block.BlockNumber+1 != payload.BlockNumber {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "incorrect parent block")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "incorrect parent block")
 	}
 
 	if payload.BlobGasUsed > 0 {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "blob tx is not allowed")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "blob tx is not allowed")
 	}
 
 	beaconRoot, err := k.BeaconRoot.Get(sdkctx)
@@ -58,16 +58,16 @@ func (k msgServer) NewEthBlock(ctx context.Context, req *types.MsgNewEthBlock) (
 		return nil, err
 	}
 	if !bytes.Equal(beaconRoot, payload.BeaconRoot) {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "invalid beacon root")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid beacon root")
 	}
 
 	if err := k.VerifyDequeue(sdkctx, payload.ExtraData, payload.Transactions); err != nil {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "dequeue mismatched")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "dequeue mismatched")
 	}
 
 	bridgeReq, relayerReq, lockingReq, err := goattypes.DecodeRequests(payload.Requests, false)
 	if err != nil {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "invalid execution requests")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid execution requests")
 	}
 
 	if err := k.lockingKeeper.ProcessLockingRequest(sdkctx, lockingReq); err != nil {

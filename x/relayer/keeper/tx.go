@@ -29,7 +29,7 @@ func (k msgServer) NewVoter(ctx context.Context, req *types.MsgNewVoterRequest) 
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
 
 	if err := req.Validate(); err != nil {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, err.Error())
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	relayer, err := k.VerifyNonProposal(sdkctx, req)
@@ -49,11 +49,11 @@ func (k msgServer) NewVoter(ctx context.Context, req *types.MsgNewVoterRequest) 
 	}
 
 	if voter.Status != types.VOTER_STATUS_PENDING {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "not a pending voter")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "not a pending voter")
 	}
 
 	if !bytes.Equal(goatcrypto.SHA256Sum(req.VoterBlsKey), voter.VoteKey) {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "vote key hash not match")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "vote key hash not match")
 	}
 
 	reqMsg := types.NewOnBoardingVoterRequest(voter.Height, addrRaw, voter.VoteKey)
@@ -61,11 +61,11 @@ func (k msgServer) NewVoter(ctx context.Context, req *types.MsgNewVoterRequest) 
 		reqMsg.MethodName(), sdkctx.ChainID(), req.Proposer, 0 /* sequence */, relayer.GetEpoch(), reqMsg.SignDoc())
 
 	if !ethcrypto.VerifySignature(req.VoterTxKey, sigMsg, req.VoterTxKeyProof) {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "false tx key proof")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "false tx key proof")
 	}
 
 	if !goatcrypto.Verify(req.VoterBlsKey, sigMsg, req.VoterBlsKeyProof) {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "false vote key proof")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "false vote key proof")
 	}
 
 	// add account
@@ -73,7 +73,7 @@ func (k msgServer) NewVoter(ctx context.Context, req *types.MsgNewVoterRequest) 
 	if !hasAccount {
 		acc := k.accountKeeper.NewAccountWithAddress(sdkctx, addrRaw)
 		if err := acc.SetPubKey(&secp256k1.PubKey{Key: req.VoterTxKey}); err != nil {
-			return nil, errorsmod.Wrapf(sdkerrors.ErrLogic, "failed to set voter's account pubkey: %s", err.Error())
+			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "failed to set voter's account pubkey: %s", err.Error())
 		}
 		k.accountKeeper.SetAccount(sdkctx, acc)
 	}
@@ -113,15 +113,15 @@ func (k msgServer) AcceptProposer(ctx context.Context, req *types.MsgAcceptPropo
 	}
 
 	if relayer.Proposer != req.Proposer {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "not the current proposer")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "not the current proposer")
 	}
 
 	if relayer.ProposerAccepted {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "proposer has been accepted")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "proposer has been accepted")
 	}
 
 	if relayer.Epoch != req.Epoch {
-		return nil, errorsmod.Wrapf(sdkerrors.ErrLogic, "invalid epoch: expected %d", relayer.Epoch)
+		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid epoch: expected %d", relayer.Epoch)
 	}
 
 	param, err := k.Params.Get(sdkctx)
@@ -130,7 +130,7 @@ func (k msgServer) AcceptProposer(ctx context.Context, req *types.MsgAcceptPropo
 	}
 
 	if sdkctx.BlockTime().Sub(relayer.LastElected) > param.AcceptProposerTimeout {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "timeout to accept proposer role")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "timeout to accept proposer role")
 	}
 
 	relayer.ProposerAccepted = true

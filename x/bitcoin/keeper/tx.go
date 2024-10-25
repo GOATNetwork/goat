@@ -29,16 +29,16 @@ var _ types.MsgServer = msgServer{}
 
 func (k msgServer) NewDeposits(ctx context.Context, req *types.MsgNewDeposits) (*types.MsgNewDepositsResponse, error) {
 	if err := req.Validate(); err != nil {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, err.Error())
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	var headers map[uint64][]byte
 	if err := json.Unmarshal(req.BlockHeaders, &headers); err != nil {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "invalid block header json")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid block header json")
 	}
 
 	if h := len(headers); h == 0 || h > len(req.Deposits) {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "invalid headers size")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid headers size")
 	}
 
 	if _, err := k.relayerKeeper.VerifyNonProposal(ctx, req); err != nil {
@@ -49,7 +49,7 @@ func (k msgServer) NewDeposits(ctx context.Context, req *types.MsgNewDeposits) (
 	deposits := make([]*types.DepositExecReceipt, 0, len(req.Deposits))
 	for _, v := range req.Deposits {
 		if err := v.Validate(); err != nil {
-			return nil, errorsmod.Wrap(sdkerrors.ErrLogic, err.Error())
+			return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 
 		deposit, err := k.VerifyDeposit(ctx, headers, v)
@@ -80,7 +80,7 @@ func (k msgServer) NewDeposits(ctx context.Context, req *types.MsgNewDeposits) (
 
 func (k msgServer) NewBlockHashes(ctx context.Context, req *types.MsgNewBlockHashes) (*types.MsgNewBlockHashesResponse, error) {
 	if err := req.Validate(); err != nil {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, err.Error())
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	parentHeight, err := k.BlockTip.Peek(ctx)
@@ -88,7 +88,7 @@ func (k msgServer) NewBlockHashes(ctx context.Context, req *types.MsgNewBlockHas
 		return nil, err
 	}
 	if req.StartBlockNumber != parentHeight+1 {
-		return nil, errorsmod.Wrapf(sdkerrors.ErrLogic, "block number is not the next of the block %d", parentHeight)
+		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "block number is not the next of the block %d", parentHeight)
 	}
 
 	sequence, err := k.relayerKeeper.VerifyProposal(ctx, req)
@@ -124,7 +124,7 @@ func (k msgServer) NewBlockHashes(ctx context.Context, req *types.MsgNewBlockHas
 
 func (k msgServer) NewPubkey(ctx context.Context, req *types.MsgNewPubkey) (*types.MsgNewPubkeyResponse, error) {
 	if err := req.Validate(); err != nil {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, err.Error())
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	sequence, err := k.relayerKeeper.VerifyProposal(ctx, req)
@@ -139,7 +139,7 @@ func (k msgServer) NewPubkey(ctx context.Context, req *types.MsgNewPubkey) (*typ
 	}
 
 	if exists {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "the key already existed")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "the key already existed")
 	}
 
 	if err := k.relayerKeeper.AddNewKey(ctx, rawKey); err != nil {
@@ -348,11 +348,11 @@ func (k msgServer) ReplaceWithdrawal(ctx context.Context, req *types.MsgReplaceW
 		}
 
 		if withdrawal.Status != types.WITHDRAWAL_STATUS_PROCESSING || withdrawal.Receipt == nil {
-			return nil, errorsmod.Wrapf(sdkerrors.ErrLogic, "witdhrawal %d is not processing", wid)
+			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "witdhrawal %d is not processing", wid)
 		}
 
 		if txPrice > float64(withdrawal.MaxTxPrice) {
-			return nil, errorsmod.Wrapf(sdkerrors.ErrLogic, "tx price is larger than user request for witdhrawal %d", wid)
+			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "tx price is larger than user request for witdhrawal %d", wid)
 		}
 
 		txout := tx.TxOut[idx]
@@ -427,7 +427,7 @@ func (k msgServer) FinalizeWithdrawal(ctx context.Context, req *types.MsgFinaliz
 	}
 
 	if len(processing.Txid) != len(processing.Output) {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "internal error: txid length is not the same with outputs")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "internal error: txid length is not the same with outputs")
 	}
 
 	idx := -1
@@ -444,7 +444,7 @@ func (k msgServer) FinalizeWithdrawal(ctx context.Context, req *types.MsgFinaliz
 
 	txOutput := processing.Output[idx]
 	if len(txOutput.Values) != len(processing.Withdrawals) {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "internal error: output length is not the same with withdrawals")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "internal error: output length is not the same with withdrawals")
 	}
 
 	// check if the block is voted
@@ -473,11 +473,11 @@ func (k msgServer) FinalizeWithdrawal(ctx context.Context, req *types.MsgFinaliz
 			return nil, err
 		}
 		if withdrawal.Status != types.WITHDRAWAL_STATUS_PROCESSING {
-			return nil, errorsmod.Wrapf(sdkerrors.ErrLogic, "witdhrawal %d is not processing", wid)
+			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "witdhrawal %d is not processing", wid)
 		}
 
 		if withdrawal.Receipt == nil {
-			return nil, errorsmod.Wrapf(sdkerrors.ErrLogic, "witdhrawal %d receipt is nil", wid)
+			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "witdhrawal %d receipt is nil", wid)
 		}
 
 		// the last RBFed txes might not be confirmed, so we should update the txid and amount
