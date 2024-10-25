@@ -44,10 +44,10 @@ service Msg {
   // relayer proposer doesn't need to submit the signed transaction to the chain
   rpc ProcessWithdrawal(MsgProcessWithdrawal) returns (MsgProcessWithdrawalResponse);
 
-  // ReplaceWithdrawal replaces a withdrawal by relayer
+  // ReplaceWithdrawal replaces a withdrawal by increasing fee
   // ** the output for the withdrawal should be not changed, but you can change
   // the value
-  // ** the new tx price should not be larger than before
+  // ** the new tx fee should be larger than before
   // ** it requires off-chain vote by relayer group
   rpc ReplaceWithdrawal(MsgReplaceWithdrawal) returns (MsgReplaceWithdrawalResponse);
 

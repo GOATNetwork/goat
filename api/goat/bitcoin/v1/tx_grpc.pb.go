@@ -62,10 +62,10 @@ type MsgClient interface {
 	// signing process is finished Since the signing is an off chain process, so
 	// relayer proposer doesn't need to submit the signed transaction to the chain
 	ProcessWithdrawal(ctx context.Context, in *MsgProcessWithdrawal, opts ...grpc.CallOption) (*MsgProcessWithdrawalResponse, error)
-	// ReplaceWithdrawal replaces a withdrawal by relayer
+	// ReplaceWithdrawal replaces a withdrawal by increasing fee
 	// ** the output for the withdrawal should be not changed, but you can change
 	// the value
-	// ** the new tx price should not be larger than before
+	// ** the new tx fee should be larger than before
 	// ** it requires off-chain vote by relayer group
 	ReplaceWithdrawal(ctx context.Context, in *MsgReplaceWithdrawal, opts ...grpc.CallOption) (*MsgReplaceWithdrawalResponse, error)
 	// FinalizeWithdrawal finlizes withdrawals and informs the chain to create the
@@ -202,10 +202,10 @@ type MsgServer interface {
 	// signing process is finished Since the signing is an off chain process, so
 	// relayer proposer doesn't need to submit the signed transaction to the chain
 	ProcessWithdrawal(context.Context, *MsgProcessWithdrawal) (*MsgProcessWithdrawalResponse, error)
-	// ReplaceWithdrawal replaces a withdrawal by relayer
+	// ReplaceWithdrawal replaces a withdrawal by increasing fee
 	// ** the output for the withdrawal should be not changed, but you can change
 	// the value
-	// ** the new tx price should not be larger than before
+	// ** the new tx fee should be larger than before
 	// ** it requires off-chain vote by relayer group
 	ReplaceWithdrawal(context.Context, *MsgReplaceWithdrawal) (*MsgReplaceWithdrawalResponse, error)
 	// FinalizeWithdrawal finlizes withdrawals and informs the chain to create the
