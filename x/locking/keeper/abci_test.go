@@ -1,10 +1,27 @@
 package keeper_test
 
 import (
+	gomath "math"
+	"math/big"
+	"math/rand/v2"
+	"testing"
+
 	"cosmossdk.io/collections"
+	"cosmossdk.io/log"
 	"cosmossdk.io/math"
+	"cosmossdk.io/store"
+	"cosmossdk.io/store/metrics"
+	storetypes "cosmossdk.io/store/types"
+	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
+	dbm "github.com/cosmos/cosmos-db"
+	"github.com/cosmos/cosmos-sdk/codec"
+	addresscodec "github.com/cosmos/cosmos-sdk/codec/address"
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
+	"github.com/cosmos/cosmos-sdk/runtime"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/goatnetwork/goat/x/locking/keeper"
 	"github.com/goatnetwork/goat/x/locking/types"
+	"github.com/stretchr/testify/require"
 )
 
 func (suite *KeeperTestSuite) TestEndBlocker() {
@@ -228,4 +245,52 @@ func (suite *KeeperTestSuite) TestEndBlocker() {
 			suite.Require().False(exists)
 		}
 	}
+}
+
+func TestPowerRankingIterator(t *testing.T) {
+	db, err := dbm.NewDB(types.ModuleName, dbm.GoLevelDBBackend, t.TempDir())
+	require.NoError(t, err)
+
+	storeKey := storetypes.NewKVStoreKey(types.StoreKey)
+	stateStore := store.NewCommitMultiStore(db, log.NewNopLogger(), metrics.NewNoOpMetrics())
+	stateStore.MountStoreWithDB(storeKey, storetypes.StoreTypeIAVL, db)
+	require.NoError(t, stateStore.LoadLatestVersion())
+
+	cdc := codec.NewProtoCodec(codectypes.NewInterfaceRegistry())
+	addressCodec := addresscodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix())
+
+	k := keeper.NewKeeper(
+		cdc,
+		addressCodec,
+		runtime.NewKVStoreService(storeKey),
+		nil,
+		log.NewNopLogger(),
+	)
+
+	ctx := sdk.NewContext(stateStore, cmtproto.Header{}, false, log.NewNopLogger())
+
+	const total int64 = 1e5
+	for i := range total {
+		power := rand.Uint64N(gomath.MaxUint64)
+		err := k.PowerRanking.Set(ctx, collections.Join(power,
+			sdk.ConsAddress(big.NewInt(i).FillBytes(make([]byte, 20)))))
+		require.NoError(t, err)
+	}
+
+	iter, err := k.PowerRanking.Iterate(ctx,
+		new(collections.PairRange[uint64, sdk.ConsAddress]).Descending())
+	require.NoError(t, err)
+	defer iter.Close()
+
+	var lastPower uint64
+	var count int64
+	for ; iter.Valid(); iter.Next() {
+		key, err := iter.Key()
+		require.NoError(t, err)
+		curPower := key.K1()
+		require.False(t, curPower > lastPower && count != 0)
+		lastPower = curPower
+		count++
+	}
+	require.EqualValues(t, count, total)
 }
