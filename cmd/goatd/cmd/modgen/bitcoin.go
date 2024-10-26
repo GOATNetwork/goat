@@ -28,6 +28,7 @@ func Bitcoin() *cobra.Command {
 		FlagDepositTxid    = "txid"
 		FlagDepositTxout   = "txout"
 		FlagDepositSatoshi = "satoshi"
+		FlagEthAddress     = "eth-address"
 	)
 
 	parsePubkey := func(raw []byte, typ string) (*relayer.PublicKey, error) {
@@ -197,6 +198,57 @@ func Bitcoin() *cobra.Command {
 		},
 	}
 
+	depositAddress := &cobra.Command{
+		Use: "deposit-address",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			address, err := cmd.Flags().GetString(FlagEthAddress)
+			if err != nil {
+				return err
+			}
+
+			evmAddress, err := types.DecodeEthAddress(address)
+			if err != nil {
+				return err
+			}
+
+			networkName, err := cmd.Flags().GetString(FlagNetworkName)
+			if err != nil {
+				return err
+			}
+
+			if networkName == "" {
+				return errors.New("no network name provided")
+			}
+
+			network, ok := types.BitcoinNetworks[networkName]
+			if !ok {
+				return fmt.Errorf("unknown bitcoin network: %s", networkName)
+			}
+
+			rawPubkey, err := cmd.Flags().GetBytesHex(FlagPubkey)
+			if err != nil {
+				return err
+			}
+
+			keyType, err := cmd.Flags().GetString(FlagPubkeyType)
+			if err != nil {
+				return err
+			}
+
+			newPubkey, err := parsePubkey(rawPubkey, keyType)
+			if err != nil {
+				return err
+			}
+
+			btcAddress, err := types.DepositAddressV0(newPubkey, evmAddress, network)
+			if err != nil {
+				return err
+			}
+			fmt.Println("deposit address", btcAddress.EncodeAddress())
+			return nil
+		},
+	}
+
 	param := types.DefaultParams()
 	cmd.Flags().Uint32(FlagConfirmationNumber, param.ConfirmationNumber, "the confirmation number")
 	cmd.Flags().BytesHex(FlagPubkey, nil, "the initial relayer public key")
@@ -208,6 +260,11 @@ func Bitcoin() *cobra.Command {
 	addDeposit.Flags().String(FlagDepositTxid, "", "deposit txid")
 	addDeposit.Flags().Uint32(FlagDepositTxout, 0, "deposit txout")
 
-	cmd.AddCommand(addDeposit)
+	depositAddress.Flags().BytesHex(FlagPubkey, nil, "the deposit public key")
+	depositAddress.Flags().String(FlagEthAddress, "", "the eth address to deposit")
+	depositAddress.Flags().String(FlagNetworkName, "", "the bitcoin network name(mainnet|testnet3|regtest|signet)")
+	depositAddress.Flags().String(FlagPubkeyType, types.Secp256K1Name, "the public key type [secp256k1,schnorr]")
+
+	cmd.AddCommand(addDeposit, depositAddress)
 	return cmd
 }
