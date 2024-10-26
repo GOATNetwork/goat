@@ -2,6 +2,7 @@ package modgen
 
 import (
 	"bytes"
+	"encoding/hex"
 	"fmt"
 	"slices"
 	"time"
@@ -11,6 +12,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	"github.com/cosmos/cosmos-sdk/server"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 	"github.com/goatnetwork/goat/x/relayer/types"
 	"github.com/spf13/cobra"
 )
@@ -175,10 +177,39 @@ func Relayer() *cobra.Command {
 		},
 	}
 
+	keygen := &cobra.Command{
+		Use:   "keygen",
+		Short: "create key for relayer voter",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			keys := make(map[string]string)
+			{
+				p256k1 := secp256k1.GenPrivKey()
+				address := p256k1.PubKey().Address()
+				clientCtx := client.GetClientContextFromCmd(cmd)
+
+				goatAddress, err := clientCtx.TxConfig.SigningContext().AddressCodec().BytesToString(address)
+				if err != nil {
+					return err
+				}
+
+				keys["txKey"] = hex.EncodeToString(p256k1.PubKey().Bytes())
+				PrintStderr("txPrvkey", hex.EncodeToString(p256k1.Bytes()), "address", goatAddress)
+			}
+
+			{
+				secretKey := goatcrypto.GenPrivKey()
+				publicKey := new(goatcrypto.PublicKey).From(secretKey)
+				keys["voteKey"] = hex.EncodeToString(publicKey.Compress())
+				PrintStderr("voterPrvkey", hex.EncodeToString(secretKey.Serialize()))
+			}
+			return PrintJSON(keys)
+		},
+	}
+
 	cmd.Flags().Duration(FlagParamElectingPeriod, time.Minute*10, "")
 	cmd.Flags().Duration(FlagParamAcceptProposerTimeout, time.Minute, "")
 	addVoter.Flags().String(FlagPubkey, "", "the voter tx public key(compressed secp256k1)")
 	addVoter.Flags().String(FlagVoteKey, "", "the voter vote public key(compressed bls12381 G2)")
-	cmd.AddCommand(addVoter)
+	cmd.AddCommand(addVoter, keygen)
 	return cmd
 }

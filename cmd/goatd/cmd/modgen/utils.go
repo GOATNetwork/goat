@@ -105,11 +105,15 @@ func getValidatorSignMsg(chainID uint64, owner, validator []byte) []byte {
 	return ethcrypto.Keccak256(data, validator, owner)
 }
 
-var PrintJSON = func(info any) error {
+func PrintJSON(info any) error {
 	out, err := json.MarshalIndent(info, "", " ")
 	if err != nil {
 		return err
 	}
 	_, err = fmt.Fprintf(os.Stdout, "%s\n", out)
 	return err
+}
+
+func PrintStderr(a ...any) {
+	fmt.Fprintln(os.Stderr, a...)
 }
