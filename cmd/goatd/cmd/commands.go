@@ -29,8 +29,7 @@ func initRootCmd(
 	basicManager module.BasicManager,
 ) {
 	rootCmd.AddCommand(
-		InitCmd(basicManager),
-		ModgenCommand(),
+		ModgenCommand(basicManager),
 		debug.Cmd(),
 		confixcmd.ConfigCommand(),
 		pruning.Cmd(newApp, app.DefaultNodeHome),
@@ -39,8 +38,8 @@ func initRootCmd(
 
 	server.AddCommandsWithStartCmdOptions(rootCmd, app.DefaultNodeHome, newApp, appExport, server.StartCmdOptions{
 		AddFlags: func(cmd *cobra.Command) {
-			cmd.Flags().String(FlagGoatGeth, "http://127.0.0.1:8545", "the goat-geth endpoint, ipc is recommended")
-			cmd.Flags().String(FlagJwtPath, "", "the jwt secret file for engine api, it's only required if connecting to an goat-geth via http")
+			cmd.Flags().String(FlagGoatGeth, "", "the goat-geth endpoint, ipc is recommended")
+			cmd.Flags().String(flags.FlagChainID, "", "the chain id. builtin list: "+allChainID())
 		},
 	})
 
@@ -174,7 +173,7 @@ func appExport(
 	return bApp.ExportAppStateAndValidators(forZeroHeight, jailAllowedAddrs, modulesToExport)
 }
 
-func ModgenCommand() *cobra.Command {
+func ModgenCommand(basicManager module.BasicManager) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "modgen",
 		Short: "update module genesis",
@@ -186,6 +185,7 @@ func ModgenCommand() *cobra.Command {
 		modgen.Relayer(),
 		modgen.Goat(),
 		modgen.Locking(),
+		modgen.Init(basicManager),
 	)
 	return cmd
 }

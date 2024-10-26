@@ -64,8 +64,7 @@ func NewRootCmd() *cobra.Command {
 			if err := server.InterceptConfigsPreRunHandler(cmd, customAppTemplate, customAppConfig, initCometBFTConfig()); err != nil {
 				return err
 			}
-			serverCtx := server.GetServerContextFromCmd(cmd)
-			return initializeNodeFiles(serverCtx.Config)
+			return initializeNodeFiles(cmd)
 		},
 	}
 

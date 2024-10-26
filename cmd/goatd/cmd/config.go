@@ -9,12 +9,10 @@ import (
 
 const (
 	FlagGoatGeth = "goat.geth"
-	FlagJwtPath  = "goat.jwt"
 )
 
 type GoatConfig struct {
 	Geth string `mapstructure:"geth"`
-	JWT  string `mapstructure:"jwt"`
 }
 
 // initCometBFTConfig helps to override default CometBFT Config values.
@@ -54,8 +52,6 @@ func initAppConfig() (string, interface{}) {
 [goat]
 # the goat-geth node endpoint, using ipc is recommended
 geth = "{{ .Goat.Geth }}"
-# the jwt secret file for engine api, it's only required if connecting to an execution node via HTTP.
-jwt = "{{ .Goat.JWT }}"
 `
 
 	return customAppTemplate, customAppConfig
