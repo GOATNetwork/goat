@@ -2,14 +2,12 @@ package cmd
 
 import (
 	"os"
-	"strings"
 
 	"cosmossdk.io/client/v2/autocli"
 	"cosmossdk.io/depinject"
 	"cosmossdk.io/log"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/config"
-	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/server"
@@ -18,7 +16,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/goatnetwork/goat/app"
 	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
 )
 
 // NewRootCmd creates a new root command for goatd. It is called once in the main function.
@@ -31,16 +28,10 @@ func NewRootCmd() *cobra.Command {
 
 	if err := depinject.Inject(
 		depinject.Configs(app.AppConfig(),
-			depinject.Supply(
-				log.NewNopLogger(),
-			),
-			depinject.Provide(
-				ProvideClientContext,
-			),
+			depinject.Supply(log.NewNopLogger()),
+			depinject.Provide(ProvideClientContext),
 		),
-		&autoCliOpts,
-		&moduleBasicManager,
-		&clientCtx,
+		&autoCliOpts, &moduleBasicManager, &clientCtx,
 	); err != nil {
 		panic(err)
 	}
@@ -70,40 +61,20 @@ func NewRootCmd() *cobra.Command {
 			}
 
 			customAppTemplate, customAppConfig := initAppConfig()
-			customCMTConfig := initCometBFTConfig()
-
-			return server.InterceptConfigsPreRunHandler(cmd, customAppTemplate, customAppConfig, customCMTConfig)
+			if err := server.InterceptConfigsPreRunHandler(cmd, customAppTemplate, customAppConfig, initCometBFTConfig()); err != nil {
+				return err
+			}
+			serverCtx := server.GetServerContextFromCmd(cmd)
+			return initializeNodeFiles(serverCtx.Config)
 		},
 	}
 
 	initRootCmd(rootCmd, moduleBasicManager)
-
-	overwriteFlagDefaults(rootCmd, map[string]string{
-		flags.FlagChainID:        strings.ReplaceAll(app.Name, "-", ""),
-		flags.FlagKeyringBackend: "test",
-	})
-
 	if err := autoCliOpts.EnhanceRootCommand(rootCmd); err != nil {
 		panic(err)
 	}
 
 	return rootCmd
-}
-
-func overwriteFlagDefaults(c *cobra.Command, defaults map[string]string) {
-	set := func(s *pflag.FlagSet, key, val string) {
-		if f := s.Lookup(key); f != nil {
-			f.DefValue = val
-			_ = f.Value.Set(val)
-		}
-	}
-	for key, val := range defaults {
-		set(c.Flags(), key, val)
-		set(c.PersistentFlags(), key, val)
-	}
-	for _, c := range c.Commands() {
-		overwriteFlagDefaults(c, defaults)
-	}
 }
 
 func ProvideClientContext(

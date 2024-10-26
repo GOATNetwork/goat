@@ -186,7 +186,6 @@ func ModgenCommand() *cobra.Command {
 		modgen.Relayer(),
 		modgen.Goat(),
 		modgen.Locking(),
-		modgen.NewKey(),
 	)
 	return cmd
 }

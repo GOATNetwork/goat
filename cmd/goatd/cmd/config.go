@@ -24,7 +24,7 @@ func initCometBFTConfig() *cmtcfg.Config {
 
 	cfg.P2P.MaxNumInboundPeers = 150
 	cfg.P2P.MaxNumOutboundPeers = 100
-	cfg.Mempool.Size = 50
+	cfg.Mempool.Size = 10
 	cfg.Consensus.TimeoutPropose = 1500 * time.Millisecond
 	cfg.Consensus.TimeoutPrevote = 1500 * time.Millisecond
 	cfg.Consensus.TimeoutPrecommit = time.Second

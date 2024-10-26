@@ -90,26 +90,24 @@ func (ante GoatGuardHandler) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate boo
 		return nil
 	}
 
-	if !simulate {
-		// the message should be belong to goad namespace
-		for _, msg := range msgs {
-			msgName := string(msg.ProtoReflect().Descriptor().FullName())
-			switch ctx.ExecMode() {
-			case sdk.ExecModeCheck, sdk.ExecModeReCheck, sdk.ExecModePrepareProposal: // only accept relayer txs in the mempool
-				if err := relayerTxOnly(msgName); err != nil {
-					return ctx, err
+	// the message should be belong to goad namespace
+	for _, msg := range msgs {
+		msgName := string(msg.ProtoReflect().Descriptor().FullName())
+		switch ctx.ExecMode() {
+		case sdk.ExecModeCheck, sdk.ExecModeReCheck, sdk.ExecModePrepareProposal: // only accept relayer txs in the mempool
+			if err := relayerTxOnly(msgName); err != nil {
+				return ctx, err
+			}
+		case sdk.ExecModeProcessProposal, sdk.ExecModeFinalize:
+			if (msgName) == "goat.goat.v1.MsgNewEthBlock" {
+				if timeoutHeight != uint64(ctx.BlockHeight()) {
+					return ctx, errorsmod.Wrapf(
+						sdkerrors.ErrTxTimeoutHeight, "MsgNewEthBlock timeout height should be current block: %d", ctx.BlockHeight())
 				}
-			case sdk.ExecModeProcessProposal, sdk.ExecModeFinalize:
-				if (msgName) == "goat.goat.v1.MsgNewEthBlock" {
-					if timeoutHeight != uint64(ctx.BlockHeight()) {
-						return ctx, errorsmod.Wrapf(
-							sdkerrors.ErrTxTimeoutHeight, "MsgNewEthBlock timeout height should be current block: %d", ctx.BlockHeight())
-					}
-					continue
-				}
-				if err := relayerTxOnly(msgName); err != nil {
-					return ctx, err
-				}
+				continue
+			}
+			if err := relayerTxOnly(msgName); err != nil {
+				return ctx, err
 			}
 		}
 	}
