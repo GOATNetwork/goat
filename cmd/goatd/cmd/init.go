@@ -29,14 +29,18 @@ func allChainID() string {
 	return strings.Join(res, ",")
 }
 
+var bootnodes = map[string][]string{}
+
 // initializeNodeFiles creates private validator and p2p configuration files if they doesn't exist
 func initializeNodeFiles(cmd *cobra.Command) error {
 	serverCtx := server.GetServerContextFromCmd(cmd)
 
+	// add default p2p key
 	if _, err := p2p.LoadOrGenNodeKey(serverCtx.Config.NodeKeyFile()); err != nil {
 		return err
 	}
 
+	// add validator private key
 	pvKeyFile := serverCtx.Config.PrivValidatorKeyFile()
 	if _, pvKeyFileErr := os.Stat(pvKeyFile); os.IsNotExist(pvKeyFileErr) {
 		pvStateFile := serverCtx.Config.PrivValidatorStateFile()
@@ -58,10 +62,14 @@ func initializeNodeFiles(cmd *cobra.Command) error {
 		return nil
 	}
 
-	serverCtx.Viper.Set("minimum-gas-prices", "0gas")
+	// we have gas system, but cosmos requires a non-empty gas value
+	serverCtx.Viper.Set(server.FlagMinGasPrices, "0gas")
+
+	chainID := serverCtx.Viper.GetString(flags.FlagChainID)
+
+	// insert genesis file the file doesn't exist
 	genFile := serverCtx.Config.GenesisFile()
 	if _, genFileErr := os.Stat(genFile); os.IsNotExist(genFileErr) {
-		chainID := serverCtx.Viper.GetString(flags.FlagChainID)
 		if chainID == "" {
 			return errors.New("no chain id")
 		}
@@ -69,7 +77,16 @@ func initializeNodeFiles(cmd *cobra.Command) error {
 		if err != nil {
 			return fmt.Errorf("genesis not found for chain id %s", chainID)
 		}
-		return tempfile.WriteFileAtomic(genFile, jsonBytes, 0o600)
+		if err := tempfile.WriteFileAtomic(genFile, jsonBytes, 0o644); err != nil {
+			return err
+		}
+	}
+
+	// add bootnodes if not provided
+	if chainID != "" && serverCtx.Viper.GetString(FlagPersistentPeers) == "" {
+		if bootnode, ok := bootnodes[chainID]; ok {
+			serverCtx.Viper.Set(FlagPersistentPeers, strings.Join(bootnode, ","))
+		}
 	}
 	return nil
 }

@@ -8,7 +8,8 @@ import (
 )
 
 const (
-	FlagGoatGeth = "goat.geth"
+	FlagGoatGeth        = "goat.geth"
+	FlagPersistentPeers = "p2p.persistent_peers"
 )
 
 type GoatConfig struct {
