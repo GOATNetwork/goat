@@ -18,10 +18,10 @@ import (
 )
 
 //go:embed genesis
-var genesis embed.FS
+var genesisFiles embed.FS
 
-func allChainID() string {
-	dirEntry, _ := genesis.ReadDir("genesis")
+func chainList() string {
+	dirEntry, _ := genesisFiles.ReadDir("genesis")
 	var res []string
 	for _, item := range dirEntry {
 		res = append(res, strings.TrimSuffix(item.Name(), ".json"))
@@ -65,7 +65,7 @@ func initializeNodeFiles(cmd *cobra.Command) error {
 	// we have gas system, but cosmos requires a non-empty gas value
 	serverCtx.Viper.Set(server.FlagMinGasPrices, "0gas")
 
-	chainID := serverCtx.Viper.GetString(flags.FlagChainID)
+	chainID, _ := cmd.Flags().GetString(flags.FlagChainID)
 
 	// insert genesis file the file doesn't exist
 	genFile := serverCtx.Config.GenesisFile()
@@ -73,7 +73,7 @@ func initializeNodeFiles(cmd *cobra.Command) error {
 		if chainID == "" {
 			return errors.New("no chain id")
 		}
-		jsonBytes, err := genesis.ReadFile(fmt.Sprintf("genesis/%s.json", chainID))
+		jsonBytes, err := genesisFiles.ReadFile(fmt.Sprintf("genesis/%s.json", chainID))
 		if err != nil {
 			return fmt.Errorf("genesis not found for chain id %s", chainID)
 		}

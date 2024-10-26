@@ -39,7 +39,7 @@ func initRootCmd(
 	server.AddCommandsWithStartCmdOptions(rootCmd, app.DefaultNodeHome, newApp, appExport, server.StartCmdOptions{
 		AddFlags: func(cmd *cobra.Command) {
 			cmd.Flags().String(FlagGoatGeth, "", "the goat-geth endpoint, ipc is recommended")
-			cmd.Flags().String(flags.FlagChainID, "", "the chain id. builtin list: "+allChainID())
+			cmd.Flags().String(flags.FlagChainID, "", "the chain id ("+chainList()+")")
 		},
 	})
 
