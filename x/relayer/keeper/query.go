@@ -2,7 +2,9 @@ package keeper
 
 import (
 	"context"
+	"encoding/hex"
 	"errors"
+	"strings"
 
 	"cosmossdk.io/collections"
 	"github.com/goatnetwork/goat/x/relayer/types"
@@ -49,25 +51,39 @@ func (q queryServer) Relayer(ctx context.Context, req *types.QueryRelayerRequest
 		return nil, status.Error(codes.Internal, "internal error")
 	}
 
-	return &types.QueryRelayerResponse{Relayer: &relayer, Sequence: sequence}, nil
+	return &types.QueryRelayerResponse{Relayer: relayer, Sequence: sequence}, nil
 }
 
-func (q queryServer) Voters(ctx context.Context, req *types.QueryVotersRequest) (*types.QueryVotersResponse, error) {
-	iter, err := q.k.Voters.Iterate(ctx, nil)
-	if err != nil {
-		return nil, err
+func (q queryServer) Voter(ctx context.Context, req *types.QueryVoterRequest) (*types.QueryVoterResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
-	defer iter.Close()
 
-	var voters []types.Voter
-	for ; iter.Valid(); iter.Next() {
-		kv, err := iter.KeyValue()
+	if len(req.Address) == 42 && strings.HasPrefix(req.Address, "0x") {
+		addrBytes, err := hex.DecodeString(req.Address[2:])
 		if err != nil {
-			return nil, err
+			return nil, status.Error(codes.InvalidArgument, "invalid address(eth format)")
 		}
-		voters = append(voters, kv.Value)
+		address, err := q.k.AddrCodec.BytesToString(addrBytes)
+		if err != nil {
+			return nil, status.Error(codes.Internal, "failed to encode address")
+		}
+		req.Address = address
+	} else {
+		if _, err := q.k.AddrCodec.StringToBytes(req.Address); err != nil {
+			return nil, status.Error(codes.InvalidArgument, "invalid address(bech32 format)")
+		}
 	}
-	return &types.QueryVotersResponse{Voters: voters}, nil
+
+	voter, err := q.k.Voters.Get(ctx, req.Address)
+	if err != nil {
+		if errors.Is(err, collections.ErrNotFound) {
+			return nil, status.Error(codes.NotFound, "not found")
+		}
+		return nil, status.Error(codes.Internal, "internal error")
+	}
+
+	return &types.QueryVoterResponse{Voter: voter}, nil
 }
 
 func (q queryServer) Pubkeys(ctx context.Context, req *types.QueryPubkeysRequest) (*types.QueryPubkeysResponse, error) {

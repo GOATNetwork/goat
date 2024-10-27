@@ -22,9 +22,10 @@ service Query {
     option (google.api.http).get = "/goatnetwork/goat/relayer/v1/relayer";
   }
 
-  // Voters queries all current voter list
-  rpc Voters(QueryVotersRequest) returns (QueryVotersResponse) {
-    option (google.api.http).get = "/goatnetwork/goat/relayer/v1/voters";
+  // Voters queries a voter details by it's address
+  // the address can be bech32 or eth format
+  rpc Voter(QueryVoterRequest) returns (QueryVoterResponse) {
+    option (google.api.http).get = "/goatnetwork/goat/relayer/v1/voter";
   }
 
   // Pubkeys queries all current public keys
@@ -46,13 +47,13 @@ message QueryParamsResponse {
 }
 
 // QueryVotersRequest is request type for the Query/Voters RPC method
-message QueryVotersRequest {
-  // cosmos.base.query.v1beta1.PageRequest pagination = 1;
+message QueryVoterRequest {
+  string address = 1;
 }
 
 // QueryVotersRequest is response type for the Query/Voters RPC method
-message QueryVotersResponse {
-  repeated Voter voters = 1 [
+message QueryVoterResponse {
+  Voter voter = 1 [
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
@@ -63,7 +64,10 @@ message QueryRelayerRequest {}
 
 // QueryRelayerResponse is response type for the Query/Voters RPC method
 message QueryRelayerResponse {
-  Relayer relayer = 1;
+  Relayer relayer = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
   uint64 sequence = 2;
 }
 

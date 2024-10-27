@@ -21,7 +21,7 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	Query_Params_FullMethodName  = "/goat.relayer.v1.Query/Params"
 	Query_Relayer_FullMethodName = "/goat.relayer.v1.Query/Relayer"
-	Query_Voters_FullMethodName  = "/goat.relayer.v1.Query/Voters"
+	Query_Voter_FullMethodName   = "/goat.relayer.v1.Query/Voter"
 	Query_Pubkeys_FullMethodName = "/goat.relayer.v1.Query/Pubkeys"
 )
 
@@ -35,8 +35,9 @@ type QueryClient interface {
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
 	// Relayer queries relayer state
 	Relayer(ctx context.Context, in *QueryRelayerRequest, opts ...grpc.CallOption) (*QueryRelayerResponse, error)
-	// Voters queries all current voter list
-	Voters(ctx context.Context, in *QueryVotersRequest, opts ...grpc.CallOption) (*QueryVotersResponse, error)
+	// Voters queries a voter details by it's address
+	// the address can be bech32 or eth format
+	Voter(ctx context.Context, in *QueryVoterRequest, opts ...grpc.CallOption) (*QueryVoterResponse, error)
 	// Pubkeys queries all current public keys
 	Pubkeys(ctx context.Context, in *QueryPubkeysRequest, opts ...grpc.CallOption) (*QueryPubkeysResponse, error)
 }
@@ -69,10 +70,10 @@ func (c *queryClient) Relayer(ctx context.Context, in *QueryRelayerRequest, opts
 	return out, nil
 }
 
-func (c *queryClient) Voters(ctx context.Context, in *QueryVotersRequest, opts ...grpc.CallOption) (*QueryVotersResponse, error) {
+func (c *queryClient) Voter(ctx context.Context, in *QueryVoterRequest, opts ...grpc.CallOption) (*QueryVoterResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(QueryVotersResponse)
-	err := c.cc.Invoke(ctx, Query_Voters_FullMethodName, in, out, cOpts...)
+	out := new(QueryVoterResponse)
+	err := c.cc.Invoke(ctx, Query_Voter_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -99,8 +100,9 @@ type QueryServer interface {
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
 	// Relayer queries relayer state
 	Relayer(context.Context, *QueryRelayerRequest) (*QueryRelayerResponse, error)
-	// Voters queries all current voter list
-	Voters(context.Context, *QueryVotersRequest) (*QueryVotersResponse, error)
+	// Voters queries a voter details by it's address
+	// the address can be bech32 or eth format
+	Voter(context.Context, *QueryVoterRequest) (*QueryVoterResponse, error)
 	// Pubkeys queries all current public keys
 	Pubkeys(context.Context, *QueryPubkeysRequest) (*QueryPubkeysResponse, error)
 	mustEmbedUnimplementedQueryServer()
@@ -119,8 +121,8 @@ func (UnimplementedQueryServer) Params(context.Context, *QueryParamsRequest) (*Q
 func (UnimplementedQueryServer) Relayer(context.Context, *QueryRelayerRequest) (*QueryRelayerResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Relayer not implemented")
 }
-func (UnimplementedQueryServer) Voters(context.Context, *QueryVotersRequest) (*QueryVotersResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Voters not implemented")
+func (UnimplementedQueryServer) Voter(context.Context, *QueryVoterRequest) (*QueryVoterResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Voter not implemented")
 }
 func (UnimplementedQueryServer) Pubkeys(context.Context, *QueryPubkeysRequest) (*QueryPubkeysResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Pubkeys not implemented")
@@ -182,20 +184,20 @@ func _Query_Relayer_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_Voters_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryVotersRequest)
+func _Query_Voter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryVoterRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).Voters(ctx, in)
+		return srv.(QueryServer).Voter(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Query_Voters_FullMethodName,
+		FullMethod: Query_Voter_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Voters(ctx, req.(*QueryVotersRequest))
+		return srv.(QueryServer).Voter(ctx, req.(*QueryVoterRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -234,8 +236,8 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Query_Relayer_Handler,
 		},
 		{
-			MethodName: "Voters",
-			Handler:    _Query_Voters_Handler,
+			MethodName: "Voter",
+			Handler:    _Query_Voter_Handler,
 		},
 		{
 			MethodName: "Pubkeys",

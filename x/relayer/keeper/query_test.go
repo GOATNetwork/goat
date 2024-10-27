@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/goatnetwork/goat/x/relayer/keeper"
 	"github.com/goatnetwork/goat/x/relayer/types"
 )
@@ -67,7 +68,7 @@ func (suite *KeeperTestSuite) TestQueryRelayer() {
 	resp, err := query.Relayer(suite.Context, nil)
 	suite.Require().NoError(err)
 
-	suite.Require().Equal(relayer, *resp.Relayer)
+	suite.Require().Equal(relayer, resp.Relayer)
 	suite.Require().Equal(seq, resp.Sequence)
 }
 
@@ -83,11 +84,39 @@ func (suite *KeeperTestSuite) TestQueryVoters() {
 
 	query := keeper.NewQueryServerImpl(suite.Keeper)
 
-	resp, err := query.Voters(suite.Context, nil)
-	suite.Require().NoError(err)
+	for _, voter := range suite.Voters {
+		{
+			resp, err := query.Voter(suite.Context, &types.QueryVoterRequest{Address: hexutil.Encode(voter.Address)})
+			suite.Require().NoError(err)
+			suite.Require().Equal(resp.Voter, voter)
+		}
 
-	slices.SortFunc(resp.Voters, func(i, j types.Voter) int {
-		return bytes.Compare(i.Address, j.Address)
-	})
-	suite.Require().Equal(resp.Voters, suite.Voters)
+		{
+			address, err := suite.Keeper.AddrCodec.BytesToString(voter.Address)
+			suite.Require().NoError(err)
+			resp, err := query.Voter(suite.Context, &types.QueryVoterRequest{Address: address})
+			suite.Require().NoError(err)
+			suite.Require().Equal(resp.Voter, voter)
+		}
+	}
+
+	{
+		_, err := query.Voter(suite.Context, nil)
+		suite.Require().ErrorContains(err, "invalid request")
+	}
+
+	{
+		_, err := query.Voter(suite.Context, &types.QueryVoterRequest{Address: "0xxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxy"})
+		suite.Require().ErrorContains(err, "invalid address(eth format)")
+	}
+
+	{
+		_, err := query.Voter(suite.Context, &types.QueryVoterRequest{Address: "bc1qassh6388meyz0zqyjgwfffynfngjvup5dqhpsc"})
+		suite.Require().ErrorContains(err, "invalid address(bech32 format)")
+	}
+
+	{
+		_, err := query.Voter(suite.Context, &types.QueryVoterRequest{Address: "goat1gu2ttwaut55r4cguylq4l6xgjyjm5s5z4ugr9w"})
+		suite.Require().ErrorContains(err, "not found")
+	}
 }
