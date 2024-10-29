@@ -4,7 +4,6 @@ import (
 	"context"
 	"os"
 	"path/filepath"
-	"strings"
 	"time"
 
 	"cosmossdk.io/log"
@@ -13,7 +12,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
-	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/params"
 	"github.com/goatnetwork/goat/pkg/ethrpc"
 	bitcintypes "github.com/goatnetwork/goat/x/bitcoin/types"
@@ -23,45 +21,28 @@ import (
 func ProvideEngineClient(logger log.Logger, appOpts servertypes.AppOptions) *ethrpc.Client {
 	endpoint := cast.ToString(appOpts.Get("goat.geth"))
 	if endpoint == "" {
-		panic("goat execution node endpoint not found")
+		panic("goat-geth node endpoint not found")
 	}
 
-	jwtSecret := func() []byte {
-		if jwtPath := cast.ToString(appOpts.Get("goat.jwt-path")); jwtPath != "" {
-			data, err := os.ReadFile(jwtPath)
-			if err != nil {
-				panic("cannot open jwt secret file: " + jwtPath)
-			}
-
-			jwtSecret := common.FromHex(strings.TrimSpace(string(data)))
-			if len(jwtSecret) != 32 {
-				panic("jwt secret is not a 32 bytes hex string")
-			}
-			return jwtSecret
-		}
-		return nil
-	}()
-
 	var ethclient *ethrpc.Client
+	var err error
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*7)
 	defer cancel()
-
 	for i := 0; i < 10; i++ {
-		var err error
 		logger.Info("try to connect goat-geth", "endpoint", endpoint)
-		ethclient, err = ethrpc.DialContext(ctx, endpoint, jwtSecret)
+		ethclient, err = ethrpc.DialContext(ctx, endpoint)
 		if err == nil {
 			var conf *params.ChainConfig
 			conf, err = ethclient.GetChainConfig(ctx)
 			if err == nil {
 				if conf.Goat == nil {
-					panic("No goat config found in the goat-geth, please verify if you're using correct setup")
+					panic("invalid goat-geth node, please verify if you're using correct setup")
 				}
 				break
 			}
 		}
-		logger.Error("retry to connect goat-geth", "err", err.Error())
+		logger.Warn("retry to connect goat-geth", "err", err.Error())
 		<-time.After(time.Second / 2)
 	}
 
@@ -73,9 +54,9 @@ func ProvideEngineClient(logger log.Logger, appOpts servertypes.AppOptions) *eth
 }
 
 func ProvideValidatorPrvKey(appOpts servertypes.AppOptions) cryptotypes.PrivKey {
-	prvkey := appOpts.Get("priv_validator_key_file").(string)
+	prvkey := cast.ToString(appOpts.Get("priv_validator_key_file"))
 	if !filepath.IsAbs(prvkey) {
-		prvkey = filepath.Join(appOpts.Get("home").(string), prvkey)
+		prvkey = filepath.Join(cast.ToString(appOpts.Get("home")), prvkey)
 	}
 
 	keyJSONBytes, err := os.ReadFile(prvkey)

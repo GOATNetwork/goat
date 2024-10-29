@@ -51,7 +51,8 @@ func initAppConfig() (string, interface{}) {
 
 	customAppTemplate := serverconfig.DefaultConfigTemplate + `
 [goat]
-# the goat-geth node endpoint, using ipc is recommended
+# the goat-geth node ipc path
+# we don't use http due to the node server has body limit for it
 geth = "{{ .Goat.Geth }}"
 `
 
