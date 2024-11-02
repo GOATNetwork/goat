@@ -108,10 +108,11 @@ func NewWithdrawalRelayerReplaceEvent(id uint64, hash []byte) sdktypes.Event {
 	)
 }
 
-func NewWithdrawalFinalizedEvent(id uint64) sdktypes.Event {
+func NewWithdrawalFinalizedEvent(id uint64, hash []byte) sdktypes.Event {
 	return sdktypes.NewEvent(
 		EventTypeWithdrawalFinalized,
 		sdktypes.NewAttribute("pid", strconv.FormatUint(id, 10)),
+		sdktypes.NewAttribute("txid", BtcTxid(hash)), // we must use big endian
 	)
 }
 

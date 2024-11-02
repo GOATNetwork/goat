@@ -502,7 +502,7 @@ func (k msgServer) FinalizeWithdrawal(ctx context.Context, req *types.MsgFinaliz
 		return nil, err
 	}
 
-	sdkctx.EventManager().EmitEvent(types.NewWithdrawalFinalizedEvent(req.Pid))
+	sdkctx.EventManager().EmitEvent(types.NewWithdrawalFinalizedEvent(req.Pid, req.Txid))
 	return &types.MsgFinalizeWithdrawalResponse{}, nil
 }
 

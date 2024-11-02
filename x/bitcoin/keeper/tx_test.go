@@ -221,7 +221,7 @@ func (suite *KeeperTestSuite) TestMsgWithdrawal() {
 		suite.Require().EqualValues(latestPid, 1)
 		suite.Require().Len(suite.Context.EventManager().ABCIEvents(), 2)
 		events = append(events, sdktypes.NewEvent(types.EventTypeWithdrawalProcessing,
-			sdktypes.NewAttribute("pid", "0"), sdktypes.NewAttribute("txid", types.BtcTxid(fristTxid.CloneBytes()))))
+			sdktypes.NewAttribute("pid", "0"), sdktypes.NewAttribute("txid", fristTxid.String())))
 		events = append(events, sdktypes.NewEvent(relayertypes.EventFinalizedProposal, sdktypes.NewAttribute("sequence", "100")))
 	}
 
@@ -264,7 +264,7 @@ func (suite *KeeperTestSuite) TestMsgWithdrawal() {
 		suite.Require().Len(suite.Context.EventManager().ABCIEvents(), 4)
 
 		events = append(events, sdktypes.NewEvent(types.EventTypeWithdrawalRelayerReplace,
-			sdktypes.NewAttribute("pid", "0"), sdktypes.NewAttribute("txid", types.BtcTxid(secondTxid.CloneBytes()))))
+			sdktypes.NewAttribute("pid", "0"), sdktypes.NewAttribute("txid", secondTxid.String())))
 		events = append(events, sdktypes.NewEvent(relayertypes.EventFinalizedProposal, sdktypes.NewAttribute("sequence", "101")))
 	}
 
@@ -319,7 +319,9 @@ func (suite *KeeperTestSuite) TestMsgWithdrawal() {
 		suite.Require().NoError(err)
 		suite.Require().False(noProcessing)
 		suite.Require().Len(suite.Context.EventManager().ABCIEvents(), 5)
-		events = append(events, sdktypes.NewEvent(types.EventTypeWithdrawalFinalized, sdktypes.NewAttribute("pid", "0")))
+		events = append(events, sdktypes.NewEvent(types.EventTypeWithdrawalFinalized,
+			sdktypes.NewAttribute("pid", "0"),
+			sdktypes.NewAttribute("txid", fristTxid.String())))
 	}
 
 	testutil.EventEquals(suite.T(), events, suite.Context.EventManager().Events())
