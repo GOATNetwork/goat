@@ -3,6 +3,7 @@ package types
 import (
 	"crypto/sha256"
 	"errors"
+	"fmt"
 
 	"github.com/ethereum/go-ethereum/common"
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
@@ -85,10 +86,35 @@ func (req *MsgNewDeposits) Validate() error {
 		return errors.New("invalid deposit list length")
 	}
 
+	if h := len(req.BlockHeaders); h == 0 || h > len(req.Deposits) {
+		return errors.New("invalid block headers list size")
+	}
+
 	return nil
 }
 
+func (req *MsgNewDeposits) BlockHeadersMap() (map[uint64][]byte, error) {
+	headers := make(map[uint64][]byte, len(req.BlockHeaders))
+	for _, item := range req.BlockHeaders {
+		if item == nil {
+			return nil, errors.New("nil item")
+		}
+		if len(item.Raw) != RawBtcHeaderSize {
+			return nil, errors.New("invalid raw header length")
+		}
+		if _, ok := headers[item.Height]; ok {
+			return nil, fmt.Errorf("duplicate height: %d", item.Height)
+		}
+		headers[item.Height] = item.Raw
+	}
+	return headers, nil
+}
+
 func (req *Deposit) Validate() error {
+	if req == nil {
+		return errors.New("nil item")
+	}
+
 	if len(req.EvmAddress) != common.AddressLength {
 		return errors.New("invalid evm address")
 	}

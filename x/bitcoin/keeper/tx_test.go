@@ -2,7 +2,6 @@ package keeper_test
 
 import (
 	"encoding/hex"
-	"encoding/json"
 
 	"cosmossdk.io/collections"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
@@ -35,9 +34,7 @@ func (suite *KeeperTestSuite) TestMsgNewDeposits() {
 	tx, err := hex.DecodeString("0200000001e15e44fc827b0e1a3178b6e07f67e8339faae54e4241e5fa5c1ed61786a84bda0000000000fdffffff020dc74c0001000000225120098ad136e9ed8106af7c1b6b4934011f320b30f6e18871917e0d6fb1bdcb5d1400e1f50500000000220020f7608234b4bc67678cc5498dfe7db5dfda221d3ff669f1d9ee89fbcf14d104f366000000")
 	suite.Require().NoError(err)
 
-	proof := common.Hex2Bytes("4930ac654c3c2e487fcc2106a51ecaaf4188093686dfffcfe880798044aadc02")
-
-	headers, err := json.Marshal(map[uint64][]byte{height: header})
+	proof, err := hex.DecodeString("4930ac654c3c2e487fcc2106a51ecaaf4188093686dfffcfe880798044aadc02")
 	suite.Require().NoError(err)
 
 	err = suite.Keeper.EthTxQueue.Set(suite.Context, types.EthTxQueue{})
@@ -47,7 +44,7 @@ func (suite *KeeperTestSuite) TestMsgNewDeposits() {
 
 	req := &types.MsgNewDeposits{
 		Proposer:     "goat1xa56637tjn857jyg2plgvhdclzmr4crxzn5xus",
-		BlockHeaders: headers,
+		BlockHeaders: []*types.BlockHeader{{Height: height, Raw: header}},
 		Deposits: []*types.Deposit{
 			{
 				Version:           0,
@@ -70,11 +67,11 @@ func (suite *KeeperTestSuite) TestMsgNewDeposits() {
 	suite.Require().NoError(err)
 	suite.Require().Equal(queue, types.EthTxQueue{
 		Deposits: []*types.DepositExecReceipt{
-			{Txid: txid[:], Txout: txOutput, Address: evmAddress[:], Amount: amount},
+			{Txid: txid.CloneBytes(), Txout: txOutput, Address: evmAddress.Bytes(), Amount: amount},
 		},
 	})
 
-	exist, err := suite.Keeper.Deposited.Has(suite.Context, collections.Join(txid[:], uint32(txOutput)))
+	exist, err := suite.Keeper.Deposited.Has(suite.Context, collections.Join(txid.CloneBytes(), uint32(txOutput)))
 	suite.Require().NoError(err)
 	suite.Require().True(exist)
 }

@@ -58,3 +58,9 @@ message Withdrawal {
   WithdrawalStatus status = 4;
   WithdrawalReceipt receipt = 5;
 }
+
+// the bitcoin height and its raw header pair
+message BlockHeader {
+  uint64 height = 1;
+  bytes raw = 2;
+}

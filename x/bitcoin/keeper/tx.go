@@ -3,7 +3,6 @@ package keeper
 import (
 	"bytes"
 	"context"
-	"encoding/json"
 
 	"cosmossdk.io/collections"
 	errorsmod "cosmossdk.io/errors"
@@ -32,13 +31,9 @@ func (k msgServer) NewDeposits(ctx context.Context, req *types.MsgNewDeposits) (
 		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	var headers map[uint64][]byte
-	if err := json.Unmarshal(req.BlockHeaders, &headers); err != nil {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid block header json")
-	}
-
-	if h := len(headers); h == 0 || h > len(req.Deposits) {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid headers size")
+	headers, err := req.BlockHeadersMap()
+	if err != nil {
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	if _, err := k.relayerKeeper.VerifyNonProposal(ctx, req); err != nil {
