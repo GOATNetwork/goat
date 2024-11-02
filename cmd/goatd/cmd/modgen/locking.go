@@ -19,6 +19,7 @@ import (
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
 	bitcointypes "github.com/goatnetwork/goat/x/bitcoin/types"
 	"github.com/goatnetwork/goat/x/locking/types"
@@ -317,9 +318,10 @@ func Locking() *cobra.Command {
 			prvkey.Y.FillBytes(pubkey[32:])
 
 			return PrintJSON(map[string]string{
-				"owner":     "0x" + hex.EncodeToString(ownerByte),
-				"pubkey":    "0x" + hex.EncodeToString(pubkey),
-				"signature": "0x" + hex.EncodeToString(sig),
+				"owner":     hexutil.Encode(ownerByte),
+				"pubkey":    hexutil.Encode(pubkey),
+				"signature": hexutil.Encode(sig),
+				"validator": hexutil.Encode(pvKey.Address.Bytes()),
 			})
 		},
 	}
@@ -364,7 +366,7 @@ func Locking() *cobra.Command {
 	addToken.Flags().String(FlagTokenThreshold, "", "validator vote power")
 	addValidator.Flags().String(FlagValidatorPubkey, "", "validator pubkey(secp256k1)")
 
-	sign.Flags().Uint64(FlagEthChainID, 31337, "eth chain id")
+	sign.Flags().Uint64(FlagEthChainID, 48815, "the goat-geth chain id")
 	sign.Flags().String(FlagOwner, "", "the validator owner")
 	cmd.AddCommand(addToken, addValidator, sign, setParam)
 	return cmd
