@@ -12,6 +12,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	"github.com/cosmos/cosmos-sdk/server"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 	"github.com/goatnetwork/goat/x/relayer/types"
 	"github.com/spf13/cobra"
@@ -193,7 +194,9 @@ func Relayer() *cobra.Command {
 				}
 
 				keys["txKey"] = hex.EncodeToString(p256k1.PubKey().Bytes())
-				PrintStderr("txPrvkey", hex.EncodeToString(p256k1.Bytes()), "address", goatAddress)
+				keys["address"] = hexutil.Encode(address)
+				PrintStderr("txPrvkey", hex.EncodeToString(p256k1.Bytes()))
+				PrintStderr("goatAddress", goatAddress)
 			}
 
 			{
