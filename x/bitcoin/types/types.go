@@ -6,6 +6,9 @@ const (
 	ProcessWithdrawalMethodSigName = "Bitcoin/ProcessWithdrawal"
 	ReplaceWithdrawalMethodSigName = "Bitcoin/ReplaceWithdrawal"
 	NewConsolidationMethodSigName  = "Bitcoin/NewConsolidation"
+
+	UpdateConfirmationNumberMethodSigName = "Bitcoin/UpdateConfirmationNumber"
+	UpdateMinDepositMethodSigName         = "Bitcoin/UpdateMinDeposit"
 )
 
 const (

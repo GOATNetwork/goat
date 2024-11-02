@@ -19,14 +19,16 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Msg_NewBlockHashes_FullMethodName      = "/goat.bitcoin.v1.Msg/NewBlockHashes"
-	Msg_NewDeposits_FullMethodName         = "/goat.bitcoin.v1.Msg/NewDeposits"
-	Msg_NewPubkey_FullMethodName           = "/goat.bitcoin.v1.Msg/NewPubkey"
-	Msg_ProcessWithdrawal_FullMethodName   = "/goat.bitcoin.v1.Msg/ProcessWithdrawal"
-	Msg_ReplaceWithdrawal_FullMethodName   = "/goat.bitcoin.v1.Msg/ReplaceWithdrawal"
-	Msg_FinalizeWithdrawal_FullMethodName  = "/goat.bitcoin.v1.Msg/FinalizeWithdrawal"
-	Msg_ApproveCancellation_FullMethodName = "/goat.bitcoin.v1.Msg/ApproveCancellation"
-	Msg_NewConsolidation_FullMethodName    = "/goat.bitcoin.v1.Msg/NewConsolidation"
+	Msg_NewBlockHashes_FullMethodName           = "/goat.bitcoin.v1.Msg/NewBlockHashes"
+	Msg_NewDeposits_FullMethodName              = "/goat.bitcoin.v1.Msg/NewDeposits"
+	Msg_NewPubkey_FullMethodName                = "/goat.bitcoin.v1.Msg/NewPubkey"
+	Msg_ProcessWithdrawal_FullMethodName        = "/goat.bitcoin.v1.Msg/ProcessWithdrawal"
+	Msg_ReplaceWithdrawal_FullMethodName        = "/goat.bitcoin.v1.Msg/ReplaceWithdrawal"
+	Msg_FinalizeWithdrawal_FullMethodName       = "/goat.bitcoin.v1.Msg/FinalizeWithdrawal"
+	Msg_ApproveCancellation_FullMethodName      = "/goat.bitcoin.v1.Msg/ApproveCancellation"
+	Msg_NewConsolidation_FullMethodName         = "/goat.bitcoin.v1.Msg/NewConsolidation"
+	Msg_UpdateMinDeposit_FullMethodName         = "/goat.bitcoin.v1.Msg/UpdateMinDeposit"
+	Msg_UpdateConfirmationNumber_FullMethodName = "/goat.bitcoin.v1.Msg/UpdateConfirmationNumber"
 )
 
 // MsgClient is the client API for Msg service.
@@ -79,6 +81,12 @@ type MsgClient interface {
 	// NewConsolidation initializes a consolidation request to aggregate utxo set
 	// ** it requires off-chain vote by relayer group
 	NewConsolidation(ctx context.Context, in *MsgNewConsolidation, opts ...grpc.CallOption) (*MsgNewConsolidationResponse, error)
+	// UpdateMinDeposit
+	// ** it requires off-chain vote by relayer group
+	UpdateMinDeposit(ctx context.Context, in *MsgUpdateMinDeposit, opts ...grpc.CallOption) (*MsgUpdateMinDepositResponse, error)
+	// UpdateConfirmationNumber
+	// ** it requires off-chain vote by relayer group
+	UpdateConfirmationNumber(ctx context.Context, in *MsgUpdateConfirmationNumber, opts ...grpc.CallOption) (*MsgUpdateConfirmationNumberResponse, error)
 }
 
 type msgClient struct {
@@ -169,6 +177,26 @@ func (c *msgClient) NewConsolidation(ctx context.Context, in *MsgNewConsolidatio
 	return out, nil
 }
 
+func (c *msgClient) UpdateMinDeposit(ctx context.Context, in *MsgUpdateMinDeposit, opts ...grpc.CallOption) (*MsgUpdateMinDepositResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MsgUpdateMinDepositResponse)
+	err := c.cc.Invoke(ctx, Msg_UpdateMinDeposit_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) UpdateConfirmationNumber(ctx context.Context, in *MsgUpdateConfirmationNumber, opts ...grpc.CallOption) (*MsgUpdateConfirmationNumberResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MsgUpdateConfirmationNumberResponse)
+	err := c.cc.Invoke(ctx, Msg_UpdateConfirmationNumber_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility.
@@ -219,6 +247,12 @@ type MsgServer interface {
 	// NewConsolidation initializes a consolidation request to aggregate utxo set
 	// ** it requires off-chain vote by relayer group
 	NewConsolidation(context.Context, *MsgNewConsolidation) (*MsgNewConsolidationResponse, error)
+	// UpdateMinDeposit
+	// ** it requires off-chain vote by relayer group
+	UpdateMinDeposit(context.Context, *MsgUpdateMinDeposit) (*MsgUpdateMinDepositResponse, error)
+	// UpdateConfirmationNumber
+	// ** it requires off-chain vote by relayer group
+	UpdateConfirmationNumber(context.Context, *MsgUpdateConfirmationNumber) (*MsgUpdateConfirmationNumberResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -252,6 +286,12 @@ func (UnimplementedMsgServer) ApproveCancellation(context.Context, *MsgApproveCa
 }
 func (UnimplementedMsgServer) NewConsolidation(context.Context, *MsgNewConsolidation) (*MsgNewConsolidationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method NewConsolidation not implemented")
+}
+func (UnimplementedMsgServer) UpdateMinDeposit(context.Context, *MsgUpdateMinDeposit) (*MsgUpdateMinDepositResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateMinDeposit not implemented")
+}
+func (UnimplementedMsgServer) UpdateConfirmationNumber(context.Context, *MsgUpdateConfirmationNumber) (*MsgUpdateConfirmationNumberResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateConfirmationNumber not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 func (UnimplementedMsgServer) testEmbeddedByValue()             {}
@@ -418,6 +458,42 @@ func _Msg_NewConsolidation_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_UpdateMinDeposit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgUpdateMinDeposit)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).UpdateMinDeposit(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_UpdateMinDeposit_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).UpdateMinDeposit(ctx, req.(*MsgUpdateMinDeposit))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_UpdateConfirmationNumber_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgUpdateConfirmationNumber)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).UpdateConfirmationNumber(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_UpdateConfirmationNumber_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).UpdateConfirmationNumber(ctx, req.(*MsgUpdateConfirmationNumber))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -456,6 +532,14 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "NewConsolidation",
 			Handler:    _Msg_NewConsolidation_Handler,
+		},
+		{
+			MethodName: "UpdateMinDeposit",
+			Handler:    _Msg_UpdateMinDeposit_Handler,
+		},
+		{
+			MethodName: "UpdateConfirmationNumber",
+			Handler:    _Msg_UpdateConfirmationNumber_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

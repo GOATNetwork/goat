@@ -22,6 +22,9 @@ const (
 	EventTypeWithdrawalUserCancel     = "withdrawal_user_cancel"
 	EventTypeWithdrawalRelayerReplace = "withdrawal_relayer_rbf"
 	EventTypeWithdrawalRelayerCancel  = "withdrawal_relayer_cancel"
+
+	EventTypeUpdateMinDeposit         = "param_update_min_deposit"
+	EventTypeUpdateConfirmationNumber = "param_update_confirmation_number"
 )
 
 const (
@@ -127,5 +130,19 @@ func NewConsolidationEvent(hash []byte) sdktypes.Event {
 	return sdktypes.NewEvent(
 		EventTypeNewConsolidation,
 		sdktypes.NewAttribute("txid", BtcTxid(hash)), // we must use big endian
+	)
+}
+
+func UpdateMinDepositEvent(value uint64) sdktypes.Event {
+	return sdktypes.NewEvent(
+		EventTypeUpdateMinDeposit,
+		sdktypes.NewAttribute("value", strconv.FormatUint(value, 10)),
+	)
+}
+
+func UpdateConfirmationNumberEvent(value uint64) sdktypes.Event {
+	return sdktypes.NewEvent(
+		EventTypeUpdateConfirmationNumber,
+		sdktypes.NewAttribute("value", strconv.FormatUint(value, 10)),
 	)
 }

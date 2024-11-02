@@ -3,6 +3,8 @@ package types
 import (
 	"errors"
 	"fmt"
+
+	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 )
 
 // NewParams creates a new Params instance.
@@ -39,4 +41,34 @@ func (p Params) Validate() error {
 		return errors.New("confirmation number can't set to zero(mempool txs are not reliable )")
 	}
 	return nil
+}
+
+func (req *MsgUpdateConfirmationNumber) Validate() error {
+	if req.Value == 0 {
+		return errors.New("number too low")
+	}
+	return nil
+}
+
+func (req *MsgUpdateConfirmationNumber) MethodName() string {
+	return UpdateConfirmationNumberMethodSigName
+}
+
+func (req *MsgUpdateConfirmationNumber) VoteSigDoc() []byte {
+	return goatcrypto.Uint64LE(req.Value)
+}
+
+func (req *MsgUpdateMinDeposit) Validate() error {
+	if req.Satoshi < DustTxoutAmount {
+		return errors.New("number too low")
+	}
+	return nil
+}
+
+func (req *MsgUpdateMinDeposit) MethodName() string {
+	return UpdateMinDepositMethodSigName
+}
+
+func (req *MsgUpdateMinDeposit) VoteSigDoc() []byte {
+	return goatcrypto.Uint64LE(req.Satoshi)
 }

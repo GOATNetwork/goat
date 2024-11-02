@@ -83,7 +83,7 @@ func Bitcoin() *cobra.Command {
 					return fmt.Errorf("unknown bitcoin network: %s", networkName)
 				}
 
-				confirmationNumber, err := cmd.Flags().GetUint32(FlagConfirmationNumber)
+				confirmationNumber, err := cmd.Flags().GetUint64(FlagConfirmationNumber)
 				if err != nil {
 					return err
 				}
@@ -250,7 +250,7 @@ func Bitcoin() *cobra.Command {
 	}
 
 	param := types.DefaultParams()
-	cmd.Flags().Uint32(FlagConfirmationNumber, param.ConfirmationNumber, "the confirmation number")
+	cmd.Flags().Uint64(FlagConfirmationNumber, param.ConfirmationNumber, "the confirmation number")
 	cmd.Flags().BytesHex(FlagPubkey, nil, "the initial relayer public key")
 	cmd.Flags().String(FlagPubkeyType, types.Secp256K1Name, "the public key type [secp256k1,schnorr]")
 	cmd.Flags().String(FlagNetworkName, param.NetworkName, "the bitcoin network name(mainnet|testnet3|regtest|signet)")

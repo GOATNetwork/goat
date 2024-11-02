@@ -101,8 +101,8 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 			return
 		}
 	}
-	if x.ConfirmationNumber != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.ConfirmationNumber)
+	if x.ConfirmationNumber != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.ConfirmationNumber)
 		if !f(fd_Params_confirmation_number, value) {
 			return
 		}
@@ -137,7 +137,7 @@ func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 	case "goat.bitcoin.v1.Params.network_name":
 		return x.NetworkName != ""
 	case "goat.bitcoin.v1.Params.confirmation_number":
-		return x.ConfirmationNumber != uint32(0)
+		return x.ConfirmationNumber != uint64(0)
 	case "goat.bitcoin.v1.Params.min_deposit_amount":
 		return x.MinDepositAmount != uint64(0)
 	case "goat.bitcoin.v1.Params.deposit_magic_prefix":
@@ -161,7 +161,7 @@ func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 	case "goat.bitcoin.v1.Params.network_name":
 		x.NetworkName = ""
 	case "goat.bitcoin.v1.Params.confirmation_number":
-		x.ConfirmationNumber = uint32(0)
+		x.ConfirmationNumber = uint64(0)
 	case "goat.bitcoin.v1.Params.min_deposit_amount":
 		x.MinDepositAmount = uint64(0)
 	case "goat.bitcoin.v1.Params.deposit_magic_prefix":
@@ -187,7 +187,7 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 		return protoreflect.ValueOfString(value)
 	case "goat.bitcoin.v1.Params.confirmation_number":
 		value := x.ConfirmationNumber
-		return protoreflect.ValueOfUint32(value)
+		return protoreflect.ValueOfUint64(value)
 	case "goat.bitcoin.v1.Params.min_deposit_amount":
 		value := x.MinDepositAmount
 		return protoreflect.ValueOfUint64(value)
@@ -217,7 +217,7 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 	case "goat.bitcoin.v1.Params.network_name":
 		x.NetworkName = value.Interface().(string)
 	case "goat.bitcoin.v1.Params.confirmation_number":
-		x.ConfirmationNumber = uint32(value.Uint())
+		x.ConfirmationNumber = value.Uint()
 	case "goat.bitcoin.v1.Params.min_deposit_amount":
 		x.MinDepositAmount = value.Uint()
 	case "goat.bitcoin.v1.Params.deposit_magic_prefix":
@@ -266,7 +266,7 @@ func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protor
 	case "goat.bitcoin.v1.Params.network_name":
 		return protoreflect.ValueOfString("")
 	case "goat.bitcoin.v1.Params.confirmation_number":
-		return protoreflect.ValueOfUint32(uint32(0))
+		return protoreflect.ValueOfUint64(uint64(0))
 	case "goat.bitcoin.v1.Params.min_deposit_amount":
 		return protoreflect.ValueOfUint64(uint64(0))
 	case "goat.bitcoin.v1.Params.deposit_magic_prefix":
@@ -502,7 +502,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.ConfirmationNumber |= uint32(b&0x7F) << shift
+					x.ConfirmationNumber |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -618,7 +618,7 @@ type Params struct {
 	// A block has the confirmation number should be considered as a finalized
 	// block, and it's very hard to be rollbacked Using 6 is recommended for the
 	// bitcoin mainnet and you can use 1 on the regtest/devnet
-	ConfirmationNumber uint32 `protobuf:"varint,2,opt,name=confirmation_number,json=confirmationNumber,proto3" json:"confirmation_number,omitempty"`
+	ConfirmationNumber uint64 `protobuf:"varint,2,opt,name=confirmation_number,json=confirmationNumber,proto3" json:"confirmation_number,omitempty"`
 	MinDepositAmount   uint64 `protobuf:"varint,3,opt,name=min_deposit_amount,json=minDepositAmount,proto3" json:"min_deposit_amount,omitempty"`
 	DepositMagicPrefix []byte `protobuf:"bytes,4,opt,name=deposit_magic_prefix,json=depositMagicPrefix,proto3" json:"deposit_magic_prefix,omitempty"`
 }
@@ -650,7 +650,7 @@ func (x *Params) GetNetworkName() string {
 	return ""
 }
 
-func (x *Params) GetConfirmationNumber() uint32 {
+func (x *Params) GetConfirmationNumber() uint64 {
 	if x != nil {
 		return x.ConfirmationNumber
 	}
@@ -682,7 +682,7 @@ var file_goat_bitcoin_v1_params_proto_rawDesc = []byte{
 	0x0c, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x5f, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20,
 	0x01, 0x28, 0x09, 0x52, 0x0b, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x4e, 0x61, 0x6d, 0x65,
 	0x12, 0x2f, 0x0a, 0x13, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x5f, 0x6e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x12, 0x63,
+	0x5f, 0x6e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x12, 0x63,
 	0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x4e, 0x75, 0x6d, 0x62, 0x65,
 	0x72, 0x12, 0x2c, 0x0a, 0x12, 0x6d, 0x69, 0x6e, 0x5f, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74,
 	0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x10, 0x6d,

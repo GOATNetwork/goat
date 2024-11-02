@@ -398,18 +398,104 @@ func (suite *KeeperTestSuite) TestNewConsolidation() {
 	txid, err := chainhash.NewHashFromStr("1ed1c224d55d41aa03d0baa14f370f627c39ac21970d92ef87694abf60c9b76d")
 	suite.Require().NoError(err)
 
-	events := suite.Context.EventManager().ABCIEvents()
+	events := suite.Context.EventManager().Events()
 	suite.Require().Equal(len(events), 2)
+	testutil.EventEquals(suite.T(), events, sdktypes.Events{
+		sdktypes.NewEvent(
+			types.EventTypeNewConsolidation,
+			sdktypes.NewAttribute("txid", txid.String()),
+		),
+		sdktypes.NewEvent(
+			relayertypes.EventFinalizedProposal,
+			sdktypes.NewAttribute("sequence", "100"),
+		),
+	})
+}
 
-	event0 := types.NewConsolidationEvent(txid[:])
-	suite.Require().Equal(events[0].Type, event0.Type)
-	suite.Require().Equal(len(events[0].Attributes), len(event0.Attributes))
-	suite.Require().Equal(events[0].Attributes[0].Key, event0.Attributes[0].Key)
-	suite.Require().Equal(events[0].Attributes[0].Value, event0.Attributes[0].Value)
+func (suite *KeeperTestSuite) TestUpdateMinDeposit() {
+	msgServer := keeper.NewMsgServerImpl(suite.Keeper)
+	req := &types.MsgUpdateMinDeposit{
+		Proposer: "goat1xa56637tjn857jyg2plgvhdclzmr4crxzn5xus",
+		Vote:     &relayertypes.Votes{Signature: make([]byte, goatcrypto.SignatureLength)},
+		Satoshi:  100,
+	}
 
-	event1 := relayertypes.FinalizedProposalEvent(sequence)
-	suite.Require().Equal(events[1].Type, event1.Type)
-	suite.Require().Equal(len(events[1].Attributes), len(event1.Attributes))
-	suite.Require().Equal(events[1].Attributes[0].Key, event1.Attributes[0].Key)
-	suite.Require().Equal(events[1].Attributes[0].Value, event1.Attributes[0].Value)
+	_, err := msgServer.UpdateMinDeposit(suite.Context, req)
+	suite.Require().ErrorContains(err, "number too low")
+
+	req.Satoshi = types.DefaultParams().MinDepositAmount
+	sequence := uint64(100)
+	suite.RelayerKeeper.EXPECT().VerifyProposal(suite.Context, req).Return(sequence, nil)
+
+	_, err = msgServer.UpdateMinDeposit(suite.Context, req)
+	suite.Require().ErrorContains(err, "no changes")
+
+	req.Satoshi = 1e8
+	suite.RelayerKeeper.EXPECT().VerifyProposal(suite.Context, req).Return(sequence, nil)
+	suite.RelayerKeeper.EXPECT().SetProposalSeq(suite.Context, sequence+1)
+	suite.RelayerKeeper.EXPECT().UpdateRandao(suite.Context, req)
+
+	_, err = msgServer.UpdateMinDeposit(suite.Context, req)
+	suite.Require().NoError(err)
+	newParam, err := suite.Keeper.Params.Get(suite.Context)
+	suite.Require().NoError(err)
+	suite.Param.MinDepositAmount = req.Satoshi
+	suite.Require().Equal(suite.Param, newParam)
+
+	events := suite.Context.EventManager().Events()
+	suite.Require().Equal(len(events), 2)
+	testutil.EventEquals(suite.T(), events, sdktypes.Events{
+		sdktypes.NewEvent(
+			types.EventTypeUpdateMinDeposit,
+			sdktypes.NewAttribute("value", "100000000"),
+		),
+		sdktypes.NewEvent(
+			relayertypes.EventFinalizedProposal,
+			sdktypes.NewAttribute("sequence", "100"),
+		),
+	})
+}
+
+func (suite *KeeperTestSuite) TestUpdateConfirmationNumber() {
+	msgServer := keeper.NewMsgServerImpl(suite.Keeper)
+	req := &types.MsgUpdateConfirmationNumber{
+		Proposer: "goat1xa56637tjn857jyg2plgvhdclzmr4crxzn5xus",
+		Vote:     &relayertypes.Votes{Signature: make([]byte, goatcrypto.SignatureLength)},
+		Value:    0,
+	}
+
+	_, err := msgServer.UpdateConfirmationNumber(suite.Context, req)
+	suite.Require().ErrorContains(err, "number too low")
+
+	req.Value = types.DefaultParams().ConfirmationNumber
+	sequence := uint64(100)
+	suite.RelayerKeeper.EXPECT().VerifyProposal(suite.Context, req).Return(sequence, nil)
+
+	_, err = msgServer.UpdateConfirmationNumber(suite.Context, req)
+	suite.Require().ErrorContains(err, "no changes")
+
+	req.Value = 20
+	suite.RelayerKeeper.EXPECT().VerifyProposal(suite.Context, req).Return(sequence, nil)
+	suite.RelayerKeeper.EXPECT().SetProposalSeq(suite.Context, sequence+1)
+	suite.RelayerKeeper.EXPECT().UpdateRandao(suite.Context, req)
+
+	_, err = msgServer.UpdateConfirmationNumber(suite.Context, req)
+	suite.Require().NoError(err)
+	newParam, err := suite.Keeper.Params.Get(suite.Context)
+	suite.Require().NoError(err)
+	suite.Param.ConfirmationNumber = req.Value
+	suite.Require().Equal(suite.Param, newParam)
+
+	events := suite.Context.EventManager().Events()
+	suite.Require().Equal(len(events), 2)
+	testutil.EventEquals(suite.T(), events, sdktypes.Events{
+		sdktypes.NewEvent(
+			types.EventTypeUpdateConfirmationNumber,
+			sdktypes.NewAttribute("value", "20"),
+		),
+		sdktypes.NewEvent(
+			relayertypes.EventFinalizedProposal,
+			sdktypes.NewAttribute("sequence", "100"),
+		),
+	})
 }
