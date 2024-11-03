@@ -38,7 +38,8 @@ func initRootCmd(
 
 	server.AddCommandsWithStartCmdOptions(rootCmd, app.DefaultNodeHome, newApp, appExport, server.StartCmdOptions{
 		AddFlags: func(cmd *cobra.Command) {
-			cmd.Flags().String(FlagGoatGeth, "", "the goat-geth endpoint, ipc is recommended")
+			cmd.Flags().String(FlagGoatGeth, "", "the goat-geth ipc path")
+			cmd.Flags().String(FlagGoatPreset, "", "the goat node preset(bootnode,rpc)")
 			cmd.Flags().String(flags.FlagChainID, "", "the chain id ("+chainList()+")")
 		},
 	})

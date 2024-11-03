@@ -4,8 +4,11 @@ import (
 	"embed"
 	"errors"
 	"fmt"
+	"io"
+	"net/http"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 
 	tmsecp256k1 "github.com/cometbft/cometbft/crypto/secp256k1"
@@ -88,5 +91,45 @@ func initializeNodeFiles(cmd *cobra.Command) error {
 			serverCtx.Viper.Set(FlagPersistentPeers, strings.Join(bootnode, ","))
 		}
 	}
+
+	preset, _ := cmd.Flags().GetString(FlagGoatPreset)
+	presets := strings.Split(preset, ",")
+	if slices.Contains(presets, "bootnode") {
+		if serverCtx.Viper.GetString(FlagExternalIP) == "" {
+			if ip, err := getPublicIP(); err != nil {
+				serverCtx.Logger.Warn("Failed to fetch external public IP", "err", err.Error())
+			} else {
+				serverCtx.Logger.Info("Set external public IP", "ip", ip)
+				serverCtx.Viper.Set(FlagP2PListener, "tcp://0.0.0.0:26656")
+				serverCtx.Viper.Set(FlagExternalIP, ip+":26656")
+			}
+		}
+		serverCtx.Viper.Set("p2p.max_num_inbound_peers", 200)
+		serverCtx.Viper.Set("p2p.max_num_outbound_peers", 200)
+	}
+
+	if slices.Contains(presets, "rpc") {
+		serverCtx.Viper.Set(flags.FlagGRPC, "0.0.0.0:9090")
+		serverCtx.Viper.Set(server.FlagAPIEnable, true)
+	}
+
+	if slices.Contains(presets, "regtest") {
+		serverCtx.Viper.Set(FlagP2PPex, false)
+	}
+
 	return nil
+}
+
+func getPublicIP() (string, error) {
+	resp, err := http.Get("https://checkip.amazonaws.com")
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	data, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+	return strings.TrimSpace(string(data)), nil
 }

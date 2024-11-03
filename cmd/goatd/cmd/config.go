@@ -9,11 +9,16 @@ import (
 
 const (
 	FlagGoatGeth        = "goat.geth"
+	FlagGoatPreset      = "goat.preset"
 	FlagPersistentPeers = "p2p.persistent_peers"
+	FlagP2PListener     = "p2p.laddr"
+	FlagP2PPex          = "p2p.pex"
+	FlagExternalIP      = "p2p.external_address"
 )
 
 type GoatConfig struct {
-	Geth string `mapstructure:"geth"`
+	Geth   string `mapstructure:"geth"`
+	Preset string `mapstructure:"preset"`
 }
 
 // initCometBFTConfig helps to override default CometBFT Config values.
@@ -21,8 +26,6 @@ type GoatConfig struct {
 func initCometBFTConfig() *cmtcfg.Config {
 	cfg := cmtcfg.DefaultConfig()
 
-	cfg.P2P.MaxNumInboundPeers = 150
-	cfg.P2P.MaxNumOutboundPeers = 100
 	cfg.Mempool.Size = 10
 	cfg.Consensus.TimeoutPropose = 1500 * time.Millisecond
 	cfg.Consensus.TimeoutPrevote = 1500 * time.Millisecond
@@ -44,6 +47,7 @@ func initAppConfig() (string, interface{}) {
 	srvCfg := serverconfig.DefaultConfig()
 	srvCfg.MinGasPrices = "0gas"
 	srvCfg.Mempool.MaxTxs = 10
+	srvCfg.GRPCWeb.Enable = false
 
 	customAppConfig := GoatAppConfig{
 		Config: *srvCfg,
@@ -54,6 +58,8 @@ func initAppConfig() (string, interface{}) {
 # the goat-geth node ipc path
 # we don't use http due to the node server has body limit for it
 geth = "{{ .Goat.Geth }}"
+# the node preset configuration, e.g. rpc,bootnode
+preset = "{{ .Goat.Preset }}"
 `
 
 	return customAppTemplate, customAppConfig

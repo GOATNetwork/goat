@@ -8,7 +8,7 @@ RUN echo "Ensuring binary is statically linked ..."  \
     && file /app/build/goatd | grep "statically linked"
 
 FROM alpine:3.20
-RUN apk add --no-cache build-base jq
+RUN apk add --no-cache build-base jq ca-certificates
 RUN addgroup -g 1025 nonroot && \
     adduser -D nonroot -u 1025 -G nonroot
 COPY --from=builder /app/build/goatd /usr/local/bin/
