@@ -111,10 +111,7 @@ func initializeNodeFiles(cmd *cobra.Command) error {
 	if slices.Contains(presets, "rpc") {
 		serverCtx.Viper.Set(flags.FlagGRPC, "0.0.0.0:9090")
 		serverCtx.Viper.Set(server.FlagAPIEnable, true)
-	}
-
-	if slices.Contains(presets, "regtest") {
-		serverCtx.Viper.Set(FlagP2PPex, false)
+		serverCtx.Viper.Set(server.FlagAPIAddress, "tcp://0.0.0.0:1317")
 	}
 
 	return nil
