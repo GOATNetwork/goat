@@ -13,4 +13,4 @@ RUN addgroup -g 1025 nonroot && \
     adduser -D nonroot -u 1025 -G nonroot
 COPY --from=builder /app/build/goatd /usr/local/bin/
 EXPOSE 26656 26657 1317 9090
-ENTRYPOINT ["goatd", "start"]
+ENTRYPOINT ["goatd"]
