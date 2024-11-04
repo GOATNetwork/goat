@@ -28,9 +28,8 @@ type (
 		Params     collections.Item[types.Params]
 		BeaconRoot collections.Item[[]byte] // the cometbft blockhash
 		Block      collections.Item[types.ExecutionPayload]
-		ethclient  ethrpc.EngineClient
-		// this line is used by starport scaffolding # collection/type
 
+		engineClient  ethrpc.EngineClient
 		bitcoinKeeper types.BitcoinKeeper
 		lockingKeeper types.LockingKeeper
 		relayerKeeper types.RelayerKeeper
@@ -48,7 +47,7 @@ func NewKeeper(
 	lockingKeeper types.LockingKeeper,
 	relayerKeeper types.RelayerKeeper,
 	accountKeeper types.AccountKeeper,
-	ethclient ethrpc.EngineClient,
+	engineClient ethrpc.EngineClient,
 ) Keeper {
 	sb := collections.NewSchemaBuilder(storeService)
 
@@ -65,7 +64,7 @@ func NewKeeper(
 		Params:        collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 		Block:         collections.NewItem(sb, types.BlockKey, "block", codec.CollValue[types.ExecutionPayload](cdc)),
 		BeaconRoot:    collections.NewItem(sb, types.ConsHashKey, "consensus_hash", collections.BytesValue),
-		ethclient:     ethclient,
+		engineClient:  engineClient,
 	}
 
 	schema, err := sb.Build()
@@ -92,7 +91,7 @@ func (k Keeper) Finalized(ctx context.Context) error { // EndBlock phase only!
 	}
 
 	k.Logger().Info("Notify NewPayload", "number", block.BlockNumber)
-	response, err := k.ethclient.NewPayloadV4(ctx, types.PayloadToExecutableData(&block),
+	response, err := k.engineClient.NewPayloadV4(ctx, types.PayloadToExecutableData(&block),
 		[]common.Hash{}, common.BytesToHash(block.BeaconRoot), block.Requests)
 	if err != nil {
 		return err
@@ -103,12 +102,12 @@ func (k Keeper) Finalized(ctx context.Context) error { // EndBlock phase only!
 	}
 
 	// set current block hash to head state and set previous block hash to safe and finalized state
-	k.Logger().Info("Notify ForkchoiceUpdated",
+	k.Logger().Info("Notify ForkChoiceUpdated",
 		"head", hexutil.Encode(block.BlockHash), "finalized", hexutil.Encode(block.ParentHash))
-	forkRes, err := k.ethclient.ForkchoiceUpdatedV3(ctx, &engine.ForkchoiceStateV1{
-		HeadBlockHash:      common.BytesToHash(block.BlockHash),
-		SafeBlockHash:      common.BytesToHash(block.ParentHash),
-		FinalizedBlockHash: common.BytesToHash(block.ParentHash),
+	parentHash := common.BytesToHash(block.ParentHash)
+	forkRes, err := k.engineClient.ForkchoiceUpdatedV3(ctx, &engine.ForkchoiceStateV1{
+		HeadBlockHash: common.BytesToHash(block.BlockHash),
+		SafeBlockHash: parentHash, FinalizedBlockHash: parentHash,
 	}, nil)
 	if err != nil {
 		return err

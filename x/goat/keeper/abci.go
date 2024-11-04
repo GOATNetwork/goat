@@ -113,7 +113,7 @@ func (k Keeper) createEthBlockProposal(sdkctx sdk.Context, keyProvider cryptotyp
 		return nil, err
 	}
 
-	tmctx, cancel := context.WithTimeout(sdkctx, time.Second*2)
+	tmctx, cancel := context.WithTimeout(sdkctx, 1200*time.Millisecond)
 	defer cancel()
 
 	// yeah, we have a proposer based random number
@@ -121,13 +121,11 @@ func (k Keeper) createEthBlockProposal(sdkctx sdk.Context, keyProvider cryptotyp
 	_, _ = rand.Read(random[:])
 
 	beaconRoot := common.BytesToHash(beaconBlock)
-	forkChoiceResp, err := k.ethclient.ForkchoiceUpdatedV3(tmctx,
+	forkChoiceResp, err := k.engineClient.ForkchoiceUpdatedV3(tmctx,
 		&engine.ForkchoiceStateV1{HeadBlockHash: common.BytesToHash(parentBlock.BlockHash)},
 		&engine.PayloadAttributes{
-			// Why we use system timestamp instead of CometBFT timestamp?
-			// CometBFT 0.38 uses last vote median time by all voters
-			// The proposer-based timestamps (PBTS) will be enabled on CometBFT 1.0
-			// We can use the consensus layer timestamp after migrating to 1.0
+			// We use system timestamp instead of CometBFT timestamp
+			// Because CometBFT 0.38 uses median time of last vote, it might break the execution layer rules
 			Timestamp:             uint64(time.Now().UTC().Unix()),
 			Random:                random,
 			SuggestedFeeRecipient: common.BytesToAddress(rpp.ProposerAddress),
@@ -148,12 +146,14 @@ func (k Keeper) createEthBlockProposal(sdkctx sdk.Context, keyProvider cryptotyp
 	}
 
 	if forkChoiceResp.PayloadID == nil {
-		return nil, errors.New("got nil payloadId")
+		return nil, errors.New("nil payloadId")
 	}
 
-	// Note: the waiting duration is for the payload building starting instead of finishing
+	// the forkChoiceUpdated is too fast to have a non-empty payload
+	// add a timer here to wait for the payload construction to start
+	// the getPayload is a synchronized call, it will wait up to 1s to include transactions from the tx pool
 	<-time.After(time.Millisecond * 50)
-	envelope, err := k.ethclient.GetPayloadV4(tmctx, *forkChoiceResp.PayloadID)
+	envelope, err := k.engineClient.GetPayloadV4(tmctx, *forkChoiceResp.PayloadID)
 	if err != nil {
 		return nil, err
 	}
@@ -271,6 +271,7 @@ func (k Keeper) verifyEthBlockProposal(sdkctx sdk.Context, msg *types.MsgNewEthB
 			return errors.New("invalid MsgNewEthBlock timestamp")
 		}
 
+		// verify if the block refers to the last block
 		block, err := k.Block.Get(sdkctx)
 		if err != nil {
 			return err
@@ -280,13 +281,16 @@ func (k Keeper) verifyEthBlockProposal(sdkctx sdk.Context, msg *types.MsgNewEthB
 			return fmt.Errorf("incorrect parent block number: expected %x got %x", block.BlockHash, payload.ParentHash)
 		}
 
-		if block.BlockNumber+1 != payload.BlockNumber {
-			return fmt.Errorf("incorrect parent block hash: expected %d got %d", block.BlockNumber+1, payload.BlockNumber)
+		if height := block.BlockNumber + 1; height != payload.BlockNumber {
+			return fmt.Errorf("incorrect parent block hash: expected %d got %d", height, payload.BlockNumber)
 		}
 
-		if _, _, lockingReqs, err := goattypes.DecodeRequests(payload.Requests, false); err != nil {
+		// verify if the requests are valid
+		_, _, lockingReqs, err := goattypes.DecodeRequests(payload.Requests)
+		if err != nil {
 			return fmt.Errorf("invalid goat requests: %w", err)
-		} else if len(lockingReqs.Gas) != 1 {
+		}
+		if len(lockingReqs.Gas) != 1 {
 			return errors.New("gas revenue request length is not 1")
 		}
 
@@ -299,6 +303,7 @@ func (k Keeper) verifyEthBlockProposal(sdkctx sdk.Context, msg *types.MsgNewEthB
 			return fmt.Errorf("refer to incorrect beacon root: expected %x got %x", beaconRoot, payload.BeaconRoot)
 		}
 
+		// verify if the goat txs match
 		if err := k.VerifyDequeue(sdkctx, payload.ExtraData, payload.Transactions); err != nil {
 			return err
 		}
@@ -307,7 +312,7 @@ func (k Keeper) verifyEthBlockProposal(sdkctx sdk.Context, msg *types.MsgNewEthB
 	})
 
 	eg.Go(func() error {
-		res, err := k.ethclient.NewPayloadV4(egctx, types.PayloadToExecutableData(payload),
+		res, err := k.engineClient.NewPayloadV4(egctx, types.PayloadToExecutableData(payload),
 			[]common.Hash{}, common.BytesToHash(payload.BeaconRoot), payload.Requests)
 		if err != nil {
 			return err
