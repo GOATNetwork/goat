@@ -20,9 +20,7 @@ DOCKER := $(shell which docker)
 BUILDDIR ?= $(CURDIR)/build
 
 GO_SYSTEM_VERSION = $(shell go version | cut -c 14- | cut -d' ' -f1 | cut -d'.' -f1-2)
-REQUIRE_GO_VERSION = 1.22
-
-export GO111MODULE = on
+REQUIRE_GO_VERSION = 1.23
 
 # process build tags
 
