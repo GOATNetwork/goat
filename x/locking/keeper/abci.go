@@ -90,7 +90,7 @@ func (k Keeper) EndBlocker(ctx context.Context) ([]abci.ValidatorUpdate, error) 
 				newSet = append(newSet, abci.ValidatorUpdate{
 					Power: int64(validator.Power), PubKey: validator.CMPubkey(),
 				})
-				k.Logger().Info("Validator set updated", "address", types.ValidatorName(valAddr), "power", validator.Power)
+				k.Logger().Info("Update validator set", "address", types.ValidatorName(valAddr), "power", validator.Power)
 			}
 			delete(lastSet, valstr)
 		case types.Pending:
@@ -108,7 +108,7 @@ func (k Keeper) EndBlocker(ctx context.Context) ([]abci.ValidatorUpdate, error) 
 			newSet = append(newSet, abci.ValidatorUpdate{
 				Power: int64(validator.Power), PubKey: validator.CMPubkey(),
 			})
-			k.Logger().Info("Validator set updated", "address", types.ValidatorName(valAddr), "power", validator.Power)
+			k.Logger().Info("Add to validator set", "address", types.ValidatorName(valAddr), "power", validator.Power)
 		default:
 			return nil, fmt.Errorf("%s validator %x in power ranking", validator.Status, valAddr.Bytes())
 		}
@@ -132,7 +132,7 @@ func (k Keeper) EndBlocker(ctx context.Context) ([]abci.ValidatorUpdate, error) 
 			return nil, err
 		}
 		newSet = append(newSet, abci.ValidatorUpdate{PubKey: validator.CMPubkey()})
-		k.Logger().Info("Validator set updated", "address", types.ValidatorName(valAddr), "power", 0)
+		k.Logger().Info("Remove from validator set", "address", types.ValidatorName(valAddr), "power", validator.Power)
 	}
 	return newSet, nil
 }
