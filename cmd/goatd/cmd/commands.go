@@ -5,7 +5,6 @@ import (
 	"io"
 
 	"cosmossdk.io/log"
-	confixcmd "cosmossdk.io/tools/confix/cmd"
 	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/debug"
@@ -29,28 +28,23 @@ func initRootCmd(
 	basicManager module.BasicManager,
 ) {
 	rootCmd.AddCommand(
-		ModgenCommand(basicManager),
+		ModGenCommand(basicManager),
 		debug.Cmd(),
-		confixcmd.ConfigCommand(),
 		pruning.Cmd(newApp, app.DefaultNodeHome),
 		snapshot.Cmd(newApp),
+		server.StatusCommand(),
+		queryCommand(),
+		txCommand(),
+		keys.Commands(),
 	)
 
 	server.AddCommandsWithStartCmdOptions(rootCmd, app.DefaultNodeHome, newApp, appExport, server.StartCmdOptions{
 		AddFlags: func(cmd *cobra.Command) {
 			cmd.Flags().String(FlagGoatGeth, "", "the goat-geth ipc path")
 			cmd.Flags().String(FlagGoatPreset, "", "the goat node preset(bootnode,rpc)")
-			cmd.Flags().String(flags.FlagChainID, "", "the chain id ("+chainList()+")")
+			cmd.Flags().String(flags.FlagChainID, "", "the chain id")
 		},
 	})
-
-	// add keybase, auxiliary RPC, query, genesis, and tx child commands
-	rootCmd.AddCommand(
-		server.StatusCommand(),
-		queryCommand(),
-		txCommand(),
-		keys.Commands(),
-	)
 }
 
 func queryCommand() *cobra.Command {
@@ -64,13 +58,13 @@ func queryCommand() *cobra.Command {
 	}
 
 	cmd.AddCommand(
-		rpc.QueryEventForTxCmd(),
+		rpc.WaitTxCmd(),
 		rpc.ValidatorCommand(),
 		server.QueryBlockCmd(),
-		authcmd.QueryTxsByEventsCmd(),
 		server.QueryBlocksCmd(),
-		authcmd.QueryTxCmd(),
 		server.QueryBlockResultsCmd(),
+		authcmd.QueryTxCmd(),
+		authcmd.QueryTxsByEventsCmd(),
 	)
 	cmd.PersistentFlags().String(flags.FlagChainID, "", "The network chain ID")
 
@@ -88,15 +82,10 @@ func txCommand() *cobra.Command {
 
 	cmd.AddCommand(
 		authcmd.GetSignCommand(),
-		authcmd.GetSignBatchCommand(),
-		authcmd.GetMultiSignCommand(),
-		authcmd.GetMultiSignBatchCmd(),
 		authcmd.GetValidateSignaturesCommand(),
-		flags.LineBreak,
 		authcmd.GetBroadcastCommand(),
 		authcmd.GetEncodeCommand(),
 		authcmd.GetDecodeCommand(),
-		authcmd.GetSimulateCmd(),
 	)
 	cmd.PersistentFlags().String(flags.FlagChainID, "", "The network chain ID")
 
@@ -174,7 +163,7 @@ func appExport(
 	return bApp.ExportAppStateAndValidators(forZeroHeight, jailAllowedAddrs, modulesToExport)
 }
 
-func ModgenCommand(basicManager module.BasicManager) *cobra.Command {
+func ModGenCommand(basicManager module.BasicManager) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "modgen",
 		Short: "update module genesis",

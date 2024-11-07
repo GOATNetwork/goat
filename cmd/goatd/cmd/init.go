@@ -23,15 +23,6 @@ import (
 //go:embed genesis
 var genesisFiles embed.FS
 
-func chainList() string {
-	dirEntry, _ := genesisFiles.ReadDir("genesis")
-	var res []string
-	for _, item := range dirEntry {
-		res = append(res, strings.TrimSuffix(item.Name(), ".json"))
-	}
-	return strings.Join(res, ",")
-}
-
 var bootnodes = map[string][]string{}
 
 // initializeNodeFiles creates private validator and p2p configuration files if they doesn't exist
