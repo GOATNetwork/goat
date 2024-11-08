@@ -15,6 +15,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/tx"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/goatnetwork/goat/app"
+	"github.com/goatnetwork/goat/cmd/goatd/cmd/modgen"
 	"github.com/spf13/cobra"
 )
 
@@ -62,7 +63,7 @@ func NewRootCmd() *cobra.Command {
 
 			customAppTemplate, customAppConfig := initAppConfig()
 			cometConfig := initCometBFTConfig()
-			regtest, _ := cmd.Flags().GetBool(FlagRegtest)
+			regtest, _ := cmd.Flags().GetBool(modgen.FlagRegtest)
 			if regtest {
 				cometConfig = initRegtestCometBFTConfig()
 			}
@@ -73,7 +74,7 @@ func NewRootCmd() *cobra.Command {
 		},
 	}
 
-	rootCmd.PersistentFlags().Bool(FlagRegtest, false, "use regtest consensus config")
+	rootCmd.PersistentFlags().Bool(modgen.FlagRegtest, false, "use regtest consensus config")
 
 	initRootCmd(rootCmd, moduleBasicManager)
 	if err := autoCliOpts.EnhanceRootCommand(rootCmd); err != nil {

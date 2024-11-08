@@ -24,8 +24,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// Init returns a command that initializes all files needed for Tendermint
-// and the respective application.
+// Init returns a command that initializes default genesis
 func Init(mbm module.BasicManager) *cobra.Command {
 	const (
 		// FlagOverwrite defines a flag to overwrite an existing genesis JSON file.
@@ -33,9 +32,6 @@ func Init(mbm module.BasicManager) *cobra.Command {
 
 		// FlagGenesisTime defines a flag to set genesis time
 		FlagGenesisTime = "genesis-time"
-
-		// FlagNoGenesis defines a flag to create node files without default genesis file
-		FlagNoGenesis = "no-genesis"
 	)
 
 	cmd := &cobra.Command{
@@ -49,16 +45,11 @@ func Init(mbm module.BasicManager) *cobra.Command {
 			serverCtx.Config.SetRoot(clientCtx.HomeDir)
 			serverCtx.Config.Moniker = args[0]
 
-			noGenesis, err := cmd.Flags().GetBool(FlagNoGenesis)
-			if err != nil {
-				return err
-			}
-
-			if noGenesis {
-				return nil
-			}
-
+			regtest, _ := cmd.Flags().GetBool(FlagRegtest)
 			chainID, _ := cmd.Flags().GetString(flags.FlagChainID)
+			if chainID == "" && regtest {
+				chainID = FlagRegtest
+			}
 			if chainID == "" {
 				return errors.New("no chain id provided")
 			}
@@ -128,6 +119,5 @@ func Init(mbm module.BasicManager) *cobra.Command {
 	cmd.Flags().BoolP(FlagOverwrite, "o", false, "overwrite the genesis.json file")
 	cmd.Flags().String(FlagGenesisTime, "", "genesis time(rfc3399/unix number/duration(e.g. +1h))")
 	cmd.Flags().String(flags.FlagChainID, "", "the chain-id")
-	cmd.Flags().Bool(FlagNoGenesis, false, "create the default node files without default genesis")
 	return cmd
 }
