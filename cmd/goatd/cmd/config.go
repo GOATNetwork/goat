@@ -14,7 +14,6 @@ const (
 	FlagP2PListener     = "p2p.laddr"
 	FlagP2PPex          = "p2p.pex"
 	FlagExternalIP      = "p2p.external_address"
-	FlagRegtest         = "regtest"
 )
 
 type GoatConfig struct {
