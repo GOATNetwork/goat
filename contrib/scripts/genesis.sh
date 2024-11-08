@@ -15,11 +15,6 @@ if [ ! -f "$2" ]; then
   exit 1
 fi
 
-if [ ! -f "$3" ]; then
-  echo "geth-genesis $3 is not a file"
-  exit 1
-fi
-
 TOKEN_LENGTH=$(jq '.Locking.tokens | length' $2)
 for ((i=0; i<TOKEN_LENGTH; i++)); do
   echo "Add token $i"
@@ -81,10 +76,13 @@ done
 ./build/goatd modgen relayer --home $1 --param.accept_proposer_timeout $(jq -r ".Consensus.Relayer.acceptProposerTimeout" $2)
 
 ./build/goatd modgen bitcoin --home $1 \
-  --min-deposit $(jq -r ".Consensus.Bridge.minDepositInSat" $2) \
-  --confirmation-number $(jq -r ".Consensus.Bridge.confirmationNumber" $2) \
   --network $(jq -r ".Bitcoin.network" $2) \
+  --deposit-magic-prefix $(jq -r ".Bitcoin.depositPrefixMagic" $2) \
+  --min-deposit $(jq -r ".Bridge.minDepositInSat" $2) \
+  --deposit-tax-rate $(jq -r ".Bridge.depositTaxBP" $2) \
+  --deposit-max-tax $(jq -r ".Bridge.maxDepositTaxInSat" $2) \
+  --confirmation-number $(jq -r ".Bridge.confirmationNumber" $2) \
   --pubkey $(jq -r ".Consensus.Relayer.tssPubkey" $2) \
   $(jq -r ".Bitcoin.height" $2) $(jq -r ".Bitcoin.hash" $2)
 
-./build/goatd modgen goat --home $1 $3
+./build/goatd modgen goat --home $1 $2

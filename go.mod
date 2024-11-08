@@ -47,7 +47,7 @@ replace (
 	// github.com/cosmos/cosmos-sdk => ../goat-cosmos-sdk
 	// goat-geth implementation
 	// github.com/ethereum/go-ethereum => ../goat-geth
-	github.com/ethereum/go-ethereum => github.com/GOATNetwork/goat-geth v0.0.0-20241107084842-9b4732a3cd19
+	github.com/ethereum/go-ethereum => github.com/GOATNetwork/goat-geth v0.0.0-20241108001249-f8970d7aea77
 	// fix upstream GHSA-h395-qcrw-5vmq vulnerability.
 	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.9.1
 	// replace broken goleveldb
@@ -62,7 +62,6 @@ require (
 	github.com/DataDog/zstd v1.5.5 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/StackExchange/wmi v1.2.1 // indirect
-	github.com/VictoriaMetrics/fastcache v1.12.2 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bgentry/speakeasy v0.1.1-0.20220910012023-760eaf8b6816 // indirect
 	github.com/bits-and-blooms/bitset v1.13.0 // indirect
@@ -135,7 +134,6 @@ require (
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/hashicorp/yamux v0.1.1 // indirect
 	github.com/hdevalence/ed25519consensus v0.1.0 // indirect
-	github.com/holiman/bloomfilter/v2 v2.0.3 // indirect
 	github.com/holiman/uint256 v1.3.1 // indirect
 	github.com/huandu/skiplist v1.2.0 // indirect
 	github.com/iancoleman/strcase v0.3.0 // indirect

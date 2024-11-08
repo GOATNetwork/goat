@@ -67,6 +67,7 @@ func NewDepositEvent(deposit *DepositExecReceipt) sdktypes.Event {
 		sdktypes.NewAttribute("txout", strconv.FormatUint(uint64(deposit.Txout), 10)),
 		sdktypes.NewAttribute("address", hex.EncodeToString(deposit.Address)),
 		sdktypes.NewAttribute("amount", strconv.FormatUint(deposit.Amount, 10)),
+		sdktypes.NewAttribute("tax", strconv.FormatUint(deposit.Tax, 10)),
 	)
 }
 

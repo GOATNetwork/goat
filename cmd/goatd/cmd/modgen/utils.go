@@ -10,12 +10,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/rawdb"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/triedb"
-	"github.com/ethereum/go-ethereum/triedb/hashdb"
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 )
 
@@ -51,27 +47,28 @@ func GetCompressedK256P1Pubkey(pubkeyRaw []byte) ([]byte, error) {
 	return pubkeyRaw, nil
 }
 
-func GetEthGenesisHeaderByFile(genesisPath string) (*ethtypes.Header, error) {
-	file, err := os.Open(genesisPath)
+func GetEthGenesisHeaderByFile(configPath string) (*ethtypes.Header, error) {
+	file, err := os.Open(configPath)
 	if err != nil {
 		return nil, err
 	}
 	defer file.Close()
 
-	genesis := new(core.Genesis)
+	type Config struct {
+		Consensus struct {
+			Goat *ethtypes.Header
+		}
+	}
+
+	genesis := new(Config)
 	if err := json.NewDecoder(file).Decode(genesis); err != nil {
 		return nil, err
 	}
 
-	memdb := rawdb.NewMemoryDatabase()
-	triedb := triedb.NewDatabase(memdb, &triedb.Config{Preimages: true, HashDB: hashdb.Defaults})
-	defer triedb.Close()
-
-	block, err := genesis.Commit(memdb, triedb)
-	if err != nil {
-		return nil, err
+	header := genesis.Consensus.Goat
+	if header == nil {
+		return nil, errors.New("genesis header is empty")
 	}
-	header := block.Header()
 
 	if header.BaseFee == nil || header.WithdrawalsHash == nil {
 		return nil, errors.New("shanghai upgrade should be activated")

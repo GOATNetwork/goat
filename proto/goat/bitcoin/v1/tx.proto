@@ -64,14 +64,6 @@ service Msg {
   // NewConsolidation initializes a consolidation request to aggregate utxo set
   // ** it requires off-chain vote by relayer group
   rpc NewConsolidation(MsgNewConsolidation) returns (MsgNewConsolidationResponse);
-
-  // UpdateMinDeposit
-  // ** it requires off-chain vote by relayer group
-  rpc UpdateMinDeposit(MsgUpdateMinDeposit) returns (MsgUpdateMinDepositResponse);
-
-  // UpdateConfirmationNumber
-  // ** it requires off-chain vote by relayer group
-  rpc UpdateConfirmationNumber(MsgUpdateConfirmationNumber) returns (MsgUpdateConfirmationNumberResponse);
 }
 
 // MsgNewBlockHashes represents a solid block header is confirmed by relayer
@@ -200,29 +192,3 @@ message MsgNewConsolidation {
 
 // MsgNewConsolidationResponse
 message MsgNewConsolidationResponse {}
-
-// MsgUpdateMinDeposit
-message MsgUpdateMinDeposit {
-  option (cosmos.msg.v1.signer) = "proposer";
-  option (amino.name) = "goat/x/bitcoin/MsgUpdateMinDeposit";
-
-  string proposer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  goat.relayer.v1.Votes vote = 2;
-  uint64 satoshi = 3;
-}
-
-// MsgUpdateMinDepositResponse
-message MsgUpdateMinDepositResponse {}
-
-// MsgUpdateConfirmationNumber
-message MsgUpdateConfirmationNumber {
-  option (cosmos.msg.v1.signer) = "proposer";
-  option (amino.name) = "goat/x/bitcoin/MsgUpdateConfirmationNumber";
-
-  string proposer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  goat.relayer.v1.Votes vote = 2;
-  uint64 value = 3;
-}
-
-// MsgUpdateConfirmationNumberResponse
-message MsgUpdateConfirmationNumberResponse {}

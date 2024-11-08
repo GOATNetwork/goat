@@ -13,7 +13,7 @@ const (
 
 const (
 	DepositMagicLen    = 4
-	DustTxoutAmount    = 546
+	DustTxoutAmount    = 1e3 // the current dust value is 546, we use a slightly larger value here
 	RawBtcHeaderSize   = 80
 	P2TRScriptSize     = 34
 	P2WSHScriptSize    = 34
@@ -29,4 +29,5 @@ const (
 	// 4 lockTime
 	MinDepositTxSize    = 4 + 1 + 32 + 4 + 1 + 0 + 4 + 1 + 8 + 1 + 34 + 4
 	MaxAllowedBtcTxSize = 32 * 1024
+	MaxTaxBP            = 1e4
 )

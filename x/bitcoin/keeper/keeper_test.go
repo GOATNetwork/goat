@@ -61,7 +61,7 @@ func (suite *KeeperTestSuite) TestNewPubkey() {
 	suite.Require().True(pubkey.Equal(suite.TestKey))
 }
 
-func (suite *KeeperTestSuite) TestVerifyDeposit() {
+func (suite *KeeperTestSuite) TestVerifyDepositV0() {
 	evmAddress := common.HexToAddress("0xbC122aEc3EdD80433dfE3c708b2E549B5A7Ab96E")
 
 	suite.Run("v0", func() {
@@ -85,6 +85,13 @@ func (suite *KeeperTestSuite) TestVerifyDeposit() {
 		rawTx := common.Hex2Bytes("0200000001e15e44fc827b0e1a3178b6e07f67e8339faae54e4241e5fa5c1ed61786a84bda0000000000fdffffff020dc74c0001000000225120098ad136e9ed8106af7c1b6b4934011f320b30f6e18871917e0d6fb1bdcb5d1400e1f50500000000220020f7608234b4bc67678cc5498dfe7db5dfda221d3ff669f1d9ee89fbcf14d104f366000000")
 		proof := common.Hex2Bytes("4930ac654c3c2e487fcc2106a51ecaaf4188093686dfffcfe880798044aadc02")
 
+		param := types.DefaultParams()
+		param.MaxDepositTax = 100
+		param.DepositTaxRate = 2
+
+		err = suite.Keeper.Params.Set(suite.Context, param)
+		suite.Require().NoError(err)
+
 		res, err := suite.Keeper.VerifyDeposit(suite.Context,
 			map[uint64][]byte{height: header},
 			&types.Deposit{
@@ -103,10 +110,14 @@ func (suite *KeeperTestSuite) TestVerifyDeposit() {
 			Address: evmAddress.Bytes(),
 			Txid:    txid[:],
 			Txout:   txOutput,
-			Amount:  amount,
+			Amount:  amount - param.MaxDepositTax,
+			Tax:     param.MaxDepositTax,
 		})
 	})
+}
 
+func (suite *KeeperTestSuite) TestVerifyDepositV1() {
+	evmAddress := common.HexToAddress("0xbC122aEc3EdD80433dfE3c708b2E549B5A7Ab96E")
 	suite.Run("v1", func() {
 		suite.RelayerKeeper.EXPECT().HasPubkey(suite.Context, relayer.EncodePublicKey(&suite.TestKey)).Return(true, nil)
 
@@ -145,6 +156,7 @@ func (suite *KeeperTestSuite) TestVerifyDeposit() {
 			Txid:    txid[:],
 			Txout:   txOutput,
 			Amount:  amount,
+			Tax:     0,
 		})
 	})
 }

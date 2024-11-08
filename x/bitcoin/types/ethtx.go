@@ -14,6 +14,9 @@ func (d *DepositExecReceipt) EthTx(seq uint64) *ethtypes.Transaction {
 	amount := new(big.Int).SetUint64(d.Amount)
 	amount.Mul(amount, satoshi)
 
+	tax := new(big.Int).SetUint64(d.Tax)
+	tax.Mul(tax, satoshi)
+
 	return ethtypes.NewTx(
 		ethtypes.NewGoatTx(
 			goattypes.BirdgeModule,
@@ -24,6 +27,7 @@ func (d *DepositExecReceipt) EthTx(seq uint64) *ethtypes.Transaction {
 				TxOut:  d.Txout,
 				Target: common.BytesToAddress(d.Address),
 				Amount: amount,
+				Tax:    tax,
 			},
 		),
 	)

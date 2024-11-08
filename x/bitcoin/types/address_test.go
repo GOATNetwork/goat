@@ -83,6 +83,13 @@ func TestDepositAddressV1(t *testing.T) {
 
 	t.Parallel()
 
+	DepositMagicPreifxs := map[string]string{
+		chaincfg.MainNetParams.Name:       "GTV2",
+		chaincfg.TestNet3Params.Name:      "GTV1",
+		chaincfg.SigNetParams.Name:        "GTV1",
+		chaincfg.RegressionNetParams.Name: "GTT0",
+	}
+
 	for idx, item := range tests {
 		t.Run(fmt.Sprintf("idx-%d", idx), func(t *testing.T) {
 			network, ok := BitcoinNetworks[item.Network]

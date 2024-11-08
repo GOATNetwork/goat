@@ -1,9 +1,11 @@
 package keeper_test
 
 import (
+	sdktypes "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/core/types/goattypes"
+	"github.com/goatnetwork/goat/testutil"
 	"github.com/goatnetwork/goat/x/bitcoin/types"
 )
 
@@ -30,16 +32,39 @@ func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
 	}
 
 	suite.Require().NoError(suite.Keeper.EthTxQueue.Set(suite.Context, types.EthTxQueue{}))
-	err := suite.Keeper.ProcessBridgeRequest(suite.Context, goattypes.BridgeRequests{Withdraws: withdrawals1})
+	err := suite.Keeper.ProcessBridgeRequest(suite.Context, goattypes.BridgeRequests{
+		Withdraws:    withdrawals1,
+		DepositTax:   []*goattypes.DepositTaxRequest{{Rate: 2, Max: 1e5}},
+		Confirmation: []*goattypes.ConfirmationNumberRequest{{Number: 20}},
+		MinDeposit:   []*goattypes.MinDepositRequest{{Satoshi: 1e4}},
+	})
 	suite.Require().NoError(err)
-	suite.Require().Equal(len(suite.Context.EventManager().Events()), 1)
+	suite.Require().Equal(len(suite.Context.EventManager().Events()), 5)
 
-	has0, err := suite.Keeper.Withdrawals.Has(suite.Context, 0)
+	events := sdktypes.Events{
+		types.NewWithdrawalRelayerCancelEvent(0),
+		types.NewWithdrawalRelayerCancelEvent(1),
+		types.NewWithdrawalInitEvent(withdrawals1[2].Address, withdrawals1[2].Id, withdrawals1[2].TxPrice, withdrawals1[2].Amount),
+		types.UpdateConfirmationNumberEvent(20),
+		types.UpdateMinDepositEvent(1e4),
+	}
+
+	testutil.EventEquals(suite.T(), suite.Context.EventManager().Events(), events)
+
+	param, err := suite.Keeper.Params.Get(suite.Context)
 	suite.Require().NoError(err)
-	suite.Require().False(has0)
-	has1, err := suite.Keeper.Withdrawals.Has(suite.Context, 1)
+	suite.Require().EqualValues(param.ConfirmationNumber, 20)
+	suite.Require().EqualValues(param.DepositTaxRate, 2)
+	suite.Require().EqualValues(param.MaxDepositTax, 1e5)
+	suite.Require().EqualValues(param.MinDepositAmount, 1e4)
+
+	wd0, err := suite.Keeper.Withdrawals.Get(suite.Context, 0)
 	suite.Require().NoError(err)
-	suite.Require().False(has1)
+	suite.Require().Equal(wd0.Status, types.WITHDRAWAL_STATUS_CANCELED)
+
+	wd1, err := suite.Keeper.Withdrawals.Get(suite.Context, 1)
+	suite.Require().NoError(err)
+	suite.Require().Equal(wd1.Status, types.WITHDRAWAL_STATUS_CANCELED)
 
 	queue, err := suite.Keeper.EthTxQueue.Get(suite.Context)
 	suite.Require().NoError(err)
@@ -71,6 +96,10 @@ func (suite *KeeperTestSuite) TestProcessBridgeRequest() {
 
 	err = suite.Keeper.ProcessBridgeRequest(suite.Context, goattypes.BridgeRequests{Withdraws: withdrawals2, ReplaceByFees: rbf1})
 	suite.Require().NoError(err)
+
+	events = append(events, types.NewWithdrawalInitEvent(withdrawals2[0].Address, withdrawals2[0].Id, withdrawals2[0].TxPrice, withdrawals2[0].Amount))
+	events = append(events, types.NewWithdrawalUserReplaceEvent(rbf1[0].Id, rbf1[0].TxPrice))
+	testutil.EventEquals(suite.T(), suite.Context.EventManager().Events(), events)
 
 	wd2, err = suite.Keeper.Withdrawals.Get(suite.Context, 2)
 	suite.Require().NoError(err)
@@ -200,6 +229,7 @@ func (suite *KeeperTestSuite) TestDequeueBitcoinModuleTx() {
 			Txout:   8,
 			Address: common.Hex2Bytes("f59d04d7c30c0e3a25407dd6e7a0475ef0fb19f6"),
 			Amount:  1,
+			Tax:     1,
 		},
 	}
 

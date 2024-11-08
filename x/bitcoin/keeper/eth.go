@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/btcsuite/btcd/chaincfg"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/core/types/goattypes"
@@ -91,44 +90,47 @@ func (k Keeper) DequeueBitcoinModuleTx(ctx context.Context) (txs []*ethtypes.Tra
 }
 
 func (k Keeper) ProcessBridgeRequest(ctx context.Context, reqs goattypes.BridgeRequests) error {
-	reqLens := len(reqs.Withdraws) + len(reqs.ReplaceByFees) + len(reqs.Cancel1s)
+	reqLens := len(reqs.Withdraws) + len(reqs.ReplaceByFees) + len(reqs.Cancel1s) +
+		len(reqs.DepositTax) + len(reqs.Confirmation) + len(reqs.MinDeposit)
 	if reqLens == 0 {
 		return nil
 	}
 
 	events := make(sdktypes.Events, 0, reqLens)
 
-	var netwk *chaincfg.Params
-	if len(reqs.Withdraws) > 0 {
-		param, err := k.Params.Get(ctx)
-		if err != nil {
-			return err
-		}
+	param, err := k.Params.Get(ctx)
+	if err != nil {
+		return err
+	}
 
-		netwk = types.BitcoinNetworks[param.NetworkName]
-		if netwk == nil {
-			return fmt.Errorf("%s network is not defined", param.NetworkName)
-		}
+	netwk := types.BitcoinNetworks[param.NetworkName]
+	if netwk == nil {
+		return fmt.Errorf("%s network is not defined", param.NetworkName)
 	}
 
 	var rejecting []uint64
 	for _, v := range reqs.Withdraws {
+		status := types.WITHDRAWAL_STATUS_PENDING
 		// reject if we have an invalid address
 		if _, err := types.DecodeBtcAddress(v.Address, netwk); err != nil {
 			k.Logger().Info("invalid withdrawal address", "id", v.Id, "address", v.Address, "err", err.Error())
 			rejecting = append(rejecting, v.Id)
-			continue
+			status = types.WITHDRAWAL_STATUS_CANCELED
 		}
 
 		if err := k.Withdrawals.Set(ctx, v.Id, types.Withdrawal{
 			Address:       v.Address,
 			RequestAmount: v.Amount,
 			MaxTxPrice:    v.TxPrice,
-			Status:        types.WITHDRAWAL_STATUS_PENDING,
+			Status:        status,
 		}); err != nil {
 			return err
 		}
-		events = append(events, types.NewWithdrawalInitEvent(v.Address, v.Id, v.TxPrice, v.Amount))
+		if status == types.WITHDRAWAL_STATUS_PENDING {
+			events = append(events, types.NewWithdrawalInitEvent(v.Address, v.Id, v.TxPrice, v.Amount))
+		} else {
+			events = append(events, types.NewWithdrawalRelayerCancelEvent(v.Id))
+		}
 	}
 
 	if len(rejecting) > 0 {
@@ -176,6 +178,25 @@ func (k Keeper) ProcessBridgeRequest(ctx context.Context, reqs goattypes.BridgeR
 			return err
 		}
 		events = append(events, types.NewWithdrawalUserCancelEvent(v.Id))
+	}
+
+	for _, v := range reqs.DepositTax {
+		param.DepositTaxRate = v.Rate
+		param.MaxDepositTax = v.Max
+	}
+
+	for _, v := range reqs.Confirmation {
+		param.ConfirmationNumber = v.Number
+		events = append(events, types.UpdateConfirmationNumberEvent(v.Number))
+	}
+
+	for _, v := range reqs.MinDeposit {
+		param.MinDepositAmount = v.Satoshi
+		events = append(events, types.UpdateMinDepositEvent(v.Satoshi))
+	}
+
+	if err := k.Params.Set(ctx, param); err != nil {
+		return err
 	}
 
 	sdktypes.UnwrapSDKContext(ctx).EventManager().EmitEvents(events)

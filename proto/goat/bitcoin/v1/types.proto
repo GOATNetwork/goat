@@ -13,6 +13,7 @@ message DepositExecReceipt {
   uint32 txout = 2;
   bytes address = 3;
   uint64 amount = 4;
+  uint64 tax = 5;
 }
 
 // WithdrawalExecReceipt

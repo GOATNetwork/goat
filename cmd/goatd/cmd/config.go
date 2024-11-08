@@ -14,6 +14,7 @@ const (
 	FlagP2PListener     = "p2p.laddr"
 	FlagP2PPex          = "p2p.pex"
 	FlagExternalIP      = "p2p.external_address"
+	FlagRegtest         = "regtest"
 )
 
 type GoatConfig struct {
@@ -31,6 +32,19 @@ func initCometBFTConfig() *cmtcfg.Config {
 	cfg.Consensus.TimeoutPrevote = 1500 * time.Millisecond
 	cfg.Consensus.TimeoutPrecommit = time.Second
 	cfg.Consensus.TimeoutCommit = time.Second * 3
+
+	return cfg
+}
+
+func initRegtestCometBFTConfig() *cmtcfg.Config {
+	cfg := cmtcfg.DefaultConfig()
+
+	cfg.Consensus.TimeoutPropose = 500 * time.Millisecond
+	cfg.Consensus.TimeoutPrevote = 500 * time.Millisecond
+	cfg.Consensus.TimeoutPrecommit = 500 * time.Millisecond
+	cfg.Consensus.TimeoutCommit = 500 * time.Millisecond
+	cfg.P2P.PexReactor = false
+	cfg.Moniker = "regtest"
 
 	return cfg
 }

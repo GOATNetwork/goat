@@ -51,8 +51,9 @@ func (k msgServer) NewDeposits(ctx context.Context, req *types.MsgNewDeposits) (
 		if err != nil {
 			return nil, err
 		}
+		amount := deposit.Amount + deposit.Tax
 		if err := k.Deposited.Set(ctx,
-			collections.Join(deposit.Txid, deposit.Txout), deposit.Amount); err != nil {
+			collections.Join(deposit.Txid, deposit.Txout), amount); err != nil {
 			return nil, err
 		}
 		events = append(events, types.NewDepositEvent(deposit))
@@ -583,90 +584,4 @@ func (k msgServer) NewConsolidation(ctx context.Context, req *types.MsgNewConsol
 		relayertypes.FinalizedProposalEvent(sequence),
 	})
 	return &types.MsgNewConsolidationResponse{}, nil
-}
-
-func (k msgServer) UpdateMinDeposit(ctx context.Context, req *types.MsgUpdateMinDeposit) (*types.MsgUpdateMinDepositResponse, error) {
-	if err := req.Validate(); err != nil {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-	}
-
-	sdkctx := sdktypes.UnwrapSDKContext(ctx)
-
-	sequence, err := k.relayerKeeper.VerifyProposal(sdkctx, req)
-	if err != nil {
-		return nil, err
-	}
-
-	param, err := k.Params.Get(sdkctx)
-	if err != nil {
-		return nil, err
-	}
-	if param.MinDepositAmount == req.Satoshi {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "no changes")
-	}
-
-	param.MinDepositAmount = req.Satoshi
-	if err := k.Params.Set(sdkctx, param); err != nil {
-		return nil, err
-	}
-
-	if err := k.relayerKeeper.SetProposalSeq(sdkctx, sequence+1); err != nil {
-		return nil, err
-	}
-
-	if err := k.relayerKeeper.UpdateRandao(sdkctx, req); err != nil {
-		return nil, err
-	}
-
-	sdkctx.EventManager().EmitEvents(sdktypes.Events{
-		types.UpdateMinDepositEvent(req.Satoshi),
-		relayertypes.FinalizedProposalEvent(sequence),
-	})
-
-	return &types.MsgUpdateMinDepositResponse{}, nil
-}
-
-func (k msgServer) UpdateConfirmationNumber(ctx context.Context, req *types.MsgUpdateConfirmationNumber) (*types.MsgUpdateConfirmationNumberResponse, error) {
-	if err := req.Validate(); err != nil {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-	}
-
-	sdkctx := sdktypes.UnwrapSDKContext(ctx)
-	sequence, err := k.relayerKeeper.VerifyProposal(sdkctx, req)
-	if err != nil {
-		return nil, err
-	}
-
-	param, err := k.Params.Get(sdkctx)
-	if err != nil {
-		return nil, err
-	}
-
-	if param.ConfirmationNumber == req.Value {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "no changes")
-	}
-
-	if param.NetworkName == "mainnet" && param.ConfirmationNumber < 6 {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "confirmation number can't be less than 6 for mainnet")
-	}
-
-	param.ConfirmationNumber = req.Value
-	if err := k.Params.Set(sdkctx, param); err != nil {
-		return nil, err
-	}
-
-	if err := k.relayerKeeper.SetProposalSeq(sdkctx, sequence+1); err != nil {
-		return nil, err
-	}
-
-	if err := k.relayerKeeper.UpdateRandao(sdkctx, req); err != nil {
-		return nil, err
-	}
-
-	sdkctx.EventManager().EmitEvents(sdktypes.Events{
-		types.UpdateConfirmationNumberEvent(req.Value),
-		relayertypes.FinalizedProposalEvent(sequence),
-	})
-
-	return &types.MsgUpdateConfirmationNumberResponse{}, nil
 }

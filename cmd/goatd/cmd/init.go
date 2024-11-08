@@ -26,7 +26,7 @@ var genesisFiles embed.FS
 var bootnodes = map[string][]string{}
 
 // initializeNodeFiles creates private validator and p2p configuration files if they doesn't exist
-func initializeNodeFiles(cmd *cobra.Command) error {
+func initializeNodeFiles(cmd *cobra.Command, regtest bool) error {
 	serverCtx := server.GetServerContextFromCmd(cmd)
 
 	// add default p2p key
@@ -64,6 +64,9 @@ func initializeNodeFiles(cmd *cobra.Command) error {
 	// insert genesis file the file doesn't exist
 	genFile := serverCtx.Config.GenesisFile()
 	if _, genFileErr := os.Stat(genFile); os.IsNotExist(genFileErr) {
+		if regtest {
+			return errors.New("genesis file should be existed for regtest")
+		}
 		if chainID == "" {
 			return errors.New("no chain id")
 		}
@@ -77,7 +80,7 @@ func initializeNodeFiles(cmd *cobra.Command) error {
 	}
 
 	// add bootnodes if not provided
-	if chainID != "" && serverCtx.Viper.GetString(FlagPersistentPeers) == "" {
+	if !regtest && chainID != "" && serverCtx.Viper.GetString(FlagPersistentPeers) == "" {
 		if bootnode, ok := bootnodes[chainID]; ok {
 			serverCtx.Viper.Set(FlagPersistentPeers, strings.Join(bootnode, ","))
 		}
@@ -85,7 +88,7 @@ func initializeNodeFiles(cmd *cobra.Command) error {
 
 	preset, _ := cmd.Flags().GetString(FlagGoatPreset)
 	presets := strings.Split(preset, ",")
-	if slices.Contains(presets, "bootnode") {
+	if !regtest && slices.Contains(presets, "bootnode") {
 		if serverCtx.Viper.GetString(FlagExternalIP) == "" {
 			if ip, err := getPublicIP(); err != nil {
 				serverCtx.Logger.Warn("Failed to fetch external public IP", "err", err.Error())
@@ -99,7 +102,7 @@ func initializeNodeFiles(cmd *cobra.Command) error {
 		serverCtx.Viper.Set("p2p.max_num_outbound_peers", 200)
 	}
 
-	if slices.Contains(presets, "rpc") {
+	if regtest || slices.Contains(presets, "rpc") {
 		serverCtx.Viper.Set(flags.FlagGRPC, "0.0.0.0:9090")
 		serverCtx.Viper.Set(server.FlagAPIEnable, true)
 		serverCtx.Viper.Set(server.FlagAPIAddress, "tcp://0.0.0.0:1317")

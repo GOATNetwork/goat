@@ -24,6 +24,9 @@ func Bitcoin() *cobra.Command {
 		FlagMinDeposit         = "min-deposit"
 		FlagNetworkName        = "network"
 		FlagConfirmationNumber = "confirmation-number"
+		FlagDepositMagicPrefix = "deposit-magic-prefix"
+		FlagDepositTaxRate     = "deposit-tax-rate"
+		FlagDepositMaxTax      = "deposit-max-tax"
 
 		FlagDepositTxid    = "txid"
 		FlagDepositTxout   = "txout"
@@ -83,6 +86,15 @@ func Bitcoin() *cobra.Command {
 					return fmt.Errorf("unknown bitcoin network: %s", networkName)
 				}
 
+				depositMagicPrefix, err := cmd.Flags().GetString(FlagDepositMagicPrefix)
+				if err != nil {
+					return err
+				}
+
+				if len([]byte(depositMagicPrefix)) != 4 {
+					return fmt.Errorf("invalid deposit magic prefix length")
+				}
+
 				confirmationNumber, err := cmd.Flags().GetUint64(FlagConfirmationNumber)
 				if err != nil {
 					return err
@@ -99,11 +111,23 @@ func Bitcoin() *cobra.Command {
 					return err
 				}
 
+				depositTaxRate, err := cmd.Flags().GetUint64(FlagDepositTaxRate)
+				if err != nil {
+					return err
+				}
+
+				maxDepositTax, err := cmd.Flags().GetUint64(FlagDepositMaxTax)
+				if err != nil {
+					return err
+				}
+
 				genesis.Params = types.Params{
 					NetworkName:        network.Name,
 					ConfirmationNumber: confirmationNumber,
-					DepositMagicPrefix: []byte(types.DepositMagicPreifxs[networkName]),
+					DepositMagicPrefix: []byte(depositMagicPrefix),
 					MinDepositAmount:   minDeposit,
+					DepositTaxRate:     depositTaxRate,
+					MaxDepositTax:      maxDepositTax,
 				}
 
 				genesis.Pubkey = newPubkey
@@ -254,7 +278,10 @@ func Bitcoin() *cobra.Command {
 	cmd.Flags().BytesHex(FlagPubkey, nil, "the initial relayer public key")
 	cmd.Flags().String(FlagPubkeyType, types.Secp256K1Name, "the public key type [secp256k1,schnorr]")
 	cmd.Flags().String(FlagNetworkName, param.NetworkName, "the bitcoin network name(mainnet|testnet3|regtest|signet)")
+	cmd.Flags().String(FlagDepositMagicPrefix, string(param.DepositMagicPrefix), "the deposit magic prefix")
 	cmd.Flags().Uint64(FlagMinDeposit, param.MinDepositAmount, "minimal allowed deposit amount")
+	cmd.Flags().Uint64(FlagDepositTaxRate, param.DepositTaxRate, "tax rate for deposits")
+	cmd.Flags().Uint64(FlagDepositMaxTax, param.MaxDepositTax, "max tax for deposits")
 
 	addDeposit.Flags().Uint64(FlagDepositSatoshi, 0, "deposit amount in satoshi")
 	addDeposit.Flags().String(FlagDepositTxid, "", "deposit txid")

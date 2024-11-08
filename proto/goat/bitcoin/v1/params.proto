@@ -10,10 +10,12 @@ message Params {
   option (amino.name) = "goat/x/bitcoin/Params";
 
   string network_name = 1;
-  // A block has the confirmation number should be considered as a finalized
-  // block, and it's very hard to be rollbacked Using 6 is recommended for the
-  // bitcoin mainnet and you can use 1 on the regtest/devnet
+  // A block has the number should be considered as a finalized block
   uint64 confirmation_number = 2;
+  // min deposit amount in satoshi
   uint64 min_deposit_amount = 3;
   bytes deposit_magic_prefix = 4;
+  uint64 deposit_tax_rate = 5;
+  // max deposit tax in satoshi
+  uint64 max_deposit_tax = 6;
 }

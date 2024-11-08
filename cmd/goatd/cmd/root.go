@@ -61,12 +61,19 @@ func NewRootCmd() *cobra.Command {
 			}
 
 			customAppTemplate, customAppConfig := initAppConfig()
-			if err := server.InterceptConfigsPreRunHandler(cmd, customAppTemplate, customAppConfig, initCometBFTConfig()); err != nil {
+			cometConfig := initCometBFTConfig()
+			regtest, _ := cmd.Flags().GetBool(FlagRegtest)
+			if regtest {
+				cometConfig = initRegtestCometBFTConfig()
+			}
+			if err := server.InterceptConfigsPreRunHandler(cmd, customAppTemplate, customAppConfig, cometConfig); err != nil {
 				return err
 			}
-			return initializeNodeFiles(cmd)
+			return initializeNodeFiles(cmd, regtest)
 		},
 	}
+
+	rootCmd.PersistentFlags().Bool(FlagRegtest, false, "use regtest consensus config")
 
 	initRootCmd(rootCmd, moduleBasicManager)
 	if err := autoCliOpts.EnhanceRootCommand(rootCmd); err != nil {

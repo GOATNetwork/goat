@@ -3,8 +3,6 @@ package types
 import (
 	"errors"
 	"fmt"
-
-	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 )
 
 // NewParams creates a new Params instance.
@@ -38,37 +36,21 @@ func (p Params) Validate() error {
 	}
 
 	if p.ConfirmationNumber == 0 {
-		return errors.New("confirmation number can't set to zero(mempool txs are not reliable )")
+		return errors.New("confirmation number can't set to zero(mempool txs are not reliable)")
 	}
-	return nil
-}
 
-func (req *MsgUpdateConfirmationNumber) Validate() error {
-	if req.Value == 0 {
-		return errors.New("number too low")
+	if p.DepositTaxRate > 0 {
+		if p.MaxDepositTax == 0 || p.DepositTaxRate > 1e4 {
+			return fmt.Errorf("invalid deposit tax: DepositTaxRate(%d) MaxDepositTax(%d)",
+				p.DepositTaxRate, p.MaxDepositTax)
+		}
+		if p.MaxDepositTax > 1e8 {
+			return fmt.Errorf("MaxDepositTax is too large: %d", p.MaxDepositTax)
+		}
+	} else if p.MaxDepositTax != 0 {
+		return fmt.Errorf("invalid deposit tax: DepositTaxRate(%d) MaxDepositTax(%d)",
+			p.DepositTaxRate, p.MaxDepositTax)
 	}
+
 	return nil
-}
-
-func (req *MsgUpdateConfirmationNumber) MethodName() string {
-	return UpdateConfirmationNumberMethodSigName
-}
-
-func (req *MsgUpdateConfirmationNumber) VoteSigDoc() []byte {
-	return goatcrypto.Uint64LE(req.Value)
-}
-
-func (req *MsgUpdateMinDeposit) Validate() error {
-	if req.Satoshi < DustTxoutAmount {
-		return errors.New("number too low")
-	}
-	return nil
-}
-
-func (req *MsgUpdateMinDeposit) MethodName() string {
-	return UpdateMinDepositMethodSigName
-}
-
-func (req *MsgUpdateMinDeposit) VoteSigDoc() []byte {
-	return goatcrypto.Uint64LE(req.Satoshi)
 }

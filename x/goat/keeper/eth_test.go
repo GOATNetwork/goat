@@ -19,6 +19,7 @@ func (suite *KeeperTestSuite) TestDequeue() {
 				TxOut:  0,
 				Target: common.HexToAddress("0xe896f4afff6c2424819aa493b1724fc11851dc54"),
 				Amount: big.NewInt(10),
+				Tax:    new(big.Int),
 			},
 		)),
 		ethtypes.NewTx(
@@ -62,6 +63,7 @@ func (suite *KeeperTestSuite) TestVerifyDequeue() {
 				TxOut:  0,
 				Target: common.HexToAddress("0xe896f4afff6c2424819aa493b1724fc11851dc54"),
 				Amount: big.NewInt(10),
+				Tax:    new(big.Int),
 			},
 		)),
 		ethtypes.NewTx(

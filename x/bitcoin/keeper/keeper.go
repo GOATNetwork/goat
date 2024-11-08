@@ -147,14 +147,15 @@ func (k Keeper) VerifyDeposit(ctx context.Context, headers map[uint64][]byte, de
 	}
 
 	// check if the deposit script is valid
-	txout := tx.TxOut[deposit.OutputIndex]
-	if txout.Value < int64(param.MinDepositAmount) {
+	txOut := tx.TxOut[deposit.OutputIndex]
+	txAmount := uint64(txOut.Value)
+	if txAmount < param.MinDepositAmount {
 		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "amount too low")
 	}
 
 	switch deposit.Version {
 	case 0:
-		if err := types.VerifyDespositScriptV0(deposit.RelayerPubkey, deposit.EvmAddress, txout.PkScript); err != nil {
+		if err := types.VerifyDespositScriptV0(deposit.RelayerPubkey, deposit.EvmAddress, txOut.PkScript); err != nil {
 			k.logger.Warn("invalid deposit version 0 script", "txid", types.BtcTxid(txid), "txout", deposit.OutputIndex, "err", err.Error())
 			return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid deposit version 0 script")
 		}
@@ -163,7 +164,7 @@ func (k Keeper) VerifyDeposit(ctx context.Context, headers map[uint64][]byte, de
 			return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid txout index for version 1 deposit")
 		}
 		if err := types.VerifyDespositScriptV1(deposit.RelayerPubkey,
-			param.DepositMagicPrefix, deposit.EvmAddress, txout.PkScript, tx.TxOut[1].PkScript); err != nil {
+			param.DepositMagicPrefix, deposit.EvmAddress, txOut.PkScript, tx.TxOut[1].PkScript); err != nil {
 			k.logger.Warn("invalid deposit version 1 script", "txid", types.BtcTxid(txid), "txout", deposit.OutputIndex, "err", err.Error())
 			return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid deposit version 1 script")
 		}
@@ -176,11 +177,21 @@ func (k Keeper) VerifyDeposit(ctx context.Context, headers map[uint64][]byte, de
 		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid spv")
 	}
 
+	tax := uint64(0)
+	if param.DepositTaxRate > 0 && txAmount > types.MaxTaxBP {
+		tax = txAmount / types.MaxTaxBP * param.DepositTaxRate
+		if tax > param.MaxDepositTax {
+			tax = param.MaxDepositTax
+		}
+		txAmount -= tax
+	}
+
 	return &types.DepositExecReceipt{
 		Address: deposit.EvmAddress,
 		Txid:    txid,
 		Txout:   deposit.OutputIndex,
-		Amount:  uint64(txout.Value),
+		Amount:  txAmount,
+		Tax:     tax,
 	}, nil
 }
 
