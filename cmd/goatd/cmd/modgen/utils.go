@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"math/big"
 	"os"
 	"strings"
@@ -112,6 +113,15 @@ func PrintJSON(info any) error {
 		return err
 	}
 	_, err = fmt.Fprintf(os.Stdout, "%s\n", out)
+	return err
+}
+
+func WriteJSON(file io.Writer, info any) error {
+	out, err := json.MarshalIndent(info, "", " ")
+	if err != nil {
+		return err
+	}
+	_, err = fmt.Fprintf(file, "%s\n", out)
 	return err
 }
 

@@ -3,7 +3,10 @@ package modgen
 import (
 	"bytes"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
+	"os"
+	"path/filepath"
 	"slices"
 	"time"
 
@@ -25,6 +28,8 @@ func Relayer() *cobra.Command {
 
 		FlagPubkey  = "key.tx"
 		FlagVoteKey = "key.vote"
+
+		FlagKeyOutput = "output"
 	)
 
 	cmd := &cobra.Command{
@@ -182,30 +187,72 @@ func Relayer() *cobra.Command {
 		Use:   "keygen",
 		Short: "create key for relayer voter",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			keys := make(map[string]string)
+			type Key struct {
+				Type    string `json:"type"`
+				Address string `json:"address"`
+				TxKey   string `json:"txKey"`
+				VoteKey string `json:"voteKey"`
+			}
+
+			clientCtx := client.GetClientContextFromCmd(cmd)
+
+			output, err := cmd.Flags().GetString(FlagKeyOutput)
+			if err != nil {
+				return err
+			}
+
+			secretkeys := Key{Type: "SecretKey"}
+			publicKeys := Key{Type: "PublicKey"}
 			{
 				p256k1 := secp256k1.GenPrivKey()
 				address := p256k1.PubKey().Address()
-				clientCtx := client.GetClientContextFromCmd(cmd)
 
 				goatAddress, err := clientCtx.TxConfig.SigningContext().AddressCodec().BytesToString(address)
 				if err != nil {
 					return err
 				}
 
-				keys["txKey"] = hex.EncodeToString(p256k1.PubKey().Bytes())
-				keys["address"] = hexutil.Encode(address)
-				PrintStderr("txPrvkey", hex.EncodeToString(p256k1.Bytes()))
-				PrintStderr("goatAddress", goatAddress)
+				publicKeys.TxKey = hex.EncodeToString(p256k1.PubKey().Bytes())
+				publicKeys.Address = hexutil.Encode(address)
+
+				secretkeys.Address = goatAddress
+				secretkeys.TxKey = hex.EncodeToString(p256k1.Bytes())
 			}
 
 			{
 				secretKey := goatcrypto.GenPrivKey()
 				publicKey := new(goatcrypto.PublicKey).From(secretKey)
-				keys["voteKey"] = hex.EncodeToString(publicKey.Compress())
-				PrintStderr("voterPrvkey", hex.EncodeToString(secretKey.Serialize()))
+				publicKeys.VoteKey = hex.EncodeToString(publicKey.Compress())
+				secretkeys.VoteKey = hex.EncodeToString(secretKey.Serialize())
 			}
-			return PrintJSON(keys)
+
+			if output == "" || output == "-" {
+				if err := WriteJSON(os.Stderr, secretkeys); err != nil {
+					return err
+				}
+			} else {
+				if !filepath.IsAbs(output) {
+					output = filepath.Join(clientCtx.HomeDir, "relayer", output)
+				}
+
+				if _, err := os.Stat(output); err == nil {
+					return fmt.Errorf("file %s exists", output)
+				}
+
+				if err := os.MkdirAll(filepath.Dir(output), os.ModePerm); err != nil {
+					return err
+				}
+
+				data, err := json.MarshalIndent(secretkeys, "", "  ")
+				if err != nil {
+					return err
+				}
+
+				if err := os.WriteFile(output, data, 0o400); err != nil {
+					return fmt.Errorf("failed to write secret keys: %w", err)
+				}
+			}
+			return PrintJSON(publicKeys)
 		},
 	}
 
@@ -213,6 +260,7 @@ func Relayer() *cobra.Command {
 	cmd.Flags().Duration(FlagParamAcceptProposerTimeout, time.Minute, "")
 	addVoter.Flags().String(FlagPubkey, "", "the voter tx public key(compressed secp256k1)")
 	addVoter.Flags().String(FlagVoteKey, "", "the voter vote public key(compressed bls12381 G2)")
+	keygen.Flags().String(FlagKeyOutput, "", "the key file name")
 	cmd.AddCommand(addVoter, keygen)
 	return cmd
 }
