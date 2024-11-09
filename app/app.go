@@ -141,8 +141,7 @@ func New(
 	}
 
 	// create the simulation manager and define the order of the modules for deterministic simulations
-	app.sm = module.NewSimulationManagerFromAppModules(app.ModuleManager.Modules, make(map[string]module.AppModuleSimulation))
-	app.sm.RegisterStoreDecoders()
+	app.sm = module.NewSimulationManager(nil)
 
 	// register goat handlers
 	app.SetPrepareProposal(app.GoatKeeper.PrepareProposalHandler(app.Mempool(), app, app.NodeKeyProvider, app.txConfig))

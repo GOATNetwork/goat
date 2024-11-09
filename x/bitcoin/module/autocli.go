@@ -35,7 +35,26 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					RpcMethod: "NewPubkey",
 					Skip:      true,
 				},
-				// this line is used by ignite scaffolding # autocli/tx
+				{
+					RpcMethod: "ProcessWithdrawal",
+					Skip:      true,
+				},
+				{
+					RpcMethod: "ReplaceWithdrawal",
+					Skip:      true,
+				},
+				{
+					RpcMethod: "FinalizeWithdrawal",
+					Skip:      true,
+				},
+				{
+					RpcMethod: "ApproveCancellation",
+					Skip:      true,
+				},
+				{
+					RpcMethod: "FinalizeWithdrawal",
+					Skip:      true,
+				},
 			},
 		},
 	}
