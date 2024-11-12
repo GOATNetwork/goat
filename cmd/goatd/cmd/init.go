@@ -56,12 +56,12 @@ func initializeNodeFiles(cmd *cobra.Command, regtest bool) error {
 		return nil
 	}
 
-	// we have gas system, but cosmos requires a non-empty gas value
+	// we don't have gas system, but cosmos requires a non-empty gas value
 	serverCtx.Viper.Set(server.FlagMinGasPrices, "0gas")
 
 	chainID, _ := cmd.Flags().GetString(flags.FlagChainID)
 
-	// insert genesis file the file doesn't exist
+	// insert genesis file if it doesn't exist
 	genFile := serverCtx.Config.GenesisFile()
 	if _, genFileErr := os.Stat(genFile); os.IsNotExist(genFileErr) {
 		if regtest {

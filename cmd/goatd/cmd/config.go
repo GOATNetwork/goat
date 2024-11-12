@@ -41,8 +41,8 @@ func initRegtestCometBFTConfig() *cmtcfg.Config {
 	cfg.Consensus.TimeoutPropose = 500 * time.Millisecond
 	cfg.Consensus.TimeoutPrevote = 500 * time.Millisecond
 	cfg.Consensus.TimeoutPrecommit = 500 * time.Millisecond
-	// the geth can't handle the internal that less 1s
-	// we can't use 1s due to cosmos-sdk updates it to 5s by default
+	// the geth can't handle the duration which is less than 1s
+	// and we can't use 1s due to cosmos-sdk updates it to 5s by default
 	cfg.Consensus.TimeoutCommit = 1010 * time.Millisecond
 	cfg.P2P.PexReactor = false
 	cfg.Moniker = "regtest"
