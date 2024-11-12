@@ -88,9 +88,6 @@ endif
 
 #$(info $$BUILD_FLAGS is [$(BUILD_FLAGS)])
 
-# The below include contains the tools target.
-include contrib/devtools/Makefile
-
 ###############################################################################
 ###                              Build                                      ###
 ###############################################################################
@@ -101,7 +98,7 @@ ifneq ($(shell [ "$(GO_SYSTEM_VERSION)" \< "$(REQUIRE_GO_VERSION)" ] && echo tru
 	exit 1
 endif
 
-all: install lint run-tests test-e2e vulncheck
+all: build lint run-tests vulncheck
 
 BUILD_TARGETS := build install
 
@@ -114,11 +111,8 @@ $(BUILDDIR)/:
 	mkdir -p $(BUILDDIR)/
 
 vulncheck: $(BUILDDIR)/
-	GOBIN=$(BUILDDIR) go install golang.org/x/vuln/cmd/govulncheck@latest
-	$(BUILDDIR)/govulncheck ./...
-
-build-linux: go.sum
-	LEDGER_ENABLED=false GOOS=linux GOARCH=amd64 $(MAKE) build
+	go install golang.org/x/vuln/cmd/govulncheck@latest
+	govulncheck ./...
 
 go.sum: go.mod
 	@echo "--> Ensure dependencies have not been modified"
@@ -136,10 +130,7 @@ draw-deps:
 	@goviz -i ./cmd/goatd -d 2 | dot -Tpng -o dependency-graph.png
 
 clean:
-	rm -rf $(BUILDDIR)/ artifacts/
-
-distclean: clean
-	rm -rf vendor/
+	rm -rf $(BUILDDIR)/
 
 ###############################################################################
 ###                           Tests & Simulation                            ###
@@ -147,32 +138,22 @@ distclean: clean
 
 PACKAGES_UNIT=$(shell go list ./... | grep -v -e '/tests/e2e')
 TEST_PACKAGES=./...
-TEST_TARGETS := test-unit test-unit-cover test-race
 
-test-unit: ARGS=-timeout=15m -tags='norace'
-test-unit: TEST_PACKAGES=$(PACKAGES_UNIT)
-test-unit-cover: ARGS=-timeout=15m -tags='norace' -coverprofile=coverage.txt -covermode=atomic
-test-unit-cover: TEST_PACKAGES=$(PACKAGES_UNIT)
-test-race: ARGS=-timeout=15m -race
-test-race: TEST_PACKAGES=$(PACKAGES_UNIT)
-$(TEST_TARGETS): run-tests
+mockgen:
+	@go install go.uber.org/mock/mockgen@v0.5.0
+	bash ./contrib/scripts/mockgen.sh
 
 run-tests:
-ifneq (,$(shell which tparse 2>/dev/null))
-	@echo "--> Running tests"
-	@go test -mod=readonly -json $(ARGS) $(TEST_PACKAGES) | tparse
-else
 	@echo "--> Running tests"
 	@go test -mod=readonly $(ARGS) $(TEST_PACKAGES)
-endif
 
-.PHONY: run-tests $(TEST_TARGETS)
+.PHONY: run-tests mockgen
 
 ###############################################################################
 ###                                Linting                                  ###
 ###############################################################################
 golangci_lint_cmd=golangci-lint
-golangci_version=v1.61.0
+golangci_version=v1.62.0
 
 lint:
 	@echo "--> Running linter"
@@ -187,17 +168,9 @@ lint-fix:
 format:
 	@go install mvdan.cc/gofumpt@latest
 	@go install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
-	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" -not -path "./client/docs/statik/statik.go" -not -path "./tests/mocks/*" -not -name "*.pb.go" -not -name "*.pb.gw.go" -not -name "*.pulsar.go" -not -path "./crypto/keys/secp256k1/*" | xargs gofumpt -w -l
+	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" -not -name "*.pb.go" -not -name "*.pb.gw.go" -not -name "*.pulsar.go" | xargs gofumpt -w -l
 	$(golangci_lint_cmd) run --fix
 .PHONY: format
-
-###############################################################################
-###                                Docker                                   ###
-###############################################################################
-
-.PHONY: all build-linux install format lint draw-deps clean build \
-	docker-build-debug docker-build-hermes docker-build-all
-
 
 ###############################################################################
 ###                                Protobuf                                 ###
