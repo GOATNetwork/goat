@@ -181,18 +181,24 @@ func (k Keeper) ProcessBridgeRequest(ctx context.Context, reqs goattypes.BridgeR
 	}
 
 	for _, v := range reqs.DepositTax {
-		param.DepositTaxRate = v.Rate
 		param.MaxDepositTax = v.Max
+		if v.Rate < types.MaxTaxBP {
+			param.DepositTaxRate = v.Rate
+		}
 	}
 
 	for _, v := range reqs.Confirmation {
-		param.ConfirmationNumber = v.Number
-		events = append(events, types.UpdateConfirmationNumberEvent(v.Number))
+		if v.Number != 0 {
+			param.ConfirmationNumber = v.Number
+			events = append(events, types.UpdateConfirmationNumberEvent(v.Number))
+		}
 	}
 
 	for _, v := range reqs.MinDeposit {
-		param.MinDepositAmount = v.Satoshi
-		events = append(events, types.UpdateMinDepositEvent(v.Satoshi))
+		if v.Satoshi > types.DustTxoutAmount {
+			param.MinDepositAmount = v.Satoshi
+			events = append(events, types.UpdateMinDepositEvent(v.Satoshi))
+		}
 	}
 
 	if err := k.Params.Set(ctx, param); err != nil {
