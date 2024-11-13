@@ -85,11 +85,13 @@ func initializeNodeFiles(cmd *cobra.Command, regtest bool) error {
 		}
 	}
 
+	// Note: cometbft doesn't use the viper to get the config
+
 	// add bootnodes if not provided
 	if !regtest && chainID != "" && serverCtx.Viper.GetString(FlagPersistentPeers) == "" {
 		if bootnode, ok := bootnodes[chainID]; ok {
-			serverCtx.Logger.Info("Set persistent peers")
-			serverCtx.Viper.Set(FlagPersistentPeers, strings.Join(bootnode, ","))
+			serverCtx.Logger.Info("Set persistent peers", "chainID", chainID)
+			serverCtx.Config.P2P.PersistentPeers = strings.Join(bootnode, ",")
 		}
 	}
 
@@ -101,12 +103,12 @@ func initializeNodeFiles(cmd *cobra.Command, regtest bool) error {
 				serverCtx.Logger.Warn("Failed to fetch external public IP", "err", err.Error())
 			} else {
 				serverCtx.Logger.Info("Set external public IP", "ip", ip)
-				serverCtx.Viper.Set(FlagP2PListener, "tcp://0.0.0.0:26656")
-				serverCtx.Viper.Set(FlagExternalIP, ip+":26656")
+				serverCtx.Config.P2P.ListenAddress = "tcp://0.0.0.0:26656"
+				serverCtx.Config.P2P.ExternalAddress = ip + ":26656"
 			}
 		}
-		serverCtx.Viper.Set("p2p.max_num_inbound_peers", 200)
-		serverCtx.Viper.Set("p2p.max_num_outbound_peers", 200)
+		serverCtx.Config.P2P.MaxNumInboundPeers = 200
+		serverCtx.Config.P2P.MaxNumOutboundPeers = 200
 	}
 
 	if regtest || slices.Contains(presets, "rpc") {
