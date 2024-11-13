@@ -23,7 +23,13 @@ import (
 //go:embed genesis
 var genesisFiles embed.FS
 
-var bootnodes = map[string][]string{}
+var bootnodes = map[string][]string{
+	"goat-testnet-3": {
+		"997f925d3d4947483c9339ec2765ed8c825ace32@3.222.213.223:26656",
+		"9106b59e244eb8bf4dbedcd03b56e30790278765@54.68.179.184:26656",
+		"c99c2abe0886a3c82c12f611477ce22fe178186a@52.32.82.160:26656",
+	},
+}
 
 // initializeNodeFiles creates private validator and p2p configuration files if they doesn't exist
 func initializeNodeFiles(cmd *cobra.Command, regtest bool) error {

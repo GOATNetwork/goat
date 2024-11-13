@@ -33,8 +33,8 @@ github.com/DataDog/datadog-go v3.2.0+incompatible h1:qSG2N4FghB1He/r2mFrWKCaL7dX
 github.com/DataDog/datadog-go v3.2.0+incompatible/go.mod h1:LButxg5PwREeZtORoXG3tL4fMGNddJ+vMq1mwgfaqoQ=
 github.com/DataDog/zstd v1.5.5 h1:oWf5W7GtOLgp6bciQYDmhHHjdhYkALu6S/5Ni9ZgSvQ=
 github.com/DataDog/zstd v1.5.5/go.mod h1:g4AWEaM3yOg3HYfnJ3YIawPnVdXJh9QME85blwSAmyw=
-github.com/GOATNetwork/goat-geth v0.0.0-20241108001249-f8970d7aea77 h1:qY0I+9vBLvgEF+ruIiwzOvhcgv0Hk7t9JhxuGxJQFJA=
-github.com/GOATNetwork/goat-geth v0.0.0-20241108001249-f8970d7aea77/go.mod h1:3hFfXPoLxRMg3VKcGQCDF+wxU3Oo+LrmkFbcTZe53cI=
+github.com/GOATNetwork/goat-geth v0.1.0 h1:JbJnphXNNmEE5YoQpJEoDC8A6x+nnLyUgn7pLjlJRr0=
+github.com/GOATNetwork/goat-geth v0.1.0/go.mod h1:3hFfXPoLxRMg3VKcGQCDF+wxU3Oo+LrmkFbcTZe53cI=
 github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible/go.mod h1:r7JcOSlj0wfOMncg0iLm8Leh48TZaKVeNIfJntJ2wa0=
 github.com/Microsoft/go-winio v0.6.2 h1:F2VQgta7ecxGYO8k3ZZz3RS8fVIXVxONVUPlNERoyfY=
 github.com/Microsoft/go-winio v0.6.2/go.mod h1:yd8OoFMLzJbo9gZq8j5qaps8bJ9aShtEA8Ipt1oGCvU=
