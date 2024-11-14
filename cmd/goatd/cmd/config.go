@@ -11,9 +11,7 @@ const (
 	FlagGoatGeth        = "goat.geth"
 	FlagGoatPreset      = "goat.preset"
 	FlagPersistentPeers = "p2p.persistent_peers"
-	FlagP2PListener     = "p2p.laddr"
-	FlagP2PPex          = "p2p.pex"
-	FlagExternalIP      = "p2p.external_address"
+	// FlagExternalIP      = "p2p.external_address"
 )
 
 type GoatConfig struct {

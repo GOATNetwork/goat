@@ -98,23 +98,23 @@ func initializeNodeFiles(cmd *cobra.Command, regtest bool) error {
 	preset, _ := cmd.Flags().GetString(FlagGoatPreset)
 	presets := strings.Split(preset, ",")
 	if !regtest && slices.Contains(presets, "bootnode") {
-		if serverCtx.Viper.GetString(FlagExternalIP) == "" {
-			if ip, err := getPublicIP(); err != nil {
-				serverCtx.Logger.Warn("Failed to fetch external public IP", "err", err.Error())
-			} else {
-				serverCtx.Logger.Info("Set external public IP", "ip", ip)
-				serverCtx.Config.P2P.ListenAddress = "tcp://0.0.0.0:26656"
-				serverCtx.Config.P2P.ExternalAddress = ip + ":26656"
-			}
+		if ip, err := getPublicIP(); err != nil {
+			serverCtx.Logger.Warn("Failed to fetch external public IP", "err", err.Error())
+		} else {
+			serverCtx.Logger.Info("Set external public IP", "ip", ip)
+			serverCtx.Config.P2P.ListenAddress = "tcp://0.0.0.0:26656"
+			serverCtx.Config.P2P.ExternalAddress = ip + ":26656"
 		}
 		serverCtx.Config.P2P.MaxNumInboundPeers = 200
 		serverCtx.Config.P2P.MaxNumOutboundPeers = 200
 	}
 
 	if regtest || slices.Contains(presets, "rpc") {
-		serverCtx.Viper.Set(flags.FlagGRPC, "0.0.0.0:9090")
-		serverCtx.Viper.Set(server.FlagAPIEnable, true)
-		serverCtx.Viper.Set(server.FlagAPIAddress, "tcp://0.0.0.0:1317")
+		serverCtx.Config.RPC.ListenAddress = "tcp://0.0.0.0:26657"
+		serverCtx.Config.RPC.CORSAllowedOrigins = []string{"*"}
+		serverCtx.Viper.Set("grpc.address", "0.0.0.0:9090")
+		serverCtx.Viper.Set("api.enable", true)
+		serverCtx.Viper.Set("api.address", "tcp://0.0.0.0:1317")
 	}
 
 	return nil
