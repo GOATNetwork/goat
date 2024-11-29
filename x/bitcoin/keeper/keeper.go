@@ -180,7 +180,8 @@ func (k Keeper) VerifyDeposit(ctx context.Context, headers map[uint64][]byte, de
 	tax := uint64(0)
 	if param.DepositTaxRate > 0 && txAmount > types.MaxTaxBP {
 		tax = txAmount / types.MaxTaxBP * param.DepositTaxRate
-		if tax > param.MaxDepositTax {
+		// 0 represents no limit
+		if param.MaxDepositTax > 0 && tax > param.MaxDepositTax {
 			tax = param.MaxDepositTax
 		}
 		txAmount -= tax
