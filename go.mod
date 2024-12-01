@@ -30,7 +30,7 @@ require (
 	github.com/spf13/cast v1.7.0
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.19.0
-	github.com/stretchr/testify v1.9.0
+	github.com/stretchr/testify v1.10.0
 	github.com/supranational/blst v0.3.13
 	go.uber.org/automaxprocs v1.6.0
 	go.uber.org/mock v0.5.0
