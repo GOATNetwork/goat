@@ -29,6 +29,11 @@ var bootnodes = map[string][]string{
 		"9106b59e244eb8bf4dbedcd03b56e30790278765@54.68.179.184:26656",
 		"c99c2abe0886a3c82c12f611477ce22fe178186a@52.32.82.160:26656",
 	},
+	"goat-mainnet": {
+		"852bbdcd424a6072133fbf1089080fe0f98f8e2a@3.14.116.76:26656",
+		"6b013c7e07430ff060fa6b570daa556fbf00cb58@18.222.86.233:26656",
+		"ecd124ef10138a580ec79808971dcaa3574c7a92@18.221.14.115:26656",
+	},
 }
 
 // initializeNodeFiles creates private validator and p2p configuration files if they doesn't exist
