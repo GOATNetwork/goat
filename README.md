@@ -2,9 +2,9 @@
 
 GOAT consensus client built using Cosmos SDK
 
-## Testnet
+## Public networks
 
-To participate in or utilize the current testnet, take a look at the [the docker-compose file](./docker/testnet3.yaml).
+To participate in or utilize the public networks, take a look at the [the docker-compose files](./docker).
 
 ## Regtest
 
