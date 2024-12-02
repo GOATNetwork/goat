@@ -28,9 +28,18 @@ import (
 
 func Locking() *cobra.Command {
 	const (
-		FlagInitialReward  = "init-reward"
-		FlagUnlockDuration = "unlock-duration"
-		FlagExitDuration   = "exit-duration"
+		FlagTotalReward     = "total-reward"
+		FlagUnlockDuration  = "unlock-duration"
+		FlagExitingDuration = "exit-duration"
+
+		FlagDowntimeJailDuration    = "downtime-jail-duration"
+		FlagMaxValidators           = "max-validators"
+		FlagSignedBlocksWindow      = "signed-blocks-window"
+		FlagMaxMissedPerWindow      = "max-missed-per-window"
+		FlagSlashFractionDoubleSign = "slash-double-sign"
+		FlagSlashFractionDowntime   = "slash-down"
+		FlagHalvingInterval         = "halving-interval"
+		FlagInitialBlockReward      = "initial-block-reward"
 
 		FlagValidatorPubkey = "pubkey"
 
@@ -52,7 +61,7 @@ func Locking() *cobra.Command {
 			config := serverCtx.Config.SetRoot(clientCtx.HomeDir)
 			genesisFile := config.GenesisFile()
 
-			rewardStr, err := cmd.Flags().GetString(FlagInitialReward)
+			rewardStr, err := cmd.Flags().GetString(FlagTotalReward)
 			if err != nil {
 				return err
 			}
@@ -341,25 +350,85 @@ func Locking() *cobra.Command {
 				return err
 			}
 
-			exitDuration, err := cmd.Flags().GetDuration(FlagExitDuration)
+			exitingDuration, err := cmd.Flags().GetDuration(FlagExitingDuration)
+			if err != nil {
+				return err
+			}
+
+			maxValidators, err := cmd.Flags().GetInt64(FlagMaxValidators)
+			if err != nil {
+				return err
+			}
+
+			signedBlocksWindow, err := cmd.Flags().GetInt64(FlagSignedBlocksWindow)
+			if err != nil {
+				return err
+			}
+			maxMissedPerWindow, err := cmd.Flags().GetInt64(FlagMaxMissedPerWindow)
+			if err != nil {
+				return err
+			}
+
+			slashFractionDoubleSignStr, err := cmd.Flags().GetString(FlagSlashFractionDoubleSign)
+			if err != nil {
+				return err
+			}
+			slashFractionDoubleSign, err := math.LegacyNewDecFromStr(slashFractionDoubleSignStr)
+			if err != nil {
+				return err
+			}
+
+			slashFractionDowntimeStr, err := cmd.Flags().GetString(FlagSlashFractionDowntime)
+			if err != nil {
+				return err
+			}
+			slashFractionDowntime, err := math.LegacyNewDecFromStr(slashFractionDowntimeStr)
+			if err != nil {
+				return err
+			}
+
+			halvingInterval, err := cmd.Flags().GetInt64(FlagHalvingInterval)
+			if err != nil {
+				return err
+			}
+
+			initialBlockReward, err := cmd.Flags().GetInt64(FlagInitialBlockReward)
 			if err != nil {
 				return err
 			}
 
 			serverCtx.Logger.Info("update param", "module", types.ModuleName, "geneis", genesisFile)
 			return UpdateModuleGenesis(genesisFile, types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
-				genesis.Params.ExitingDuration = exitDuration
 				genesis.Params.UnlockDuration = unlockDuration
+				genesis.Params.ExitingDuration = exitingDuration
+
+				genesis.Params.MaxValidators = maxValidators
+				genesis.Params.SignedBlocksWindow = signedBlocksWindow
+				genesis.Params.MaxMissedPerWindow = maxMissedPerWindow
+
+				genesis.Params.SlashFractionDoubleSign = slashFractionDoubleSign
+				genesis.Params.SlashFractionDowntime = slashFractionDowntime
+
+				genesis.Params.HalvingInterval = halvingInterval
+				genesis.Params.InitialBlockReward = initialBlockReward
 				return genesis.Params.Validate()
 			})
 		},
 	}
 
-	cmd.Flags().String(FlagInitialReward, "", "remain reward amount")
+	cmd.Flags().String(FlagTotalReward, "", "total reward amount in genesis")
 
 	defaultParam := types.DefaultParams()
-	setParam.Flags().Duration(FlagUnlockDuration, defaultParam.UnlockDuration, "unlock duation")
-	setParam.Flags().Duration(FlagExitDuration, defaultParam.ExitingDuration, "exit duation")
+	setParam.Flags().Duration(FlagUnlockDuration, defaultParam.UnlockDuration, "waiting time for partial unlock")
+	setParam.Flags().Duration(FlagExitingDuration, defaultParam.ExitingDuration, "waiting time for exit unlock")
+	setParam.Flags().Duration(FlagDowntimeJailDuration, defaultParam.DowntimeJailDuration, "jail duration for downgraded validators")
+	setParam.Flags().Int64(FlagMaxValidators, defaultParam.MaxValidators, "max number in the validator set")
+	setParam.Flags().Int64(FlagSignedBlocksWindow, defaultParam.SignedBlocksWindow, "sgined block window")
+	setParam.Flags().Int64(FlagMaxMissedPerWindow, defaultParam.MaxMissedPerWindow, "max missed block per block window")
+	setParam.Flags().String(FlagSlashFractionDoubleSign, defaultParam.SlashFractionDoubleSign.String(), "frachtion for double sign")
+	setParam.Flags().String(FlagSlashFractionDowntime, defaultParam.SlashFractionDowntime.String(), "frachtion for down")
+	setParam.Flags().Int64(FlagHalvingInterval, defaultParam.HalvingInterval, "halving block interval")
+	setParam.Flags().Int64(FlagInitialBlockReward, defaultParam.InitialBlockReward, "reward for the first block")
 
 	addToken.Flags().String(FlagTokenAddress, "", "token address")
 	addToken.Flags().Uint64(FlagTokenWeight, 0, "validator vote power")

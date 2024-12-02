@@ -42,14 +42,22 @@ for ((i=0; i<TRANSFER_LENGTH; i++)); do
   address=$(jq -r ".GoatToken.transfers[$i].to" $2 | tr '[:upper:]' '[:lower:]')
   if [ $address = $GOAT_LOCKING_CONTRACT ]; then
     value=$(jq -r ".GoatToken.transfers[$i].value" $2)
-    echo "Set initial reward $value"
-    ./build/goatd modgen locking --home $1 --init-reward $value
+    echo "Set total reward of genesis: $value"
+    ./build/goatd modgen locking --home $1 --total-reward $value
   fi
 done
 
 ./build/goatd modgen locking param --home $1 \
   --unlock-duration $(jq -r ".Consensus.Locking.unlockDuration" $2) \
-  --exit-duration $(jq -r ".Consensus.Locking.exitDuration" $2)
+  --exit-duration $(jq -r ".Consensus.Locking.exitDuration" $2) \
+  --downtime-jail-duration $(jq -r ".Consensus.Locking.downtimeJailDuration" $2) \
+  --max-validators $(jq -r ".Consensus.Locking.maxValidators" $2) \
+  --signed-blocks-window $(jq -r ".Consensus.Locking.signedBlocksWindow" $2) \
+  --max-missed-per-window $(jq -r ".Consensus.Locking.maxMissedPerWindow" $2) \
+  --slash-double-sign $(jq -r ".Consensus.Locking.slashFractionDoubleSign" $2) \
+  --slash-down $(jq -r ".Consensus.Locking.slashFractionDowntime" $2) \
+  --halving-interval $(jq -r ".Consensus.Locking.halvingInterval" $2) \
+  --initial-block-reward $(jq -r ".Consensus.Locking.initialBlockReward" $2)
 
 VOTERS_LENGTH=$(jq '.Relayer.voters | length' $2)
 for ((i=0; i<VOTERS_LENGTH; i++)); do
