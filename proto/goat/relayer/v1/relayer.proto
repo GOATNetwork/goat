@@ -1,7 +1,7 @@
 syntax = "proto3";
 package goat.relayer.v1;
 
-// import "cosmos/base/v1beta1/coin.proto";
+import "amino/amino.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
@@ -67,8 +67,8 @@ message PublicKey {
 
   // the key
   oneof key {
-    bytes secp256k1 = 1;
-    bytes schnorr = 2;
+    bytes secp256k1 = 1 [(amino.oneof_name) = "goat/Relayer/PublicKey/Secp256k1"];
+    bytes schnorr = 2 [(amino.oneof_name) = "goat/Relayer/PublicKey/Schnorr"];
   }
 }
 
