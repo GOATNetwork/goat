@@ -22,7 +22,7 @@ require (
 	github.com/cosmos/cosmos-proto v1.0.0-beta.5
 	github.com/cosmos/cosmos-sdk v0.50.10
 	github.com/cosmos/gogoproto v1.7.0
-	github.com/ethereum/go-ethereum v1.14.11
+	github.com/ethereum/go-ethereum v1.14.12
 	github.com/golang/protobuf v1.5.4
 	github.com/gorilla/mux v1.8.1
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
@@ -47,7 +47,7 @@ replace (
 	// github.com/cosmos/cosmos-sdk => ../goat-cosmos-sdk
 	// goat-geth implementation
 	// github.com/ethereum/go-ethereum => ../goat-geth
-	github.com/ethereum/go-ethereum => github.com/GOATNetwork/goat-geth v0.1.0
+	github.com/ethereum/go-ethereum => github.com/GOATNetwork/goat-geth v0.1.3
 	// fix upstream GHSA-h395-qcrw-5vmq vulnerability.
 	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.9.1
 	// replace broken goleveldb
