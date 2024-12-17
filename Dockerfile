@@ -7,7 +7,7 @@ RUN --mount=type=cache,target=/go/pkg --mount=type=cache,target=/root/.cache/go-
 RUN echo "Ensuring binary is statically linked ..."  \
     && file /app/build/goatd | grep "statically linked"
 
-FROM alpine:3.20
+FROM alpine:3.21
 RUN apk add --no-cache build-base curl jq ca-certificates
 RUN addgroup -g 1025 nonroot && \
     adduser -D nonroot -u 1025 -G nonroot
