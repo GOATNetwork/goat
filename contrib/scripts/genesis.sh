@@ -47,16 +47,16 @@ for ((i=0; i<TRANSFER_LENGTH; i++)); do
   fi
 done
 
-jq 'select(.Consensus.Locking.unlockDuration != null) // error("Key .Consensus.Locking.unlockDuration does not exist")' $2
-jq 'select(.Consensus.Locking.exitDuration != null) // error("Key .Consensus.Locking.exitDuration does not exist")' $2
-jq 'select(.Consensus.Locking.downtimeJailDuration != null) // error("Key .Consensus.Locking.downtimeJailDuration does not exist")' $2
-jq 'select(.Consensus.Locking.maxValidators != null) // error("Key .Consensus.Locking.maxValidators does not exist")' $2
-jq 'select(.Consensus.Locking.signedBlocksWindow != null) // error("Key .Consensus.Locking.signedBlocksWindow does not exist")' $2
-jq 'select(.Consensus.Locking.maxMissedPerWindow != null) // error("Key .Consensus.Locking.maxMissedPerWindow does not exist")' $2
-jq 'select(.Consensus.Locking.slashFractionDoubleSign != null) // error("Key .Consensus.Locking.slashFractionDoubleSign does not exist")' $2
-jq 'select(.Consensus.Locking.slashFractionDowntime != null) // error("Key .Consensus.Locking.slashFractionDowntime does not exist")' $2
-jq 'select(.Consensus.Locking.halvingInterval != null) // error("Key .Consensus.Locking.halvingInterval does not exist")' $2
-jq 'select(.Consensus.Locking.initialBlockReward != null) // error("Key .Consensus.Locking.initialBlockReward does not exist")' $2
+jq 'select(.Consensus.Locking.unlockDuration != null) // error("Key .Consensus.Locking.unlockDuration does not exist") | empty' $2
+jq 'select(.Consensus.Locking.exitDuration != null) // error("Key .Consensus.Locking.exitDuration does not exist") | empty' $2
+jq 'select(.Consensus.Locking.downtimeJailDuration != null) // error("Key .Consensus.Locking.downtimeJailDuration does not exist") | empty' $2
+jq 'select(.Consensus.Locking.maxValidators != null) // error("Key .Consensus.Locking.maxValidators does not exist") | empty' $2
+jq 'select(.Consensus.Locking.signedBlocksWindow != null) // error("Key .Consensus.Locking.signedBlocksWindow does not exist") | empty' $2
+jq 'select(.Consensus.Locking.maxMissedPerWindow != null) // error("Key .Consensus.Locking.maxMissedPerWindow does not exist") | empty' $2
+jq 'select(.Consensus.Locking.slashFractionDoubleSign != null) // error("Key .Consensus.Locking.slashFractionDoubleSign does not exist") | empty' $2
+jq 'select(.Consensus.Locking.slashFractionDowntime != null) // error("Key .Consensus.Locking.slashFractionDowntime does not exist") | empty' $2
+jq 'select(.Consensus.Locking.halvingInterval != null) // error("Key .Consensus.Locking.halvingInterval does not exist") | empty' $2
+jq 'select(.Consensus.Locking.initialBlockReward != null) // error("Key .Consensus.Locking.initialBlockReward does not exist") | empty' $2
 
 ./build/goatd modgen locking param --home $1 \
   --unlock-duration $(jq -r ".Consensus.Locking.unlockDuration" $2) \
@@ -94,15 +94,15 @@ done
 
 ./build/goatd modgen relayer --home $1 --param.accept_proposer_timeout $(jq -r ".Consensus.Relayer.acceptProposerTimeout" $2)
 
-jq 'select(.Bitcoin.network != null) // error("Key .Bitcoin.network does not exist")' $2
-jq 'select(.Bridge.depositPrefixMagic != null) // error("Key .Bridge.depositPrefixMagic does not exist")' $2
-jq 'select(.Bridge.minDepositInSat != null) // error("Key .Bridge.minDepositInSat does not exist")' $2
-jq 'select(.Bridge.depositTaxBP != null) // error("Key .Bridge.depositTaxBP does not exist")' $2
-jq 'select(.Bridge.maxDepositTaxInSat != null) // error("Key .Bridge.maxDepositTaxInSat does not exist")' $2
-jq 'select(.Bridge.confirmationNumber != null) // error("Key .Bridge.confirmationNumber does not exist")' $2
-jq 'select(.Consensus.Relayer.tssPubkey != null) // error("Key .Consensus.Relayer.tssPubkey does not exist")' $2
-jq 'select(.Bitcoin.height != null) // error("Key .Bitcoin.height does not exist")' $2
-jq 'select(.Bitcoin.hash != null) // error("Key .Bitcoin.hash does not exist")' $2
+jq 'select(.Bitcoin.network != null) // error("Key .Bitcoin.network does not exist") | empty' $2
+jq 'select(.Bridge.depositPrefixMagic != null) // error("Key .Bridge.depositPrefixMagic does not exist") | empty' $2
+jq 'select(.Bridge.minDepositInSat != null) // error("Key .Bridge.minDepositInSat does not exist") | empty' $2
+jq 'select(.Bridge.depositTaxBP != null) // error("Key .Bridge.depositTaxBP does not exist") | empty' $2
+jq 'select(.Bridge.maxDepositTaxInSat != null) // error("Key .Bridge.maxDepositTaxInSat does not exist") | empty' $2
+jq 'select(.Bridge.confirmationNumber != null) // error("Key .Bridge.confirmationNumber does not exist") | empty' $2
+jq 'select(.Consensus.Relayer.tssPubkey != null) // error("Key .Consensus.Relayer.tssPubkey does not exist") | empty' $2
+jq 'select(.Bitcoin.height != null) // error("Key .Bitcoin.height does not exist") | empty' $2
+jq 'select(.Bitcoin.hash != null) // error("Key .Bitcoin.hash does not exist") | empty' $2
 
 ./build/goatd modgen bitcoin --home $1 \
   --network $(jq -r ".Bitcoin.network" $2) \
