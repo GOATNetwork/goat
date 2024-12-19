@@ -47,7 +47,7 @@ replace (
 	// github.com/cosmos/cosmos-sdk => ../goat-cosmos-sdk
 	// goat-geth implementation
 	// github.com/ethereum/go-ethereum => ../goat-geth
-	github.com/ethereum/go-ethereum => github.com/GOATNetwork/goat-geth v0.1.3
+	github.com/ethereum/go-ethereum => github.com/GOATNetwork/goat-geth v0.1.4
 	// fix upstream GHSA-h395-qcrw-5vmq vulnerability.
 	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.9.1
 	// replace broken goleveldb
