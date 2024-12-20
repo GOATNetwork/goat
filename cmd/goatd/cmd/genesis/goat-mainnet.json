@@ -1,7 +1,7 @@
 {
   "app_name": "goatd",
-  "app_version": "main-3749af783a48e64ce733b24a36ac11195ca4ba27",
-  "genesis_time": "2024-12-02T13:00:00Z",
+  "app_version": "main-92f81dc1fcbb4a5f7ff85bff606939d9b3851dce",
+  "genesis_time": "2024-12-20T15:30:00Z",
   "chain_id": "goat-mainnet",
   "initial_height": 1,
   "app_hash": null,
@@ -17,30 +17,30 @@
       "accounts": [
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
-          "address": "goat1x6rwra40me99pmkveszkdr27gyl2lf7gdkaz83",
+          "address": "goat1wchyre7a8crs3d4rnuw7epcvmzvn9mxu20ljly",
           "pub_key": {
             "@type": "/cosmos.crypto.secp256k1.PubKey",
-            "key": "A+sIgTeKSmH00nyZRg/k/fV/nxJCORPwN7l/FU9IEHmt"
+            "key": "ApAw3FDpmYkCasdiEx/J77A8SsOrZc2CAasCWk87bIKw"
           },
           "account_number": "0",
           "sequence": "0"
         },
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
-          "address": "goat1emk9tnxvjeded7arp47npm7ntz2klk49mdk7aq",
+          "address": "goat12lj24yg3uwye2374rk832yy83a9plckk62kj4s",
           "pub_key": {
             "@type": "/cosmos.crypto.secp256k1.PubKey",
-            "key": "A0xo8ZG2s3fDv1XEHkNgpVP65NdMKb8GoJoTD225srEd"
+            "key": "A3iE47FwKrLG6qAU0Z3wig+ikNbu+hRTTDxSoXpfBAQO"
           },
           "account_number": "1",
           "sequence": "0"
         },
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
-          "address": "goat1nu9pfzc40tx0u2eqjw4y5u0wgjtskm0hehj3sl",
+          "address": "goat15p67ykk3s0ns40f4vwwc48040zy6n4enpmfkkd",
           "pub_key": {
             "@type": "/cosmos.crypto.secp256k1.PubKey",
-            "key": "Ay7MpZ3zy5di1VNoCTccKrPwrTMkJZba83K2Q13TvIbr"
+            "key": "A9jvL81us8nBr9uq3Th0F/lFBHE5QQtevvLGnS+az927"
           },
           "account_number": "2",
           "sequence": "0"
@@ -82,17 +82,17 @@
         "network_name": "mainnet",
         "confirmation_number": "6",
         "min_deposit_amount": "50000",
-        "deposit_magic_prefix": "bnVsbA==",
+        "deposit_magic_prefix": "R09BVA==",
         "deposit_tax_rate": "0",
         "max_deposit_tax": "0"
       },
-      "block_tip": "872861",
+      "block_tip": "875430",
       "block_hashes": [
-        "Lsm5MuEIy/ElSkr8sZr+OCMPNo6VwQAAAAAAAAAAAAA="
+        "SzZoLZ7Nj6pRCQ/EXX5hTGVsQp2IUgEAAAAAAAAAAAA="
       ],
       "eth_tx_nonce": "0",
       "eth_tx_queue": {
-        "block_number": "872861",
+        "block_number": "875430",
         "deposits": [],
         "paid_withdrawals": [],
         "rejected_withdrawals": []
@@ -127,17 +127,17 @@
       "eth_block": {
         "parent_hash": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
         "fee_recipient": "AAAAAAAAAAAAAAAAAAAAAAAAAAA=",
-        "state_root": "SLmjMUMN06tlI45aCYZJBsByu8lPa+FTZ14QYf4CtFY=",
+        "state_root": "DkbH/+BTnFgNmribatPYUq3nmCt4LHb9Ok/EG6NTgWo=",
         "receipts_root": "VugfFxvMVab/g0XmksD4bltI4BuZbK3AAWIvteNjtCE=",
         "logs_bloom": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
         "prev_randao": "",
         "block_number": "0",
         "gas_limit": "30000000",
         "gas_used": "0",
-        "timestamp": "1733126970",
+        "timestamp": "1734704687",
         "extra_data": "AFboHxcbzFWm/4NF5pLA+G5bSOAbmWytwAFiL7XjY7Qh",
         "base_fee_per_gas": "2028449",
-        "block_hash": "9xjO//PfjJaYkzMBANTIaAwDPc0QZd++HoWpFFmVm+M=",
+        "block_hash": "CE9VG103gsFPYVLf07zkzl/Bc2kAWVOEkxgc9nCJttQ=",
         "transactions": [],
         "beacon_root": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
         "blob_gas_used": "0",
@@ -161,7 +161,7 @@
       },
       "validators": [
         {
-          "pubkey": "A+sIgTeKSmH00nyZRg/k/fV/nxJCORPwN7l/FU9IEHmt",
+          "pubkey": "ApAw3FDpmYkCasdiEx/J77A8SsOrZc2CAasCWk87bIKw",
           "power": "250000",
           "locking": [
             {
@@ -179,7 +179,7 @@
           "jailed_until": "0001-01-01T00:00:00Z"
         },
         {
-          "pubkey": "A0xo8ZG2s3fDv1XEHkNgpVP65NdMKb8GoJoTD225srEd",
+          "pubkey": "A3iE47FwKrLG6qAU0Z3wig+ikNbu+hRTTDxSoXpfBAQO",
           "power": "250000",
           "locking": [
             {
@@ -197,7 +197,7 @@
           "jailed_until": "0001-01-01T00:00:00Z"
         },
         {
-          "pubkey": "Ay7MpZ3zy5di1VNoCTccKrPwrTMkJZba83K2Q13TvIbr",
+          "pubkey": "A9jvL81us8nBr9uq3Th0F/lFBHE5QQtevvLGnS+az927",
           "power": "250000",
           "locking": [
             {
@@ -249,7 +249,7 @@
           "goat1aa370xvckk63g8gqygs7rlkwta87ww0qgu37xd",
           "goat1hn6tu3wle7cuvumx2ls4xmm7yrq4y2gaa7y7yk"
         ],
-        "last_elected": "2024-12-02T08:34:34.601125Z",
+        "last_elected": "2024-12-20T14:32:52.840013Z",
         "proposer_accepted": true
       },
       "sequence": "0",
