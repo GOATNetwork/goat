@@ -18,7 +18,7 @@ require (
 	github.com/btcsuite/btcd/btcutil v1.1.6
 	github.com/btcsuite/btcd/chaincfg/chainhash v1.1.0
 	github.com/cometbft/cometbft v0.38.16
-	github.com/cosmos/cosmos-db v1.1.0
+	github.com/cosmos/cosmos-db v1.1.1
 	github.com/cosmos/cosmos-proto v1.0.0-beta.5
 	github.com/cosmos/cosmos-sdk v0.50.11
 	github.com/cosmos/gogoproto v1.7.0
@@ -27,7 +27,7 @@ require (
 	github.com/gorilla/mux v1.8.1
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
 	github.com/kelindar/bitmap v1.5.2
-	github.com/spf13/cast v1.7.0
+	github.com/spf13/cast v1.7.1
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.19.0
 	github.com/stretchr/testify v1.10.0
