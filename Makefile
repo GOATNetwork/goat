@@ -13,7 +13,7 @@ ifeq (,$(VERSION))
 endif
 
 PACKAGES_SIMTEST=$(shell go list ./... | grep '/simulation')
-LEDGER_ENABLED ?= true
+LEDGER_ENABLED ?= false
 SDK_PACK := $(shell go list -m github.com/cosmos/cosmos-sdk | sed  's/ /\@/g')
 TM_VERSION := $(shell go list -m github.com/cometbft/cometbft | sed 's:.* ::') # grab everything after the space in "github.com/cometbft/cometbft v0.34.7"
 DOCKER := $(shell which docker)
@@ -24,7 +24,7 @@ REQUIRE_GO_VERSION = 1.23
 
 # process build tags
 
-build_tags = netgo
+build_tags =
 ifeq ($(LEDGER_ENABLED),true)
   ifeq ($(OS),Windows_NT)
     GCCEXE = $(shell where gcc.exe 2> NUL)
@@ -48,9 +48,6 @@ ifeq ($(LEDGER_ENABLED),true)
   endif
 endif
 
-ifeq (cleveldb,$(findstring cleveldb,$(GOAT_BUILD_OPTIONS)))
-  build_tags += gcc cleveldb
-endif
 build_tags += $(BUILD_TAGS)
 build_tags := $(strip $(build_tags))
 
@@ -105,7 +102,7 @@ BUILD_TARGETS := build install
 build: BUILD_ARGS=-o $(BUILDDIR)/
 
 $(BUILD_TARGETS): check_version go.sum $(BUILDDIR)/
-	go $@ -v -mod=readonly $(BUILD_FLAGS) $(BUILD_ARGS) ./cmd/...
+	go $@ -mod=readonly $(BUILD_FLAGS) $(BUILD_ARGS) ./cmd/...
 
 $(BUILDDIR)/:
 	mkdir -p $(BUILDDIR)/
