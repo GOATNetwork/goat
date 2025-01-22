@@ -24,6 +24,11 @@ import (
 var genesisFiles embed.FS
 
 var bootnodes = map[string][]string{
+	"goat-testnet3": {
+		"997f925d3d4947483c9339ec2765ed8c825ace32@3.222.213.223:26656",
+		"9106b59e244eb8bf4dbedcd03b56e30790278765@54.68.179.184:26656",
+		"c99c2abe0886a3c82c12f611477ce22fe178186a@52.32.82.160:26656",
+	},
 	"goat-mainnet": {
 		// ZKM
 		"84b041c3800b67319d378fbb8d2f83e2c686e738@3.16.248.103:26656",
@@ -78,9 +83,6 @@ func initializeNodeFiles(cmd *cobra.Command, regtest bool) error {
 		}
 		if chainID == "" {
 			return errors.New("no chain id")
-		}
-		if chainID == "goat-testnet3" {
-			return errors.New("testnet3 is removed from this version, please use v0.1.3 instead")
 		}
 		jsonBytes, err := genesisFiles.ReadFile(fmt.Sprintf("genesis/%s.json", chainID))
 		if err != nil {
