@@ -66,6 +66,9 @@ func (req *MsgProcessWithdrawalV2) Validate() error {
 }
 
 func (req *MsgProcessWithdrawalV2) CalTxPrice() float64 {
+	// tx price = feeInSat / vbytes
+	// total_size = stripped_size + witness_size
+	// vbytes = (stripped_size * 3 + total_size) / 4 = stripped_size + witness_size / 4
 	return float64(req.TxFee) / (float64(len(req.NoWitnessTx)) + float64(req.WitnessSize)/4)
 }
 
