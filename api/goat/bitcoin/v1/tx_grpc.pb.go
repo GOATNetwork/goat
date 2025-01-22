@@ -23,7 +23,9 @@ const (
 	Msg_NewDeposits_FullMethodName         = "/goat.bitcoin.v1.Msg/NewDeposits"
 	Msg_NewPubkey_FullMethodName           = "/goat.bitcoin.v1.Msg/NewPubkey"
 	Msg_ProcessWithdrawal_FullMethodName   = "/goat.bitcoin.v1.Msg/ProcessWithdrawal"
+	Msg_ProcessWithdrawalV2_FullMethodName = "/goat.bitcoin.v1.Msg/ProcessWithdrawalV2"
 	Msg_ReplaceWithdrawal_FullMethodName   = "/goat.bitcoin.v1.Msg/ReplaceWithdrawal"
+	Msg_ReplaceWithdrawalV2_FullMethodName = "/goat.bitcoin.v1.Msg/ReplaceWithdrawalV2"
 	Msg_FinalizeWithdrawal_FullMethodName  = "/goat.bitcoin.v1.Msg/FinalizeWithdrawal"
 	Msg_ApproveCancellation_FullMethodName = "/goat.bitcoin.v1.Msg/ApproveCancellation"
 	Msg_NewConsolidation_FullMethodName    = "/goat.bitcoin.v1.Msg/NewConsolidation"
@@ -62,12 +64,18 @@ type MsgClient interface {
 	// signing process is finished Since the signing is an off chain process, so
 	// relayer proposer doesn't need to submit the signed transaction to the chain
 	ProcessWithdrawal(ctx context.Context, in *MsgProcessWithdrawal, opts ...grpc.CallOption) (*MsgProcessWithdrawalResponse, error)
+	// ProcessWithdrawalV2, it's the same as ProcessWithdrawal, but it includes
+	// the witness size
+	ProcessWithdrawalV2(ctx context.Context, in *MsgProcessWithdrawalV2, opts ...grpc.CallOption) (*MsgProcessWithdrawalV2Response, error)
 	// ReplaceWithdrawal replaces a withdrawal by increasing fee
 	// ** the output for the withdrawal should be not changed, but you can change
 	// the value
 	// ** the new tx fee should be larger than before
 	// ** it requires off-chain vote by relayer group
 	ReplaceWithdrawal(ctx context.Context, in *MsgReplaceWithdrawal, opts ...grpc.CallOption) (*MsgReplaceWithdrawalResponse, error)
+	// ReplaceWithdrawalV2, it's the same as ReplaceWithdrawal, but it includes
+	// the witness size
+	ReplaceWithdrawalV2(ctx context.Context, in *MsgReplaceWithdrawalV2, opts ...grpc.CallOption) (*MsgReplaceWithdrawalV2Response, error)
 	// FinalizeWithdrawal finlizes withdrawals and informs the chain to create the
 	// withdrawal receipts This is the final step to process withdrawals
 	//
@@ -129,10 +137,30 @@ func (c *msgClient) ProcessWithdrawal(ctx context.Context, in *MsgProcessWithdra
 	return out, nil
 }
 
+func (c *msgClient) ProcessWithdrawalV2(ctx context.Context, in *MsgProcessWithdrawalV2, opts ...grpc.CallOption) (*MsgProcessWithdrawalV2Response, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MsgProcessWithdrawalV2Response)
+	err := c.cc.Invoke(ctx, Msg_ProcessWithdrawalV2_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *msgClient) ReplaceWithdrawal(ctx context.Context, in *MsgReplaceWithdrawal, opts ...grpc.CallOption) (*MsgReplaceWithdrawalResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(MsgReplaceWithdrawalResponse)
 	err := c.cc.Invoke(ctx, Msg_ReplaceWithdrawal_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) ReplaceWithdrawalV2(ctx context.Context, in *MsgReplaceWithdrawalV2, opts ...grpc.CallOption) (*MsgReplaceWithdrawalV2Response, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MsgReplaceWithdrawalV2Response)
+	err := c.cc.Invoke(ctx, Msg_ReplaceWithdrawalV2_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -202,12 +230,18 @@ type MsgServer interface {
 	// signing process is finished Since the signing is an off chain process, so
 	// relayer proposer doesn't need to submit the signed transaction to the chain
 	ProcessWithdrawal(context.Context, *MsgProcessWithdrawal) (*MsgProcessWithdrawalResponse, error)
+	// ProcessWithdrawalV2, it's the same as ProcessWithdrawal, but it includes
+	// the witness size
+	ProcessWithdrawalV2(context.Context, *MsgProcessWithdrawalV2) (*MsgProcessWithdrawalV2Response, error)
 	// ReplaceWithdrawal replaces a withdrawal by increasing fee
 	// ** the output for the withdrawal should be not changed, but you can change
 	// the value
 	// ** the new tx fee should be larger than before
 	// ** it requires off-chain vote by relayer group
 	ReplaceWithdrawal(context.Context, *MsgReplaceWithdrawal) (*MsgReplaceWithdrawalResponse, error)
+	// ReplaceWithdrawalV2, it's the same as ReplaceWithdrawal, but it includes
+	// the witness size
+	ReplaceWithdrawalV2(context.Context, *MsgReplaceWithdrawalV2) (*MsgReplaceWithdrawalV2Response, error)
 	// FinalizeWithdrawal finlizes withdrawals and informs the chain to create the
 	// withdrawal receipts This is the final step to process withdrawals
 	//
@@ -241,8 +275,14 @@ func (UnimplementedMsgServer) NewPubkey(context.Context, *MsgNewPubkey) (*MsgNew
 func (UnimplementedMsgServer) ProcessWithdrawal(context.Context, *MsgProcessWithdrawal) (*MsgProcessWithdrawalResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ProcessWithdrawal not implemented")
 }
+func (UnimplementedMsgServer) ProcessWithdrawalV2(context.Context, *MsgProcessWithdrawalV2) (*MsgProcessWithdrawalV2Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ProcessWithdrawalV2 not implemented")
+}
 func (UnimplementedMsgServer) ReplaceWithdrawal(context.Context, *MsgReplaceWithdrawal) (*MsgReplaceWithdrawalResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReplaceWithdrawal not implemented")
+}
+func (UnimplementedMsgServer) ReplaceWithdrawalV2(context.Context, *MsgReplaceWithdrawalV2) (*MsgReplaceWithdrawalV2Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReplaceWithdrawalV2 not implemented")
 }
 func (UnimplementedMsgServer) FinalizeWithdrawal(context.Context, *MsgFinalizeWithdrawal) (*MsgFinalizeWithdrawalResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FinalizeWithdrawal not implemented")
@@ -346,6 +386,24 @@ func _Msg_ProcessWithdrawal_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_ProcessWithdrawalV2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgProcessWithdrawalV2)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).ProcessWithdrawalV2(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_ProcessWithdrawalV2_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).ProcessWithdrawalV2(ctx, req.(*MsgProcessWithdrawalV2))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Msg_ReplaceWithdrawal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MsgReplaceWithdrawal)
 	if err := dec(in); err != nil {
@@ -360,6 +418,24 @@ func _Msg_ReplaceWithdrawal_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).ReplaceWithdrawal(ctx, req.(*MsgReplaceWithdrawal))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_ReplaceWithdrawalV2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgReplaceWithdrawalV2)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).ReplaceWithdrawalV2(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_ReplaceWithdrawalV2_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).ReplaceWithdrawalV2(ctx, req.(*MsgReplaceWithdrawalV2))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -442,8 +518,16 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_ProcessWithdrawal_Handler,
 		},
 		{
+			MethodName: "ProcessWithdrawalV2",
+			Handler:    _Msg_ProcessWithdrawalV2_Handler,
+		},
+		{
 			MethodName: "ReplaceWithdrawal",
 			Handler:    _Msg_ReplaceWithdrawal_Handler,
+		},
+		{
+			MethodName: "ReplaceWithdrawalV2",
+			Handler:    _Msg_ReplaceWithdrawalV2_Handler,
 		},
 		{
 			MethodName: "FinalizeWithdrawal",

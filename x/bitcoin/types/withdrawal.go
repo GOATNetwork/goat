@@ -47,6 +47,10 @@ func (req *MsgProcessWithdrawal) Validate() error {
 	return nil
 }
 
+func (req *MsgProcessWithdrawal) CalTxPrice() float64 {
+	return float64(req.TxFee) / (float64(len(req.NoWitnessTx)))
+}
+
 func (req *MsgReplaceWithdrawal) MethodName() string {
 	return ReplaceWithdrawalMethodSigName
 }
@@ -74,6 +78,10 @@ func (req *MsgReplaceWithdrawal) VoteSigDoc() []byte {
 	ids := goatcrypto.Uint64LE(req.Pid, req.NewTxFee)
 	tx := goatcrypto.SHA256Sum(req.NewNoWitnessTx)
 	return slices.Concat(ids, tx)
+}
+
+func (req *MsgReplaceWithdrawal) CalTxPrice() float64 {
+	return float64(req.NewTxFee) / (float64(len(req.NewNoWitnessTx)))
 }
 
 func (req *MsgFinalizeWithdrawal) Validate() error {

@@ -44,12 +44,20 @@ service Msg {
   // relayer proposer doesn't need to submit the signed transaction to the chain
   rpc ProcessWithdrawal(MsgProcessWithdrawal) returns (MsgProcessWithdrawalResponse);
 
+  // ProcessWithdrawalV2, it's the same as ProcessWithdrawal, but it includes
+  // the witness size
+  rpc ProcessWithdrawalV2(MsgProcessWithdrawalV2) returns (MsgProcessWithdrawalV2Response);
+
   // ReplaceWithdrawal replaces a withdrawal by increasing fee
   // ** the output for the withdrawal should be not changed, but you can change
   // the value
   // ** the new tx fee should be larger than before
   // ** it requires off-chain vote by relayer group
   rpc ReplaceWithdrawal(MsgReplaceWithdrawal) returns (MsgReplaceWithdrawalResponse);
+
+  // ReplaceWithdrawalV2, it's the same as ReplaceWithdrawal, but it includes
+  // the witness size
+  rpc ReplaceWithdrawalV2(MsgReplaceWithdrawalV2) returns (MsgReplaceWithdrawalV2Response);
 
   // FinalizeWithdrawal finlizes withdrawals and informs the chain to create the
   // withdrawal receipts This is the final step to process withdrawals
@@ -127,6 +135,25 @@ message MsgProcessWithdrawal {
 // MsgProcessWithdrawalResponse
 message MsgProcessWithdrawalResponse {}
 
+// MsgProcessWithdrawal
+message MsgProcessWithdrawalV2 {
+  option (cosmos.msg.v1.signer) = "proposer";
+  option (amino.name) = "goat/x/bitcoin/MsgProcessWithdrawalV2";
+
+  string proposer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  goat.relayer.v1.Votes vote = 2;
+  // the withdraw id list
+  repeated uint64 id = 3;
+  bytes no_witness_tx = 4;
+  // tx fee in satoshi
+  uint64 tx_fee = 5;
+  // witness size in bytes
+  uint64 witness_size = 6;
+}
+
+// MsgProcessWithdrawalV2Response
+message MsgProcessWithdrawalV2Response {}
+
 // MsgReplaceWithdrawal
 message MsgReplaceWithdrawal {
   option (cosmos.msg.v1.signer) = "proposer";
@@ -144,6 +171,26 @@ message MsgReplaceWithdrawal {
 
 // MsgReplaceWithdrawalResponse
 message MsgReplaceWithdrawalResponse {}
+
+// MsgReplaceWithdrawal
+message MsgReplaceWithdrawalV2 {
+  option (cosmos.msg.v1.signer) = "proposer";
+  option (amino.name) = "goat/x/bitcoin/MsgReplaceWithdrawalV2";
+
+  string proposer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  goat.relayer.v1.Votes vote = 2;
+  // the process id of the withdrawals to replace
+  uint64 pid = 3;
+  // the new tx for the withdrawal proposal
+  bytes new_no_witness_tx = 4;
+  // tx fee in satoshi
+  uint64 new_tx_fee = 5;
+  // witness size in bytes
+  uint64 witness_size = 6;
+}
+
+// MsgReplaceWithdrawalV2Response
+message MsgReplaceWithdrawalV2Response {}
 
 // MsgFinalizeWithdrawal
 message MsgFinalizeWithdrawal {

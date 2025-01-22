@@ -158,28 +158,29 @@ func (k msgServer) NewPubkey(ctx context.Context, req *types.MsgNewPubkey) (*typ
 	return &types.MsgNewPubkeyResponse{}, nil
 }
 
-func (k msgServer) ProcessWithdrawal(ctx context.Context, req *types.MsgProcessWithdrawal) (*types.MsgProcessWithdrawalResponse, error) {
+func (k msgServer) processWithdrawal(ctx context.Context, req types.ProcessWithdrawalMsger) error {
 	if err := req.Validate(); err != nil {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	tx, txrd := new(wire.MsgTx), bytes.NewReader(req.NoWitnessTx)
+	tx, txrd := new(wire.MsgTx), bytes.NewReader(req.GetNoWitnessTx())
 	if err := tx.DeserializeNoWitness(txrd); err != nil || txrd.Len() > 0 {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid non-witness tx")
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid non-witness tx")
 	}
 
-	txoutLen, withdrawalLen := len(tx.TxOut), len(req.Id)
+	txoutLen, withdrawalLen := len(tx.TxOut), len(req.GetId())
 	if txoutLen != withdrawalLen && txoutLen != withdrawalLen+1 { // change output up to 1
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid tx output size for withdrawals")
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid tx output size for withdrawals")
 	}
 
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
+
 	sequence, err := k.relayerKeeper.VerifyProposal(sdkctx, req)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	txid := goatcrypto.DoubleSHA256Sum(req.NoWitnessTx)
+	txid := goatcrypto.DoubleSHA256Sum(req.GetNoWitnessTx())
 
 	/*
 		Note:
@@ -192,52 +193,52 @@ func (k msgServer) ProcessWithdrawal(ctx context.Context, req *types.MsgProcessW
 	*/
 
 	// Sat Per Byte
-	txPrice := float64(req.TxFee) / float64(len(req.NoWitnessTx))
+	txPrice := req.CalTxPrice()
 
 	// get the network config
 	param, err := k.Params.Get(sdkctx)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	netwk := types.BitcoinNetworks[param.NetworkName]
 	if netwk == nil {
-		return nil, errorsmod.Wrapf(sdkerrors.ErrAppConfig, "%s network is not defined", param.NetworkName)
+		return errorsmod.Wrapf(sdkerrors.ErrAppConfig, "%s network is not defined", param.NetworkName)
 	}
 
 	txOutput := types.TxOuptut{Values: make([]uint64, withdrawalLen)}
-	for idx, wid := range req.Id {
+	for idx, wid := range req.GetId() {
 		withdrawal, err := k.Withdrawals.Get(sdkctx, wid)
 		if err != nil {
-			return nil, err
+			return err
 		}
 
 		if withdrawal.Status != types.WITHDRAWAL_STATUS_PENDING && withdrawal.Status != types.WITHDRAWAL_STATUS_CANCELING {
-			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "witdhrawal %d is not pending or canceling", wid)
+			return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "witdhrawal %d is not pending or canceling", wid)
 		}
 
 		if txPrice > float64(withdrawal.MaxTxPrice) {
-			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "tx price is larger than user request for witdhrawal %d", wid)
+			return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "tx price is larger than user request for witdhrawal %d", wid)
 		}
 
 		txout := tx.TxOut[idx]
 		outputScript, err := types.DecodeBtcAddress(withdrawal.Address, netwk)
 		if err != nil { // It should not happen
-			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid address to process %d", wid)
+			return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid address to process %d", wid)
 		}
 
 		if !bytes.Equal(outputScript, txout.PkScript) {
-			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "witdhrawal %d script not matched", wid)
+			return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "witdhrawal %d script not matched", wid)
 		}
 
 		if withdrawal.RequestAmount < uint64(txout.Value) {
-			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "witdhrawal %d amount too large", wid)
+			return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "witdhrawal %d amount too large", wid)
 		}
 
 		// the withdrawal id can't be duplicated since we update the status here
 		withdrawal.Status = types.WITHDRAWAL_STATUS_PROCESSING
 		withdrawal.Receipt = &types.WithdrawalReceipt{Txid: txid, Txout: uint32(idx), Amount: uint64(txout.Value)}
 		if err := k.Withdrawals.Set(sdkctx, wid, withdrawal); err != nil {
-			return nil, err
+			return err
 		}
 		txOutput.Values[idx] = uint64(txout.Value)
 	}
@@ -247,34 +248,34 @@ func (k msgServer) ProcessWithdrawal(ctx context.Context, req *types.MsgProcessW
 		change := tx.TxOut[withdrawalLen]
 		pubkey, err := k.Pubkey.Get(ctx)
 		if err != nil {
-			return nil, err
+			return err
 		}
 		if !types.VerifySystemAddressScript(&pubkey, change.PkScript) {
-			return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "give change to not a latest relayer pubkey")
+			return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "give change to not a latest relayer pubkey")
 		}
 	}
 
 	// Add processing staus
 	pid, err := k.ProcessID.Peek(sdkctx)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	if err := k.Processing.Set(sdkctx, pid, types.Processing{
 		Txid: [][]byte{txid}, Output: []types.TxOuptut{txOutput},
-		Withdrawals: req.Id, Fee: req.TxFee,
+		Withdrawals: req.GetId(), Fee: req.GetTxFee(),
 	}); err != nil {
-		return nil, err
+		return err
 	}
 	if err := k.ProcessID.Set(sdkctx, pid+1); err != nil {
-		return nil, err
+		return err
 	}
 
 	if err := k.relayerKeeper.SetProposalSeq(sdkctx, sequence+1); err != nil {
-		return nil, err
+		return err
 	}
 
 	if err := k.relayerKeeper.UpdateRandao(sdkctx, req); err != nil {
-		return nil, err
+		return err
 	}
 
 	sdkctx.EventManager().EmitEvents(sdktypes.Events{
@@ -282,93 +283,93 @@ func (k msgServer) ProcessWithdrawal(ctx context.Context, req *types.MsgProcessW
 		relayertypes.FinalizedProposalEvent(sequence),
 	})
 
-	return &types.MsgProcessWithdrawalResponse{}, nil
+	return nil
 }
 
-func (k msgServer) ReplaceWithdrawal(ctx context.Context, req *types.MsgReplaceWithdrawal) (*types.MsgReplaceWithdrawalResponse, error) {
+func (k msgServer) replaceWithdrawal(ctx context.Context, req types.ReplaceWithdrawalMsger) error {
 	if err := req.Validate(); err != nil {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	tx, txrd := new(wire.MsgTx), bytes.NewReader(req.NewNoWitnessTx)
+	tx, txrd := new(wire.MsgTx), bytes.NewReader(req.GetNewNoWitnessTx())
 	if err := tx.DeserializeNoWitness(txrd); err != nil || txrd.Len() > 0 {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid non-witness tx")
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid non-witness tx")
 	}
-	txid := goatcrypto.DoubleSHA256Sum(req.NewNoWitnessTx)
+	txid := goatcrypto.DoubleSHA256Sum(req.GetNewNoWitnessTx())
 
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
-	processing, err := k.Processing.Get(sdkctx, req.Pid)
+	processing, err := k.Processing.Get(sdkctx, req.GetPid())
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	if processing.Fee >= req.NewTxFee {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "new tx fee is less than before")
+	if processing.Fee >= req.GetNewTxFee() {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "new tx fee is less than before")
 	}
-	processing.Fee = req.NewTxFee
+	processing.Fee = req.GetNewTxFee()
 
 	for _, item := range processing.Txid {
 		if bytes.Equal(item, txid) {
-			return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "the tx doesn't have any change")
+			return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "the tx doesn't have any change")
 		}
 	}
 
 	txoutLen, withdrawalLen := len(tx.TxOut), len(processing.Withdrawals)
 	if txoutLen != withdrawalLen && txoutLen != withdrawalLen+1 { // change output up to 1
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid tx output size for withdrawals")
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid tx output size for withdrawals")
 	}
 
-	txPrice := float64(req.NewTxFee) / float64(len(req.NewNoWitnessTx))
+	txPrice := req.CalTxPrice()
 
 	// verify proposal vote
 	sequence, err := k.relayerKeeper.VerifyProposal(sdkctx, req)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	// get the network config
 	param, err := k.Params.Get(sdkctx)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	netwk := types.BitcoinNetworks[param.NetworkName]
 	if netwk == nil {
-		return nil, errorsmod.Wrapf(sdkerrors.ErrAppConfig, "%s network is not defined", param.NetworkName)
+		return errorsmod.Wrapf(sdkerrors.ErrAppConfig, "%s network is not defined", param.NetworkName)
 	}
 
 	txOutput := types.TxOuptut{Values: make([]uint64, withdrawalLen)}
 	for idx, wid := range processing.Withdrawals {
 		withdrawal, err := k.Withdrawals.Get(sdkctx, wid)
 		if err != nil {
-			return nil, err
+			return err
 		}
 
 		if withdrawal.Status != types.WITHDRAWAL_STATUS_PROCESSING || withdrawal.Receipt == nil {
-			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "witdhrawal %d is not processing", wid)
+			return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "witdhrawal %d is not processing", wid)
 		}
 
 		if txPrice > float64(withdrawal.MaxTxPrice) {
-			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "tx price is larger than user request for witdhrawal %d", wid)
+			return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "tx price is larger than user request for witdhrawal %d", wid)
 		}
 
 		txout := tx.TxOut[idx]
 		outputScript, err := types.DecodeBtcAddress(withdrawal.Address, netwk)
 		if err != nil { // It should not happen
-			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid address to process %d", wid)
+			return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid address to process %d", wid)
 		}
 
 		if !bytes.Equal(outputScript, txout.PkScript) {
-			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "witdhrawal %d script not matched", wid)
+			return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "witdhrawal %d script not matched", wid)
 		}
 
 		if withdrawal.RequestAmount < uint64(txout.Value) {
-			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "witdhrawal %d amount too large", wid)
+			return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "witdhrawal %d amount too large", wid)
 		}
 
 		withdrawal.Receipt.Txid = txid
 		withdrawal.Receipt.Amount = uint64(txout.Value)
 		if err := k.Withdrawals.Set(sdkctx, wid, withdrawal); err != nil {
-			return nil, err
+			return err
 		}
 		txOutput.Values[idx] = uint64(txout.Value)
 	}
@@ -378,33 +379,33 @@ func (k msgServer) ReplaceWithdrawal(ctx context.Context, req *types.MsgReplaceW
 		change := tx.TxOut[withdrawalLen]
 		pubkey, err := k.Pubkey.Get(ctx)
 		if err != nil {
-			return nil, err
+			return err
 		}
 		if !types.VerifySystemAddressScript(&pubkey, change.PkScript) {
-			return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "give change to not a latest relayer pubkey")
+			return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "give change to not a latest relayer pubkey")
 		}
 	}
 
 	processing.Txid = append(processing.Txid, txid)
 	processing.Output = append(processing.Output, txOutput)
-	if err := k.Processing.Set(sdkctx, req.Pid, processing); err != nil {
-		return nil, err
+	if err := k.Processing.Set(sdkctx, req.GetPid(), processing); err != nil {
+		return err
 	}
 
 	if err := k.relayerKeeper.SetProposalSeq(sdkctx, sequence+1); err != nil {
-		return nil, err
+		return err
 	}
 
 	if err := k.relayerKeeper.UpdateRandao(sdkctx, req); err != nil {
-		return nil, err
+		return err
 	}
 
 	sdkctx.EventManager().EmitEvents(sdktypes.Events{
-		types.NewWithdrawalRelayerReplaceEvent(req.Pid, txid),
+		types.NewWithdrawalRelayerReplaceEvent(req.GetPid(), txid),
 		relayertypes.FinalizedProposalEvent(sequence),
 	})
 
-	return &types.MsgReplaceWithdrawalResponse{}, nil
+	return nil
 }
 
 func (k msgServer) FinalizeWithdrawal(ctx context.Context, req *types.MsgFinalizeWithdrawal) (*types.MsgFinalizeWithdrawalResponse, error) {

@@ -160,11 +160,12 @@ func (suite *KeeperTestSuite) TestMsgWithdrawal() {
 	expected, events := []types.Withdrawal{}, []sdktypes.Event{}
 	// process it
 	{
-		req := &types.MsgProcessWithdrawal{
+		req := &types.MsgProcessWithdrawalV2{
 			Proposer:    "goat1xa56637tjn857jyg2plgvhdclzmr4crxzn5xus",
 			Vote:        &relayertypes.Votes{Signature: make([]byte, goatcrypto.SignatureLength)},
 			NoWitnessTx: common.Hex2Bytes("02000000012e0e3e521ac999cfc292a78aaeb31fe19dfb7867c660ae5560537370d55fdf0e0000000000ffffffff06e8030000000000001976a9146a9d23174484d7ba74f7bc2a64ed102b4846267588ace80300000000000017a91413aa207651e0f3724cbe6134f54675aa2d5cdbf987e803000000000000160014279476d2a1d257f0cdcc48641b3679d411187415e8030000000000002200203dad4a1a80c3925f74a48f429eeca43440ade0aee3d5db6880e73b474961631de8030000000000002200200c84239e8447e7c3b471b26736615eb76c4755c5b94516376958f17e0da4648f90c9f505000000001600145b029559baaea5e928e8e2774e9e2350a5fc9c2d00000000"),
 			TxFee:       1000,
+			WitnessSize: 110,
 		}
 
 		for idx, address := range withdrawals {
@@ -194,7 +195,16 @@ func (suite *KeeperTestSuite) TestMsgWithdrawal() {
 		suite.RelayerKeeper.EXPECT().SetProposalSeq(suite.Context, sequence+1)
 		suite.RelayerKeeper.EXPECT().UpdateRandao(suite.Context, req)
 
-		_, err = msgServer.ProcessWithdrawal(suite.Context, req)
+		_, err = msgServer.ProcessWithdrawal(suite.Context, &types.MsgProcessWithdrawal{
+			Proposer:    req.Proposer,
+			Vote:        req.Vote,
+			Id:          req.Id,
+			NoWitnessTx: req.NoWitnessTx,
+			TxFee:       req.TxFee,
+		})
+		suite.Require().Error(err)
+
+		_, err = msgServer.ProcessWithdrawalV2(suite.Context, req)
 		suite.Require().NoError(err)
 
 		for idx, wd := range expected {
@@ -224,12 +234,13 @@ func (suite *KeeperTestSuite) TestMsgWithdrawal() {
 
 	// replace it
 	{
-		req := &types.MsgReplaceWithdrawal{
+		req := &types.MsgReplaceWithdrawalV2{
 			Proposer:       "goat1xa56637tjn857jyg2plgvhdclzmr4crxzn5xus",
 			Vote:           &relayertypes.Votes{Signature: make([]byte, goatcrypto.SignatureLength)},
 			Pid:            0,
 			NewNoWitnessTx: common.Hex2Bytes("02000000012e0e3e521ac999cfc292a78aaeb31fe19dfb7867c660ae5560537370d55fdf0e0000000000ffffffff06b0030000000000001976a9146a9d23174484d7ba74f7bc2a64ed102b4846267588aca00300000000000017a91413aa207651e0f3724cbe6134f54675aa2d5cdbf987e303000000000000160014279476d2a1d257f0cdcc48641b3679d41118741599030000000000002200203dad4a1a80c3925f74a48f429eeca43440ade0aee3d5db6880e73b474961631de3030000000000002200200c84239e8447e7c3b471b26736615eb76c4755c5b94516376958f17e0da4648f10270000000000001600145b029559baaea5e928e8e2774e9e2350a5fc9c2d00000000"),
 			NewTxFee:       1100,
+			WitnessSize:    110,
 		}
 
 		sequence := uint64(101)
@@ -237,7 +248,16 @@ func (suite *KeeperTestSuite) TestMsgWithdrawal() {
 		suite.RelayerKeeper.EXPECT().SetProposalSeq(suite.Context, sequence+1)
 		suite.RelayerKeeper.EXPECT().UpdateRandao(suite.Context, req)
 
-		_, err = msgServer.ReplaceWithdrawal(suite.Context, req)
+		_, err = msgServer.ReplaceWithdrawal(suite.Context, &types.MsgReplaceWithdrawal{
+			Proposer:       req.Proposer,
+			Vote:           req.Vote,
+			Pid:            req.Pid,
+			NewNoWitnessTx: req.NewNoWitnessTx,
+			NewTxFee:       req.NewTxFee,
+		})
+		suite.Require().Error(err)
+
+		_, err = msgServer.ReplaceWithdrawalV2(suite.Context, req)
 		suite.Require().NoError(err)
 
 		processing, err := suite.Keeper.Processing.Get(suite.Context, 0)

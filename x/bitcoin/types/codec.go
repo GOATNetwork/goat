@@ -12,7 +12,9 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 		new(MsgNewDeposits),
 		new(MsgNewPubkey),
 		new(MsgProcessWithdrawal),
+		new(MsgProcessWithdrawalV2),
 		new(MsgReplaceWithdrawal),
+		new(MsgReplaceWithdrawalV2),
 		new(MsgFinalizeWithdrawal),
 		new(MsgApproveCancellation),
 	)

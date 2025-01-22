@@ -40,7 +40,15 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Skip:      true,
 				},
 				{
+					RpcMethod: "ProcessWithdrawalV2",
+					Skip:      true,
+				},
+				{
 					RpcMethod: "ReplaceWithdrawal",
+					Skip:      true,
+				},
+				{
+					RpcMethod: "ReplaceWithdrawalV2",
 					Skip:      true,
 				},
 				{
