@@ -5,6 +5,7 @@ services:
     image: ghcr.io/goatnetwork/goat-geth:v0.2.0
     restart: unless-stopped
     stop_grace_period: 30s
+    network_mode: host
     command:
       - --goat=mainnet
       - --http
@@ -20,16 +21,14 @@ services:
       # - --gcmode=archive
     volumes:
       - /data/geth:/root/.ethereum
-    ports:
-      - 8545:8545
-      - 8546:8546
     logging:
       driver: local
 
   goat:
-    image: ghcr.io/goatnetwork/goat:v0.2.0
+    image: ghcr.io/goatnetwork/goat:v0.2.1
     restart: unless-stopped
     stop_grace_period: 30s
+    network_mode: host
     command:
       - start
       - --goat.geth=/geth/geth.ipc
@@ -37,9 +36,6 @@ services:
       - --grpc.address=0.0.0.0:9090
       - --api.enable
       - --api.address=tcp://0.0.0.0:1317
-    ports:
-      - 1317:1317
-      - 9090:9090
     depends_on:
       - geth
     volumes:
