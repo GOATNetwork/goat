@@ -2,7 +2,7 @@ name: mainnet
 
 services:
   geth:
-    image: ghcr.io/goatnetwork/goat-geth:v0.2.0
+    image: ghcr.io/goatnetwork/goat-geth:v0.2.1
     restart: unless-stopped
     stop_grace_period: 30s
     network_mode: host
