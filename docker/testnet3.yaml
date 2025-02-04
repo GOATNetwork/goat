@@ -27,7 +27,7 @@ services:
       driver: local
 
   goat:
-    image: ghcr.io/goatnetwork/goat:v0.2.2
+    image: ghcr.io/goatnetwork/goat:v0.2.3
     restart: unless-stopped
     stop_grace_period: 30s
     network_mode: host
