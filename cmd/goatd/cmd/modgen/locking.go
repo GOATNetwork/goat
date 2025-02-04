@@ -6,11 +6,9 @@ import (
 	"errors"
 	"fmt"
 	"math/big"
-	"os"
 	"strings"
 
 	"cosmossdk.io/math"
-	cmtjson "github.com/cometbft/cometbft/libs/json"
 	"github.com/cometbft/cometbft/privval"
 	"github.com/cosmos/cosmos-sdk/client"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -121,14 +119,14 @@ func Locking() *cobra.Command {
 				return err
 			}
 
-			fmt.Println(hex.EncodeToString(pubkeyRaw))
+			cmd.Println(hex.EncodeToString(pubkeyRaw))
 
 			pubkeyRaw, err = GetCompressedK256P1Pubkey(pubkeyRaw)
 			if err != nil {
 				return err
 			}
 
-			fmt.Println(hex.EncodeToString(pubkeyRaw))
+			cmd.Println(hex.EncodeToString(pubkeyRaw))
 
 			serverCtx.Logger.Info("adding validator", "module", types.ModuleName, "geneis", genesisFile)
 			if err := UpdateModuleGenesis(genesisFile, types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
@@ -203,6 +201,20 @@ func Locking() *cobra.Command {
 				genesis.Accounts = append(genesis.Accounts, baseAccountAny)
 				return nil
 			})
+		},
+	}
+
+	showValidator := &cobra.Command{
+		Use:   "show-validator",
+		Short: "Shows this node's validator address",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			serverCtx := server.GetServerContextFromCmd(cmd)
+			privValidator := privval.LoadFilePVEmptyState(
+				serverCtx.Config.PrivValidatorKeyFile(),
+				serverCtx.Config.PrivValidatorStateFile(),
+			)
+			cmd.Println(hexutil.Encode(privValidator.GetAddress()))
+			return nil
 		},
 	}
 
@@ -300,17 +312,7 @@ func Locking() *cobra.Command {
 				return err
 			}
 
-			keyJSONBytes, err := os.ReadFile(config.PrivValidatorKeyFile())
-			if err != nil {
-				panic(err)
-			}
-
-			var pvKey privval.FilePVKey
-			err = cmtjson.Unmarshal(keyJSONBytes, &pvKey)
-			if err != nil {
-				return err
-			}
-
+			pvKey := privval.LoadFilePVEmptyState(config.PrivValidatorKeyFile(), "").Key
 			prvkey, err := ethcrypto.ToECDSA(pvKey.PrivKey.Bytes())
 			if err != nil {
 				return err
@@ -437,6 +439,6 @@ func Locking() *cobra.Command {
 
 	sign.Flags().Uint64(FlagEthChainID, 48815, "the goat-geth chain id")
 	sign.Flags().String(FlagOwner, "", "the validator owner")
-	cmd.AddCommand(addToken, addValidator, sign, setParam)
+	cmd.AddCommand(addToken, addValidator, showValidator, sign, setParam)
 	return cmd
 }
