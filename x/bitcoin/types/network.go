@@ -7,4 +7,5 @@ var BitcoinNetworks = map[string]*chaincfg.Params{
 	chaincfg.TestNet3Params.Name:      &chaincfg.TestNet3Params,
 	chaincfg.SigNetParams.Name:        &chaincfg.SigNetParams,
 	chaincfg.RegressionNetParams.Name: &chaincfg.RegressionNetParams,
+	TestNet4Params.Name:               &TestNet4Params,
 }

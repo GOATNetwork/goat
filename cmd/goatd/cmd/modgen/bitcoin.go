@@ -277,7 +277,7 @@ func Bitcoin() *cobra.Command {
 	cmd.Flags().Uint64(FlagConfirmationNumber, param.ConfirmationNumber, "the confirmation number")
 	cmd.Flags().BytesHex(FlagPubkey, nil, "the initial relayer public key")
 	cmd.Flags().String(FlagPubkeyType, types.Secp256K1Name, "the public key type [secp256k1,schnorr]")
-	cmd.Flags().String(FlagNetworkName, param.NetworkName, "the bitcoin network name(mainnet|testnet3|regtest|signet)")
+	cmd.Flags().String(FlagNetworkName, param.NetworkName, "the bitcoin network name(mainnet|testnet3|regtest|signet|testnet4)")
 	cmd.Flags().String(FlagDepositMagicPrefix, string(param.DepositMagicPrefix), "the deposit magic prefix")
 	cmd.Flags().Uint64(FlagMinDeposit, param.MinDepositAmount, "minimal allowed deposit amount")
 	cmd.Flags().Uint64(FlagDepositTaxRate, param.DepositTaxRate, "tax rate for deposits")
@@ -289,7 +289,7 @@ func Bitcoin() *cobra.Command {
 
 	depositAddress.Flags().BytesHex(FlagPubkey, nil, "the deposit public key")
 	depositAddress.Flags().String(FlagEthAddress, "", "the eth address to deposit")
-	depositAddress.Flags().String(FlagNetworkName, "", "the bitcoin network name(mainnet|testnet3|regtest|signet)")
+	depositAddress.Flags().String(FlagNetworkName, "", "the bitcoin network name(mainnet|testnet3|regtest|signet|testnet4)")
 	depositAddress.Flags().String(FlagPubkeyType, types.Secp256K1Name, "the public key type [secp256k1,schnorr]")
 
 	cmd.AddCommand(addDeposit, depositAddress)
