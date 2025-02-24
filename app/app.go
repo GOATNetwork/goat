@@ -135,11 +135,6 @@ func New(
 	// build app
 	app.App = appBuilder.Build(db, traceStore, baseAppOptions...)
 
-	// register streaming services
-	if err := app.RegisterStreamingServices(appOpts, app.kvStoreKeys()); err != nil {
-		return nil, err
-	}
-
 	// create the simulation manager and define the order of the modules for deterministic simulations
 	app.sm = module.NewSimulationManager(nil)
 
@@ -188,18 +183,6 @@ func (app *App) GetMemKey(storeKey string) *storetypes.MemoryStoreKey {
 	}
 
 	return key
-}
-
-// kvStoreKeys returns all the kv store keys registered inside App.
-func (app *App) kvStoreKeys() map[string]*storetypes.KVStoreKey {
-	keys := make(map[string]*storetypes.KVStoreKey)
-	for _, k := range app.GetStoreKeys() {
-		if kv, ok := k.(*storetypes.KVStoreKey); ok {
-			keys[kv.Name()] = kv
-		}
-	}
-
-	return keys
 }
 
 // SimulationManager implements the SimulationApp interface.
