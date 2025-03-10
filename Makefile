@@ -150,7 +150,7 @@ run-tests:
 ###                                Linting                                  ###
 ###############################################################################
 golangci_lint_cmd=golangci-lint
-golangci_version=v1.62.0
+golangci_version=v1.64.6
 
 lint:
 	@echo "--> Running linter"
@@ -172,7 +172,7 @@ format:
 ###############################################################################
 ###                                Protobuf                                 ###
 ###############################################################################
-protoVer=0.15.1
+protoVer=0.16.0
 protoImageName=ghcr.io/cosmos/proto-builder:$(protoVer)
 protoImage=$(DOCKER) run --rm -v $(CURDIR):/workspace --workdir /workspace $(protoImageName)
 

@@ -36,7 +36,7 @@ linters:
     - thelper
     - unparam
     - mirror
-    - tenv
+    - usetesting
 
 linters-settings:
   gofmt:
