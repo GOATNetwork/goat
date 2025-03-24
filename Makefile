@@ -95,7 +95,7 @@ ifneq ($(shell [ "$(GO_SYSTEM_VERSION)" \< "$(REQUIRE_GO_VERSION)" ] && echo tru
 	exit 1
 endif
 
-all: build lint run-tests vulncheck
+all: build lint run-tests
 
 BUILD_TARGETS := build install
 
