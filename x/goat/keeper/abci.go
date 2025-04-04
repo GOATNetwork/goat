@@ -113,7 +113,7 @@ func (k Keeper) createEthBlockProposal(sdkctx sdk.Context, keyProvider cryptotyp
 		return nil, err
 	}
 
-	tmctx, cancel := context.WithTimeout(sdkctx, 1200*time.Millisecond)
+	tmctx, cancel := context.WithTimeout(sdkctx, 1500*time.Millisecond)
 	defer cancel()
 
 	// yeah, we have a proposer based random number
@@ -152,7 +152,7 @@ func (k Keeper) createEthBlockProposal(sdkctx sdk.Context, keyProvider cryptotyp
 	// the forkChoiceUpdated is too fast to have a non-empty payload
 	// add a timer here to wait for the payload construction to start
 	// the getPayload is a synchronized call, it will wait up to 1s to include transactions from the tx pool
-	<-time.After(time.Millisecond * 50)
+	<-time.After(time.Millisecond * 550)
 	envelope, err := k.engineClient.GetPayloadV4(tmctx, *forkChoiceResp.PayloadID)
 	if err != nil {
 		return nil, err
