@@ -29,7 +29,7 @@ func (ec *Client) GetPayloadV4(ctx context.Context, payloadID engine.PayloadID) 
 
 func (ec *Client) GetFullPayload(ctx context.Context, payloadID engine.PayloadID) (*engine.ExecutionPayloadEnvelope, error) {
 	var result engine.ExecutionPayloadEnvelope
-	err := ec.Client.Client().CallContext(ctx, &result, GetPayloadMethodV4, payloadID)
+	err := ec.Client.Client().CallContext(ctx, &result, GetFullPayloadMethod, payloadID)
 	if err != nil {
 		return nil, err
 	}
