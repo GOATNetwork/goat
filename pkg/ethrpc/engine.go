@@ -27,11 +27,20 @@ func (ec *Client) GetPayloadV4(ctx context.Context, payloadID engine.PayloadID) 
 	return &result, nil
 }
 
+func (ec *Client) GetFullPayload(ctx context.Context, payloadID engine.PayloadID) (*engine.ExecutionPayloadEnvelope, error) {
+	var result engine.ExecutionPayloadEnvelope
+	err := ec.Client.Client().CallContext(ctx, &result, GetPayloadMethodV4, payloadID)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
 func (ec *Client) NewPayloadV4(ctx context.Context, params *engine.ExecutableData, blobHashes []common.Hash, beaconRoot common.Hash, requests [][]byte) (*engine.PayloadStatusV1, error) {
 	var reqs []hexutil.Bytes
 	if requests != nil {
 		reqs = make([]hexutil.Bytes, len(requests))
-		for i := 0; i < len(requests); i++ {
+		for i := range requests {
 			reqs[i] = requests[i]
 		}
 	}

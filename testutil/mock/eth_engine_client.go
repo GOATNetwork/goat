@@ -103,6 +103,21 @@ func (mr *MockEngineClientMockRecorder) GetClientVersionV1(ctx, info any) *gomoc
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetClientVersionV1", reflect.TypeOf((*MockEngineClient)(nil).GetClientVersionV1), ctx, info)
 }
 
+// GetFullPayload mocks base method.
+func (m *MockEngineClient) GetFullPayload(ctx context.Context, payloadID engine.PayloadID) (*engine.ExecutionPayloadEnvelope, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetFullPayload", ctx, payloadID)
+	ret0, _ := ret[0].(*engine.ExecutionPayloadEnvelope)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetFullPayload indicates an expected call of GetFullPayload.
+func (mr *MockEngineClientMockRecorder) GetFullPayload(ctx, payloadID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFullPayload", reflect.TypeOf((*MockEngineClient)(nil).GetFullPayload), ctx, payloadID)
+}
+
 // GetPayloadV4 mocks base method.
 func (m *MockEngineClient) GetPayloadV4(ctx context.Context, payloadID engine.PayloadID) (*engine.ExecutionPayloadEnvelope, error) {
 	m.ctrl.T.Helper()
