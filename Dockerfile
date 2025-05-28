@@ -8,7 +8,7 @@ RUN echo "Ensuring binary is statically linked ..."  \
     && file /app/build/goatd | grep "statically linked"
 
 FROM alpine:latest
-RUN apk add --no-cache build-base curl jq ca-certificates
+RUN apk add --no-cache curl jq ca-certificates
 COPY --from=builder /app/build/goatd /usr/local/bin/
 EXPOSE 26656 26657 1317 9090
 ENTRYPOINT ["goatd"]
