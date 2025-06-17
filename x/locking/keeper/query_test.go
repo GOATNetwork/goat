@@ -20,6 +20,9 @@ func (suite *KeeperTestSuite) TestParamsQuery() {
 func (suite *KeeperTestSuite) TestValidatorQuery() {
 	qs := keeper.NewQueryServerImpl(suite.Keeper)
 
+	const height = 100
+	suite.Context = suite.Context.WithBlockHeight(height)
+
 	for idx, validator := range suite.Validator {
 		err := suite.Keeper.Validators.Set(suite.Context, suite.Address[idx], validator)
 		suite.Require().NoError(err)
@@ -42,7 +45,7 @@ func (suite *KeeperTestSuite) TestValidatorQuery() {
 			Address: common.BytesToAddress(suite.Address[idx]).String(),
 		})
 		suite.Require().NoError(err)
-		suite.Require().Equal(&types.QueryValidatorResponse{Validator: validator}, response)
+		suite.Require().Equal(&types.QueryValidatorResponse{Validator: validator, Height: height}, response)
 	}
 
 	_, err := qs.Validator(suite.Context, &types.QueryValidatorRequest{

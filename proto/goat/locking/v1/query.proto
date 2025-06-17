@@ -45,4 +45,5 @@ message QueryValidatorResponse {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
+  int64 height = 2 [(amino.dont_omitempty) = true];
 }

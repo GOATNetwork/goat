@@ -46,12 +46,13 @@ func (q queryServer) Validator(ctx context.Context, req *types.QueryValidatorReq
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
+	sdkctx := sdktypes.UnwrapSDKContext(ctx)
 	address, err := bitcointypes.DecodeEthAddress(req.Address)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid address")
 	}
 
-	validator, err := q.k.Validators.Get(ctx, sdktypes.ConsAddress(address))
+	validator, err := q.k.Validators.Get(sdkctx, sdktypes.ConsAddress(address))
 	if err != nil {
 		if errors.Is(err, collections.ErrNotFound) {
 			return nil, status.Error(codes.NotFound, "not found")
@@ -59,5 +60,5 @@ func (q queryServer) Validator(ctx context.Context, req *types.QueryValidatorReq
 		return nil, status.Error(codes.Internal, "internal error")
 	}
 
-	return &types.QueryValidatorResponse{Validator: validator}, nil
+	return &types.QueryValidatorResponse{Validator: validator, Height: sdkctx.BlockHeight()}, nil
 }
