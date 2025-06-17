@@ -59,7 +59,6 @@ func (k Keeper) EndBlocker(ctx context.Context) ([]abci.ValidatorUpdate, error) 
 	if err != nil {
 		return nil, err
 	}
-	defer pwIter.Close()
 
 	var newSet []abci.ValidatorUpdate
 	var lastPower uint64
@@ -113,6 +112,10 @@ func (k Keeper) EndBlocker(ctx context.Context) ([]abci.ValidatorUpdate, error) 
 			return nil, fmt.Errorf("%s validator %x in power ranking", validator.Status, valAddr.Bytes())
 		}
 		count++
+	}
+
+	if err := pwIter.Close(); err != nil {
+		return nil, err
 	}
 
 	// remove
