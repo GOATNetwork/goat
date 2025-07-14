@@ -4,7 +4,7 @@ name: testnet3
 
 services:
   geth:
-    image: ghcr.io/goatnetwork/goat-geth:v0.1.8
+    image: ghcr.io/goatnetwork/goat-geth:v0.1.9
     restart: unless-stopped
     stop_grace_period: 30s
     network_mode: host
@@ -27,7 +27,7 @@ services:
       driver: local
 
   goat:
-    image: ghcr.io/goatnetwork/goat:v0.2.4
+    image: ghcr.io/goatnetwork/goat:v0.3.3
     restart: unless-stopped
     stop_grace_period: 30s
     network_mode: host
