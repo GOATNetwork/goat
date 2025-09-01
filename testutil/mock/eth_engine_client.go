@@ -59,18 +59,18 @@ func (mr *MockEngineClientMockRecorder) ExchangeCapabilities(ctx, caps any) *gom
 }
 
 // ForkchoiceUpdatedV3 mocks base method.
-func (m *MockEngineClient) ForkchoiceUpdatedV3(ctx context.Context, update *engine.ForkchoiceStateV1, params *engine.PayloadAttributes) (engine.ForkChoiceResponse, error) {
+func (m *MockEngineClient) ForkchoiceUpdatedV3(ctx context.Context, update *engine.ForkchoiceStateV1, arg2 *engine.PayloadAttributes) (engine.ForkChoiceResponse, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ForkchoiceUpdatedV3", ctx, update, params)
+	ret := m.ctrl.Call(m, "ForkchoiceUpdatedV3", ctx, update, arg2)
 	ret0, _ := ret[0].(engine.ForkChoiceResponse)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // ForkchoiceUpdatedV3 indicates an expected call of ForkchoiceUpdatedV3.
-func (mr *MockEngineClientMockRecorder) ForkchoiceUpdatedV3(ctx, update, params any) *gomock.Call {
+func (mr *MockEngineClientMockRecorder) ForkchoiceUpdatedV3(ctx, update, arg2 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ForkchoiceUpdatedV3", reflect.TypeOf((*MockEngineClient)(nil).ForkchoiceUpdatedV3), ctx, update, params)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ForkchoiceUpdatedV3", reflect.TypeOf((*MockEngineClient)(nil).ForkchoiceUpdatedV3), ctx, update, arg2)
 }
 
 // GetChainConfig mocks base method.
@@ -134,16 +134,16 @@ func (mr *MockEngineClientMockRecorder) GetPayloadV4(ctx, payloadID any) *gomock
 }
 
 // NewPayloadV4 mocks base method.
-func (m *MockEngineClient) NewPayloadV4(ctx context.Context, params *engine.ExecutableData, versionedHashes []common.Hash, beaconRoot common.Hash, requests [][]byte) (*engine.PayloadStatusV1, error) {
+func (m *MockEngineClient) NewPayloadV4(ctx context.Context, arg1 *engine.ExecutableData, versionedHashes []common.Hash, beaconRoot common.Hash, requests [][]byte) (*engine.PayloadStatusV1, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "NewPayloadV4", ctx, params, versionedHashes, beaconRoot, requests)
+	ret := m.ctrl.Call(m, "NewPayloadV4", ctx, arg1, versionedHashes, beaconRoot, requests)
 	ret0, _ := ret[0].(*engine.PayloadStatusV1)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // NewPayloadV4 indicates an expected call of NewPayloadV4.
-func (mr *MockEngineClientMockRecorder) NewPayloadV4(ctx, params, versionedHashes, beaconRoot, requests any) *gomock.Call {
+func (mr *MockEngineClientMockRecorder) NewPayloadV4(ctx, arg1, versionedHashes, beaconRoot, requests any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "NewPayloadV4", reflect.TypeOf((*MockEngineClient)(nil).NewPayloadV4), ctx, params, versionedHashes, beaconRoot, requests)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "NewPayloadV4", reflect.TypeOf((*MockEngineClient)(nil).NewPayloadV4), ctx, arg1, versionedHashes, beaconRoot, requests)
 }
