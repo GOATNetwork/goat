@@ -1,6 +1,6 @@
 module github.com/goatnetwork/goat
 
-go 1.23.2
+go 1.25
 
 require (
 	cosmossdk.io/api v0.7.6
@@ -32,7 +32,6 @@ require (
 	github.com/spf13/viper v1.19.0
 	github.com/stretchr/testify v1.10.0
 	github.com/supranational/blst v0.3.15
-	go.uber.org/automaxprocs v1.6.0
 	go.uber.org/mock v0.5.2
 	golang.org/x/crypto v0.37.0
 	golang.org/x/sync v0.15.0

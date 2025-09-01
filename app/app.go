@@ -31,7 +31,6 @@ import (
 	goatmodulekeeper "github.com/goatnetwork/goat/x/goat/keeper"
 	lockingmodulekeeper "github.com/goatnetwork/goat/x/locking/keeper"
 	relayermodulekeeper "github.com/goatnetwork/goat/x/relayer/keeper"
-	"go.uber.org/automaxprocs/maxprocs"
 )
 
 const (
@@ -79,7 +78,6 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	_, _ = maxprocs.Set()
 }
 
 // AppConfig returns the default app config.
