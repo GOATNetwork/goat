@@ -37,7 +37,7 @@ require (
 	golang.org/x/sync v0.16.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20250218202821-56aae31c358a
 	google.golang.org/grpc v1.72.2
-	google.golang.org/protobuf v1.36.5
+	google.golang.org/protobuf v1.36.8
 )
 
 replace (
