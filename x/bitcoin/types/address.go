@@ -66,7 +66,7 @@ func DepositAddressV0(pubkey *relayer.PublicKey, evmAddress []byte, netwk *chain
 		if err != nil {
 			return nil, err
 		}
-		// tweek the pubkey with the evm address
+		// tweak the pubkey with the evm address
 		// so we don't need to build a script tree to spend it
 		witnessProg := schnorr.SerializePubKey(txscript.ComputeTaprootOutputKey(pubkey, evmAddress))
 		return btcutil.NewAddressTaproot(witnessProg, netwk)
@@ -111,7 +111,7 @@ func VerifyDespositScriptV0(pubkey *relayer.PublicKey, evmAddress, txout []byte)
 	switch v := pubkey.GetKey().(type) {
 	case *relayer.PublicKey_Secp256K1:
 		if len(txout) != P2WSHScriptSize {
-			return errors.New("invalid ouptut length")
+			return errors.New("invalid output length")
 		}
 
 		if txout[0] != txscript.OP_0 || txout[1] != txscript.OP_DATA_32 {
@@ -129,7 +129,7 @@ func VerifyDespositScriptV0(pubkey *relayer.PublicKey, evmAddress, txout []byte)
 		return nil
 	case *relayer.PublicKey_Schnorr:
 		if len(txout) != P2TRScriptSize {
-			return errors.New("invalid ouptut length")
+			return errors.New("invalid output length")
 		}
 
 		if txout[0] != txscript.OP_1 || txout[1] != txscript.OP_DATA_32 {
