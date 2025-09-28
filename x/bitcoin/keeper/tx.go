@@ -255,7 +255,7 @@ func (k msgServer) processWithdrawal(ctx context.Context, req types.ProcessWithd
 		}
 	}
 
-	// Add processing staus
+	// Add processing status
 	pid, err := k.ProcessID.Peek(sdkctx)
 	if err != nil {
 		return err
