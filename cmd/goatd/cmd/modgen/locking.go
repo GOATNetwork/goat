@@ -252,8 +252,8 @@ func Locking() *cobra.Command {
 
 			var ok bool
 			share := new(big.Int)
-			if strings.HasPrefix(shareStr, "0x") {
-				_, ok = share.SetString(strings.TrimPrefix(shareStr, "0x"), 16)
+			if trimmed, found := strings.CutPrefix(shareStr, "0x"); found {
+				_, ok = share.SetString(trimmed, 16)
 			} else {
 				_, ok = share.SetString(shareStr, 10)
 			}
