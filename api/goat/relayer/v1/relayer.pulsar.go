@@ -3742,8 +3742,8 @@ type Voter struct {
 	VoteKey []byte `protobuf:"bytes,2,opt,name=vote_key,json=voteKey,proto3" json:"vote_key,omitempty"`
 	// status represents the current voter status
 	Status VoterStatus `protobuf:"varint,3,opt,name=status,proto3,enum=goat.relayer.v1.VoterStatus" json:"status,omitempty"`
-	// height represents the block number of conensus layer when voter is approved
-	// to join on execution layer
+	// height represents the block number of consensus layer when voter is
+	// approved to join on execution layer
 	Height uint64 `protobuf:"varint,4,opt,name=height,proto3" json:"height,omitempty"`
 }
 

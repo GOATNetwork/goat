@@ -55,8 +55,8 @@ message Voter {
   bytes vote_key = 2;
   // status represents the current voter status
   VoterStatus status = 3;
-  // height represents the block number of conensus layer when voter is approved
-  // to join on execution layer
+  // height represents the block number of consensus layer when voter is
+  // approved to join on execution layer
   uint64 height = 4;
 }
 

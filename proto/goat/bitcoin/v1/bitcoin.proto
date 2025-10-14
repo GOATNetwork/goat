@@ -13,7 +13,7 @@ message Deposit {
   uint64 block_number = 2;
   // tx_index is the index of transaction in the block
   uint32 tx_index = 3;
-  // tx is the raw transaction withtout witness
+  // tx is the raw transaction without witness
   bytes no_witness_tx = 4;
   uint32 output_index = 5;
   // intermediate proof is the proof without the txid and merkel root

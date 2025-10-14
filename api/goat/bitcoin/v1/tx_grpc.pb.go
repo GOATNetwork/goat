@@ -41,7 +41,7 @@ type MsgClient interface {
 	// the block hashes are not only for deposit/withdrawal spv, but also a
 	// on-chain oracle for dapps
 	// ** it requires off-chain vote by relayer group
-	// ** the block should have a hard confirmation number which incosistent with
+	// ** the block should have a hard confirmation number which inconsistent with
 	// the param.
 	// ** every block after startBlockNumber in the geneis should be submitted on
 	// chain
@@ -82,7 +82,7 @@ type MsgClient interface {
 	// ** proposer should provide spv to prove the withdarwal is confirmed
 	// ** it doesn't need off-chain vote process
 	FinalizeWithdrawal(ctx context.Context, in *MsgFinalizeWithdrawal, opts ...grpc.CallOption) (*MsgFinalizeWithdrawalResponse, error)
-	// ApproveCancellation approves cancelation requests
+	// ApproveCancellation approves cancellation requests
 	ApproveCancellation(ctx context.Context, in *MsgApproveCancellation, opts ...grpc.CallOption) (*MsgApproveCancellationResponse, error)
 	// NewConsolidation initializes a consolidation request to aggregate utxo set
 	// ** it requires off-chain vote by relayer group
@@ -207,7 +207,7 @@ type MsgServer interface {
 	// the block hashes are not only for deposit/withdrawal spv, but also a
 	// on-chain oracle for dapps
 	// ** it requires off-chain vote by relayer group
-	// ** the block should have a hard confirmation number which incosistent with
+	// ** the block should have a hard confirmation number which inconsistent with
 	// the param.
 	// ** every block after startBlockNumber in the geneis should be submitted on
 	// chain
@@ -248,7 +248,7 @@ type MsgServer interface {
 	// ** proposer should provide spv to prove the withdarwal is confirmed
 	// ** it doesn't need off-chain vote process
 	FinalizeWithdrawal(context.Context, *MsgFinalizeWithdrawal) (*MsgFinalizeWithdrawalResponse, error)
-	// ApproveCancellation approves cancelation requests
+	// ApproveCancellation approves cancellation requests
 	ApproveCancellation(context.Context, *MsgApproveCancellation) (*MsgApproveCancellationResponse, error)
 	// NewConsolidation initializes a consolidation request to aggregate utxo set
 	// ** it requires off-chain vote by relayer group
