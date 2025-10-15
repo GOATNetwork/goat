@@ -2559,7 +2559,7 @@ type Deposit struct {
 	BlockNumber uint64 `protobuf:"varint,2,opt,name=block_number,json=blockNumber,proto3" json:"block_number,omitempty"`
 	// tx_index is the index of transaction in the block
 	TxIndex uint32 `protobuf:"varint,3,opt,name=tx_index,json=txIndex,proto3" json:"tx_index,omitempty"`
-	// tx is the raw transaction withtout witness
+	// tx is the raw transaction without witness
 	NoWitnessTx []byte `protobuf:"bytes,4,opt,name=no_witness_tx,json=noWitnessTx,proto3" json:"no_witness_tx,omitempty"`
 	OutputIndex uint32 `protobuf:"varint,5,opt,name=output_index,json=outputIndex,proto3" json:"output_index,omitempty"`
 	// intermediate proof is the proof without the txid and merkel root

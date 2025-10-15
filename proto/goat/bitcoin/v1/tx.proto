@@ -17,7 +17,7 @@ service Msg {
   // the block hashes are not only for deposit/withdrawal spv, but also a
   // on-chain oracle for dapps
   // ** it requires off-chain vote by relayer group
-  // ** the block should have a hard confirmation number which incosistent with
+  // ** the block should have a hard confirmation number which inconsistent with
   // the param.
   // ** every block after startBlockNumber in the geneis should be submitted on
   // chain
@@ -66,7 +66,7 @@ service Msg {
   // ** it doesn't need off-chain vote process
   rpc FinalizeWithdrawal(MsgFinalizeWithdrawal) returns (MsgFinalizeWithdrawalResponse);
 
-  // ApproveCancellation approves cancelation requests
+  // ApproveCancellation approves cancellation requests
   rpc ApproveCancellation(MsgApproveCancellation) returns (MsgApproveCancellationResponse);
 
   // NewConsolidation initializes a consolidation request to aggregate utxo set
