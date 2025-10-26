@@ -35,7 +35,7 @@ const (
 type QueryClient interface {
 	// Params queries the parameters of the module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
-	// Pubkeys queries current public key for deposit
+	// Pubkey queries current public key for deposit
 	Pubkey(ctx context.Context, in *QueryPubkeyRequest, opts ...grpc.CallOption) (*QueryPubkeyResponse, error)
 	// DepositAddress queries current address for deposit
 	DepositAddress(ctx context.Context, in *QueryDepositAddress, opts ...grpc.CallOption) (*QueryDepositAddressResponse, error)
@@ -123,7 +123,7 @@ func (c *queryClient) BlockTip(ctx context.Context, in *QueryBlockTipRequest, op
 type QueryServer interface {
 	// Params queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
-	// Pubkeys queries current public key for deposit
+	// Pubkey queries current public key for deposit
 	Pubkey(context.Context, *QueryPubkeyRequest) (*QueryPubkeyResponse, error)
 	// DepositAddress queries current address for deposit
 	DepositAddress(context.Context, *QueryDepositAddress) (*QueryDepositAddressResponse, error)

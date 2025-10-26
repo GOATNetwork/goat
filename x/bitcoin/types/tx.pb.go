@@ -1255,7 +1255,7 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MsgClient interface {
-	// NewBlockHashs adds new bitcoin block hashes
+	// NewBlockHashes adds new bitcoin block hashes
 	// the block hashes are not only for deposit/withdrawal spv, but also a
 	// on-chain oracle for dapps
 	// ** it requires off-chain vote by relayer group
@@ -1264,7 +1264,7 @@ type MsgClient interface {
 	// ** every block after startBlockNumber in the geneis should be submitted on
 	// chain
 	NewBlockHashes(ctx context.Context, in *MsgNewBlockHashes, opts ...grpc.CallOption) (*MsgNewBlockHashesResponse, error)
-	// NewDeposit adds new deposits
+	// NewDeposits adds new deposits
 	// ** it doesn't need off-chain vote process since we have spv
 	NewDeposits(ctx context.Context, in *MsgNewDeposits, opts ...grpc.CallOption) (*MsgNewDepositsResponse, error)
 	// NewPubkey adds new deposit public key
@@ -1407,7 +1407,7 @@ func (c *msgClient) NewConsolidation(ctx context.Context, in *MsgNewConsolidatio
 
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
-	// NewBlockHashs adds new bitcoin block hashes
+	// NewBlockHashes adds new bitcoin block hashes
 	// the block hashes are not only for deposit/withdrawal spv, but also a
 	// on-chain oracle for dapps
 	// ** it requires off-chain vote by relayer group
@@ -1416,7 +1416,7 @@ type MsgServer interface {
 	// ** every block after startBlockNumber in the geneis should be submitted on
 	// chain
 	NewBlockHashes(context.Context, *MsgNewBlockHashes) (*MsgNewBlockHashesResponse, error)
-	// NewDeposit adds new deposits
+	// NewDeposits adds new deposits
 	// ** it doesn't need off-chain vote process since we have spv
 	NewDeposits(context.Context, *MsgNewDeposits) (*MsgNewDepositsResponse, error)
 	// NewPubkey adds new deposit public key

@@ -17,7 +17,7 @@ service Query {
     option (google.api.http).get = "/goatnetwork/goat/bitcoin/v1/params";
   }
 
-  // Pubkeys queries current public key for deposit
+  // Pubkey queries current public key for deposit
   rpc Pubkey(QueryPubkeyRequest) returns (QueryPubkeyResponse) {
     option (google.api.http).get = "/goatnetwork/goat/bitcoin/v1/pubkey";
   }
