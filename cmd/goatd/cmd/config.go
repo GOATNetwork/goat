@@ -50,7 +50,7 @@ func initRegtestCometBFTConfig() *cmtcfg.Config {
 
 // initAppConfig helps to override default appConfig template and configs.
 // return "", nil if no custom configuration is required for the application.
-func initAppConfig() (string, interface{}) {
+func initAppConfig() (string, any) {
 	// The following code snippet is just for reference.
 	type GoatAppConfig struct {
 		serverconfig.Config `mapstructure:",squash"`
