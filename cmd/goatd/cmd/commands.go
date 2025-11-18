@@ -68,6 +68,7 @@ func queryCommand() *cobra.Command {
 		QueryMsgsCmd(),
 	)
 	cmd.PersistentFlags().String(flags.FlagChainID, "", "The network chain ID")
+	cmd.PersistentFlags().String(flags.FlagOutput, flags.OutputFormatText, "Output format (text|json)")
 
 	return cmd
 }
@@ -89,6 +90,7 @@ func txCommand() *cobra.Command {
 		authcmd.GetDecodeCommand(),
 	)
 	cmd.PersistentFlags().String(flags.FlagChainID, "", "The network chain ID")
+	cmd.PersistentFlags().String(flags.FlagOutput, flags.OutputFormatText, "Output format (text|json)")
 
 	return cmd
 }
