@@ -23,14 +23,27 @@ func QueryMsgsCmd() *cobra.Command {
 				return err
 			}
 
-			height, err := strconv.ParseInt(args[0], 10, 64)
-			if err != nil {
-				return fmt.Errorf("failed to parse block height: %w", err)
-			}
-
 			node, err := clientCtx.GetNode()
 			if err != nil {
 				return err
+			}
+
+			var height int64 = 0
+			switch len(args) {
+			case 0:
+				// use latest height
+				status, err := node.Status(cmd.Context())
+				if err != nil {
+					return err
+				}
+				height = status.SyncInfo.LatestBlockHeight
+			case 1:
+				height, err = strconv.ParseInt(args[0], 10, 64)
+				if err != nil {
+					return fmt.Errorf("failed to parse block height: %w", err)
+				}
+			default:
+				return fmt.Errorf("too many arguments, expected at most 1, got %d", len(args))
 			}
 
 			block, err := node.Block(cmd.Context(), &height)
