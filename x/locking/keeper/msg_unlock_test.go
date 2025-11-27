@@ -313,7 +313,9 @@ func (suite *KeeperTestSuite) TestDequeueMatureUnlocks() {
 	suite.Require().Len(queue.Rewards, 0)
 	suite.Require().Len(queue.Unlocks, 0)
 
-	newctx = suite.Context.WithBlockTime(now.Add(time.Minute * -5))
+	newTime := now.Add(time.Minute * -5)
+	newctx = suite.Context.WithBlockTime(newTime)
+	suite.Require().NoError(suite.Keeper.FinalizedTime.Set(newctx, newTime))
 	err = suite.Keeper.DequeueMatureUnlocks(newctx)
 	suite.Require().NoError(err)
 
@@ -324,6 +326,7 @@ func (suite *KeeperTestSuite) TestDequeueMatureUnlocks() {
 	suite.Require().Equal(queue.Unlocks, unlocks[:5])
 
 	newctx = suite.Context.WithBlockTime(now)
+	suite.Require().NoError(suite.Keeper.FinalizedTime.Set(newctx, now))
 	err = suite.Keeper.DequeueMatureUnlocks(newctx)
 	suite.Require().NoError(err)
 
