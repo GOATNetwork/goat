@@ -13,6 +13,9 @@ import (
 
 func (k Keeper) BeginBlocker(ctx context.Context) error {
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
+	if err := k.UpdateForkParams(sdkctx); err != nil {
+		return err
+	}
 	if err := k.DistributeReward(sdkctx); err != nil {
 		return err
 	}
