@@ -6,7 +6,7 @@ import (
 )
 
 func (k Keeper) UpdateForkParams(sdkctx sdktypes.Context) error {
-	if osakaHeight := types.OsakaForkHeight[sdkctx.ChainID()]; sdkctx.BlockHeight() == osakaHeight {
+	if osakaHeight, ok := types.OsakaForkHeight[sdkctx.ChainID()]; ok && sdkctx.BlockHeight() == osakaHeight {
 		param, err := k.Params.Get(sdkctx)
 		if err != nil {
 			return err
