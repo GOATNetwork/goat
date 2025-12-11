@@ -107,8 +107,10 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	}
 
 	// finalized time
-	if err := k.FinalizedTime.Set(ctx, ctx.BlockTime()); err != nil {
-		panic(err)
+	if osakaHeight := types.OsakaForkHeight[ctx.ChainID()]; ctx.BlockHeight() >= osakaHeight {
+		if err := k.FinalizedTime.Set(ctx, ctx.BlockTime()); err != nil {
+			panic(err)
+		}
 	}
 
 	return vs
