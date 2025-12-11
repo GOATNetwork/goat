@@ -13,6 +13,9 @@ import (
 
 func (k Keeper) BeginBlocker(ctx context.Context) error {
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
+	if err := k.UpdateForkParams(sdkctx); err != nil {
+		return err
+	}
 	if err := k.DistributeReward(sdkctx); err != nil {
 		return err
 	}
@@ -30,6 +33,13 @@ func (k Keeper) BeginBlocker(ctx context.Context) error {
 
 func (k Keeper) EndBlocker(ctx context.Context) ([]abci.ValidatorUpdate, error) {
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
+
+	// set finalized time after osaka fork, enable by default(use >= symbol)
+	if osakaHeight := types.OsakaForkHeight[sdkctx.ChainID()]; sdkctx.BlockHeight() >= osakaHeight {
+		if err := k.FinalizedTime.Set(sdkctx, sdkctx.BlockTime()); err != nil {
+			return nil, err
+		}
+	}
 
 	lastSet := make(map[string]uint64)
 	{

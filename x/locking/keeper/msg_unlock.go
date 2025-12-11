@@ -152,10 +152,24 @@ func (k Keeper) unlock(sdkctx sdktypes.Context, req *goattypes.UnlockRequest, pa
 func (k Keeper) DequeueMatureUnlocks(ctx context.Context) error {
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
 
+	// get the finalized time(after osaka fork)
+	finalTime := sdkctx.BlockTime()
+	if osakaHeight := types.OsakaForkHeight[sdkctx.ChainID()]; sdkctx.BlockHeight() >= osakaHeight {
+		t, err := k.FinalizedTime.Get(sdkctx)
+		if err != nil {
+			// if not found, use block time
+			if !errors.Is(err, collections.ErrNotFound) {
+				return err
+			}
+		} else {
+			finalTime = t
+		}
+	}
+
 	var keys []time.Time
 	var values []*types.Unlock
 
-	rng := (&collections.Range[time.Time]{}).EndInclusive(sdkctx.BlockTime())
+	rng := (&collections.Range[time.Time]{}).EndInclusive(finalTime)
 	if err := k.UnlockQueue.Walk(ctx, rng, func(key time.Time, value types.Unlocks) (bool, error) {
 		keys = append(keys, key)
 		values = append(values, value.Unlocks...)

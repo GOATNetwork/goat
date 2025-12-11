@@ -63,6 +63,9 @@ func (suite *KeeperTestSuite) TestEndBlocker() {
 		vs, err := suite.Keeper.EndBlocker(suite.Context)
 		suite.Require().NoError(err)
 		suite.Require().Len(vs, 0)
+		finalizedTime, err := suite.Keeper.FinalizedTime.Get(suite.Context)
+		suite.Require().NoError(err)
+		suite.Require().Equal(suite.Context.BlockTime(), finalizedTime)
 	}
 
 	// Add power to validator 0
