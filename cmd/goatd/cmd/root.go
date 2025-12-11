@@ -74,6 +74,7 @@ func NewRootCmd() *cobra.Command {
 		},
 	}
 
+	rootCmd.PersistentFlags().String(FlagGoatGeth, "", "the goat-geth ipc path")
 	rootCmd.PersistentFlags().Bool(modgen.FlagRegtest, false, "use regtest consensus config")
 
 	initRootCmd(rootCmd, moduleBasicManager)
