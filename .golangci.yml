@@ -1,63 +1,84 @@
+version: "2"
 run:
-  timeout: 20m
   tests: true
 
 linters:
-  disable-all: true
+  default: none
   enable:
-    - goimports
-    - gosimple
-    - govet
-    - ineffassign
-    - misspell
-    - unconvert
-    - typecheck
-    - unused
-    - staticcheck
-    - bidichk
-    - durationcheck
     - copyloopvar
-    - whitespace
-    - revive
-    - gocheckcompilerdirectives
-    - reassign
+    - dogsled
     - errcheck
     - errorlint
-    - makezero
-    - nilerr
-    - dogsled
-    - gci
     - goconst
     - gocritic
-    - gofumpt
+    - gosec
     - nakedret
     - nolintlint
-    - stylecheck
     - thelper
-    - unparam
+    - bidichk
+    - gocheckcompilerdirectives
+    - govet
+    - ineffassign
     - mirror
+    - misspell
+    - reassign
+    - revive # only certain checks enabled
+    - staticcheck
+    - unconvert
+    - unused
     - usetesting
+    - whitespace
 
-linters-settings:
-  gofmt:
-    simplify: true
-  revive:
-    enable-all-rules: false
-    # here we enable specific useful rules
-    # see https://golangci-lint.run/usage/linters/#revive for supported rules
+  settings:
+    dogsled:
+      max-blank-identifiers: 6
+    gocritic:
+      disabled-checks:
+        - regexpMust
+        - appendAssign
+        - ifElseChain
+    gosec:
+      excludes:
+        - G115
+      confidence: medium
+    misspell:
+      locale: US
+    nolintlint:
+      require-explanation: true
+      require-specific: false
+      allow-unused: false
+    revive:
+      rules:
+        - name: redefines-builtin-id
+          disabled: true
+    staticcheck:
+      checks:
+        - all
+    unused:
+      local-variables-are-used: false
+
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
     rules:
-      - name: receiver-naming
-        severity: warning
-        disabled: false
-        exclude: [""]
-
-issues:
-  exclude-rules:
-    - path: pkg/crypto/hash.go
-      text: 'SA1019: "golang.org/x/crypto/ripemd160" is deprecated: RIPEMD-160 is a legacy hash and should not be used for new applications.'
-  exclude-dirs:
-    - tmp
-    - api
-  exclude-files:
-    - '\*\.pb\.go'
-    - '\*\.pb\.gw\.go'
+      - path: x/locking/keeper/keeper.go
+        text: "SA1019: sdktypes.TimeKey is deprecated: exists only for state compatibility reasons, should not be used for new storage keys using time. Please use the time KeyCodec provided in the collections package."
+    paths:
+      - '\*\.pb\.go'
+      - '\*\.pb\.gw\.go'
+      - pkg/crypto/hash.go
+formatters:
+  enable:
+    - goimports
+  settings:
+    gofmt:
+      simplify: true
+  exclusions:
+    generated: lax
+    paths:
+      - '\*\.pb\.go'
+      - '\*\.pb\.gw\.go'

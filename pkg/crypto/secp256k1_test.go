@@ -14,8 +14,8 @@ func TestCompressP256K1Pubkey(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		prvkey.PublicKey.X.FillBytes(pubkey[:32])
-		prvkey.PublicKey.Y.FillBytes(pubkey[32:])
+		prvkey.X.FillBytes(pubkey[:32])
+		prvkey.Y.FillBytes(pubkey[32:])
 		want := ethcrypto.CompressPubkey(&prvkey.PublicKey)
 		got := CompressP256k1Pubkey(pubkey)
 		if !bytes.Equal(got, want) {

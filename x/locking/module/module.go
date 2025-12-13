@@ -57,7 +57,7 @@ func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {}
 // RegisterInterfaces registers a module's interface types and their concrete implementations as proto.Message.
 func (a AppModuleBasic) RegisterInterfaces(cdctypes.InterfaceRegistry) {}
 
-// DefaultGenesis returns a default GenesisState for the module, marshalled to json.RawMessage.
+// DefaultGenesis returns a default GenesisState for the module, marshaled to json.RawMessage.
 // The default GenesisState need to be defined by the module developer and is primarily used for testing.
 func (AppModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 	return cdc.MustMarshalJSON(types.DefaultGenesis())

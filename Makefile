@@ -150,21 +150,21 @@ run-tests:
 ###                                Linting                                  ###
 ###############################################################################
 golangci_lint_cmd=golangci-lint
-golangci_version=v1.64.6
+golangci_version=v2.7.2
 
 lint:
 	@echo "--> Running linter"
-	@go install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
+	@go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@$(golangci_version)
 	@$(golangci_lint_cmd) run --timeout=10m
 
 lint-fix:
 	@echo "--> Running linter"
-	@go install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
+	@go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@$(golangci_version)
 	@$(golangci_lint_cmd) run --fix --out-format=tab --issues-exit-code=0
 
 format:
 	@go install mvdan.cc/gofumpt@latest
-	@go install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
+	@go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@$(golangci_version)
 	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" -not -name "*.pb.go" -not -name "*.pb.gw.go" -not -name "*.pulsar.go" | xargs gofumpt -w -l
 	$(golangci_lint_cmd) run --fix
 .PHONY: format

@@ -160,9 +160,10 @@ func TestDepositAddressV0(t *testing.T) {
 			}
 
 			pubkey := &relayer.PublicKey{}
-			if item.Type == Secp256K1Name {
+			switch item.Type {
+			case Secp256K1Name:
 				pubkey.Key = &relayer.PublicKey_Secp256K1{Secp256K1: item.Pubkey}
-			} else if item.Type == "schnorr" {
+			case SchnorrName:
 				pubkey.Key = &relayer.PublicKey_Schnorr{Schnorr: item.Pubkey}
 			}
 
@@ -211,12 +212,12 @@ func TestVerifySystemAddressScript(t *testing.T) {
 	for idx, item := range tests {
 		t.Run(fmt.Sprintf("address-%d", idx), func(t *testing.T) {
 			pubkey := &relayer.PublicKey{}
-			if item.Type == Secp256K1Name {
+			switch item.Type {
+			case Secp256K1Name:
 				pubkey.Key = &relayer.PublicKey_Secp256K1{Secp256K1: item.Pubkey}
-			} else if item.Type == SchnorrName {
+			case SchnorrName:
 				pubkey.Key = &relayer.PublicKey_Schnorr{Schnorr: item.Pubkey}
 			}
-
 			if !VerifySystemAddressScript(pubkey, item.Script) {
 				t.Errorf("VerifySystemAddressScript() not true")
 			}

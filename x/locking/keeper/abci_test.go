@@ -274,7 +274,7 @@ func TestPowerRankingIterator(t *testing.T) {
 
 	const total int64 = 1e5
 	for i := range total {
-		power := rand.Uint64N(gomath.MaxUint64)
+		power := rand.Uint64N(gomath.MaxUint64) //nolint: gosec // test only
 		err := k.PowerRanking.Set(ctx, collections.Join(power,
 			sdk.ConsAddress(big.NewInt(i).FillBytes(make([]byte, 20)))))
 		require.NoError(t, err)

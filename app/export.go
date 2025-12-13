@@ -36,6 +36,6 @@ func (app *App) ExportAppStateAndValidators(forZeroHeight bool, jailAllowedAddrs
 		AppState:        appState,
 		Validators:      vs,
 		Height:          height,
-		ConsensusParams: app.BaseApp.GetConsensusParams(ctx),
+		ConsensusParams: app.GetConsensusParams(ctx),
 	}, err
 }
