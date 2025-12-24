@@ -19,8 +19,10 @@ func (k Keeper) BeginBlocker(ctx context.Context) error {
 	if err := k.DistributeReward(sdkctx); err != nil {
 		return err
 	}
-	if err := k.DequeueMatureUnlocks(sdkctx); err != nil {
-		return err
+	if height, ok := types.TzngForkHeight[sdkctx.ChainID()]; ok && sdkctx.BlockHeight() < height {
+		if err := k.DequeueMatureUnlocks(sdkctx); err != nil {
+			return err
+		}
 	}
 	if err := k.HandleVoteInfos(sdkctx); err != nil {
 		return err
@@ -34,6 +36,12 @@ func (k Keeper) BeginBlocker(ctx context.Context) error {
 func (k Keeper) EndBlocker(ctx context.Context) ([]abci.ValidatorUpdate, error) {
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
 
+	if height := types.TzngForkHeight[sdkctx.ChainID()]; sdkctx.BlockHeight() >= height {
+		if err := k.DequeueMatureUnlocks(sdkctx); err != nil {
+			return nil, err
+		}
+	}
+
 	// set finalized time after osaka fork, enable by default(use >= symbol)
 	if osakaHeight := types.OsakaForkHeight[sdkctx.ChainID()]; sdkctx.BlockHeight() >= osakaHeight {
 		if err := k.FinalizedTime.Set(sdkctx, sdkctx.BlockTime()); err != nil {
@@ -41,6 +49,10 @@ func (k Keeper) EndBlocker(ctx context.Context) ([]abci.ValidatorUpdate, error) 
 		}
 	}
 
+	return k.updateValidatorSet(sdkctx)
+}
+
+func (k Keeper) updateValidatorSet(sdkctx sdktypes.Context) ([]abci.ValidatorUpdate, error) {
 	lastSet := make(map[string]uint64)
 	{
 		iter, err := k.ValidatorSet.Iterate(sdkctx, nil)
