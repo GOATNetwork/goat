@@ -70,13 +70,12 @@ func (k Keeper) UpdateTokens(ctx context.Context, weights []*goattypes.UpdateTok
 	return nil
 }
 
-func (k Keeper) onWeightChanged(ctx context.Context, token string, previous, current uint64) error {
+func (k Keeper) onWeightChanged(ctx sdktypes.Context, token string, previous, current uint64) error {
 	if previous == current {
 		return nil
 	}
 
-	sdkctx := sdktypes.UnwrapSDKContext(ctx)
-	iter, err := k.Locking.Iterate(sdkctx,
+	iter, err := k.Locking.Iterate(ctx,
 		collections.NewPrefixedPairRange[string, sdktypes.ConsAddress](token))
 	if err != nil {
 		return err
@@ -95,12 +94,12 @@ func (k Keeper) onWeightChanged(ctx context.Context, token string, previous, cur
 		}
 
 		valdtAddr, amount := kv.Key.K2(), kv.Value
-		validator, err := k.Validators.Get(sdkctx, valdtAddr)
+		validator, err := k.Validators.Get(ctx, valdtAddr)
 		if err != nil {
 			return err
 		}
 
-		if err := k.PowerRanking.Remove(sdkctx,
+		if err := k.PowerRanking.Remove(ctx,
 			collections.Join(validator.Power, valdtAddr)); err != nil {
 			return err
 		}
@@ -119,12 +118,12 @@ func (k Keeper) onWeightChanged(ctx context.Context, token string, previous, cur
 				validator.Power = 0
 			}
 		}
-		if err := k.Validators.Set(sdkctx, valdtAddr, validator); err != nil {
+		if err := k.Validators.Set(ctx, valdtAddr, validator); err != nil {
 			return err
 		}
 
 		if validator.Power > 0 {
-			if err := k.PowerRanking.Set(sdkctx,
+			if err := k.PowerRanking.Set(ctx,
 				collections.Join(validator.Power, valdtAddr)); err != nil {
 				return err
 			}
