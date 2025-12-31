@@ -5,7 +5,14 @@ import (
 
 	cmtcfg "github.com/cometbft/cometbft/config"
 	serverconfig "github.com/cosmos/cosmos-sdk/server/config"
+	"github.com/cosmos/cosmos-sdk/types/mempool"
 )
+
+func init() {
+	// command flag has higher priority than the config file
+	// https://github.com/cosmos/cosmos-sdk/blob/16b9ffd5dfae43d39294ecdabc88801a31e0f2ac/server/start.go#L1010
+	mempool.DefaultMaxTx = 10
+}
 
 const (
 	FlagGoatGeth        = "goat.geth"
