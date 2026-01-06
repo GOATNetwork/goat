@@ -18,20 +18,17 @@ import (
 	"github.com/spf13/cast"
 )
 
-func ProvideEngineClient(logger log.Logger, appOpts servertypes.AppOptions) *ethrpc.Client {
+func ProvideEngineClient(logger log.Logger, appOpts servertypes.AppOptions) (*ethrpc.Client, *params.ChainConfig) {
 	endpoint := cast.ToString(appOpts.Get("goat.geth"))
 	if endpoint == "" {
 		panic("goat-geth node endpoint not found")
 	}
 
-	var ethclient *ethrpc.Client
-	var err error
-
+	logger.Info("try to connect goat-geth", "endpoint", endpoint)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*7)
 	defer cancel()
-	for i := 0; i < 10; i++ {
-		logger.Info("try to connect goat-geth", "endpoint", endpoint)
-		ethclient, err = ethrpc.DialContext(ctx, endpoint)
+	for range 10 {
+		ethclient, err := ethrpc.DialContext(ctx, endpoint)
 		if err == nil {
 			var conf *params.ChainConfig
 			conf, err = ethclient.GetChainConfig(ctx)
@@ -39,18 +36,18 @@ func ProvideEngineClient(logger log.Logger, appOpts servertypes.AppOptions) *eth
 				if conf.Goat == nil {
 					panic("invalid goat-geth node, please verify if you're using correct setup")
 				}
-				break
+				// goat-geth upgrade check
+				if conf.OsakaTime == nil {
+					panic("osaka time is undefined in goat-geth node, please upgrade your goat-geth node")
+				}
+				return ethclient, conf
 			}
 		}
 		logger.Warn("retry to connect goat-geth", "err", err.Error())
 		<-time.After(time.Second / 2)
 	}
 
-	if ethclient == nil {
-		panic("can not connect to goat-geth via " + endpoint)
-	}
-
-	return ethclient
+	panic("can not connect to goat-geth via " + endpoint)
 }
 
 func ProvideValidatorPrvKey(appOpts servertypes.AppOptions) cryptotypes.PrivKey {

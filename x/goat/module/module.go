@@ -15,6 +15,7 @@ import (
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
+	"github.com/ethereum/go-ethereum/params"
 	modulev1 "github.com/goatnetwork/goat/api/goat/goat/module/v1"
 	"github.com/goatnetwork/goat/pkg/ethrpc"
 	"github.com/goatnetwork/goat/x/goat/keeper"
@@ -165,6 +166,7 @@ type ModuleInputs struct {
 	LockingKeeper types.LockingKeeper
 	RelayerKeeper types.RelayerKeeper
 	EngineClient  ethrpc.EngineClient `optional:"true"` // optinal for client context
+	ExecConfig    *params.ChainConfig `optional:"true"` // optinal for client context
 }
 
 type ModuleOutputs struct {
@@ -185,6 +187,7 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.RelayerKeeper,
 		in.AccountKeeper,
 		in.EngineClient,
+		in.ExecConfig,
 	)
 	m := NewAppModule(in.Cdc, k)
 	return ModuleOutputs{GoatKeeper: k, Module: m}

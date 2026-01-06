@@ -15,6 +15,7 @@ import (
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/ethereum/go-ethereum/params"
 	"github.com/goatnetwork/goat/pkg/ethrpc"
 	"github.com/goatnetwork/goat/x/goat/keeper"
 	"github.com/goatnetwork/goat/x/goat/types"
@@ -26,7 +27,8 @@ func GoatKeeper(tb testing.TB,
 	lockingKeeper types.LockingKeeper,
 	relayerKeeper types.RelayerKeeper,
 	accountKeeper types.AccountKeeper,
-	ethClient ethrpc.EngineClient,
+	engineClient ethrpc.EngineClient,
+	execConfig *params.ChainConfig,
 ) (keeper.Keeper, sdk.Context, address.Codec) {
 	tb.Helper()
 
@@ -50,7 +52,8 @@ func GoatKeeper(tb testing.TB,
 		lockingKeeper,
 		relayerKeeper,
 		accountKeeper,
-		ethClient,
+		engineClient,
+		execConfig,
 	)
 
 	ctx := sdk.NewContext(stateStore, cmtproto.Header{}, false, log.NewNopLogger())

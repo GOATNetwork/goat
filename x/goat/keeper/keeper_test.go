@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/ethereum/go-ethereum/params"
 	keepertest "github.com/goatnetwork/goat/testutil/keeper"
 	"github.com/goatnetwork/goat/testutil/mock"
 	"github.com/goatnetwork/goat/x/goat/keeper"
@@ -37,7 +38,9 @@ func (suite *KeeperTestSuite) SetupTest() {
 	ethClient := mock.NewMockEngineClient(ctl)
 
 	keeper, ctx, _ := keepertest.GoatKeeper(suite.T(),
-		bitcoinKeeper, lockingKeeper, relayerKeeper, accountKeeper, ethClient)
+		bitcoinKeeper, lockingKeeper, relayerKeeper, accountKeeper,
+		ethClient,
+		params.AllGoatDebugChainConfig)
 
 	suite.Keeper = keeper
 	suite.Account = accountKeeper

@@ -13,6 +13,7 @@ import (
 	"github.com/ethereum/go-ethereum/beacon/engine"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
+	"github.com/ethereum/go-ethereum/params"
 	"github.com/goatnetwork/goat/pkg/ethrpc"
 	"github.com/goatnetwork/goat/x/goat/types"
 )
@@ -29,11 +30,13 @@ type (
 		BeaconRoot collections.Item[[]byte] // the cometbft blockhash
 		Block      collections.Item[types.ExecutionPayload]
 
-		engineClient  ethrpc.EngineClient
 		bitcoinKeeper types.BitcoinKeeper
 		lockingKeeper types.LockingKeeper
 		relayerKeeper types.RelayerKeeper
 		accountKeeper types.AccountKeeper
+
+		engineClient ethrpc.EngineClient
+		execConfig   *params.ChainConfig
 	}
 )
 
@@ -48,6 +51,7 @@ func NewKeeper(
 	relayerKeeper types.RelayerKeeper,
 	accountKeeper types.AccountKeeper,
 	engineClient ethrpc.EngineClient,
+	execConfig *params.ChainConfig,
 ) Keeper {
 	sb := collections.NewSchemaBuilder(storeService)
 
@@ -65,6 +69,7 @@ func NewKeeper(
 		Block:         collections.NewItem(sb, types.BlockKey, "block", codec.CollValue[types.ExecutionPayload](cdc)),
 		BeaconRoot:    collections.NewItem(sb, types.ConsHashKey, "consensus_hash", collections.BytesValue),
 		engineClient:  engineClient,
+		execConfig:    execConfig,
 	}
 
 	schema, err := sb.Build()
