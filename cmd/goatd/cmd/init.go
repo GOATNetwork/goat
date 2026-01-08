@@ -115,6 +115,7 @@ func initializeNodeFiles(cmd *cobra.Command, regtest bool) error {
 		}
 		serverCtx.Config.P2P.MaxNumInboundPeers = 200
 		serverCtx.Config.P2P.MaxNumOutboundPeers = 200
+		serverCtx.Config.P2P.AllowDuplicateIP = true
 	}
 
 	if regtest || slices.Contains(presets, "rpc") {
