@@ -85,10 +85,6 @@ func newLightClient(basectx context.Context, cmd *cobra.Command) (*lightClient, 
 		return nil, err
 	}
 
-	if endpoint == "" {
-		return nil, errors.New("goat-geth node endpoint not found")
-	}
-
 	logger := server.GetServerContextFromCmd(cmd).Logger
 	engineClient, engineConfig, err := app.ConnectEngineClient(basectx, logger, endpoint)
 	if err != nil {
@@ -106,6 +102,8 @@ func newLightClient(basectx context.Context, cmd *cobra.Command) (*lightClient, 
 }
 
 func (client *lightClient) Start(basectx context.Context) error {
+	client.logger.Info("light client started",
+		"interval", client.interval.String(), "node", client.context.NodeURI, "chain-id", client.chainID)
 	for {
 		select {
 		case <-basectx.Done():
