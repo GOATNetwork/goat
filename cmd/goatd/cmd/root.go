@@ -15,7 +15,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/tx"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/goatnetwork/goat/app"
-	"github.com/goatnetwork/goat/cmd/goatd/cmd/modgen"
+	"github.com/goatnetwork/goat/cmd/goatd/cmd/goatflags"
 	"github.com/spf13/cobra"
 )
 
@@ -47,23 +47,13 @@ func NewRootCmd() *cobra.Command {
 			cmd.SetErr(cmd.ErrOrStderr())
 
 			clientCtx = clientCtx.WithCmdContext(cmd.Context())
-			clientCtx, err := client.ReadPersistentCommandFlags(clientCtx, cmd.Flags())
-			if err != nil {
-				return err
-			}
-
-			clientCtx, err = config.ReadFromClientConfig(clientCtx)
-			if err != nil {
-				return err
-			}
-
 			if err := client.SetCmdClientContextHandler(clientCtx, cmd); err != nil {
 				return err
 			}
 
 			customAppTemplate, customAppConfig := initAppConfig()
 			cometConfig := initCometBFTConfig()
-			regtest, _ := cmd.Flags().GetBool(modgen.FlagRegtest)
+			regtest, _ := cmd.Flags().GetBool(goatflags.Regtest)
 			if regtest {
 				cometConfig = initRegtestCometBFTConfig()
 			}
@@ -74,8 +64,8 @@ func NewRootCmd() *cobra.Command {
 		},
 	}
 
-	rootCmd.PersistentFlags().String(FlagGoatGeth, "", "the goat-geth ipc path")
-	rootCmd.PersistentFlags().Bool(modgen.FlagRegtest, false, "use regtest consensus config")
+	rootCmd.PersistentFlags().String(goatflags.GoatGeth, "", "the goat-geth ipc path")
+	rootCmd.PersistentFlags().Bool(goatflags.Regtest, false, "use regtest consensus config")
 
 	initRootCmd(rootCmd, moduleBasicManager)
 	if err := autoCliOpts.EnhanceRootCommand(rootCmd); err != nil {

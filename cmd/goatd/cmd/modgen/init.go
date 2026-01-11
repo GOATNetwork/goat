@@ -21,6 +21,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/version"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
 	"github.com/cosmos/cosmos-sdk/x/genutil/types"
+	"github.com/goatnetwork/goat/cmd/goatd/cmd/goatflags"
 	"github.com/spf13/cobra"
 )
 
@@ -45,10 +46,10 @@ func Init(mbm module.BasicManager) *cobra.Command {
 			serverCtx.Config.SetRoot(clientCtx.HomeDir)
 			serverCtx.Config.Moniker = args[0]
 
-			regtest, _ := cmd.Flags().GetBool(FlagRegtest)
+			regtest, _ := cmd.Flags().GetBool(goatflags.Regtest)
 			chainID, _ := cmd.Flags().GetString(flags.FlagChainID)
 			if chainID == "" && regtest {
-				chainID = FlagRegtest
+				chainID = goatflags.Regtest
 			}
 			if chainID == "" {
 				return errors.New("no chain id provided")

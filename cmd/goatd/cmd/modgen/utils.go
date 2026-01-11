@@ -16,10 +16,6 @@ import (
 	goatcrypto "github.com/goatnetwork/goat/pkg/crypto"
 )
 
-const (
-	FlagRegtest = "regtest"
-)
-
 func DecodeHexOrBase64String(str string) ([]byte, error) {
 	if strings.HasPrefix(str, "0x") {
 		return hex.DecodeString(str[2:])

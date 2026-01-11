@@ -15,7 +15,6 @@ func init() {
 }
 
 const (
-	FlagGoatGeth        = "goat.geth"
 	FlagGoatPreset      = "goat.preset"
 	FlagPersistentPeers = "p2p.persistent_peers"
 	// FlagExternalIP      = "p2p.external_address"
