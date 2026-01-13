@@ -1,14 +1,18 @@
 package lightclient
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"math/big"
 	"os/signal"
 	"syscall"
 	"time"
 
 	"cosmossdk.io/log"
+	cometbftclient "github.com/cometbft/cometbft/rpc/client"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/server"
@@ -18,7 +22,7 @@ import (
 	"github.com/goatnetwork/goat/app"
 	"github.com/goatnetwork/goat/cmd/goatd/cmd/goatflags"
 	"github.com/goatnetwork/goat/pkg/ethrpc"
-	"github.com/goatnetwork/goat/x/goat/types"
+	goattypes "github.com/goatnetwork/goat/x/goat/types"
 	"github.com/spf13/cobra"
 )
 
@@ -66,7 +70,6 @@ func newLightClient(basectx context.Context, cmd *cobra.Command) (*lightClient, 
 	if err != nil {
 		return nil, err
 	}
-	clientCtx = clientCtx.WithCmdContext(basectx)
 
 	tickerNum, err := cmd.Flags().GetDuration(FlagInterval)
 	if err != nil {
@@ -85,7 +88,7 @@ func newLightClient(basectx context.Context, cmd *cobra.Command) (*lightClient, 
 		return nil, err
 	}
 
-	logger := server.GetServerContextFromCmd(cmd).Logger
+	logger := server.GetServerContextFromCmd(cmd).Logger.With(log.ModuleKey, "light-client")
 	engineClient, engineConfig, err := app.ConnectEngineClient(basectx, logger, endpoint)
 	if err != nil {
 		return nil, err
@@ -104,6 +107,9 @@ func newLightClient(basectx context.Context, cmd *cobra.Command) (*lightClient, 
 func (client *lightClient) Start(basectx context.Context) error {
 	client.logger.Info("light client started",
 		"interval", client.interval.String(), "node", client.context.NodeURI, "chain-id", client.chainID)
+	if err := client.verifyGenesis(basectx); err != nil {
+		return err
+	}
 	for {
 		select {
 		case <-basectx.Done():
@@ -176,11 +182,11 @@ func (client *lightClient) run(ctx context.Context) error {
 		var requests [][]byte
 		for _, msg := range tx.GetMsgs() {
 			switch v := msg.(type) {
-			case *types.MsgNewEthBlock:
+			case *goattypes.MsgNewEthBlock:
 				if v.Payload.BlockNumber <= gethHeight {
 					return fmt.Errorf("block number %d is not greater than goat-geth height %d", v.Payload.BlockNumber, gethHeight)
 				}
-				execData = types.PayloadToExecutableData(v.Payload)
+				execData = goattypes.PayloadToExecutableData(v.Payload)
 				beaconRoot = common.BytesToHash(v.Payload.BeaconRoot)
 				requests = v.Payload.Requests
 			default:
@@ -214,5 +220,54 @@ func (client *lightClient) run(ctx context.Context) error {
 		}
 	}
 
+	return nil
+}
+
+func (client *lightClient) verifyGenesis(ctx context.Context) error {
+	node, err := client.context.GetNode()
+	if err != nil {
+		return err
+	}
+
+	cometbft, ok := node.(cometbftclient.HistoryClient)
+	if !ok {
+		return errors.New("node client does not support HistoryClient")
+	}
+
+	nodeGenResp, err := cometbft.Genesis(ctx)
+	if err != nil {
+		return err
+	}
+
+	if nodeGenResp.Genesis.ChainID != client.chainID {
+		return fmt.Errorf("node chain id mismatch: expected %s, got %s", client.chainID, nodeGenResp.Genesis.ChainID)
+	}
+
+	var appGenState map[string]json.RawMessage
+	if err := json.Unmarshal(nodeGenResp.Genesis.AppState, &appGenState); err != nil {
+		return err
+	}
+
+	// extract the module gensis
+	rawState, ok := appGenState["goat"]
+	if !ok {
+		return errors.New("goat doesn't exist in the genesis file")
+	}
+
+	var goatGenesis goattypes.GenesisState
+	if err := client.context.Codec.UnmarshalJSON(rawState, &goatGenesis); err != nil {
+		return err
+	}
+
+	genesisHeader, err := client.engineClient.HeaderByNumber(ctx, new(big.Int))
+	if err != nil {
+		return err
+	}
+
+	if !bytes.Equal(genesisHeader.Hash().Bytes(), goatGenesis.EthBlock.BlockHash) {
+		return fmt.Errorf("geth genesis block hash mismatch: expected %s, got %s",
+			common.Bytes2Hex(goatGenesis.EthBlock.BlockHash),
+			genesisHeader.Hash().Hex())
+	}
 	return nil
 }
