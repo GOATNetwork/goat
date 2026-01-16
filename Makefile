@@ -150,7 +150,7 @@ run-tests:
 ###                                Linting                                  ###
 ###############################################################################
 golangci_lint_cmd=golangci-lint
-golangci_version=v2.7.2
+golangci_version=v2.8.0
 
 lint:
 	@echo "--> Running linter"
@@ -172,7 +172,7 @@ format:
 ###############################################################################
 ###                                Protobuf                                 ###
 ###############################################################################
-protoVer=0.16.0
+protoVer=0.17.1
 protoImageName=ghcr.io/cosmos/proto-builder:$(protoVer)
 protoImage=$(DOCKER) run --rm -v $(CURDIR):/workspace --workdir /workspace $(protoImageName)
 
@@ -180,7 +180,6 @@ proto-all: proto-format proto-lint proto-gen
 
 proto-gen:
 	@echo "Generating Protobuf files"
-	# ignite generate proto-go -y --clear-cache
 	@$(protoImage) sh ./contrib/scripts/protocgen.sh
 	@echo "Generating Protobuf Swagger"
 	@$(protoImage) sh ./contrib/scripts/protoc-swagger-gen.sh
