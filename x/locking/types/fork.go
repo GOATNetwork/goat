@@ -2,6 +2,9 @@ package types
 
 import "math"
 
+// OsakaForkHeight defines the fork height for Osaka upgrade on different networks
+// key: network name, value: fork height
+// The default value for unknown networks is 0, meaning the fork is active from genesis.
 var OsakaForkHeight = map[string]int64{
 	"unitest": 10, // it's for unit test
 
