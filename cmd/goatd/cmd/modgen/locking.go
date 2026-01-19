@@ -2,7 +2,6 @@ package modgen
 
 import (
 	"bytes"
-	"encoding/hex"
 	"errors"
 	"fmt"
 	"math/big"
@@ -119,14 +118,10 @@ func Locking() *cobra.Command {
 				return err
 			}
 
-			cmd.Println(hex.EncodeToString(pubkeyRaw))
-
 			pubkeyRaw, err = GetCompressedK256P1Pubkey(pubkeyRaw)
 			if err != nil {
 				return err
 			}
-
-			cmd.Println(hex.EncodeToString(pubkeyRaw))
 
 			serverCtx.Logger.Info("adding validator", "module", types.ModuleName, "geneis", genesisFile)
 			if err := UpdateModuleGenesis(genesisFile, types.ModuleName, new(types.GenesisState), clientCtx.Codec, func(genesis *types.GenesisState) error {
