@@ -47,7 +47,7 @@ func (p Params) Validate() error {
 		return fmt.Errorf("SlashFractionDoubleSign too high: %s", p.SlashFractionDoubleSign.String())
 	}
 
-	if p.SlashFractionDoubleSign.IsZero() || p.SlashFractionDowntime.IsNegative() {
+	if p.SlashFractionDoubleSign.IsZero() || p.SlashFractionDoubleSign.IsNegative() {
 		return fmt.Errorf("SlashFractionDoubleSign too low: %s", p.SlashFractionDoubleSign.String())
 	}
 
