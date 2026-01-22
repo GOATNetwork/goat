@@ -3,9 +3,13 @@ package keeper
 import (
 	"context"
 	"errors"
+	"math/big"
 
 	"cosmossdk.io/collections"
+	"cosmossdk.io/math"
+	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	bitcointypes "github.com/goatnetwork/goat/x/bitcoin/types"
 	"github.com/goatnetwork/goat/x/locking/types"
 	"google.golang.org/grpc/codes"
@@ -61,4 +65,41 @@ func (q queryServer) Validator(ctx context.Context, req *types.QueryValidatorReq
 	}
 
 	return &types.QueryValidatorResponse{Validator: validator, Height: sdkctx.BlockHeight()}, nil
+}
+
+func (q queryServer) ActiveValidators(ctx context.Context, req *types.QueryActiveValidatorsRequest) (*types.QueryActiveValidatorsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "empty request")
+	}
+
+	sdkctx := sdktypes.UnwrapSDKContext(ctx)
+	resp := &types.QueryActiveValidatorsResponse{Height: sdkctx.BlockHeight()}
+	iter, err := q.k.ValidatorSet.Iterate(sdkctx, nil)
+	if err != nil {
+		return nil, status.Error(codes.Internal, "internal error: "+err.Error())
+	}
+	for ; iter.Valid(); iter.Next() {
+		kv, err := iter.KeyValue()
+		if err != nil {
+			return nil, status.Error(codes.Internal, "internal error: "+err.Error())
+		}
+		validator, err := q.k.Validators.Get(sdkctx, kv.Key)
+		if err != nil {
+			return nil, status.Error(codes.Internal, "internal error: "+err.Error())
+		}
+		pubkey := &secp256k1.PubKey{Key: validator.Pubkey}
+		resp.Validators = append(resp.Validators, &types.ValidatorInfo{
+			ValidatorAddress: hexutil.Encode(pubkey.Address()),
+			Validator:        validator,
+		})
+		resp.TotalPower += int64(validator.Power)
+	}
+	if err := iter.Close(); err != nil {
+		return nil, status.Error(codes.Internal, "internal error: "+err.Error())
+	}
+	total := math.NewIntFromBigIntMut(big.NewInt(resp.TotalPower))
+	for _, v := range resp.Validators {
+		v.PowerPercentage = math.LegacyNewDecWithPrec(int64(v.Validator.Power), 0).QuoInt(total).MulInt(math.NewInt(100))
+	}
+	return resp, nil
 }

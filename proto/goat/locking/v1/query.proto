@@ -2,6 +2,7 @@ syntax = "proto3";
 package goat.locking.v1;
 
 import "amino/amino.proto";
+import "cosmos_proto/cosmos.proto";
 import "goat/locking/v1/locking.proto";
 import "goat/locking/v1/params.proto";
 import "gogoproto/gogo.proto";
@@ -19,6 +20,11 @@ service Query {
   // Validator queries validator state by address.
   rpc Validator(QueryValidatorRequest) returns (QueryValidatorResponse) {
     option (google.api.http).get = "/goatnetwork/goat/locking/v1/validator";
+  }
+
+  // ActiveValidators queries all active validators.
+  rpc ActiveValidators(QueryActiveValidatorsRequest) returns (QueryActiveValidatorsResponse) {
+    option (google.api.http).get = "/goatnetwork/goat/locking/v1/active_validators";
   }
 }
 
@@ -46,4 +52,28 @@ message QueryValidatorResponse {
     (amino.dont_omitempty) = true
   ];
   int64 height = 2 [(amino.dont_omitempty) = true];
+}
+
+// QueryActiveValidatorsRequest
+message QueryActiveValidatorsRequest {}
+
+// ValidatorInfo
+message ValidatorInfo {
+  Validator validator = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  string power_percentage = 2 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false
+  ];
+  string validator_address = 3;
+}
+
+// QueryActiveValidatorsResponse
+message QueryActiveValidatorsResponse {
+  repeated ValidatorInfo validators = 1;
+  int64 total_power = 2 [(amino.dont_omitempty) = true];
+  int64 height = 3 [(amino.dont_omitempty) = true];
 }
