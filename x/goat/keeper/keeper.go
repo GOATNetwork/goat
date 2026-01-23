@@ -93,8 +93,8 @@ func (k Keeper) Logger() log.Logger {
 // we don't use timeout here, validators are responsible for a reliable node
 func (k Keeper) Finalized(ctx context.Context) error { // EndBlock phase only!
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
-	// Update beacon root after tzng fork, it's enabled by default
-	if height := consensusfork.TzngForkHeight[sdkctx.ChainID()]; sdkctx.BlockHeight() >= height {
+	// Update beacon root after reese fork, it's enabled by default
+	if height := consensusfork.ReeseForkHeight[sdkctx.ChainID()]; sdkctx.BlockHeight() >= height {
 		if err := k.BeaconRoot.Set(sdkctx, sdkctx.HeaderHash()); err != nil {
 			return err
 		}

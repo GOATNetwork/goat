@@ -87,8 +87,8 @@ func (k msgServer) NewEthBlock(ctx context.Context, req *types.MsgNewEthBlock) (
 		return nil, err
 	}
 
-	// only update beacon root before tzng fork, it's enabled by default
-	if height, ok := consensusfork.TzngForkHeight[sdkctx.ChainID()]; ok && sdkctx.BlockHeight() < height {
+	// only update beacon root before reese fork, it's enabled by default
+	if height, ok := consensusfork.ReeseForkHeight[sdkctx.ChainID()]; ok && sdkctx.BlockHeight() < height {
 		if err := k.BeaconRoot.Set(sdkctx, sdkctx.HeaderHash()); err != nil {
 			return nil, err
 		}

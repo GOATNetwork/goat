@@ -20,8 +20,8 @@ func (k Keeper) BeginBlocker(ctx context.Context) error {
 	if err := k.DistributeReward(sdkctx); err != nil {
 		return err
 	}
-	// dequeue mature unlocks before tzng fork, it's disabled by default
-	if height, ok := consensusfork.TzngForkHeight[sdkctx.ChainID()]; ok && sdkctx.BlockHeight() < height {
+	// dequeue mature unlocks before reese fork, it's disabled by default
+	if height, ok := consensusfork.ReeseForkHeight[sdkctx.ChainID()]; ok && sdkctx.BlockHeight() < height {
 		if err := k.DequeueMatureUnlocks(sdkctx); err != nil {
 			return err
 		}
@@ -38,8 +38,8 @@ func (k Keeper) BeginBlocker(ctx context.Context) error {
 func (k Keeper) EndBlocker(ctx context.Context) ([]abci.ValidatorUpdate, error) {
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
 
-	// dequeue mature unlocks after tzng fork, it's enabled by default
-	if height := consensusfork.TzngForkHeight[sdkctx.ChainID()]; sdkctx.BlockHeight() >= height {
+	// dequeue mature unlocks after reese fork, it's enabled by default
+	if height := consensusfork.ReeseForkHeight[sdkctx.ChainID()]; sdkctx.BlockHeight() >= height {
 		if err := k.DequeueMatureUnlocks(sdkctx); err != nil {
 			return nil, err
 		}
