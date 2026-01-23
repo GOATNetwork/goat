@@ -223,6 +223,7 @@ func (k Keeper) ProcessProposalHandler(txVerifier baseapp.ProposalTxVerifier) sd
 				if err := k.verifyEthBlockProposal(sdkctx, ethBlock); err != nil {
 					return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid MsgNewEthBlock: %s", err.Error())
 				}
+				k.Logger().Info("Verified new executable payload successfully", ethBlock.Payload.LogKeyVals()...)
 				continue
 			}
 
@@ -245,7 +246,6 @@ func (k Keeper) verifyEthBlockProposal(sdkctx sdk.Context, msg *types.MsgNewEthB
 		return errors.New("empty payload")
 	}
 
-	k.Logger().Info("Verify new executable payload", payload.LogKeyVals()...)
 	eg, egctx := errgroup.WithContext(sdkctx)
 	eg.Go(func() error {
 		proposer, err := k.addressCodec.StringToBytes(msg.Proposer)

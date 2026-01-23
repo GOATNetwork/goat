@@ -71,6 +71,9 @@ func PayloadToExecutableData(data *ExecutionPayload) *engine.ExecutableData {
 }
 
 func (payload *ExecutionPayload) LogKeyVals() []any {
+	if payload == nil {
+		return []any{"payload", "null"}
+	}
 	return []any{
 		"BlockNumber", payload.BlockNumber,
 		"BlockHash", hexutil.Encode(payload.BlockHash),
