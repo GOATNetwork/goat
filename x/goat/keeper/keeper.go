@@ -10,11 +10,13 @@ import (
 	"cosmossdk.io/core/store"
 	"cosmossdk.io/log"
 	"github.com/cosmos/cosmos-sdk/codec"
+	sdktypes "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/beacon/engine"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/params"
 	"github.com/goatnetwork/goat/pkg/ethrpc"
+	"github.com/goatnetwork/goat/x/consensusfork"
 	"github.com/goatnetwork/goat/x/goat/types"
 )
 
@@ -90,13 +92,21 @@ func (k Keeper) Logger() log.Logger {
 // if there are any errors, the FinalizeBlock phase will be failed
 // we don't use timeout here, validators are responsible for a reliable node
 func (k Keeper) Finalized(ctx context.Context) error { // EndBlock phase only!
-	block, err := k.Block.Get(ctx)
+	sdkctx := sdktypes.UnwrapSDKContext(ctx)
+	// Update beacon root after tzng fork, it's enabled by default
+	if height := consensusfork.TzngForkHeight[sdkctx.ChainID()]; sdkctx.BlockHeight() >= height {
+		if err := k.BeaconRoot.Set(sdkctx, sdkctx.HeaderHash()); err != nil {
+			return err
+		}
+	}
+
+	block, err := k.Block.Get(sdkctx)
 	if err != nil {
 		return err
 	}
 
 	k.Logger().Info("Notify NewPayload", "number", block.BlockNumber)
-	response, err := k.engineClient.NewPayloadV4(ctx, types.PayloadToExecutableData(&block),
+	response, err := k.engineClient.NewPayloadV4(sdkctx, types.PayloadToExecutableData(&block),
 		[]common.Hash{}, common.BytesToHash(block.BeaconRoot), block.Requests)
 	if err != nil {
 		return err
@@ -110,7 +120,7 @@ func (k Keeper) Finalized(ctx context.Context) error { // EndBlock phase only!
 	k.Logger().Info("Notify ForkChoiceUpdated",
 		"head", hexutil.Encode(block.BlockHash), "finalized", hexutil.Encode(block.ParentHash))
 	parentHash := common.BytesToHash(block.ParentHash)
-	forkRes, err := k.engineClient.ForkchoiceUpdatedV3(ctx, &engine.ForkchoiceStateV1{
+	forkRes, err := k.engineClient.ForkchoiceUpdatedV3(sdkctx, &engine.ForkchoiceStateV1{
 		HeadBlockHash: common.BytesToHash(block.BlockHash),
 		SafeBlockHash: parentHash, FinalizedBlockHash: parentHash,
 	}, nil)

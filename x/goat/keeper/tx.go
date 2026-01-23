@@ -8,6 +8,7 @@ import (
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/ethereum/go-ethereum/core/types/goattypes"
+	"github.com/goatnetwork/goat/x/consensusfork"
 	"github.com/goatnetwork/goat/x/goat/types"
 )
 
@@ -86,9 +87,11 @@ func (k msgServer) NewEthBlock(ctx context.Context, req *types.MsgNewEthBlock) (
 		return nil, err
 	}
 
-	// Update beacon root
-	if err := k.BeaconRoot.Set(sdkctx, sdkctx.HeaderHash()); err != nil {
-		return nil, err
+	// only update beacon root before tzng fork, it's enabled by default
+	if height, ok := consensusfork.TzngForkHeight[sdkctx.ChainID()]; ok && sdkctx.BlockHeight() < height {
+		if err := k.BeaconRoot.Set(sdkctx, sdkctx.HeaderHash()); err != nil {
+			return nil, err
+		}
 	}
 
 	sdkctx.EventManager().EmitEvent(types.NewEthBlockEvent(req.Payload.BlockNumber, req.Payload.BlockHash))

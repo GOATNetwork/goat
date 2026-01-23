@@ -1,10 +1,11 @@
-package types
+package consensusfork
 
 import "math"
 
-// OsakaForkHeight defines the fork height for Osaka upgrade on different networks
-// key: network name, value: fork height
 // The default value for unknown networks is 0, meaning the fork is active from genesis.
+// key: network name, value: fork height
+
+// OsakaForkHeight defines the fork height for Osaka upgrade on different networks
 var OsakaForkHeight = map[string]int64{
 	"unitest": 10, // it's for unit test
 
@@ -12,6 +13,7 @@ var OsakaForkHeight = map[string]int64{
 	"goat-testnet3": 9695800, // estimate at 2025-12-15 15:00:00 UTC
 }
 
+// TzngForkHeight is for fixing unlock queue and beacon root processing bug
 var TzngForkHeight = map[string]int64{
 	"unitest": 5, // it's for unit test
 

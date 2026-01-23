@@ -5,6 +5,7 @@ import (
 	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/goatnetwork/goat/x/consensusfork"
 	"github.com/goatnetwork/goat/x/locking/keeper"
 	"github.com/goatnetwork/goat/x/locking/types"
 )
@@ -107,7 +108,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	}
 
 	// finalized time
-	if osakaHeight := types.OsakaForkHeight[ctx.ChainID()]; ctx.BlockHeight() >= osakaHeight {
+	if height := consensusfork.OsakaForkHeight[ctx.ChainID()]; ctx.BlockHeight() >= height {
 		if err := k.FinalizedTime.Set(ctx, ctx.BlockTime()); err != nil {
 			panic(err)
 		}

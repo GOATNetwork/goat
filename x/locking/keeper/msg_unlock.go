@@ -11,6 +11,7 @@ import (
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/ethereum/go-ethereum/core/types/goattypes"
+	"github.com/goatnetwork/goat/x/consensusfork"
 	"github.com/goatnetwork/goat/x/locking/types"
 )
 
@@ -152,9 +153,10 @@ func (k Keeper) unlock(sdkctx sdktypes.Context, req *goattypes.UnlockRequest, pa
 func (k Keeper) DequeueMatureUnlocks(ctx context.Context) error {
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
 
-	// get the finalized time(after osaka fork)
+	// use the finalized time after osaka fork, it's enabled by default
+	// use the block time before osaka fork
 	finalTime := sdkctx.BlockTime()
-	if osakaHeight := types.OsakaForkHeight[sdkctx.ChainID()]; sdkctx.BlockHeight() >= osakaHeight {
+	if height := consensusfork.OsakaForkHeight[sdkctx.ChainID()]; sdkctx.BlockHeight() >= height {
 		t, err := k.FinalizedTime.Get(sdkctx)
 		if err != nil {
 			// if not found, use block time
