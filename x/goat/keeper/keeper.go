@@ -105,7 +105,7 @@ func (k Keeper) Finalized(ctx context.Context) error { // EndBlock phase only!
 		return err
 	}
 
-	k.Logger().Info("Notify NewPayload", "number", block.BlockNumber)
+	k.Logger().Info("Notify NewPayload", "number", block.BlockNumber, "slot", sdkctx.BlockHeight())
 	response, err := k.engineClient.NewPayloadV4(sdkctx, types.PayloadToExecutableData(&block),
 		[]common.Hash{}, common.BytesToHash(block.BeaconRoot), block.Requests)
 	if err != nil {
