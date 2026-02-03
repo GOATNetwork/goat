@@ -18,5 +18,5 @@ var ReeseForkHeight = map[string]int64{
 	"unitest": 5, // it's for unit test
 
 	"goat-mainnet":  math.MaxInt64, // TODO: set real height
-	"goat-testnet3": math.MaxInt64, // TODO: set real height
+	"goat-testnet3": 11044000,      // estimate at 2026-02-05 13:00:00 UTC
 }
