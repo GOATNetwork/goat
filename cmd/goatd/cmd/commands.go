@@ -69,6 +69,7 @@ func queryCommand() *cobra.Command {
 		QueryMsgsCmd(),
 	)
 	cmd.PersistentFlags().String(flags.FlagChainID, "", "The network chain ID")
+	cmd.PersistentFlags().StringP(flags.FlagNode, "n", "tcp://localhost:26657", "Node to connect to")
 	cmd.PersistentFlags().String(flags.FlagOutput, flags.OutputFormatText, "Output format (text|json)")
 
 	return cmd
@@ -92,6 +93,7 @@ func txCommand() *cobra.Command {
 	)
 	cmd.PersistentFlags().String(flags.FlagChainID, "", "The network chain ID")
 	cmd.PersistentFlags().String(flags.FlagOutput, flags.OutputFormatText, "Output format (text|json)")
+	cmd.PersistentFlags().StringP(flags.FlagNode, "n", "tcp://localhost:26657", "Node to connect to")
 
 	return cmd
 }
