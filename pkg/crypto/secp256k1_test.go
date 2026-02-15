@@ -9,7 +9,7 @@ import (
 
 func TestCompressP256K1Pubkey(t *testing.T) {
 	var pubkey [64]byte
-	for i := 0; i < 200; i++ {
+	for range 200 {
 		prvkey, err := ethcrypto.GenerateKey()
 		if err != nil {
 			t.Fatal(err)

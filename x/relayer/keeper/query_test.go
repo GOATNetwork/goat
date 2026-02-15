@@ -13,7 +13,7 @@ import (
 
 func (suite *KeeperTestSuite) TestQueryPubkeys() {
 	expected := []*types.PublicKey{}
-	for i := 0; i < 5; i++ {
+	for range 5 {
 		prvkey := secp256k1.GenPrivKey()
 		pubkey := prvkey.PubKey().Bytes()
 

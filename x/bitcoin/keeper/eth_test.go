@@ -326,7 +326,7 @@ func (suite *KeeperTestSuite) TestDequeueBitcoinModuleTx() {
 		}
 		suite.Require().Equal(len(txsGot), len(txsWant))
 
-		for i := 0; i < len(txsGot); i++ {
+		for i := range txsGot {
 			got, err := txsGot[i].MarshalBinary()
 			suite.Require().NoError(err)
 			want, err := txsWant[i].MarshalBinary()
@@ -358,7 +358,7 @@ func (suite *KeeperTestSuite) TestDequeueBitcoinModuleTx() {
 		}
 		suite.Require().Equal(len(txsGot), len(txsWant))
 
-		for i := 0; i < len(txsGot); i++ {
+		for i := range txsGot {
 			got, err := txsGot[i].MarshalBinary()
 			suite.Require().NoError(err)
 			want, err := txsWant[i].MarshalBinary()
@@ -448,7 +448,7 @@ func (suite *KeeperTestSuite) TestDequeueBitcoinModuleTx() {
 
 		suite.Require().Equal(len(txsGot), len(txsWant))
 
-		for i := 0; i < len(txsGot); i++ {
+		for i := range txsGot {
 			got, err := txsGot[i].MarshalBinary()
 			suite.Require().NoError(err)
 			want, err := txsWant[i].MarshalBinary()

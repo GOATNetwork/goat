@@ -20,7 +20,7 @@ func VerifyMerkelProof(txid, root, proof []byte, index uint32) bool {
 	}
 
 	current := txid
-	for i := 0; i < nodes; i++ {
+	for i := range nodes {
 		start := i * sha256.Size
 		end := start + sha256.Size
 		next := proof[start:end]

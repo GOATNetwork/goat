@@ -38,7 +38,7 @@ func (suite *KeeperTestSuite) TestDequeue() {
 	}
 
 	bytes := make([][]byte, len(txs))
-	for i := 0; i < len(txs); i++ {
+	for i := range txs {
 		tx, err := txs[i].MarshalBinary()
 		suite.Require().NoError(err)
 		bytes[i] = tx
@@ -82,7 +82,7 @@ func (suite *KeeperTestSuite) TestVerifyDequeue() {
 	}
 
 	bytes := make([][]byte, len(txs))
-	for i := 0; i < len(txs); i++ {
+	for i := range txs {
 		tx, err := txs[i].MarshalBinary()
 		suite.Require().NoError(err)
 		bytes[i] = tx

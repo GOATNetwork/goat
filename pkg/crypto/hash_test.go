@@ -41,7 +41,7 @@ func TestUint64LE(t *testing.T) {
 
 func TestHash160Sum(t *testing.T) {
 	t.Parallel()
-	for i := 0; i < 100; i++ {
+	for i := range 100 {
 		t.Run(fmt.Sprintf("Hash160-%d", i), func(t *testing.T) {
 			data := make([]byte, 32)
 			_, _ = rand.Read(data)
@@ -54,7 +54,7 @@ func TestHash160Sum(t *testing.T) {
 
 func TestDoubleSHA256Sum(t *testing.T) {
 	t.Parallel()
-	for i := 0; i < 100; i++ {
+	for i := range 100 {
 		t.Run(fmt.Sprintf("DoubleSHA256Sum-%d", i), func(t *testing.T) {
 			data := make([]byte, 32)
 			_, _ = rand.Read(data)

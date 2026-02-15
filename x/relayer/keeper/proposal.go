@@ -49,7 +49,7 @@ func (k Keeper) VerifyProposal(ctx context.Context, req types.IVoteMsg, verifyFn
 	}
 	pubkeys = append(pubkeys, proposer.VoteKey)
 
-	for i := 0; i < len(voters); i++ {
+	for i := range voters {
 		if !bmp.Contains(uint32(i)) {
 			continue
 		}

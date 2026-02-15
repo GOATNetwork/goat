@@ -25,7 +25,7 @@ func (suite *KeeperTestSuite) TestVerifyProposal() {
 
 	sigdoc := types.VoteSignDoc(reqMethod, sdkctx.ChainID(), relayer.Proposer, 0, relayer.Epoch, reqSigDoc)
 	var sigs [][]byte
-	for i := 0; i < 2; i++ {
+	for i := range 2 {
 		sk := new(goatcrypto.PrivateKey).Deserialize(suite.VoterKeys[i].VoteKey)
 		suite.Require().NotNil(sk)
 		sigs = append(sigs, goatcrypto.Sign(sk, sigdoc))

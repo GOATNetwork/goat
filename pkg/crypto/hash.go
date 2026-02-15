@@ -60,7 +60,7 @@ func ripemd160Sum(data ...[]byte) []byte {
 
 func Uint64LE(n ...uint64) []byte {
 	raw := make([]byte, len(n)*8)
-	for i := 0; i < len(n); i++ {
+	for i := range n {
 		start := i * 8
 		end := start + 8
 		binary.LittleEndian.PutUint64(raw[start:end], n[i])

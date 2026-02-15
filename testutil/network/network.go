@@ -62,7 +62,7 @@ func DefaultConfig() network.Config {
 func freePorts(n int) ([]string, error) {
 	closeFns := make([]func() error, n)
 	ports := make([]string, n)
-	for i := 0; i < n; i++ {
+	for i := range n {
 		_, port, closeFn, err := network.FreeTCPAddr()
 		if err != nil {
 			return nil, err

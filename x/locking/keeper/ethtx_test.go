@@ -27,7 +27,7 @@ func (suite *KeeperTestSuite) TestDequeueLockingModuleTx() {
 		txs := []*ethtypes.Transaction{}
 
 		nonce := uint64(0)
-		for i := uint64(0); i < 16; i++ {
+		for i := range uint64(16) {
 			recipent := make([]byte, 20)
 			_, err := rand.Read(recipent)
 			suite.Require().NoError(err)
@@ -84,7 +84,7 @@ func (suite *KeeperTestSuite) TestDequeueLockingModuleTx() {
 		got1, err := suite.Keeper.DequeueLockingModuleTx(suite.Context)
 		suite.Require().NoError(err)
 		suite.Require().Len(got1, 32)
-		for i := 0; i < 32; i++ {
+		for i := range 32 {
 			got, err := got1[i].MarshalBinary()
 			suite.Require().NoError(err)
 			want, err := txs[i].MarshalBinary()
@@ -103,7 +103,7 @@ func (suite *KeeperTestSuite) TestDequeueLockingModuleTx() {
 		got2, err := suite.Keeper.DequeueLockingModuleTx(suite.Context)
 		suite.Require().NoError(err)
 		suite.Require().Len(got2, 4)
-		for i := 0; i < 4; i++ {
+		for i := range 4 {
 			got, err := got2[i].MarshalBinary()
 			suite.Require().NoError(err)
 			want, err := txs[i+32].MarshalBinary()

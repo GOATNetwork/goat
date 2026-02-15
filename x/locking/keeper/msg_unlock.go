@@ -25,7 +25,7 @@ func (k Keeper) Unlock(ctx context.Context, reqs []*goattypes.UnlockRequest) err
 	if err != nil {
 		return err
 	}
-	for i := 0; i < len(reqs); i++ {
+	for i := range reqs {
 		if err := k.unlock(sdkctx, reqs[i], &param); err != nil {
 			return err
 		}

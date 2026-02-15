@@ -42,7 +42,7 @@ func (suite *KeeperTestSuite) TestEndBlocker() {
 		})
 		suite.Require().NoError(err)
 
-		for i := 0; i < 2; i++ {
+		for i := range 2 {
 			voter, err := suite.Keeper.Voters.Get(suite.Context, suite.VoterKeys[i].Address)
 			suite.Require().NoError(err)
 			suite.Require().Equal(voter, types.Voter{
