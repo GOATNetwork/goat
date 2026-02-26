@@ -150,7 +150,7 @@ run-tests:
 ###                                Linting                                  ###
 ###############################################################################
 golangci_lint_cmd=golangci-lint
-golangci_version=v2.9.0
+golangci_version=v2.10.1
 
 lint:
 	@echo "--> Running linter"
