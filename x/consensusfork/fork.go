@@ -1,7 +1,5 @@
 package consensusfork
 
-import "math"
-
 // The default value for unknown networks is 0, meaning the fork is active from genesis.
 // key: network name, value: fork height
 
@@ -17,6 +15,6 @@ var OsakaForkHeight = map[string]int64{
 var ReeseForkHeight = map[string]int64{
 	"unitest": 5, // it's for unit test
 
-	"goat-mainnet":  math.MaxInt64, // TODO: set real height
-	"goat-testnet3": 11044000,      // estimate at 2026-02-05 13:00:00 UTC
+	"goat-mainnet":  11130000, // estimate at 2026-03-26 02:18:00 UTC
+	"goat-testnet3": 11044000, // estimate at 2026-02-05 13:00:00 UTC
 }
