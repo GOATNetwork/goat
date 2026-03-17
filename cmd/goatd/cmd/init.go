@@ -25,11 +25,21 @@ var genesisFiles embed.FS
 
 var bootnodes = map[string][]string{
 	"goat-testnet3": {
+		"20443bfea09e1eab6fa4a8634e89dd6f6f12c5cf@35.82.170.238:26656",
+		"cd23f3c3d21d27fc7d1119ee478819378765966a@100.22.4.171:26656",
+		"4e1cd16b9377da92f10cde336de8b549c4be6499@52.36.155.137:26656",
+
+		// Deprecated bootnodes, will be removed later
 		"997f925d3d4947483c9339ec2765ed8c825ace32@3.222.213.223:26656",
 		"9106b59e244eb8bf4dbedcd03b56e30790278765@54.68.179.184:26656",
 		"c99c2abe0886a3c82c12f611477ce22fe178186a@52.32.82.160:26656",
 	},
 	"goat-mainnet": {
+		"5b7503cd5e819ebb400a9068a72b05f7514b0a44@54.69.121.173:26656",
+		"e1728a836481154bca8012871fee692fba4f9f9d@44.235.88.193:26656",
+		"9f0dcce3c0fd0f2f292271a4734718b6ac07e720@44.254.4.159:26656",
+
+		// Deprecated bootnodes, will be removed later
 		// ZKM
 		"84b041c3800b67319d378fbb8d2f83e2c686e738@3.16.248.103:26656",
 		// Goat
