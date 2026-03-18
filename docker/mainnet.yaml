@@ -8,6 +8,8 @@ services:
     network_mode: host
     command:
       - --goat=mainnet
+      # Uncomment the following line if you want to run a bootnode
+      # - --goat.preset=bootnode
       - --http
       - --http.api=eth,net,web3
       - --http.addr=0.0.0.0
@@ -17,7 +19,7 @@ services:
       - --ws.origins=*
       - --ws.addr=0.0.0.0
       - --ws.api=eth,net,web3
-      # Open it if you need an archive node
+      # Uncomment the following line if you need an archive node
       # - --gcmode=archive
     volumes:
       - /data/geth:/root/.ethereum
@@ -31,11 +33,16 @@ services:
     network_mode: host
     command:
       - start
-      - --goat.geth=/geth/geth.ipc
       - --chain-id=goat-mainnet
-      - --grpc.address=0.0.0.0:9090
-      - --api.enable
-      - --api.address=tcp://0.0.0.0:1317
+      # Uncomment the following line if you want to run a bootnode
+      # - --goat.preset=bootnode
+      - --goat.geth=/geth/geth.ipc
+      # Disable colored logs for better readability in Docker logs
+      - --log_no_color
+      # Uncomment the following lines if you want to enable gRPC and REST API
+      # - --grpc.address=0.0.0.0:9090
+      # - --api.enable
+      # - --api.address=tcp://0.0.0.0:1317
     depends_on:
       - geth
     volumes:
