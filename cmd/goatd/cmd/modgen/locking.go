@@ -323,10 +323,19 @@ func Locking() *cobra.Command {
 			prvkey.X.FillBytes(pubkey[:32])
 			prvkey.Y.FillBytes(pubkey[32:])
 
-			return PrintJSON(map[string]string{
+			return PrintJSON(map[string]any{
 				"owner":     hexutil.Encode(ownerByte),
 				"pubkey":    hexutil.Encode(pubkey),
 				"signature": hexutil.Encode(sig),
+				"ecrecover": struct {
+					R string `json:"r"`
+					S string `json:"s"`
+					V string `json:"v"`
+				}{
+					R: hexutil.Encode(sig[:32]),
+					S: hexutil.Encode(sig[32:64]),
+					V: hexutil.EncodeBig(big.NewInt(int64(sig[64]) + 27)),
+				},
 				"validator": hexutil.Encode(pvKey.Address.Bytes()),
 			})
 		},
