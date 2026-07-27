@@ -1,6 +1,6 @@
 module github.com/goatnetwork/goat
 
-go 1.25
+go 1.25.0
 
 require (
 	cosmossdk.io/api v0.9.2
@@ -34,7 +34,7 @@ require (
 	github.com/supranational/blst v0.3.16
 	go.uber.org/mock v0.6.0
 	golang.org/x/crypto v0.46.0
-	golang.org/x/sync v0.19.0
+	golang.org/x/sync v0.22.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20251202230838-ff82c1b0f217
 	google.golang.org/grpc v1.79.3
 	google.golang.org/protobuf v1.36.10
