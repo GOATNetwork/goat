@@ -361,7 +361,7 @@ func (suite *KeeperTestSuite) TestDequeueBitcoinModuleTx() {
 		for i := range txsGot {
 			got, err := txsGot[i].MarshalBinary()
 			suite.Require().NoError(err)
-			want, err := txsWant[i].MarshalBinary()
+			want, err := txsWant[i].MarshalBinary() //nolint // length has been checked above
 			suite.Require().NoError(err)
 			suite.Require().Equal(got, want)
 		}

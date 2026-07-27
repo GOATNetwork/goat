@@ -14,6 +14,8 @@ import (
 	relayertypes "github.com/goatnetwork/goat/x/relayer/types"
 )
 
+const testProposer = "goat1xa56637tjn857jyg2plgvhdclzmr4crxzn5xus"
+
 func (suite *KeeperTestSuite) TestMsgNewDeposits() {
 	evmAddress := common.HexToAddress("0xbC122aEc3EdD80433dfE3c708b2E549B5A7Ab96E")
 	blockHash, err := chainhash.NewHashFromStr("38fb77a25662f9eda5abef8a407ba45e8c3374b5a0724cfa9762f1f9cbf627e2")
@@ -43,7 +45,7 @@ func (suite *KeeperTestSuite) TestMsgNewDeposits() {
 	msgServer := keeper.NewMsgServerImpl(suite.Keeper)
 
 	req := &types.MsgNewDeposits{
-		Proposer:     "goat1xa56637tjn857jyg2plgvhdclzmr4crxzn5xus",
+		Proposer:     testProposer,
 		BlockHeaders: []*types.BlockHeader{{Height: height, Raw: header}},
 		Deposits: []*types.Deposit{
 			{
@@ -82,7 +84,7 @@ func (suite *KeeperTestSuite) TestMsgNewBlockHashes() {
 	suite.Require().NoError(err)
 
 	req := &types.MsgNewBlockHashes{
-		Proposer:         "goat1xa56637tjn857jyg2plgvhdclzmr4crxzn5xus",
+		Proposer:         testProposer,
 		Vote:             &relayertypes.Votes{Signature: make([]byte, goatcrypto.SignatureLength)},
 		StartBlockNumber: 101,
 		BlockHash: [][]byte{
@@ -116,7 +118,7 @@ func (suite *KeeperTestSuite) TestMsgNewBlockHashes() {
 
 func (suite *KeeperTestSuite) TestMsgNewPubkey() {
 	req := &types.MsgNewPubkey{
-		Proposer: "goat1xa56637tjn857jyg2plgvhdclzmr4crxzn5xus",
+		Proposer: testProposer,
 		Vote:     &relayertypes.Votes{Signature: make([]byte, goatcrypto.SignatureLength)},
 		Pubkey: &relayertypes.PublicKey{Key: &relayertypes.PublicKey_Secp256K1{
 			Secp256K1: common.Hex2Bytes("03a466deef30f68c03ad54f89f9deb8284f0529aad1c095985a015be27daec20c6"),
@@ -161,7 +163,7 @@ func (suite *KeeperTestSuite) TestMsgWithdrawal() {
 	// process it
 	{
 		req := &types.MsgProcessWithdrawalV2{
-			Proposer:    "goat1xa56637tjn857jyg2plgvhdclzmr4crxzn5xus",
+			Proposer:    testProposer,
 			Vote:        &relayertypes.Votes{Signature: make([]byte, goatcrypto.SignatureLength)},
 			NoWitnessTx: common.Hex2Bytes("02000000012e0e3e521ac999cfc292a78aaeb31fe19dfb7867c660ae5560537370d55fdf0e0000000000ffffffff06e8030000000000001976a9146a9d23174484d7ba74f7bc2a64ed102b4846267588ace80300000000000017a91413aa207651e0f3724cbe6134f54675aa2d5cdbf987e803000000000000160014279476d2a1d257f0cdcc48641b3679d411187415e8030000000000002200203dad4a1a80c3925f74a48f429eeca43440ade0aee3d5db6880e73b474961631de8030000000000002200200c84239e8447e7c3b471b26736615eb76c4755c5b94516376958f17e0da4648f90c9f505000000001600145b029559baaea5e928e8e2774e9e2350a5fc9c2d00000000"),
 			TxFee:       1000,
@@ -235,7 +237,7 @@ func (suite *KeeperTestSuite) TestMsgWithdrawal() {
 	// replace it
 	{
 		req := &types.MsgReplaceWithdrawalV2{
-			Proposer:       "goat1xa56637tjn857jyg2plgvhdclzmr4crxzn5xus",
+			Proposer:       testProposer,
 			Vote:           &relayertypes.Votes{Signature: make([]byte, goatcrypto.SignatureLength)},
 			Pid:            0,
 			NewNoWitnessTx: common.Hex2Bytes("02000000012e0e3e521ac999cfc292a78aaeb31fe19dfb7867c660ae5560537370d55fdf0e0000000000ffffffff06b0030000000000001976a9146a9d23174484d7ba74f7bc2a64ed102b4846267588aca00300000000000017a91413aa207651e0f3724cbe6134f54675aa2d5cdbf987e303000000000000160014279476d2a1d257f0cdcc48641b3679d41118741599030000000000002200203dad4a1a80c3925f74a48f429eeca43440ade0aee3d5db6880e73b474961631de3030000000000002200200c84239e8447e7c3b471b26736615eb76c4755c5b94516376958f17e0da4648f10270000000000001600145b029559baaea5e928e8e2774e9e2350a5fc9c2d00000000"),
@@ -304,7 +306,7 @@ func (suite *KeeperTestSuite) TestMsgWithdrawal() {
 		suite.Require().NoError(err)
 
 		req := &types.MsgFinalizeWithdrawal{
-			Proposer:          "goat1xa56637tjn857jyg2plgvhdclzmr4crxzn5xus",
+			Proposer:          testProposer,
 			Pid:               0,
 			Txid:              fristTxid.CloneBytes(),
 			BlockNumber:       height,
@@ -359,7 +361,7 @@ func (suite *KeeperTestSuite) TestMsgApproveCancellation() {
 	msgServer := keeper.NewMsgServerImpl(suite.Keeper)
 
 	req := &types.MsgApproveCancellation{
-		Proposer: "goat1xa56637tjn857jyg2plgvhdclzmr4crxzn5xus",
+		Proposer: testProposer,
 	}
 
 	expected := []types.Withdrawal{}
@@ -402,7 +404,7 @@ func (suite *KeeperTestSuite) TestNewConsolidation() {
 
 	msgServer := keeper.NewMsgServerImpl(suite.Keeper)
 	req := &types.MsgNewConsolidation{
-		Proposer:    "goat1xa56637tjn857jyg2plgvhdclzmr4crxzn5xus",
+		Proposer:    testProposer,
 		NoWitnessTx: common.Hex2Bytes("020000000a59470436f741658f24f25ec84e1af99a1355173b36e19abcd1d8d9079435be470000000000ffffffff59470436f741658f24f25ec84e1af99a1355173b36e19abcd1d8d9079435be470100000000ffffffff59470436f741658f24f25ec84e1af99a1355173b36e19abcd1d8d9079435be470200000000ffffffff59470436f741658f24f25ec84e1af99a1355173b36e19abcd1d8d9079435be470300000000ffffffff59470436f741658f24f25ec84e1af99a1355173b36e19abcd1d8d9079435be470400000000ffffffff59470436f741658f24f25ec84e1af99a1355173b36e19abcd1d8d9079435be470500000000ffffffff59470436f741658f24f25ec84e1af99a1355173b36e19abcd1d8d9079435be470600000000ffffffff59470436f741658f24f25ec84e1af99a1355173b36e19abcd1d8d9079435be470700000000ffffffff59470436f741658f24f25ec84e1af99a1355173b36e19abcd1d8d9079435be470800000000ffffffff59470436f741658f24f25ec84e1af99a1355173b36e19abcd1d8d9079435be470900000000ffffffff0100e1f505000000001600145b029559baaea5e928e8e2774e9e2350a5fc9c2d00000000"),
 		Vote:        &relayertypes.Votes{Signature: make([]byte, goatcrypto.SignatureLength)},
 	}

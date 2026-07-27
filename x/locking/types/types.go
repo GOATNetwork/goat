@@ -11,6 +11,11 @@ import (
 	"github.com/ethereum/go-ethereum/core/types/goattypes"
 )
 
+const (
+	GoatTokenDenom = "goat"
+	BitcoinDenom   = "btc"
+)
+
 var PowerReduction = math.NewIntFromUint64(1e18)
 
 func (v *Validator) CMPubkey() tmcrypto.PublicKey {
@@ -20,9 +25,9 @@ func (v *Validator) CMPubkey() tmcrypto.PublicKey {
 func TokenDenom(token common.Address) string {
 	switch token {
 	case common.Address{}:
-		return "btc"
+		return BitcoinDenom
 	case goattypes.GoatTokenContract:
-		return "goat"
+		return GoatTokenDenom
 	}
 	return "tkn:" + hex.EncodeToString(token.Bytes())
 }

@@ -14,8 +14,8 @@ func TestTokenDenom(t *testing.T) {
 		args common.Address
 		want string
 	}{
-		{"1", common.Address{}, "btc"},
-		{"2", goattypes.GoatTokenContract, "goat"},
+		{"1", common.Address{}, BitcoinDenom},
+		{"2", goattypes.GoatTokenContract, GoatTokenDenom},
 		{"3", goattypes.BridgeContract, "tkn:bc10000000000000000000000000000000000003"},
 	}
 	for _, tt := range tests {
