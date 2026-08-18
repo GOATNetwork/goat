@@ -10,6 +10,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types/goattypes"
+	"github.com/goatnetwork/goat/x/consensusfork"
 	"github.com/goatnetwork/goat/x/locking/types"
 )
 
@@ -296,4 +297,33 @@ func (suite *KeeperTestSuite) TestConsAddrIndexPrunesAStrandedAddress() {
 	id, err := suite.Keeper.ResolveValidatorID(ctx, f.id)
 	suite.Require().NoError(err)
 	suite.Require().Equal(f.id, id, "the id always resolves to itself")
+}
+
+// Nothing can produce a rotation before the execution layer carries a Locking
+// contract that has the function, but the consensus layer pins its own
+// behavior to a height rather than trusting that.
+func (suite *KeeperTestSuite) TestRotateIgnoredBeforeTheFork() {
+	f := suite.setupRotation()
+	ctx := suite.Context.WithChainID("unitest").
+		WithBlockHeight(consensusfork.RotationForkHeight["unitest"] - 1).
+		WithBlockTime(time.Now().UTC())
+
+	before, err := suite.Keeper.Validators.Get(ctx, f.id)
+	suite.Require().NoError(err)
+
+	suite.Require().NoError(suite.Keeper.Rotate(ctx,
+		[]*goattypes.RotateRequest{f.request(ctx.ChainID(), f.newKey)}))
+
+	after, err := suite.Keeper.Validators.Get(ctx, f.id)
+	suite.Require().NoError(err)
+	suite.Require().Equal(before, after)
+
+	// and it works from the fork height on
+	ctx = ctx.WithBlockHeight(consensusfork.RotationForkHeight["unitest"])
+	suite.Require().NoError(suite.Keeper.Rotate(ctx,
+		[]*goattypes.RotateRequest{f.request(ctx.ChainID(), f.newKey)}))
+
+	rotated, err := suite.Keeper.Validators.Get(ctx, f.id)
+	suite.Require().NoError(err)
+	suite.Require().True(rotated.IsRotating())
 }

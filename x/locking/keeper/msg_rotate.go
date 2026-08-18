@@ -8,10 +8,22 @@ import (
 	"cosmossdk.io/collections"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/core/types/goattypes"
+	"github.com/goatnetwork/goat/x/consensusfork"
 	"github.com/goatnetwork/goat/x/locking/types"
 )
 
 func (k *Keeper) Rotate(ctx context.Context, req []*goattypes.RotateRequest) error {
+	if len(req) == 0 {
+		return nil
+	}
+
+	sdkctx := sdktypes.UnwrapSDKContext(ctx)
+	if height := consensusfork.RotationForkHeight[sdkctx.ChainID()]; sdkctx.BlockHeight() < height {
+		k.Logger().Warn("Rotate: ignored before the rotation fork",
+			"count", len(req), "fork_height", height)
+		return nil
+	}
+
 	for _, rotate := range req {
 		if err := k.rotateValidator(ctx, rotate); err != nil {
 			return err
@@ -127,8 +139,15 @@ func (k Keeper) rotateValidator(ctx context.Context, req *goattypes.RotateReques
 		return err
 	}
 
+	// The operator has to swap the key its node signs with. CometBFT applies a
+	// validator update two blocks after it is emitted, so from that height the
+	// old key's votes stop counting. Missing the moment costs missed blocks,
+	// not a slashing: at the mainnet parameters that is 200 blocks of room,
+	// roughly twelve minutes, before downtime jailing.
 	k.Logger().Info("Rotate", "validator", name, "key_type", keyType,
-		"new_address", types.ValidatorName(newAddr), "apply_height", validator.RotationApplyHeight)
+		"new_address", types.ValidatorName(newAddr),
+		"apply_height", validator.RotationApplyHeight,
+		"switch_signing_key_at_height", validator.RotationApplyHeight+2)
 	sdkctx.EventManager().EmitEvent(types.ValidatorRotatedEvent(id, newAddr))
 	return nil
 }
