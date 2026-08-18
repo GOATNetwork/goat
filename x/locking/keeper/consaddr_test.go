@@ -132,7 +132,7 @@ func (suite *KeeperTestSuite) TestHandleVoteInfosAfterRotation() {
 }
 
 // Evidence references the consensus address that was active at the height of
-// the misbehaviour, which may be a pubkey the validator has rotated away from.
+// the misbehavior, which may be a pubkey the validator has rotated away from.
 // Keeping the index entry for a whole evidence window is what makes that
 // evidence slashable.
 func (suite *KeeperTestSuite) TestHandleEvidencesAfterRotation() {

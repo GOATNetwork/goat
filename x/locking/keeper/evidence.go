@@ -43,7 +43,7 @@ func (k Keeper) handleEvidence(ctx context.Context, evidence comet.Evidence, par
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
 
 	// evidence carries the consensus address that was active at the height of
-	// the misbehaviour, which may be a pubkey the validator has since rotated
+	// the misbehavior, which may be a pubkey the validator has since rotated
 	// away from
 	address, err := k.ResolveValidatorID(sdkctx, sdktypes.ConsAddress(evidence.Validator().Address()))
 	if err != nil {
