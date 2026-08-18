@@ -10,6 +10,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/goatnetwork/goat/x/locking/keeper"
 	"github.com/goatnetwork/goat/x/locking/types"
 )
 
@@ -214,4 +215,34 @@ func (suite *KeeperTestSuite) TestDistributeRewardAfterRotation() {
 	has, err := suite.Keeper.Validators.Has(newctx, rotatedConsAddr)
 	suite.Require().NoError(err)
 	suite.Require().False(has, "reward must not create a record under the reported address")
+}
+
+// Operators are told to look a validator up by its address, and what
+// CometBFT rpc and explorers show is the consensus address currently in
+// effect. After a rotation that is no longer the validator id, so the query
+// has to accept both.
+func (suite *KeeperTestSuite) TestValidatorQueryAfterRotation() {
+	qs := keeper.NewQueryServerImpl(suite.Keeper)
+
+	param := types.Params{
+		SignedBlocksWindow:   3,
+		MaxMissedPerWindow:   1,
+		DowntimeJailDuration: time.Hour,
+	}
+	validator := suite.setupRotatedValidator(param)
+
+	for _, address := range []sdk.ConsAddress{rotationID, rotatedConsAddr} {
+		response, err := qs.Validator(suite.Context, &types.QueryValidatorRequest{
+			Address: common.BytesToAddress(address).String(),
+		})
+		suite.Require().NoError(err, "querying by %x must resolve", address.Bytes())
+		suite.Require().Equal(validator.Pubkey, response.Validator.Pubkey)
+		suite.Require().Equal(validator.Power, response.Validator.Power)
+	}
+
+	// an address that is neither an id nor an index entry still 404s
+	_, err := qs.Validator(suite.Context, &types.QueryValidatorRequest{
+		Address: common.BytesToAddress(suite.Address[0]).String(),
+	})
+	suite.Require().Error(err)
 }

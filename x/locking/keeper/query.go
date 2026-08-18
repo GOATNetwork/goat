@@ -56,7 +56,14 @@ func (q queryServer) Validator(ctx context.Context, req *types.QueryValidatorReq
 		return nil, status.Error(codes.InvalidArgument, "invalid address")
 	}
 
-	validator, err := q.k.Validators.Get(sdkctx, sdktypes.ConsAddress(address))
+	// accept either the validator id or the consensus address currently in
+	// effect, the latter is what CometBFT rpc and explorers show
+	id, err := q.k.ResolveValidatorID(sdkctx, sdktypes.ConsAddress(address))
+	if err != nil {
+		return nil, status.Error(codes.Internal, "internal error")
+	}
+
+	validator, err := q.k.Validators.Get(sdkctx, id)
 	if err != nil {
 		if errors.Is(err, collections.ErrNotFound) {
 			return nil, status.Error(codes.NotFound, "not found")
