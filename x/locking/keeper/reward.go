@@ -92,7 +92,14 @@ func (k Keeper) DistributeReward(ctx context.Context) error {
 	// Here we send reward to all validators even if it didn't vote for the block
 	// it prevents proposer only including 2/3 votes to get more reward
 	for _, voteInfo := range sdkctx.VoteInfos() {
-		validator, err := k.Validators.Get(sdkctx, voteInfo.Validator.Address)
+		// CometBFT reports the address of the active consensus pubkey, the
+		// tables are keyed by the validator id
+		id, err := k.ResolveValidatorID(sdkctx, sdktypes.ConsAddress(voteInfo.Validator.Address))
+		if err != nil {
+			return err
+		}
+
+		validator, err := k.Validators.Get(sdkctx, id)
 		if err != nil {
 			return err
 		}
@@ -104,7 +111,7 @@ func (k Keeper) DistributeReward(ctx context.Context) error {
 				remainGas.Sub(remainGas, share.BigIntMut())
 				validator.GasReward = validator.GasReward.Add(share)
 				k.Logger().Debug("Distribute gas reward",
-					"address", types.ValidatorName(voteInfo.Validator.Address), "amount", share)
+					"address", types.ValidatorName(id), "amount", share)
 			}
 		}
 
@@ -114,11 +121,11 @@ func (k Keeper) DistributeReward(ctx context.Context) error {
 				remainReward.Sub(remainReward, share.BigIntMut())
 				validator.Reward = validator.Reward.Add(share)
 				k.Logger().Debug("Distribute goat reward",
-					"address", types.ValidatorName(voteInfo.Validator.Address), "amount", share)
+					"address", types.ValidatorName(id), "amount", share)
 			}
 		}
 
-		if err := k.Validators.Set(sdkctx, voteInfo.Validator.Address, validator); err != nil {
+		if err := k.Validators.Set(sdkctx, id, validator); err != nil {
 			return err
 		}
 	}

@@ -31,7 +31,12 @@ func (k msgServer) NewEthBlock(ctx context.Context, req *types.MsgNewEthBlock) (
 		return nil, err
 	}
 
-	cometProposer := sdkctx.CometInfo().GetProposerAddress()
+	// the proposer is identified by its validator id, while CometBFT reports
+	// the address of the consensus pubkey currently in effect
+	cometProposer, err := k.lockingKeeper.ResolveValidatorID(sdkctx, sdktypes.ConsAddress(sdkctx.CometInfo().GetProposerAddress()))
+	if err != nil {
+		return nil, err
+	}
 	if !bytes.Equal(proposer, cometProposer) || !bytes.Equal(proposer, req.Payload.FeeRecipient) {
 		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "consensus proposer mismatched")
 	}

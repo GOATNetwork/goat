@@ -42,7 +42,13 @@ func (k Keeper) HandleEvidences(ctx context.Context) error {
 func (k Keeper) handleEvidence(ctx context.Context, evidence comet.Evidence, param *types.Params) error {
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
 
-	address := sdktypes.ConsAddress(evidence.Validator().Address())
+	// evidence carries the consensus address that was active at the height of
+	// the misbehaviour, which may be a pubkey the validator has since rotated
+	// away from
+	address, err := k.ResolveValidatorID(sdkctx, sdktypes.ConsAddress(evidence.Validator().Address()))
+	if err != nil {
+		return err
+	}
 
 	cp := sdkctx.ConsensusParams()
 	if cp.Evidence != nil {

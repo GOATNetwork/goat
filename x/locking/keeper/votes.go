@@ -20,7 +20,12 @@ func (k Keeper) HandleVoteInfos(ctx context.Context) error {
 
 	for _, voteInfo := range sdkctx.VoteInfos() {
 		signed := comet.BlockIDFlag(voteInfo.BlockIdFlag)
-		address := sdktypes.ConsAddress(voteInfo.Validator.Address)
+		// CometBFT reports the address of the currently active consensus
+		// pubkey, which is not the validator id once the validator rotated
+		address, err := k.ResolveValidatorID(sdkctx, sdktypes.ConsAddress(voteInfo.Validator.Address))
+		if err != nil {
+			return err
+		}
 		if err := k.handleVoteInfo(sdkctx, address, signed, &param); err != nil {
 			return err
 		}

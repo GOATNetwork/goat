@@ -84,12 +84,21 @@ func (k Keeper) PrepareProposalHandler(
 }
 
 func (k Keeper) createEthBlockProposal(sdkctx sdk.Context, keyProvider cryptotypes.PrivKey, txConfig client.TxConfig, rpp *abci.RequestPrepareProposal) ([]byte, error) {
-	validatorAddr, err := k.addressCodec.BytesToString(rpp.ProposerAddress)
+	// rpp.ProposerAddress is derived from the consensus pubkey currently in
+	// effect, which stops being the validator identity once the validator
+	// rotates its consensus key; the account and the execution layer identity
+	// stay keyed by the id
+	validatorID, err := k.lockingKeeper.ResolveValidatorID(sdkctx, sdk.ConsAddress(rpp.ProposerAddress))
 	if err != nil {
 		return nil, err
 	}
 
-	validatorAcc := k.accountKeeper.GetAccount(sdkctx, rpp.ProposerAddress)
+	validatorAddr, err := k.addressCodec.BytesToString(validatorID)
+	if err != nil {
+		return nil, err
+	}
+
+	validatorAcc := k.accountKeeper.GetAccount(sdkctx, sdk.AccAddress(validatorID))
 	if validatorAcc == nil {
 		return nil, fmt.Errorf("nil validator account: %s", validatorAddr)
 	}
@@ -128,7 +137,7 @@ func (k Keeper) createEthBlockProposal(sdkctx sdk.Context, keyProvider cryptotyp
 			// Because CometBFT 0.38 uses median time of last vote, it might break the execution layer rules
 			Timestamp:             uint64(time.Now().UTC().Unix()),
 			Random:                random,
-			SuggestedFeeRecipient: common.BytesToAddress(rpp.ProposerAddress),
+			SuggestedFeeRecipient: common.BytesToAddress(validatorID),
 			Withdrawals:           ethtypes.Withdrawals{},
 			BeaconRoot:            &beaconRoot,
 			GoatTxs:               goatTxs,
@@ -253,7 +262,11 @@ func (k Keeper) verifyEthBlockProposal(sdkctx sdk.Context, msg *types.MsgNewEthB
 			return err
 		}
 
-		if expect := sdkctx.CometInfo().GetProposerAddress(); !bytes.Equal(proposer, expect) {
+		expect, err := k.lockingKeeper.ResolveValidatorID(sdkctx, sdk.ConsAddress(sdkctx.CometInfo().GetProposerAddress()))
+		if err != nil {
+			return err
+		}
+		if !bytes.Equal(proposer, expect) {
 			return fmt.Errorf("invalid MsgNewEthBlock proposer: expect %x got %x", expect, proposer)
 		}
 

@@ -13,7 +13,8 @@ import (
 	context "context"
 	reflect "reflect"
 
-	types "github.com/ethereum/go-ethereum/core/types"
+	types "github.com/cosmos/cosmos-sdk/types"
+	types0 "github.com/ethereum/go-ethereum/core/types"
 	goattypes "github.com/ethereum/go-ethereum/core/types/goattypes"
 	gomock "go.uber.org/mock/gomock"
 )
@@ -43,10 +44,10 @@ func (m *MockLockingKeeper) EXPECT() *MockLockingKeeperMockRecorder {
 }
 
 // DequeueLockingModuleTx mocks base method.
-func (m *MockLockingKeeper) DequeueLockingModuleTx(ctx context.Context) ([]*types.Transaction, error) {
+func (m *MockLockingKeeper) DequeueLockingModuleTx(ctx context.Context) ([]*types0.Transaction, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DequeueLockingModuleTx", ctx)
-	ret0, _ := ret[0].([]*types.Transaction)
+	ret0, _ := ret[0].([]*types0.Transaction)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -69,4 +70,19 @@ func (m *MockLockingKeeper) ProcessLockingRequest(ctx context.Context, req goatt
 func (mr *MockLockingKeeperMockRecorder) ProcessLockingRequest(ctx, req any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ProcessLockingRequest", reflect.TypeOf((*MockLockingKeeper)(nil).ProcessLockingRequest), ctx, req)
+}
+
+// ResolveValidatorID mocks base method.
+func (m *MockLockingKeeper) ResolveValidatorID(ctx context.Context, consAddr types.ConsAddress) (types.ConsAddress, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ResolveValidatorID", ctx, consAddr)
+	ret0, _ := ret[0].(types.ConsAddress)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ResolveValidatorID indicates an expected call of ResolveValidatorID.
+func (mr *MockLockingKeeperMockRecorder) ResolveValidatorID(ctx, consAddr any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ResolveValidatorID", reflect.TypeOf((*MockLockingKeeper)(nil).ResolveValidatorID), ctx, consAddr)
 }

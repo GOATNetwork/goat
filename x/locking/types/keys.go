@@ -27,6 +27,12 @@ var (
 	UnlockQueueKey   = collections.NewPrefix(10)
 	ThresholdKey     = collections.NewPrefix(11)
 	FinalizedTimeKey = collections.NewPrefix(12)
+
+	// ConsAddrIndexKey maps a consensus address to the validator id.
+	// It only holds entries for validators whose consensus pubkey has been
+	// rotated; for every other validator the id is the consensus address
+	// itself, see Keeper.ResolveValidatorID.
+	ConsAddrIndexKey = collections.NewPrefix(13)
 )
 
 func KeyPrefix(p string) []byte {

@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -32,9 +33,12 @@ type (
 		// (token,validator) => locking, it's used for updating power when the token weight is updated
 		Locking collections.Map[collections.Pair[string, sdktypes.ConsAddress], math.Int]
 		// (power,validator) => int64(power), it's used for getting validators of top-k power
-		PowerRanking  collections.KeySet[collections.Pair[uint64, sdktypes.ConsAddress]]
-		ValidatorSet  collections.Map[sdktypes.ConsAddress, uint64]
-		Validators    collections.Map[sdktypes.ConsAddress, types.Validator]
+		PowerRanking collections.KeySet[collections.Pair[uint64, sdktypes.ConsAddress]]
+		ValidatorSet collections.Map[sdktypes.ConsAddress, uint64]
+		Validators   collections.Map[sdktypes.ConsAddress, types.Validator]
+		// consensus address => validator id
+		// only rotated validators have an entry here, see ResolveValidatorID
+		ConsAddrIndex collections.Map[sdktypes.ConsAddress, sdktypes.ConsAddress]
 		Tokens        collections.Map[string, types.Token]
 		Threshold     collections.Item[types.Threshold]
 		Slashed       collections.Map[string, math.Int]
@@ -67,6 +71,7 @@ func NewKeeper(
 		PowerRanking:  collections.NewKeySet(sb, types.PowerRankingKey, "power_ranking", collections.PairKeyCodec(collections.Uint64Key, sdktypes.ConsAddressKey)),
 		ValidatorSet:  collections.NewMap(sb, types.ValidatorSetKey, "last_validator_set", sdktypes.ConsAddressKey, collections.Uint64Value),
 		Validators:    collections.NewMap(sb, types.ValidatorsKey, "validator", sdktypes.ConsAddressKey, codec.CollValue[types.Validator](cdc)),
+		ConsAddrIndex: collections.NewMap(sb, types.ConsAddrIndexKey, "cons_addr_index", sdktypes.ConsAddressKey, colcodec.KeyToValueCodec(sdktypes.ConsAddressKey)),
 		Tokens:        collections.NewMap(sb, types.TokensKey, "token", collections.StringKey, codec.CollValue[types.Token](cdc)),
 		Slashed:       collections.NewMap(sb, types.SlashedKey, "slashed", collections.StringKey, sdktypes.IntValue),
 		EthTxNonce:    collections.NewSequence(sb, types.EthTxNonceKey, "eth_tx_nonce"),
@@ -89,6 +94,27 @@ func NewKeeper(
 // Logger returns a module-specific logger.
 func (k Keeper) Logger() log.Logger {
 	return k.logger.With("module", fmt.Sprintf("x/%s", types.ModuleName))
+}
+
+// ResolveValidatorID maps a consensus address reported by CometBFT to the
+// validator id used as the key of Validators, ValidatorSet, PowerRanking and
+// Locking.
+//
+// The id is the consensus address the validator was created with and it never
+// changes, so a validator that has never rotated its consensus pubkey resolves
+// to itself and has no ConsAddrIndex entry. During and after a rotation the
+// index keeps both the old and the new consensus address pointing at the same
+// id, because CometBFT keeps reporting the old address for a couple of blocks
+// and evidence may reference it for a whole evidence window.
+func (k Keeper) ResolveValidatorID(ctx context.Context, consAddr sdktypes.ConsAddress) (sdktypes.ConsAddress, error) {
+	id, err := k.ConsAddrIndex.Get(ctx, consAddr)
+	if err == nil {
+		return id, nil
+	}
+	if !errors.Is(err, collections.ErrNotFound) {
+		return nil, err
+	}
+	return consAddr, nil
 }
 
 func (k Keeper) ProcessLockingRequest(ctx context.Context, reqs goattypes.LockingRequests) error {

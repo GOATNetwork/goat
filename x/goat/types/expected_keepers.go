@@ -18,6 +18,10 @@ type BitcoinKeeper interface {
 type LockingKeeper interface {
 	DequeueLockingModuleTx(ctx context.Context) ([]*ethtypes.Transaction, error)
 	ProcessLockingRequest(ctx context.Context, req goattypes.LockingRequests) error
+	// ResolveValidatorID maps the consensus address CometBFT reports to the
+	// stable validator id, which is what the validator account and the
+	// execution layer identity are keyed by
+	ResolveValidatorID(ctx context.Context, consAddr sdk.ConsAddress) (sdk.ConsAddress, error)
 }
 
 type RelayerKeeper interface {
