@@ -7,8 +7,10 @@ import (
 	"slices"
 
 	cmtcrypto "github.com/cometbft/cometbft/crypto"
+	cmmldsa65 "github.com/cometbft/cometbft/crypto/mldsa65"
 	cmsecp256k1 "github.com/cometbft/cometbft/crypto/secp256k1"
 	tmcrypto "github.com/cometbft/cometbft/proto/tendermint/crypto"
+	"github.com/cosmos/cosmos-sdk/crypto/keys/mldsa65"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
@@ -19,7 +21,8 @@ import (
 // Validator.key_type and the empty string has to keep meaning secp256k1: every
 // record written before rotation existed carries no tag at all.
 const (
-	KeyTypeSecp256k1 = "secp256k1"
+	KeyTypeSecp256k1 = cmsecp256k1.KeyType
+	KeyTypeMlDsa65   = cmmldsa65.KeyType
 )
 
 // KeyTypeName normalises a key type, mapping the empty tag of a pre-rotation
@@ -42,6 +45,11 @@ func ParsePubkey(keyType string, pubkey []byte) (cryptotypes.PubKey, error) {
 			return nil, fmt.Errorf("invalid secp256k1 pubkey prefix %d", first)
 		}
 		return &secp256k1.PubKey{Key: slices.Clone(pubkey)}, nil
+	case KeyTypeMlDsa65:
+		if len(pubkey) != cmmldsa65.PubKeySize {
+			return nil, fmt.Errorf("invalid ml_dsa_65 pubkey length %d", len(pubkey))
+		}
+		return &mldsa65.PubKey{Key: slices.Clone(pubkey)}, nil
 	default:
 		return nil, fmt.Errorf("unsupported consensus key type %q", keyType)
 	}
@@ -83,6 +91,10 @@ func cmPubkey(keyType string, pubkey []byte) (tmcrypto.PublicKey, error) {
 		return tmcrypto.PublicKey{
 			Sum: &tmcrypto.PublicKey_Secp256K1{Secp256K1: slices.Clone(pubkey)},
 		}, nil
+	case KeyTypeMlDsa65:
+		return tmcrypto.PublicKey{
+			Sum: &tmcrypto.PublicKey_Mldsa65{Mldsa65: slices.Clone(pubkey)},
+		}, nil
 	default:
 		return tmcrypto.PublicKey{}, fmt.Errorf("unsupported consensus key type %q", keyType)
 	}
@@ -103,6 +115,8 @@ func CMTPubkey(keyType string, pubkey []byte) (cmtcrypto.PubKey, error) {
 			return nil, fmt.Errorf("invalid secp256k1 pubkey length %d", len(pubkey))
 		}
 		return cmsecp256k1.PubKey(slices.Clone(pubkey)), nil
+	case KeyTypeMlDsa65:
+		return cmmldsa65.NewPubKeyFromBytes(pubkey)
 	default:
 		return nil, fmt.Errorf("unsupported consensus key type %q", keyType)
 	}
@@ -112,6 +126,7 @@ func CMTPubkey(keyType string, pubkey []byte) (cmtcrypto.PubKey, error) {
 // layer has one byte to spend and no notion of these names.
 const (
 	WireKeyTypeSecp256k1 uint8 = 0
+	WireKeyTypeMlDsa65   uint8 = 1
 )
 
 // KeyTypeFromRequest maps the wire tag onto the stored name.
@@ -119,6 +134,8 @@ func KeyTypeFromRequest(wire uint8) (string, error) {
 	switch wire {
 	case WireKeyTypeSecp256k1:
 		return KeyTypeSecp256k1, nil
+	case WireKeyTypeMlDsa65:
+		return KeyTypeMlDsa65, nil
 	default:
 		return "", fmt.Errorf("unknown consensus key type %d", wire)
 	}

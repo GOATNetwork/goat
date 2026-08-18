@@ -18,7 +18,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func LockingKeeper(tb testing.TB, accountKeeper types.AccountKeeper) (keeper.Keeper, sdk.Context) {
+func LockingKeeper(tb testing.TB, accountKeeper types.AccountKeeper) (keeper.Keeper, sdk.Context, *ConsensusParamsStore) {
 	tb.Helper()
 
 	storeKey := storetypes.NewKVStoreKey(types.StoreKey)
@@ -32,11 +32,14 @@ func LockingKeeper(tb testing.TB, accountKeeper types.AccountKeeper) (keeper.Kee
 	cdc := codec.NewProtoCodec(registry)
 	addressCodec := addresscodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix())
 
+	consensusParams := NewConsensusParamsStore(types.KeyTypeSecp256k1)
+
 	k := keeper.NewKeeper(
 		cdc,
 		addressCodec,
 		runtime.NewKVStoreService(storeKey),
 		accountKeeper,
+		consensusParams,
 		log.NewNopLogger(),
 	)
 
@@ -47,5 +50,5 @@ func LockingKeeper(tb testing.TB, accountKeeper types.AccountKeeper) (keeper.Kee
 		tb.Fatalf("failed to set params: %v", err)
 	}
 
-	return k, ctx
+	return k, ctx, consensusParams
 }

@@ -19,15 +19,16 @@ import (
 
 type KeeperTestSuite struct {
 	suite.Suite
-	Ctrl      *gomock.Controller
-	Account   *mock.MockAccountKeeper
-	Keeper    keeper.Keeper
-	Context   sdk.Context
-	Param     types.Params
-	Validator []types.Validator
-	Address   []sdk.ConsAddress
-	Token     map[string]types.Token
-	Threshold sdk.Coins
+	Ctrl            *gomock.Controller
+	Account         *mock.MockAccountKeeper
+	Keeper          keeper.Keeper
+	Context         sdk.Context
+	ConsensusParams *keepertest.ConsensusParamsStore
+	Param           types.Params
+	Validator       []types.Validator
+	Address         []sdk.ConsAddress
+	Token           map[string]types.Token
+	Threshold       sdk.Coins
 }
 
 func TestKeeper(t *testing.T) {
@@ -49,7 +50,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 	ctl := gomock.NewController(suite.T())
 	accountKeeper := mock.NewMockAccountKeeper(ctl)
 
-	suite.Keeper, suite.Context = keepertest.LockingKeeper(suite.T(), accountKeeper)
+	suite.Keeper, suite.Context, suite.ConsensusParams = keepertest.LockingKeeper(suite.T(), accountKeeper)
 
 	suite.Account = accountKeeper
 	suite.Param = types.DefaultParams()

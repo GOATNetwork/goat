@@ -18,6 +18,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/store/v2"
 	storetypes "github.com/cosmos/cosmos-sdk/store/v2/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	keepertest "github.com/goatnetwork/goat/testutil/keeper"
 	"github.com/goatnetwork/goat/x/locking/keeper"
 	"github.com/goatnetwork/goat/x/locking/types"
 	"github.com/stretchr/testify/require"
@@ -266,6 +267,7 @@ func TestPowerRankingIterator(t *testing.T) {
 		addressCodec,
 		runtime.NewKVStoreService(storeKey),
 		nil,
+		keepertest.NewConsensusParamsStore(types.KeyTypeSecp256k1),
 		log.NewNopLogger(),
 	)
 

@@ -26,6 +26,9 @@ type (
 		storeService  store.KVStoreService
 		logger        log.Logger
 		accountKeeper types.AccountKeeper
+		// widening the pub_key_types whitelist has no transaction path,
+		// see UpdateForkParams
+		consensusKeeper types.ConsensusParamsKeeper
 
 		Schema collections.Schema
 		Params collections.Item[types.Params]
@@ -54,16 +57,18 @@ func NewKeeper(
 	addressCodec address.Codec,
 	storeService store.KVStoreService,
 	accountKeeper types.AccountKeeper,
+	consensusKeeper types.ConsensusParamsKeeper,
 	logger log.Logger,
 ) Keeper {
 	sb := collections.NewSchemaBuilder(storeService)
 
 	k := Keeper{
-		cdc:           cdc,
-		addressCodec:  addressCodec,
-		storeService:  storeService,
-		logger:        logger,
-		accountKeeper: accountKeeper,
+		cdc:             cdc,
+		addressCodec:    addressCodec,
+		storeService:    storeService,
+		logger:          logger,
+		accountKeeper:   accountKeeper,
+		consensusKeeper: consensusKeeper,
 
 		Params:        collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 		Locking:       collections.NewMap(sb, types.LockingKey, "locking", collections.PairKeyCodec(collections.StringKey, sdktypes.ConsAddressKey), sdktypes.IntValue),

@@ -83,6 +83,19 @@ func (k Keeper) rotateValidator(ctx context.Context, req *goattypes.RotateReques
 		return nil
 	}
 
+	// The validator update carrying this key would be rejected by CometBFT
+	// while the type is off the whitelist, and a rejected update fails the
+	// block. Refuse here instead, where refusing is free.
+	allowed, err := k.PubKeyTypeAllowed(sdkctx, keyType)
+	if err != nil {
+		return err
+	}
+	if !allowed {
+		k.Logger().Warn("Rotate: key type is not on the consensus whitelist",
+			"validator", name, "key_type", keyType)
+		return nil
+	}
+
 	if types.SameConsensusKey(&validator, keyType, req.Pubkey) {
 		k.Logger().Warn("Rotate: new key equals the current one", "validator", name)
 		return nil

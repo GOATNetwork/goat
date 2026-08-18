@@ -162,7 +162,8 @@ type ModuleInputs struct {
 	Config       *modulev1.Module
 	Logger       log.Logger
 
-	AccountKeeper types.AccountKeeper
+	AccountKeeper   types.AccountKeeper
+	ConsensusKeeper types.ConsensusParamsKeeper
 }
 
 type ModuleOutputs struct {
@@ -178,6 +179,7 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.AddressCodec,
 		in.StoreService,
 		in.AccountKeeper,
+		in.ConsensusKeeper,
 		in.Logger,
 	)
 	m := NewAppModule(
