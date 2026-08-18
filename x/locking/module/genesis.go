@@ -3,7 +3,6 @@ package locking
 import (
 	"cosmossdk.io/collections"
 	abci "github.com/cometbft/cometbft/abci/types"
-	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/goatnetwork/goat/x/consensusfork"
 	"github.com/goatnetwork/goat/x/locking/keeper"
@@ -18,10 +17,12 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 
 	// validator
 	for _, validator := range genState.Validators {
-		pubkey := &secp256k1.PubKey{Key: validator.Pubkey}
-		address := sdk.ConsAddress(pubkey.Address())
+		address, err := types.ConsAddress(validator.KeyType, validator.Pubkey)
+		if err != nil {
+			panic(err)
+		}
 
-		err := k.Validators.Set(ctx, address, validator)
+		err = k.Validators.Set(ctx, address, validator)
 		if err != nil {
 			panic(err)
 		}

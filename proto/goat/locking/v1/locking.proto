@@ -70,4 +70,27 @@ message Validator {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
+
+  // pubkey carries no type tag of its own, so the type lives here. An empty
+  // string means secp256k1, which keeps every pre-rotation record valid
+  // without a migration.
+  string key_type = 9;
+
+  // The key being rotated away from. It is cleared once the validator update
+  // removing it has been emitted.
+  bytes prev_pubkey = 10;
+  string prev_key_type = 11;
+
+  // Height at which the rotation takes effect, or zero when no rotation is in
+  // flight. updateValidatorSet needs it because a rotation does not change the
+  // power, and without it nothing would tell CometBFT the key changed.
+  int64 rotation_apply_height = 12;
+
+  // When the ConsAddrIndex entry for the old consensus address may be dropped.
+  // Evidence naming the old address has to stay resolvable until then.
+  google.protobuf.Timestamp prev_cons_addr_expiry = 13 [
+    (gogoproto.stdtime) = true,
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
 }

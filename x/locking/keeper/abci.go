@@ -45,6 +45,10 @@ func (k Keeper) EndBlocker(ctx context.Context) ([]abci.ValidatorUpdate, error) 
 		}
 	}
 
+	if err := k.pruneConsAddrIndex(sdkctx); err != nil {
+		return nil, err
+	}
+
 	// set finalized time after osaka fork, it's enabled by default
 	if height := consensusfork.OsakaForkHeight[sdkctx.ChainID()]; sdkctx.BlockHeight() >= height {
 		if err := k.FinalizedTime.Set(sdkctx, sdkctx.BlockTime()); err != nil {
@@ -105,11 +109,27 @@ func (k Keeper) updateValidatorSet(sdkctx sdktypes.Context) ([]abci.ValidatorUpd
 		}
 		valstr := string(valAddr)
 
+		// A rotation does not touch the power, so without this the condition
+		// below would find nothing changed and emit no update at all: the state
+		// would hold the new key while CometBFT kept the old one, and the
+		// validator would silently miss every block until it was jailed.
+		rotating := validator.IsRotating() && validator.RotationApplyHeight == sdkctx.BlockHeight()
+
 		switch validator.Status {
 		case types.Active:
-			if power := lastSet[valstr]; power != validator.Power { // the power is changed
+			if power := lastSet[valstr]; power != validator.Power || rotating { // the power is changed
 				if err := k.ValidatorSet.Set(sdkctx, valAddr, validator.Power); err != nil {
 					return nil, err
+				}
+				if rotating {
+					// remove the old key in the same update; Power == 0 skips
+					// the pub_key_types check, so this works even while the new
+					// type is not yet on the whitelist
+					prev, err := validator.PrevCMPubkey()
+					if err != nil {
+						return nil, err
+					}
+					newSet = append(newSet, abci.ValidatorUpdate{PubKey: prev})
 				}
 				newSet = append(newSet, abci.ValidatorUpdate{
 					Power: int64(validator.Power), PubKey: validator.CMPubkey(),
@@ -159,8 +179,24 @@ func (k Keeper) updateValidatorSet(sdkctx sdktypes.Context) ([]abci.ValidatorUpd
 		if err := k.ValidatorSet.Remove(sdkctx, valAddr); err != nil {
 			return nil, err
 		}
-		newSet = append(newSet, abci.ValidatorUpdate{PubKey: validator.CMPubkey()})
+		// A validator can rotate and drop out of the set at the same height.
+		// It never got the update adding its new key, so the key CometBFT
+		// still has is the one it is rotating away from, and that is the one
+		// that has to be removed.
+		pubkey := validator.CMPubkey()
+		if validator.IsRotating() && validator.RotationApplyHeight == sdkctx.BlockHeight() {
+			pubkey, err = validator.PrevCMPubkey()
+			if err != nil {
+				return nil, err
+			}
+		}
+		newSet = append(newSet, abci.ValidatorUpdate{PubKey: pubkey})
 		k.Logger().Info("Remove from validator set", "address", types.ValidatorName(valAddr), "power", validator.Power)
+	}
+
+	// only once every branch above has had a chance to read PrevPubkey
+	if err := k.settleRotations(sdkctx); err != nil {
+		return nil, err
 	}
 	return newSet, nil
 }

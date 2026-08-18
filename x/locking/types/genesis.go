@@ -61,11 +61,8 @@ func (gs GenesisState) Validate() error {
 		return errors.New("no validators in genesis")
 	}
 	for i, val := range gs.Validators {
-		if len(val.Pubkey) != 33 {
-			return fmt.Errorf("invalid pubkey length: index %d", i)
-		}
-		if first := val.Pubkey[0]; first != 2 && first != 3 {
-			return fmt.Errorf("invalid pubkey prefix: index %d", i)
+		if _, err := ParsePubkey(val.KeyType, val.Pubkey); err != nil {
+			return fmt.Errorf("invalid pubkey: index %d: %w", i, err)
 		}
 
 		if err := val.Locking.Validate(); err != nil {

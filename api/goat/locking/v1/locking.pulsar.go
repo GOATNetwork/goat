@@ -521,15 +521,20 @@ func (x *_Validator_3_list) IsValid() bool {
 }
 
 var (
-	md_Validator              protoreflect.MessageDescriptor
-	fd_Validator_pubkey       protoreflect.FieldDescriptor
-	fd_Validator_power        protoreflect.FieldDescriptor
-	fd_Validator_locking      protoreflect.FieldDescriptor
-	fd_Validator_reward       protoreflect.FieldDescriptor
-	fd_Validator_gas_reward   protoreflect.FieldDescriptor
-	fd_Validator_status       protoreflect.FieldDescriptor
-	fd_Validator_signing_info protoreflect.FieldDescriptor
-	fd_Validator_jailed_until protoreflect.FieldDescriptor
+	md_Validator                       protoreflect.MessageDescriptor
+	fd_Validator_pubkey                protoreflect.FieldDescriptor
+	fd_Validator_power                 protoreflect.FieldDescriptor
+	fd_Validator_locking               protoreflect.FieldDescriptor
+	fd_Validator_reward                protoreflect.FieldDescriptor
+	fd_Validator_gas_reward            protoreflect.FieldDescriptor
+	fd_Validator_status                protoreflect.FieldDescriptor
+	fd_Validator_signing_info          protoreflect.FieldDescriptor
+	fd_Validator_jailed_until          protoreflect.FieldDescriptor
+	fd_Validator_key_type              protoreflect.FieldDescriptor
+	fd_Validator_prev_pubkey           protoreflect.FieldDescriptor
+	fd_Validator_prev_key_type         protoreflect.FieldDescriptor
+	fd_Validator_rotation_apply_height protoreflect.FieldDescriptor
+	fd_Validator_prev_cons_addr_expiry protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -543,6 +548,11 @@ func init() {
 	fd_Validator_status = md_Validator.Fields().ByName("status")
 	fd_Validator_signing_info = md_Validator.Fields().ByName("signing_info")
 	fd_Validator_jailed_until = md_Validator.Fields().ByName("jailed_until")
+	fd_Validator_key_type = md_Validator.Fields().ByName("key_type")
+	fd_Validator_prev_pubkey = md_Validator.Fields().ByName("prev_pubkey")
+	fd_Validator_prev_key_type = md_Validator.Fields().ByName("prev_key_type")
+	fd_Validator_rotation_apply_height = md_Validator.Fields().ByName("rotation_apply_height")
+	fd_Validator_prev_cons_addr_expiry = md_Validator.Fields().ByName("prev_cons_addr_expiry")
 }
 
 var _ protoreflect.Message = (*fastReflection_Validator)(nil)
@@ -658,6 +668,36 @@ func (x *fastReflection_Validator) Range(f func(protoreflect.FieldDescriptor, pr
 			return
 		}
 	}
+	if x.KeyType != "" {
+		value := protoreflect.ValueOfString(x.KeyType)
+		if !f(fd_Validator_key_type, value) {
+			return
+		}
+	}
+	if len(x.PrevPubkey) != 0 {
+		value := protoreflect.ValueOfBytes(x.PrevPubkey)
+		if !f(fd_Validator_prev_pubkey, value) {
+			return
+		}
+	}
+	if x.PrevKeyType != "" {
+		value := protoreflect.ValueOfString(x.PrevKeyType)
+		if !f(fd_Validator_prev_key_type, value) {
+			return
+		}
+	}
+	if x.RotationApplyHeight != int64(0) {
+		value := protoreflect.ValueOfInt64(x.RotationApplyHeight)
+		if !f(fd_Validator_rotation_apply_height, value) {
+			return
+		}
+	}
+	if x.PrevConsAddrExpiry != nil {
+		value := protoreflect.ValueOfMessage(x.PrevConsAddrExpiry.ProtoReflect())
+		if !f(fd_Validator_prev_cons_addr_expiry, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -689,6 +729,16 @@ func (x *fastReflection_Validator) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.SigningInfo != nil
 	case "goat.locking.v1.Validator.jailed_until":
 		return x.JailedUntil != nil
+	case "goat.locking.v1.Validator.key_type":
+		return x.KeyType != ""
+	case "goat.locking.v1.Validator.prev_pubkey":
+		return len(x.PrevPubkey) != 0
+	case "goat.locking.v1.Validator.prev_key_type":
+		return x.PrevKeyType != ""
+	case "goat.locking.v1.Validator.rotation_apply_height":
+		return x.RotationApplyHeight != int64(0)
+	case "goat.locking.v1.Validator.prev_cons_addr_expiry":
+		return x.PrevConsAddrExpiry != nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.Validator"))
@@ -721,6 +771,16 @@ func (x *fastReflection_Validator) Clear(fd protoreflect.FieldDescriptor) {
 		x.SigningInfo = nil
 	case "goat.locking.v1.Validator.jailed_until":
 		x.JailedUntil = nil
+	case "goat.locking.v1.Validator.key_type":
+		x.KeyType = ""
+	case "goat.locking.v1.Validator.prev_pubkey":
+		x.PrevPubkey = nil
+	case "goat.locking.v1.Validator.prev_key_type":
+		x.PrevKeyType = ""
+	case "goat.locking.v1.Validator.rotation_apply_height":
+		x.RotationApplyHeight = int64(0)
+	case "goat.locking.v1.Validator.prev_cons_addr_expiry":
+		x.PrevConsAddrExpiry = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.Validator"))
@@ -764,6 +824,21 @@ func (x *fastReflection_Validator) Get(descriptor protoreflect.FieldDescriptor) 
 	case "goat.locking.v1.Validator.jailed_until":
 		value := x.JailedUntil
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "goat.locking.v1.Validator.key_type":
+		value := x.KeyType
+		return protoreflect.ValueOfString(value)
+	case "goat.locking.v1.Validator.prev_pubkey":
+		value := x.PrevPubkey
+		return protoreflect.ValueOfBytes(value)
+	case "goat.locking.v1.Validator.prev_key_type":
+		value := x.PrevKeyType
+		return protoreflect.ValueOfString(value)
+	case "goat.locking.v1.Validator.rotation_apply_height":
+		value := x.RotationApplyHeight
+		return protoreflect.ValueOfInt64(value)
+	case "goat.locking.v1.Validator.prev_cons_addr_expiry":
+		value := x.PrevConsAddrExpiry
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.Validator"))
@@ -802,6 +877,16 @@ func (x *fastReflection_Validator) Set(fd protoreflect.FieldDescriptor, value pr
 		x.SigningInfo = value.Message().Interface().(*SigningInfo)
 	case "goat.locking.v1.Validator.jailed_until":
 		x.JailedUntil = value.Message().Interface().(*timestamppb.Timestamp)
+	case "goat.locking.v1.Validator.key_type":
+		x.KeyType = value.Interface().(string)
+	case "goat.locking.v1.Validator.prev_pubkey":
+		x.PrevPubkey = value.Bytes()
+	case "goat.locking.v1.Validator.prev_key_type":
+		x.PrevKeyType = value.Interface().(string)
+	case "goat.locking.v1.Validator.rotation_apply_height":
+		x.RotationApplyHeight = value.Int()
+	case "goat.locking.v1.Validator.prev_cons_addr_expiry":
+		x.PrevConsAddrExpiry = value.Message().Interface().(*timestamppb.Timestamp)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.Validator"))
@@ -838,6 +923,11 @@ func (x *fastReflection_Validator) Mutable(fd protoreflect.FieldDescriptor) prot
 			x.JailedUntil = new(timestamppb.Timestamp)
 		}
 		return protoreflect.ValueOfMessage(x.JailedUntil.ProtoReflect())
+	case "goat.locking.v1.Validator.prev_cons_addr_expiry":
+		if x.PrevConsAddrExpiry == nil {
+			x.PrevConsAddrExpiry = new(timestamppb.Timestamp)
+		}
+		return protoreflect.ValueOfMessage(x.PrevConsAddrExpiry.ProtoReflect())
 	case "goat.locking.v1.Validator.pubkey":
 		panic(fmt.Errorf("field pubkey of message goat.locking.v1.Validator is not mutable"))
 	case "goat.locking.v1.Validator.power":
@@ -848,6 +938,14 @@ func (x *fastReflection_Validator) Mutable(fd protoreflect.FieldDescriptor) prot
 		panic(fmt.Errorf("field gas_reward of message goat.locking.v1.Validator is not mutable"))
 	case "goat.locking.v1.Validator.status":
 		panic(fmt.Errorf("field status of message goat.locking.v1.Validator is not mutable"))
+	case "goat.locking.v1.Validator.key_type":
+		panic(fmt.Errorf("field key_type of message goat.locking.v1.Validator is not mutable"))
+	case "goat.locking.v1.Validator.prev_pubkey":
+		panic(fmt.Errorf("field prev_pubkey of message goat.locking.v1.Validator is not mutable"))
+	case "goat.locking.v1.Validator.prev_key_type":
+		panic(fmt.Errorf("field prev_key_type of message goat.locking.v1.Validator is not mutable"))
+	case "goat.locking.v1.Validator.rotation_apply_height":
+		panic(fmt.Errorf("field rotation_apply_height of message goat.locking.v1.Validator is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goat.locking.v1.Validator"))
@@ -878,6 +976,17 @@ func (x *fastReflection_Validator) NewField(fd protoreflect.FieldDescriptor) pro
 		m := new(SigningInfo)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "goat.locking.v1.Validator.jailed_until":
+		m := new(timestamppb.Timestamp)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "goat.locking.v1.Validator.key_type":
+		return protoreflect.ValueOfString("")
+	case "goat.locking.v1.Validator.prev_pubkey":
+		return protoreflect.ValueOfBytes(nil)
+	case "goat.locking.v1.Validator.prev_key_type":
+		return protoreflect.ValueOfString("")
+	case "goat.locking.v1.Validator.rotation_apply_height":
+		return protoreflect.ValueOfInt64(int64(0))
+	case "goat.locking.v1.Validator.prev_cons_addr_expiry":
 		m := new(timestamppb.Timestamp)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
@@ -981,6 +1090,25 @@ func (x *fastReflection_Validator) ProtoMethods() *protoiface.Methods {
 			l = options.Size(x.JailedUntil)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
+		l = len(x.KeyType)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.PrevPubkey)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.PrevKeyType)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.RotationApplyHeight != 0 {
+			n += 1 + runtime.Sov(uint64(x.RotationApplyHeight))
+		}
+		if x.PrevConsAddrExpiry != nil {
+			l = options.Size(x.PrevConsAddrExpiry)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -1009,6 +1137,46 @@ func (x *fastReflection_Validator) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.PrevConsAddrExpiry != nil {
+			encoded, err := options.Marshal(x.PrevConsAddrExpiry)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x6a
+		}
+		if x.RotationApplyHeight != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.RotationApplyHeight))
+			i--
+			dAtA[i] = 0x60
+		}
+		if len(x.PrevKeyType) > 0 {
+			i -= len(x.PrevKeyType)
+			copy(dAtA[i:], x.PrevKeyType)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.PrevKeyType)))
+			i--
+			dAtA[i] = 0x5a
+		}
+		if len(x.PrevPubkey) > 0 {
+			i -= len(x.PrevPubkey)
+			copy(dAtA[i:], x.PrevPubkey)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.PrevPubkey)))
+			i--
+			dAtA[i] = 0x52
+		}
+		if len(x.KeyType) > 0 {
+			i -= len(x.KeyType)
+			copy(dAtA[i:], x.KeyType)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.KeyType)))
+			i--
+			dAtA[i] = 0x4a
 		}
 		if x.JailedUntil != nil {
 			encoded, err := options.Marshal(x.JailedUntil)
@@ -1376,6 +1544,159 @@ func (x *fastReflection_Validator) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
+			case 9:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field KeyType", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.KeyType = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 10:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PrevPubkey", wireType)
+				}
+				var byteLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					byteLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if byteLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + byteLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.PrevPubkey = append(x.PrevPubkey[:0], dAtA[iNdEx:postIndex]...)
+				if x.PrevPubkey == nil {
+					x.PrevPubkey = []byte{}
+				}
+				iNdEx = postIndex
+			case 11:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PrevKeyType", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.PrevKeyType = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 12:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RotationApplyHeight", wireType)
+				}
+				x.RotationApplyHeight = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.RotationApplyHeight |= int64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 13:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PrevConsAddrExpiry", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.PrevConsAddrExpiry == nil {
+					x.PrevConsAddrExpiry = &timestamppb.Timestamp{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.PrevConsAddrExpiry); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -1554,6 +1875,21 @@ type Validator struct {
 	SigningInfo *SigningInfo    `protobuf:"bytes,7,opt,name=signing_info,json=signingInfo,proto3" json:"signing_info,omitempty"`
 	// Timestamp until which the validator is jailed due to liveness downtime.
 	JailedUntil *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=jailed_until,json=jailedUntil,proto3" json:"jailed_until,omitempty"`
+	// pubkey carries no type tag of its own, so the type lives here. An empty
+	// string means secp256k1, which keeps every pre-rotation record valid
+	// without a migration.
+	KeyType string `protobuf:"bytes,9,opt,name=key_type,json=keyType,proto3" json:"key_type,omitempty"`
+	// The key being rotated away from. It is cleared once the validator update
+	// removing it has been emitted.
+	PrevPubkey  []byte `protobuf:"bytes,10,opt,name=prev_pubkey,json=prevPubkey,proto3" json:"prev_pubkey,omitempty"`
+	PrevKeyType string `protobuf:"bytes,11,opt,name=prev_key_type,json=prevKeyType,proto3" json:"prev_key_type,omitempty"`
+	// Height at which the rotation takes effect, or zero when no rotation is in
+	// flight. updateValidatorSet needs it because a rotation does not change the
+	// power, and without it nothing would tell CometBFT the key changed.
+	RotationApplyHeight int64 `protobuf:"varint,12,opt,name=rotation_apply_height,json=rotationApplyHeight,proto3" json:"rotation_apply_height,omitempty"`
+	// When the ConsAddrIndex entry for the old consensus address may be dropped.
+	// Evidence naming the old address has to stay resolvable until then.
+	PrevConsAddrExpiry *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=prev_cons_addr_expiry,json=prevConsAddrExpiry,proto3" json:"prev_cons_addr_expiry,omitempty"`
 }
 
 func (x *Validator) Reset() {
@@ -1632,6 +1968,41 @@ func (x *Validator) GetJailedUntil() *timestamppb.Timestamp {
 	return nil
 }
 
+func (x *Validator) GetKeyType() string {
+	if x != nil {
+		return x.KeyType
+	}
+	return ""
+}
+
+func (x *Validator) GetPrevPubkey() []byte {
+	if x != nil {
+		return x.PrevPubkey
+	}
+	return nil
+}
+
+func (x *Validator) GetPrevKeyType() string {
+	if x != nil {
+		return x.PrevKeyType
+	}
+	return ""
+}
+
+func (x *Validator) GetRotationApplyHeight() int64 {
+	if x != nil {
+		return x.RotationApplyHeight
+	}
+	return 0
+}
+
+func (x *Validator) GetPrevConsAddrExpiry() *timestamppb.Timestamp {
+	if x != nil {
+		return x.PrevConsAddrExpiry
+	}
+	return nil
+}
+
 var File_goat_locking_v1_locking_proto protoreflect.FileDescriptor
 
 var file_goat_locking_v1_locking_proto_rawDesc = []byte{
@@ -1650,7 +2021,7 @@ var file_goat_locking_v1_locking_proto_rawDesc = []byte{
 	0x49, 0x6e, 0x66, 0x6f, 0x12, 0x16, 0x0a, 0x06, 0x6f, 0x66, 0x66, 0x73, 0x65, 0x74, 0x18, 0x01,
 	0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x6f, 0x66, 0x66, 0x73, 0x65, 0x74, 0x12, 0x16, 0x0a, 0x06,
 	0x6d, 0x69, 0x73, 0x73, 0x65, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x6d, 0x69,
-	0x73, 0x73, 0x65, 0x64, 0x22, 0x8a, 0x04, 0x0a, 0x09, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74,
+	0x73, 0x73, 0x65, 0x64, 0x22, 0xfc, 0x05, 0x0a, 0x09, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74,
 	0x6f, 0x72, 0x12, 0x16, 0x0a, 0x06, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01,
 	0x28, 0x0c, 0x52, 0x06, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x70, 0x6f,
 	0x77, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x05, 0x70, 0x6f, 0x77, 0x65, 0x72,
@@ -1683,38 +2054,53 @@ var file_goat_locking_v1_locking_proto_rawDesc = []byte{
 	0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65,
 	0x73, 0x74, 0x61, 0x6d, 0x70, 0x42, 0x0d, 0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0xa8,
 	0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x0b, 0x6a, 0x61, 0x69, 0x6c, 0x65, 0x64, 0x55, 0x6e, 0x74, 0x69,
-	0x6c, 0x2a, 0xab, 0x02, 0x0a, 0x0f, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x6f, 0x72, 0x53,
-	0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x31, 0x0a, 0x1c, 0x56, 0x41, 0x4c, 0x49, 0x44, 0x41, 0x54,
-	0x4f, 0x52, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43,
-	0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00, 0x1a, 0x0f, 0x8a, 0x9d, 0x20, 0x0b, 0x55, 0x6e, 0x73,
-	0x70, 0x65, 0x63, 0x69, 0x66, 0x69, 0x65, 0x64, 0x12, 0x29, 0x0a, 0x18, 0x56, 0x41, 0x4c, 0x49,
-	0x44, 0x41, 0x54, 0x4f, 0x52, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x50, 0x45, 0x4e,
-	0x44, 0x49, 0x4e, 0x47, 0x10, 0x01, 0x1a, 0x0b, 0x8a, 0x9d, 0x20, 0x07, 0x50, 0x65, 0x6e, 0x64,
-	0x69, 0x6e, 0x67, 0x12, 0x27, 0x0a, 0x17, 0x56, 0x41, 0x4c, 0x49, 0x44, 0x41, 0x54, 0x4f, 0x52,
-	0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x41, 0x43, 0x54, 0x49, 0x56, 0x45, 0x10, 0x02,
-	0x1a, 0x0a, 0x8a, 0x9d, 0x20, 0x06, 0x41, 0x63, 0x74, 0x69, 0x76, 0x65, 0x12, 0x2f, 0x0a, 0x1b,
-	0x56, 0x41, 0x4c, 0x49, 0x44, 0x41, 0x54, 0x4f, 0x52, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53,
-	0x5f, 0x54, 0x4f, 0x4d, 0x42, 0x53, 0x54, 0x4f, 0x4e, 0x45, 0x44, 0x10, 0x03, 0x1a, 0x0e, 0x8a,
-	0x9d, 0x20, 0x0a, 0x54, 0x6f, 0x6d, 0x62, 0x73, 0x74, 0x6f, 0x6e, 0x65, 0x64, 0x12, 0x2d, 0x0a,
-	0x1a, 0x56, 0x41, 0x4c, 0x49, 0x44, 0x41, 0x54, 0x4f, 0x52, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55,
-	0x53, 0x5f, 0x44, 0x4f, 0x57, 0x4e, 0x47, 0x52, 0x41, 0x44, 0x45, 0x10, 0x04, 0x1a, 0x0d, 0x8a,
-	0x9d, 0x20, 0x09, 0x44, 0x6f, 0x77, 0x6e, 0x67, 0x72, 0x61, 0x64, 0x65, 0x12, 0x2b, 0x0a, 0x19,
-	0x56, 0x41, 0x4c, 0x49, 0x44, 0x41, 0x54, 0x4f, 0x52, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53,
-	0x5f, 0x49, 0x4e, 0x41, 0x43, 0x54, 0x49, 0x56, 0x45, 0x10, 0x05, 0x1a, 0x0c, 0x8a, 0x9d, 0x20,
-	0x08, 0x49, 0x6e, 0x61, 0x63, 0x74, 0x69, 0x76, 0x65, 0x1a, 0x04, 0x88, 0xa3, 0x1e, 0x00, 0x42,
-	0xbc, 0x01, 0x0a, 0x13, 0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x6c, 0x6f, 0x63,
-	0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x42, 0x0c, 0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67,
-	0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x39, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e,
-	0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f,
-	0x67, 0x6f, 0x61, 0x74, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x6c, 0x6f,
-	0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x3b, 0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67,
-	0x76, 0x31, 0xa2, 0x02, 0x03, 0x47, 0x4c, 0x58, 0xaa, 0x02, 0x0f, 0x47, 0x6f, 0x61, 0x74, 0x2e,
-	0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x0f, 0x47, 0x6f, 0x61,
-	0x74, 0x5c, 0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x1b, 0x47,
-	0x6f, 0x61, 0x74, 0x5c, 0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0x5c, 0x47,
-	0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x11, 0x47, 0x6f, 0x61,
-	0x74, 0x3a, 0x3a, 0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x6c, 0x12, 0x19, 0x0a, 0x08, 0x6b, 0x65, 0x79, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x18, 0x09, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x07, 0x6b, 0x65, 0x79, 0x54, 0x79, 0x70, 0x65, 0x12, 0x1f, 0x0a, 0x0b,
+	0x70, 0x72, 0x65, 0x76, 0x5f, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x18, 0x0a, 0x20, 0x01, 0x28,
+	0x0c, 0x52, 0x0a, 0x70, 0x72, 0x65, 0x76, 0x50, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x12, 0x22, 0x0a,
+	0x0d, 0x70, 0x72, 0x65, 0x76, 0x5f, 0x6b, 0x65, 0x79, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x18, 0x0b,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x70, 0x72, 0x65, 0x76, 0x4b, 0x65, 0x79, 0x54, 0x79, 0x70,
+	0x65, 0x12, 0x32, 0x0a, 0x15, 0x72, 0x6f, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x61, 0x70,
+	0x70, 0x6c, 0x79, 0x5f, 0x68, 0x65, 0x69, 0x67, 0x68, 0x74, 0x18, 0x0c, 0x20, 0x01, 0x28, 0x03,
+	0x52, 0x13, 0x72, 0x6f, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x41, 0x70, 0x70, 0x6c, 0x79, 0x48,
+	0x65, 0x69, 0x67, 0x68, 0x74, 0x12, 0x5c, 0x0a, 0x15, 0x70, 0x72, 0x65, 0x76, 0x5f, 0x63, 0x6f,
+	0x6e, 0x73, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x5f, 0x65, 0x78, 0x70, 0x69, 0x72, 0x79, 0x18, 0x0d,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70,
+	0x42, 0x0d, 0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52,
+	0x12, 0x70, 0x72, 0x65, 0x76, 0x43, 0x6f, 0x6e, 0x73, 0x41, 0x64, 0x64, 0x72, 0x45, 0x78, 0x70,
+	0x69, 0x72, 0x79, 0x2a, 0xab, 0x02, 0x0a, 0x0f, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x6f,
+	0x72, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x31, 0x0a, 0x1c, 0x56, 0x41, 0x4c, 0x49, 0x44,
+	0x41, 0x54, 0x4f, 0x52, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x55, 0x4e, 0x53, 0x50,
+	0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00, 0x1a, 0x0f, 0x8a, 0x9d, 0x20, 0x0b, 0x55,
+	0x6e, 0x73, 0x70, 0x65, 0x63, 0x69, 0x66, 0x69, 0x65, 0x64, 0x12, 0x29, 0x0a, 0x18, 0x56, 0x41,
+	0x4c, 0x49, 0x44, 0x41, 0x54, 0x4f, 0x52, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x50,
+	0x45, 0x4e, 0x44, 0x49, 0x4e, 0x47, 0x10, 0x01, 0x1a, 0x0b, 0x8a, 0x9d, 0x20, 0x07, 0x50, 0x65,
+	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x12, 0x27, 0x0a, 0x17, 0x56, 0x41, 0x4c, 0x49, 0x44, 0x41, 0x54,
+	0x4f, 0x52, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x41, 0x43, 0x54, 0x49, 0x56, 0x45,
+	0x10, 0x02, 0x1a, 0x0a, 0x8a, 0x9d, 0x20, 0x06, 0x41, 0x63, 0x74, 0x69, 0x76, 0x65, 0x12, 0x2f,
+	0x0a, 0x1b, 0x56, 0x41, 0x4c, 0x49, 0x44, 0x41, 0x54, 0x4f, 0x52, 0x5f, 0x53, 0x54, 0x41, 0x54,
+	0x55, 0x53, 0x5f, 0x54, 0x4f, 0x4d, 0x42, 0x53, 0x54, 0x4f, 0x4e, 0x45, 0x44, 0x10, 0x03, 0x1a,
+	0x0e, 0x8a, 0x9d, 0x20, 0x0a, 0x54, 0x6f, 0x6d, 0x62, 0x73, 0x74, 0x6f, 0x6e, 0x65, 0x64, 0x12,
+	0x2d, 0x0a, 0x1a, 0x56, 0x41, 0x4c, 0x49, 0x44, 0x41, 0x54, 0x4f, 0x52, 0x5f, 0x53, 0x54, 0x41,
+	0x54, 0x55, 0x53, 0x5f, 0x44, 0x4f, 0x57, 0x4e, 0x47, 0x52, 0x41, 0x44, 0x45, 0x10, 0x04, 0x1a,
+	0x0d, 0x8a, 0x9d, 0x20, 0x09, 0x44, 0x6f, 0x77, 0x6e, 0x67, 0x72, 0x61, 0x64, 0x65, 0x12, 0x2b,
+	0x0a, 0x19, 0x56, 0x41, 0x4c, 0x49, 0x44, 0x41, 0x54, 0x4f, 0x52, 0x5f, 0x53, 0x54, 0x41, 0x54,
+	0x55, 0x53, 0x5f, 0x49, 0x4e, 0x41, 0x43, 0x54, 0x49, 0x56, 0x45, 0x10, 0x05, 0x1a, 0x0c, 0x8a,
+	0x9d, 0x20, 0x08, 0x49, 0x6e, 0x61, 0x63, 0x74, 0x69, 0x76, 0x65, 0x1a, 0x04, 0x88, 0xa3, 0x1e,
+	0x00, 0x42, 0xbc, 0x01, 0x0a, 0x13, 0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x6f, 0x61, 0x74, 0x2e, 0x6c,
+	0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x42, 0x0c, 0x4c, 0x6f, 0x63, 0x6b, 0x69,
+	0x6e, 0x67, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x39, 0x67, 0x69, 0x74, 0x68, 0x75,
+	0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72,
+	0x6b, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x61, 0x74, 0x2f,
+	0x6c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x3b, 0x6c, 0x6f, 0x63, 0x6b, 0x69,
+	0x6e, 0x67, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x47, 0x4c, 0x58, 0xaa, 0x02, 0x0f, 0x47, 0x6f, 0x61,
+	0x74, 0x2e, 0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x0f, 0x47,
+	0x6f, 0x61, 0x74, 0x5c, 0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0xe2, 0x02,
+	0x1b, 0x47, 0x6f, 0x61, 0x74, 0x5c, 0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31,
+	0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x11, 0x47,
+	0x6f, 0x61, 0x74, 0x3a, 0x3a, 0x4c, 0x6f, 0x63, 0x6b, 0x69, 0x6e, 0x67, 0x3a, 0x3a, 0x56, 0x31,
+	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1743,11 +2129,12 @@ var file_goat_locking_v1_locking_proto_depIdxs = []int32{
 	0, // 1: goat.locking.v1.Validator.status:type_name -> goat.locking.v1.ValidatorStatus
 	1, // 2: goat.locking.v1.Validator.signing_info:type_name -> goat.locking.v1.SigningInfo
 	4, // 3: goat.locking.v1.Validator.jailed_until:type_name -> google.protobuf.Timestamp
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	4, // 4: goat.locking.v1.Validator.prev_cons_addr_expiry:type_name -> google.protobuf.Timestamp
+	5, // [5:5] is the sub-list for method output_type
+	5, // [5:5] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_goat_locking_v1_locking_proto_init() }

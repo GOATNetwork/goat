@@ -12,7 +12,6 @@ import (
 	"cosmossdk.io/core/store"
 	"cosmossdk.io/log/v2"
 	"cosmossdk.io/math"
-	cmsecp256k1 "github.com/cometbft/cometbft/crypto/secp256k1"
 	cmttypes "github.com/cometbft/cometbft/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
@@ -130,6 +129,10 @@ func (k Keeper) ProcessLockingRequest(ctx context.Context, reqs goattypes.Lockin
 		return err
 	}
 
+	if err := k.Rotate(ctx, reqs.Rotates); err != nil {
+		return err
+	}
+
 	if err := k.Lock(ctx, reqs.Locks); err != nil {
 		return err
 	}
@@ -165,9 +168,14 @@ func (k Keeper) ActiveValidators(ctx context.Context) ([]cmttypes.GenesisValidat
 			return nil, err
 		}
 
+		pubkey, err := types.CMTPubkey(validator.KeyType, validator.Pubkey)
+		if err != nil {
+			return nil, err
+		}
+
 		vals = append(vals, cmttypes.GenesisValidator{
 			Address: kv.Key.Bytes(),
-			PubKey:  cmsecp256k1.PubKey(validator.Pubkey),
+			PubKey:  pubkey,
 			Power:   int64(kv.Value),
 			Name:    types.ValidatorName(kv.Key.Bytes()),
 		})
