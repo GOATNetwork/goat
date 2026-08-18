@@ -127,20 +127,6 @@ func (mr *MockAccountKeeperMockRecorder) NewAccountWithAddress(arg0, arg1 any) *
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "NewAccountWithAddress", reflect.TypeOf((*MockAccountKeeper)(nil).NewAccountWithAddress), arg0, arg1)
 }
 
-// NextAccountNumber mocks base method.
-func (m *MockAccountKeeper) NextAccountNumber(arg0 context.Context) uint64 {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "NextAccountNumber", arg0)
-	ret0, _ := ret[0].(uint64)
-	return ret0
-}
-
-// NextAccountNumber indicates an expected call of NextAccountNumber.
-func (mr *MockAccountKeeperMockRecorder) NextAccountNumber(arg0 any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "NextAccountNumber", reflect.TypeOf((*MockAccountKeeper)(nil).NextAccountNumber), arg0)
-}
-
 // RemoveAccount mocks base method.
 func (m *MockAccountKeeper) RemoveAccount(ctx context.Context, acc types.AccountI) {
 	m.ctrl.T.Helper()

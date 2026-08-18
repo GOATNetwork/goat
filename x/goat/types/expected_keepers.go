@@ -55,9 +55,6 @@ type AccountKeeper interface {
 	// Fetch the sequence of an account at a specified address.
 	GetSequence(context.Context, sdk.AccAddress) (uint64, error)
 
-	// Fetch the next account number, and increment the internal counter.
-	NextAccountNumber(context.Context) uint64
-
 	// AddressCodec returns the account address codec.
 	AddressCodec() address.Codec
 
