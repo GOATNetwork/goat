@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"cosmossdk.io/log"
+	"cosmossdk.io/log/v2"
 	cmtjson "github.com/cometbft/cometbft/libs/json"
 	"github.com/cometbft/cometbft/privval"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"

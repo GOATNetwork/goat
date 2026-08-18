@@ -10,7 +10,7 @@ import (
 	colcodec "cosmossdk.io/collections/codec"
 	"cosmossdk.io/core/address"
 	"cosmossdk.io/core/store"
-	"cosmossdk.io/log"
+	"cosmossdk.io/log/v2"
 	"cosmossdk.io/math"
 	cmsecp256k1 "github.com/cometbft/cometbft/crypto/secp256k1"
 	cmttypes "github.com/cometbft/cometbft/types"

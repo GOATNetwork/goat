@@ -4,11 +4,11 @@ import (
 	"strings"
 
 	errorsmod "cosmossdk.io/errors"
-	txsigning "cosmossdk.io/x/tx/signing"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
+	txsigning "github.com/cosmos/cosmos-sdk/x/tx/signing"
 	goattypes "github.com/goatnetwork/goat/x/goat/types"
 )
 

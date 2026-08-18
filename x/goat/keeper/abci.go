@@ -55,7 +55,9 @@ func (k Keeper) PrepareProposalHandler(
 		eg.Go(func() error {
 			iterator := txpool.Select(sdkctx, rpp.Txs)
 			for iterator != nil {
-				memTx := iterator.Tx()
+				// sdk v0.55 wraps the mempool tx together with its ante
+				// reported gas, the sdk.Tx itself is in the Tx field
+				memTx := iterator.Tx().Tx
 				txBytes, err := txVerifier.PrepareProposalVerifyTx(memTx)
 				if err != nil {
 					k.Logger().Info("Remove tx from mempool", "reason", err.Error())
@@ -213,7 +215,8 @@ func (k Keeper) ProcessProposalHandler(txVerifier baseapp.ProposalTxVerifier) sd
 		}
 
 		for txIdx, rawTx := range rpp.Txs {
-			tx, err := txVerifier.ProcessProposalVerifyTx(rawTx)
+			// sdk v0.55 also returns the gas wanted, which GOAT does not use
+			tx, _, err := txVerifier.ProcessProposalVerifyTx(rawTx)
 			if err != nil {
 				return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid transaction: index %d: %s", txIdx, err)
 			}
