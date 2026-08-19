@@ -62,8 +62,8 @@ func (suite *KeeperTestSuite) TestRotateToMlDsaBeforeTheWhitelistOpens() {
 	suite.Require().Empty(updates)
 }
 
-// The whole point of 5c and 5d together: a validator moves from secp256k1 to
-// ML-DSA-65 without leaving the set.
+// What the rotation mechanism and the widened key-type whitelist exist for: a
+// validator moves from secp256k1 to ML-DSA-65 without leaving the set.
 func (suite *KeeperTestSuite) TestRotateSecp256k1ToMlDsa() {
 	f := suite.setupRotation()
 	newKey, keyErr := mldsa65.GenPrivKey()
