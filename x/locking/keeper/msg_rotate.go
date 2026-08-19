@@ -168,9 +168,10 @@ func (k Keeper) rotateValidator(ctx context.Context, req *goattypes.RotateReques
 
 	// The operator has to swap the key its node signs with. CometBFT applies a
 	// validator update two blocks after it is emitted, so from that height the
-	// old key's votes stop counting. Missing the moment costs missed blocks,
-	// not a slashing: at the mainnet parameters that is 200 blocks of room,
-	// roughly twelve minutes, before downtime jailing.
+	// old key's votes stop counting. Missing the moment costs missed blocks
+	// rather than a double-signing slash, and the mainnet parameters leave 200
+	// blocks of room, roughly twelve minutes. Spending all of it is downtime
+	// jailing, which does slash one percent.
 	k.Logger().Info("Rotate", "validator", name, "key_type", keyType,
 		"new_address", types.ValidatorName(newAddr),
 		"apply_height", validator.RotationApplyHeight,
