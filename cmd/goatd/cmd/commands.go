@@ -37,6 +37,7 @@ func initRootCmd(
 		txCommand(),
 		keys.Commands(),
 		lightclient.Commands(),
+		RotateProofCommand(),
 	)
 
 	server.AddCommandsWithStartCmdOptions(rootCmd, app.DefaultNodeHome, newApp, appExport, server.StartCmdOptions{
