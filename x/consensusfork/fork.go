@@ -25,16 +25,17 @@ var ReeseForkHeight = map[string]int64{
 // RotationForkHeight is when the consensus layer starts accepting consensus
 // key rotations.
 //
-// Nothing can produce a rotation before Locking.sol has the rotate function,
-// and Locking.sol is a genesis predeploy, so on a live network its code can
-// only change at a coordinated fork. This gate exists so that the consensus
-// layer's behavior is pinned to a height of its own rather than depending on
-// exactly when that happens.
+// Rotations are announced by the Rotator contract, and the execution layer
+// only turns its logs into requests from GoatConfig.RotatorTime on. That gate
+// is a timestamp and this one is a height, so the two cannot be aligned
+// exactly. This exists so the consensus layer's behavior is pinned to a height
+// of its own rather than to whenever the execution layer starts carrying the
+// requests.
 var RotationForkHeight = map[string]int64{
 	unitest: 2, // it's for unit test
 
 	// deliberately unset for the public networks: the height can only be
-	// chosen once the execution layer can carry the new Locking code
+	// chosen once RotatorTime is set and the Rotator contract is deployed
 	// "goat-mainnet":  0,
 	// "goat-testnet3": 0,
 }
