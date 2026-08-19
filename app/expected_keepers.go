@@ -2,6 +2,7 @@ package app
 
 import (
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
+	consensuskeeper "github.com/cosmos/cosmos-sdk/x/consensus/keeper"
 
 	bitcoinkeeper "github.com/goatnetwork/goat/x/bitcoin/keeper"
 	goattypes "github.com/goatnetwork/goat/x/goat/types"
@@ -26,4 +27,8 @@ var (
 	_ goattypes.LockingKeeper = lockingkeeper.Keeper{}
 	_ goattypes.RelayerKeeper = relayerkeeper.Keeper{}
 	_ goattypes.BitcoinKeeper = bitcoinkeeper.Keeper{}
+
+	// x/consensus provides the keeper, and it is its params store that
+	// implements the interface, not the keeper itself
+	_ lockingtypes.ConsensusParamsKeeper = consensuskeeper.Keeper{}.ParamsStore
 )

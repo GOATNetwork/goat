@@ -16,6 +16,7 @@ import (
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
+	consensuskeeper "github.com/cosmos/cosmos-sdk/x/consensus/keeper"
 	modulev1 "github.com/goatnetwork/goat/api/goat/locking/module/v1"
 	"github.com/goatnetwork/goat/x/locking/keeper"
 	"github.com/goatnetwork/goat/x/locking/types"
@@ -162,8 +163,10 @@ type ModuleInputs struct {
 	Config       *modulev1.Module
 	Logger       log.Logger
 
-	AccountKeeper   types.AccountKeeper
-	ConsensusKeeper types.ConsensusParamsKeeper
+	AccountKeeper types.AccountKeeper
+	// the container provides the concrete keeper; the narrow interface
+	// NewKeeper takes is satisfied by its params store, not by the keeper
+	ConsensusKeeper consensuskeeper.Keeper
 }
 
 type ModuleOutputs struct {
@@ -179,7 +182,7 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.AddressCodec,
 		in.StoreService,
 		in.AccountKeeper,
-		in.ConsensusKeeper,
+		in.ConsensusKeeper.ParamsStore,
 		in.Logger,
 	)
 	m := NewAppModule(
