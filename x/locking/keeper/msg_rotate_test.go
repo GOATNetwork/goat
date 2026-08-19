@@ -262,17 +262,20 @@ func (suite *KeeperTestSuite) TestConsAddrIndexPrunesAStrandedAddress() {
 	suite.Require().NoError(err)
 	middle := sdk.ConsAddress(f.newKey.PubKey().Address())
 
+	// the rate limit means a second rotation cannot happen until the first
+	// one's retention has run out
+	second := now.Add(suite.Param.ExitingDuration + time.Second)
 	third := secp256k1.GenPrivKey()
-	ctx = ctx.WithBlockHeight(11).WithBlockTime(now.Add(time.Minute))
+	ctx = ctx.WithBlockHeight(11).WithBlockTime(second)
 	suite.Require().NoError(suite.Keeper.Rotate(ctx,
 		[]*goattypes.RotateRequest{f.request(ctx.ChainID(), third)}))
 	_, err = suite.Keeper.EndBlocker(ctx)
 	suite.Require().NoError(err)
 	latest := sdk.ConsAddress(third.PubKey().Address())
 
-	// inside the window all three addresses lead to the same validator, which
-	// is what keeps evidence against any of them slashable
-	ctx = ctx.WithBlockHeight(12).WithBlockTime(now.Add(suite.Param.ExitingDuration))
+	// inside the second window all three addresses lead to the same validator,
+	// which is what keeps evidence against any of them slashable
+	ctx = ctx.WithBlockHeight(12).WithBlockTime(second.Add(suite.Param.ExitingDuration - time.Second))
 	_, err = suite.Keeper.EndBlocker(ctx)
 	suite.Require().NoError(err)
 	for _, addr := range []sdk.ConsAddress{f.id, middle, latest} {
@@ -282,7 +285,7 @@ func (suite *KeeperTestSuite) TestConsAddrIndexPrunesAStrandedAddress() {
 	}
 
 	// past it the stranded one goes, and only that one
-	ctx = ctx.WithBlockHeight(13).WithBlockTime(now.Add(suite.Param.ExitingDuration + time.Hour))
+	ctx = ctx.WithBlockHeight(13).WithBlockTime(second.Add(suite.Param.ExitingDuration + time.Hour))
 	_, err = suite.Keeper.EndBlocker(ctx)
 	suite.Require().NoError(err)
 
@@ -326,4 +329,51 @@ func (suite *KeeperTestSuite) TestRotateIgnoredBeforeTheFork() {
 	rotated, err := suite.Keeper.Validators.Get(ctx, f.id)
 	suite.Require().NoError(err)
 	suite.Require().True(rotated.IsRotating())
+}
+
+// Every rotation strands a consensus address in the index for the whole
+// retention window, so rotating faster than that grows the index without
+// bound. It also caps what a stolen owner key can do: seizing block production
+// once rather than every block.
+func (suite *KeeperTestSuite) TestRotateRateLimitedToOneRetentionWindow() {
+	f := suite.setupRotation()
+	now := time.Now().UTC()
+
+	ctx := suite.Context.WithBlockHeight(10).WithBlockTime(now)
+	suite.Require().NoError(suite.Keeper.Rotate(ctx,
+		[]*goattypes.RotateRequest{f.request(ctx.ChainID(), f.newKey)}))
+	_, err := suite.Keeper.EndBlocker(ctx)
+	suite.Require().NoError(err)
+
+	third := secp256k1.GenPrivKey()
+
+	// the next block, and every block up to the deadline, is refused
+	for _, at := range []time.Time{
+		now.Add(time.Second),
+		now.Add(suite.Param.ExitingDuration / 2),
+		now.Add(suite.Param.ExitingDuration - time.Second),
+	} {
+		ctx = ctx.WithBlockHeight(ctx.BlockHeight() + 1).WithBlockTime(at)
+		suite.Require().NoError(suite.Keeper.Rotate(ctx,
+			[]*goattypes.RotateRequest{f.request(ctx.ChainID(), third)}))
+
+		updated, err := suite.Keeper.Validators.Get(ctx, f.id)
+		suite.Require().NoError(err)
+		suite.Require().Equal(f.newKey.PubKey().Bytes(), updated.Pubkey,
+			"the first rotation still stands at %s", at)
+
+		has, err := suite.Keeper.ConsAddrIndex.Has(ctx, sdk.ConsAddress(third.PubKey().Address()))
+		suite.Require().NoError(err)
+		suite.Require().False(has, "no index entry may be added at %s", at)
+	}
+
+	// at the deadline itself, allowed: the retention has elapsed
+	ctx = ctx.WithBlockHeight(ctx.BlockHeight() + 1).
+		WithBlockTime(now.Add(suite.Param.ExitingDuration))
+	suite.Require().NoError(suite.Keeper.Rotate(ctx,
+		[]*goattypes.RotateRequest{f.request(ctx.ChainID(), third)}))
+
+	updated, err := suite.Keeper.Validators.Get(ctx, f.id)
+	suite.Require().NoError(err)
+	suite.Require().Equal(third.PubKey().Bytes(), updated.Pubkey)
 }

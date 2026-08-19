@@ -63,6 +63,20 @@ func (k Keeper) rotateValidator(ctx context.Context, req *goattypes.RotateReques
 		return nil
 	}
 
+	// One rotation per retention window. Every rotation strands a consensus
+	// address in the index for ExitingDuration so that evidence naming it stays
+	// slashable, so rotating faster than that grows the index without bound.
+	//
+	// It also narrows what a stolen owner key buys: seizing block production
+	// once is bad enough, doing it every block is a way to bloat state as well.
+	// PrevConsAddrExpiry is the previous rotation's deadline and is never
+	// cleared, so it doubles as the rate limit with no extra field.
+	if validator.PrevConsAddrExpiry.After(sdkctx.BlockTime()) {
+		k.Logger().Warn("Rotate: too soon after the previous rotation", "validator", name,
+			"allowed_after", validator.PrevConsAddrExpiry)
+		return nil
+	}
+
 	switch validator.Status {
 	case types.Active, types.Pending, types.Downgrade:
 	default:
