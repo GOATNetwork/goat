@@ -39,10 +39,22 @@ make geth contracts
 cp $GOAT/build/goatd build/
 cp example.json config.json
 sh ./init.sh
-./build/geth --datadir ./data/geth --gcmode=archive --goat.preset=rpc --nodiscover &
-while [ ! -S data/geth/geth.ipc ]; do sleep 1; done
-./build/goatd start --home ./data/goat --regtest --goat.geth ./data/geth/geth.ipc &
+./build/geth --datadir ./data/geth --gcmode=archive --goat.preset=rpc --nodiscover \
+  </dev/null >geth.log 2>&1 &
+for _ in $(seq 30); do [ -S data/geth/geth.ipc ] && break; sleep 1; done
+./build/goatd start --home ./data/goat --regtest --goat.geth ./data/geth/geth.ipc \
+  </dev/null >goatd.log 2>&1 &
 ```
+
+Follow along with `tail -f geth.log goatd.log`. Both processes are detached
+from the terminal on purpose: left attached, the two log streams interleave,
+and under `stty tostop` the first write suspends the process, which shows up
+as `[1]+ Stopped` and leaves the wait for `geth.ipc` spinning with nothing to
+read.
+
+The wait gives up after 30 seconds rather than looping forever. If `goatd`
+then reports it cannot reach the IPC path, the reason is in `geth.log` — most
+often a `geth` left over from a previous run still holding the datadir lock.
 
 Blocks start within seconds. Check that consensus and execution advance
 together, which is the quickest sign the engine API handshake is healthy:
