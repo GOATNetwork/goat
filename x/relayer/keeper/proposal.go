@@ -61,6 +61,10 @@ func (k Keeper) VerifyProposal(ctx context.Context, req types.IVoteMsg, verifyFn
 		pubkeys = append(pubkeys, voter.VoteKey)
 	}
 
+	if pkl := len(pubkeys); pkl < relayer.Threshold() || pkl != bmpLen+1 {
+		return 0, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "incorrect voters bitmap")
+	}
+
 	sdkctx := sdktypes.UnwrapSDKContext(ctx)
 	sigdoc := types.VoteSignDoc(req.MethodName(), sdkctx.ChainID(), relayer.Proposer, sequence, relayer.Epoch, req.VoteSigDoc())
 	if !goatcrypto.AggregateVerify(pubkeys, sigdoc, req.GetVote().GetSignature()) {

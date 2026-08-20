@@ -1,7 +1,6 @@
 package types
 
 import (
-	"crypto/sha256"
 	"errors"
 	"slices"
 	"time"
@@ -28,9 +27,17 @@ type IRelayer interface {
 	GetVoters() []string
 }
 
+const (
+	MaxBitmapBytes = 32 // we have max 256 voters
+)
+
 func (v *Votes) Validate() error {
-	if len(v.Voters) > sha256.Size { // we have max 256 voters
+	if len(v.Voters) > MaxBitmapBytes {
 		return errors.New("voter bitmap too large")
+	}
+
+	if len(v.Voters)%8 != 0 {
+		return errors.New("invalid bitmap struct")
 	}
 
 	if len(v.Signature) != goatcrypto.SignatureLength {
