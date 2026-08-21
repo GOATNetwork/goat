@@ -3,6 +3,8 @@ package keeper_test
 import (
 	"testing"
 
+	"cosmossdk.io/core/address"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/params"
 	keepertest "github.com/goatnetwork/goat/testutil/keeper"
@@ -20,9 +22,11 @@ type KeeperTestSuite struct {
 	Bitcoin *mock.MockBitcoinKeeper
 	Locking *mock.MockLockingKeeper
 	Relayer *mock.MockRelayerKeeper
+	Engine  *mock.MockEngineClient
 	Keeper  keeper.Keeper
 	Context sdk.Context
 	Param   types.Params
+	Codec   address.Codec
 }
 
 func TestKeeper(t *testing.T) {
@@ -37,7 +41,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 	relayerKeeper := mock.NewMockRelayerKeeper(ctl)
 	ethClient := mock.NewMockEngineClient(ctl)
 
-	keeper, ctx, _ := keepertest.GoatKeeper(suite.T(),
+	keeper, ctx, codec := keepertest.GoatKeeper(suite.T(),
 		bitcoinKeeper, lockingKeeper, relayerKeeper, accountKeeper,
 		ethClient,
 		params.AllGoatDebugChainConfig)
@@ -47,6 +51,8 @@ func (suite *KeeperTestSuite) SetupTest() {
 	suite.Bitcoin = bitcoinKeeper
 	suite.Locking = lockingKeeper
 	suite.Relayer = relayerKeeper
+	suite.Engine = ethClient
+	suite.Codec = codec
 
 	suite.Context = ctx
 	suite.Param = types.DefaultParams()
