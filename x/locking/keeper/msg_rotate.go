@@ -154,9 +154,14 @@ func (k Keeper) rotateValidator(ctx context.Context, req *goattypes.RotateReques
 	validator.Pubkey, validator.KeyType = req.Pubkey, keyType
 	validator.RotationApplyHeight = sdkctx.BlockHeight()
 	// The old consensus address has to stay resolvable for as long as evidence
-	// naming it can still be slashed. Binding this to ExitingDuration rather
-	// than to a snapshot of the evidence window means a later parameter change
-	// moves the deadline with it.
+	// naming it can still be slashed. CometBFT expires evidence only once it is
+	// older than both max_age_num_blocks and max_age_duration, so the window to
+	// cover is the longer arm: on mainnet that is 100000 blocks, roughly four
+	// days, not the 48 hour max_age_duration. ExitingDuration is 21 days, about
+	// five times that. The headroom is the protection, not the binding itself,
+	// because this deadline is materialized here as an absolute time and is
+	// never revised afterwards. Upstream x/staking documents the same
+	// limitation in RotationEvidenceExpiry.
 	validator.PrevConsAddrExpiry = sdkctx.BlockTime().Add(param.ExitingDuration)
 
 	if err := k.ConsAddrIndex.Set(sdkctx, newAddr, id); err != nil {
