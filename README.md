@@ -32,13 +32,18 @@ Run from the root of this repo:
 ```sh
 GOAT=$PWD
 make build
+
 git clone --recurse-submodules https://github.com/GOATNetwork/goat-regtest.git ../goat-regtest
 cd ../goat-regtest
+REGTEST=$PWD
+
 mkdir -p build data/goat data/geth
-make geth contracts
 cp $GOAT/build/goatd build/
 cp example.json config.json
+make geth
+make contracts
 sh ./init.sh
+
 ./build/geth --datadir ./data/geth --gcmode=archive --goat.preset=rpc --nodiscover \
   </dev/null >geth.log 2>&1 &
 for _ in $(seq 30); do [ -S data/geth/geth.ipc ] && break; sleep 1; done
@@ -73,10 +78,16 @@ Confirm you are running what you think you are:
 ./build/goatd version --long | grep -E '^version:|^cosmos_sdk_version:|^go:'
 ```
 
-Stop `goatd` first, then give `geth` a few seconds to flush:
+Stop `goatd` first, then `geth`, waiting for each to actually exit rather than
+guessing at a sleep. The `kill -CONT` is for a process suspended by `stty tostop`,
+which would otherwise never get as far as handling the `TERM`:
 
 ```sh
-kill $(pgrep -x goatd) ; sleep 4 ; kill $(pgrep -x geth)
+kill -CONT $(pgrep -x goatd) 2>/dev/null ; kill $(pgrep -x goatd)
+for _ in $(seq 60); do pgrep -x goatd >/dev/null || break; sleep 1; done
+kill -CONT $(pgrep -x geth)  2>/dev/null ; kill $(pgrep -x geth)
+for _ in $(seq 60); do pgrep -x geth  >/dev/null || break; sleep 1; done
+for n in goatd geth; do pgrep -x $n >/dev/null && ps -o pid,stat,etime,cmd -p $(pgrep -d, -x $n); done
 ```
 
 Never `kill -9` these. `goatd` commits a height as soon as `geth` accepts the
@@ -92,8 +103,18 @@ WARN Fetching the unknown forkchoice head from network
 and the only way out is to start over:
 
 ```sh
-rm -rf data/goat data/geth && mkdir -p data/goat data/geth && sh ./init.sh
+cd $REGTEST
+rm -rf data/geth data/goat
+mkdir -p data/goat data/geth
+cp $GOAT/build/goatd build/
+cp example.json config.json
+sh ./init.sh
 ```
+
+`init.sh` is the whole of the reset: it regenerates both datadirs, the contract
+genesis, and the validator. Restoring `config.json` from `example.json` first is
+not optional — `init.sh` *appends* the validator and the voter to it, so reusing
+the old file gives you two of each.
 
 Two things this setup cannot show you. A single validator never casts a `Nil`
 precommit, so anything that only appears when votes disagree needs more nodes.
